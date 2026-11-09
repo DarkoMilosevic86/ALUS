@@ -1,0 +1,24 @@
+# Build directories
+/build*/
+
+# Meson subprojects: keep the .wrap files, not the downloaded sources
+/subprojects/*
+!/subprojects/*.wrap
+!/subprojects/packagefiles/
+
+# Editor and tooling leftovers
+.cache/
+compile_commands.json
+*.swp
+
+# Python bytecode from tools/
+__pycache__/
+*.pyc
+
+# Spike binaries: spikes/ keeps the .c and .py, never what they compile to
+/spikes/s2-espeak
+/spikes/s2-markloss
+/spikes/s2-speech
+
+# Run-time log of an uninstalled daemon
+/alus.log

@@ -1,0 +1,1293 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2026 Darko Milošević <daremc86@gmail.com>
+#
+# ALUS Serbian translations that upstream does not have.
+#
+# WRITTEN IN SERBIAN LATIN, by hand, and the ONLY file in po/ that is. The two
+# shipped catalogues are generated from it and from upstream's own Serbian:
+#
+#   tools/import-nvda-po.py   ->   po/sr.po        (transliterated to Cyrillic)
+#                             ->   po/sr@latin.po  (this text verbatim)
+#
+# so every string here is translated once and is correct in both scripts. The
+# transliteration is strict and leaves placeholders, product names and format
+# names alone (see to_cyrillic in the importer).
+#
+# What lands here, and nothing else:
+#   * messages ALUS has and upstream does not,
+#   * messages whose English ALUS spells differently -- almost always because
+#     upstream formats with {named} placeholders and ALUS uses one %s
+#     (FAZA9.md O3),
+#   * the braille abbreviations, which are cell counts rather than words and
+#     have to be chosen for Serbian rather than transliterated.
+msgid ""
+msgstr ""
+"Project-Id-Version: alus 0.1.0\n"
+"Language: sr_RS@latin\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+# ---------------------------------------------------------------------------
+# Plurals. Serbian has three forms and English two, which is the whole reason
+# these are P_() in the source: form 0 is 1/21/31, form 1 is 2-4, form 2 is
+# everything else including 5-20 and 0.
+# ---------------------------------------------------------------------------
+
+msgid "%s row"
+msgid_plural "%s rows"
+msgstr[0] "%s red"
+msgstr[1] "%s reda"
+msgstr[2] "%s redova"
+
+msgid "%s character"
+msgid_plural "%s characters"
+msgstr[0] "%s znak"
+msgstr[1] "%s znaka"
+msgstr[2] "%s znakova"
+
+# ---------------------------------------------------------------------------
+# Patterns ALUS spells with %s where upstream used a {named} placeholder.
+# ---------------------------------------------------------------------------
+
+msgid "with %s and %s"
+msgstr "sa %s i %s"
+
+msgid "with %s"
+msgstr "sa %s"
+
+msgid "through %s"
+msgstr "do %s"
+
+msgid "through row %s column %s"
+msgstr "do reda %s kolone %s"
+
+msgid "%s of %s"
+msgstr "%s od %s"
+
+msgid "%s percent"
+msgstr "%s odsto"
+
+msgid "%s on %s"
+msgstr "%s na %s"
+
+msgid "%s background"
+msgstr "pozadina %s"
+
+msgid "line %s of %s"
+msgstr "linija %s od %s"
+
+msgid "Positioned at %s, %s"
+msgstr "Pozicija %s, %s"
+
+msgid "dot %s"
+msgstr "tačka %s"
+
+msgid "%s released"
+msgstr "%s otpušten"
+
+# The element type is a noun of any gender ("naslov" masculine, "veza"
+# feminine), so no adjective may agree with it. "nema sledećeg elementa: X" is
+# grammatical whatever X is; "sledeći X ne postoji" is not.
+msgid "no next %s"
+msgstr "nema sledećeg elementa: %s"
+
+msgid "no previous %s"
+msgstr "nema prethodnog elementa: %s"
+
+msgid "Speak typed characters %s"
+msgstr "Izgovaranje otkucanih znakova %s"
+
+msgid "Speak typed words %s"
+msgstr "Izgovaranje otkucanih reči %s"
+
+msgid "Braille mode %s"
+msgstr "Brajev režim %s"
+
+msgid "Braille automatic scroll %s"
+msgstr "Automatsko pomeranje brajevog reda %s"
+
+msgid "The object model is not available: %s"
+msgstr "Objektni model nije dostupan: %s"
+
+msgid "Keyboard input is not available: %s"
+msgstr "Ulaz sa tastature nije dostupan: %s"
+
+# ---------------------------------------------------------------------------
+# Messages ALUS has and upstream does not.
+# ---------------------------------------------------------------------------
+
+msgid "ALUS started"
+msgstr "ALUS pokrenut"
+
+msgid "Cannot focus this object"
+msgstr "Ovaj objekat ne može da dobije fokus"
+
+msgid "No focused application"
+msgstr "Nema fokusirane aplikacije"
+
+msgid "Clipboard support is not available yet"
+msgstr "Podrška za ostavu još nije dostupna"
+
+msgid "find dialog not available yet"
+msgstr "dijalog za pretragu još nije dostupan"
+
+msgid "Braille typing is not available in this session"
+msgstr "Pisanje na brajevoj tastaturi nije dostupno u ovoj sesiji"
+
+msgid "Cannot cycle braille cursor shape. The braille cursor is turned off"
+msgstr "Nije moguće menjati oblik brajevog kursora. Brajev kursor je isključen"
+
+msgid "No review position"
+msgstr "Nema pozicije pregleda"
+
+msgid "No text to read"
+msgstr "Nema teksta za čitanje"
+
+msgid "The start marker must reside within the same object"
+msgstr "Početni marker mora biti u istom objektu"
+
+msgid "Cannot select text here"
+msgstr "Ovde nije moguće izabrati tekst"
+
+msgid "Selected"
+msgstr "Izabrano"
+
+msgid "Unable to determine the caret position"
+msgstr "Nije moguće odrediti poziciju karete"
+
+msgid "Language not supported"
+msgstr "Jezik nije podržan"
+
+msgid "Not in a table"
+msgstr "Nije u tabeli"
+
+msgid "No column header"
+msgstr "Nema zaglavlja kolone"
+
+msgid "No row header"
+msgstr "Nema zaglavlja reda"
+
+msgid "edge of document"
+msgstr "ivica dokumenta"
+
+msgid "edge of table"
+msgstr "ivica tabele"
+
+msgid "not in a container"
+msgstr "nije u kontejneru"
+
+msgid "not in a table"
+msgstr "nije u tabeli"
+
+msgid "selected all"
+msgstr "sve izabrano"
+
+msgid "no selection"
+msgstr "nema selekcije"
+
+msgid "copied"
+msgstr "kopirano"
+
+msgid "text not found"
+msgstr "tekst nije nađen"
+
+msgid "input help on. Press the same keys again to turn it off."
+msgstr "ulazna pomoć uključena. Pritisnite iste tastere ponovo da je isključite."
+
+# ---------------------------------------------------------------------------
+# Setting labels, spoken when a toggle command cycles.
+# ---------------------------------------------------------------------------
+
+msgid "speech output"
+msgstr "govorni izlaz"
+
+msgid "never"
+msgstr "nikad"
+
+msgid "always"
+msgstr "uvek"
+
+msgid "only when automatically tethered"
+msgstr "samo kada je automatski povezan"
+
+msgid "dot 8"
+msgstr "tačka 8"
+
+msgid "all dots"
+msgstr "sve tačke"
+
+msgid "dots 7 and 8"
+msgstr "tačke 7 i 8"
+
+msgid "Application paragraph navigation"
+msgstr "Navigacija po paragrafima aplikacije"
+
+msgid "Single line break paragraph navigation"
+msgstr "Navigacija po paragrafima sa jednim prelomom reda"
+
+msgid "Multi line break paragraph navigation"
+msgstr "Navigacija po paragrafima sa više preloma reda"
+
+msgid "Tools"
+msgstr "Alatke"
+
+msgid "tab"
+msgstr "jezičak"
+
+# ---------------------------------------------------------------------------
+# Quick-navigation element types. What "nema sledećeg elementa: %s" is filled
+# with, and what the elements list is grouped by.
+# ---------------------------------------------------------------------------
+
+msgid "heading at level 1"
+msgstr "naslov nivoa 1"
+
+msgid "heading at level 2"
+msgstr "naslov nivoa 2"
+
+msgid "heading at level 3"
+msgstr "naslov nivoa 3"
+
+msgid "heading at level 4"
+msgstr "naslov nivoa 4"
+
+msgid "heading at level 5"
+msgstr "naslov nivoa 5"
+
+msgid "heading at level 6"
+msgstr "naslov nivoa 6"
+
+msgid "heading at level 7"
+msgstr "naslov nivoa 7"
+
+msgid "heading at level 8"
+msgstr "naslov nivoa 8"
+
+msgid "heading at level 9"
+msgstr "naslov nivoa 9"
+
+msgid "visited link"
+msgstr "posećena veza"
+
+msgid "unvisited link"
+msgstr "neposećena veza"
+
+msgid "form field"
+msgstr "polje obrasca"
+
+msgid "edit field"
+msgstr "polje za unos"
+
+msgid "annotation"
+msgstr "napomena"
+
+msgid "error"
+msgstr "greška"
+
+msgid "text paragraph"
+msgstr "paragraf teksta"
+
+msgid "clickable element"
+msgstr "element na koji se može kliknuti"
+
+msgid "more text"
+msgstr "još teksta"
+
+# ---------------------------------------------------------------------------
+# Command descriptions whose English ALUS spells differently.
+# ---------------------------------------------------------------------------
+
+msgid "Moves to the next heading at level 1"
+msgstr "Prelazi na sledeći naslov nivoa 1"
+
+msgid "Moves to the next heading at level 2"
+msgstr "Prelazi na sledeći naslov nivoa 2"
+
+msgid "Moves to the next heading at level 3"
+msgstr "Prelazi na sledeći naslov nivoa 3"
+
+msgid "Moves to the next heading at level 4"
+msgstr "Prelazi na sledeći naslov nivoa 4"
+
+msgid "Moves to the next heading at level 5"
+msgstr "Prelazi na sledeći naslov nivoa 5"
+
+msgid "Moves to the next heading at level 6"
+msgstr "Prelazi na sledeći naslov nivoa 6"
+
+msgid "Moves to the next heading at level 7"
+msgstr "Prelazi na sledeći naslov nivoa 7"
+
+msgid "Moves to the next heading at level 8"
+msgstr "Prelazi na sledeći naslov nivoa 8"
+
+msgid "Moves to the next heading at level 9"
+msgstr "Prelazi na sledeći naslov nivoa 9"
+
+msgid "Moves to the previous heading at level 1"
+msgstr "Prelazi na prethodni naslov nivoa 1"
+
+msgid "Moves to the previous heading at level 2"
+msgstr "Prelazi na prethodni naslov nivoa 2"
+
+msgid "Moves to the previous heading at level 3"
+msgstr "Prelazi na prethodni naslov nivoa 3"
+
+msgid "Moves to the previous heading at level 4"
+msgstr "Prelazi na prethodni naslov nivoa 4"
+
+msgid "Moves to the previous heading at level 5"
+msgstr "Prelazi na prethodni naslov nivoa 5"
+
+msgid "Moves to the previous heading at level 6"
+msgstr "Prelazi na prethodni naslov nivoa 6"
+
+msgid "Moves to the previous heading at level 7"
+msgstr "Prelazi na prethodni naslov nivoa 7"
+
+msgid "Moves to the previous heading at level 8"
+msgstr "Prelazi na prethodni naslov nivoa 8"
+
+msgid "Moves to the previous heading at level 9"
+msgstr "Prelazi na prethodni naslov nivoa 9"
+
+msgid "Copies content of the status bar of current application to the clipboard."
+msgstr "Kopira sadržaj statusne linije trenutne aplikacije u ostavu."
+
+msgid "The next key that is pressed will not be handled at all by ALUS, it will be passed directly through to the application."
+msgstr "ALUS neće obraditi sledeći pritisnuti taster, nego će ga proslediti direktno aplikaciji."
+
+msgid "Reports the language for the text under the caret. If pressed twice, presents the information in browse mode"
+msgstr "Najavljuje jezik teksta pod karetom. Dvostruki pritisak prikazuje tu informaciju u režimu pregleda"
+
+msgid "Reports the text on the system clipboard. Pressing twice spells this information. Pressing three times spells it using character descriptions."
+msgstr "Najavljuje tekst iz sistemske ostave. Dvostruki pritisak sriče tu informaciju. Trostruki pritisak je sriče opisima znakova."
+
+msgid "Announces the current selection in edit controls and documents. Pressing twice spells this information. Pressing three times spells it using character descriptions. Pressing four times shows it in a browsable message."
+msgstr "Najavljuje trenutnu selekciju u poljima za unos i dokumentima. Dvostruki pritisak sriče tu informaciju. Trostruki pritisak je sriče opisima znakova. Četvorostruki pritisak je prikazuje u poruci koja se može pregledati."
+
+# ---------------------------------------------------------------------------
+# Braille abbreviations.
+#
+# NOT words and NOT transliterations: a cell count. A 40-cell display that
+# spends six cells on "pozadina" has 34 left for the text being read, so each
+# of these is the shortest form that stays distinct from the others in Serbian.
+# The cell PATTERNS below are the same in every language and are repeated
+# unchanged on purpose -- leaving them untranslated would work too, but then a
+# translator cannot tell "not translated yet" from "the same everywhere".
+# ---------------------------------------------------------------------------
+
+msgid "bnnr"
+msgstr "bner"
+
+msgid "cmpl"
+msgstr "dpns"
+
+msgid "cinf"
+msgstr "infs"
+
+msgid "main"
+msgstr "glvn"
+
+msgid "navi"
+msgstr "navg"
+
+msgid "srch"
+msgstr "trzn"
+
+msgid "r%s"
+msgstr "r%s"
+
+msgid "c%s"
+msgstr "k%s"
+
+msgid "⠤⠤⠤⠤⠤"
+msgstr "⠤⠤⠤⠤⠤"
+
+msgid "⢎⣿⡱"
+msgstr "⢎⣿⡱"
+
+msgid "⢎⣸⡱"
+msgstr "⢎⣸⡱"
+
+msgid "⣏⣿⣹"
+msgstr "⣏⣿⣹"
+
+msgid "⣏⣸⣹"
+msgstr "⣏⣸⣹"
+
+msgid "⢎⣀⡱"
+msgstr "⢎⣀⡱"
+
+msgid "⣏⣀⣹"
+msgstr "⣏⣀⣹"
+
+# ---------------------------------------------------------------------------
+# The settings window and the gesture dialog (phase 9).
+#
+# None of these exist upstream: upstream's settings are wxPython panels with
+# their own wording, and ALUS's seven pages are not its fifteen panels. The
+# subtitles are the only documentation most users will read, so they are
+# translated as sentences and not as labels.
+# ---------------------------------------------------------------------------
+
+# -- the gesture dialog --
+
+msgid "Gestures"
+msgstr "Gestovi"
+
+msgid "Commands"
+msgstr "Komande"
+
+msgid "Gestures for this command"
+msgstr "Gestovi za ovu komandu"
+
+msgid "Add"
+msgstr "Dodaj"
+
+msgid "Remove"
+msgstr "Ukloni"
+
+msgid "Cancel"
+msgstr "Otkaži"
+
+msgid "Open"
+msgstr "Otvori"
+
+msgid "Add a gesture"
+msgstr "Dodavanje gesta"
+
+msgid "Type the gesture to bind to “%s”, the way it is written in gestures.ini, for example kb:alus+shift+t. Wayland does not let an application capture a key it has not already been granted, so the gesture cannot be pressed here."
+msgstr "Upišite gest koji vezujete za „%s“, onako kako se piše u gestures.ini, na primer kb:alus+shift+t. Wayland ne dozvoljava aplikaciji da uhvati taster koji joj već nije dodeljen, pa se gest ovde ne može pritisnuti."
+
+msgid "“%s” is not a gesture ALUS recognises"
+msgstr "„%s“ nije gest koji ALUS prepoznaje"
+
+msgid "Could not save the gesture: %s"
+msgstr "Gest nije sačuvan: %s"
+
+msgid "%s is now bound to “%s”"
+msgstr "%s je sada vezan za „%s“"
+
+msgid "%s is no longer bound"
+msgstr "%s više nije vezan"
+
+msgid "%s is now unbound for you; the default is kept in place for everything else"
+msgstr "%s je za vas odvezan; podrazumevano vezivanje ostaje za sve ostalo"
+
+# The ALUS key, as it appears in a key combination. The product name.
+msgid "ALUS"
+msgstr "ALUS"
+
+# -- the gesture layers --
+
+msgid "yours"
+msgstr "vaš"
+
+msgid "from the language"
+msgstr "iz jezika"
+
+msgid "from the braille driver"
+msgstr "iz brajevog drajvera"
+
+msgid "from an application module"
+msgstr "iz modula aplikacije"
+
+msgid "built in"
+msgstr "ugrađen"
+
+msgid "laptop"
+msgstr "laptop"
+
+msgid "desktop"
+msgstr "desktop"
+
+# -- General --
+
+msgid "General"
+msgstr "Opšte"
+
+msgid "Language"
+msgstr "Jezik"
+
+msgid "The language ALUS speaks and shows. Independent of the desktop's language on purpose: a user may want an English desktop and a Serbian screen reader."
+msgstr "Jezik kojim ALUS govori i piše. Namerno nezavisan od jezika radne površine: korisnik može želeti radnu površinu na engleskom a čitač ekrana na srpskom."
+
+msgid "Takes effect immediately; ALUS does not need to be restarted."
+msgstr "Primenjuje se odmah; ALUS ne treba restartovati."
+
+msgid "Same as the session"
+msgstr "Isti kao u sesiji"
+
+msgid "English"
+msgstr "engleski"
+
+msgid "Serbian (Cyrillic)"
+msgstr "srpski (ćirilica)"
+
+msgid "Serbian (Latin)"
+msgstr "srpski (latinica)"
+
+msgid "Logging"
+msgstr "Beleženje"
+
+msgid "Log level"
+msgstr "Nivo beleženja"
+
+msgid "\"debug\" and \"io\" write a great deal and slow ALUS down; use them when reporting a problem."
+msgstr "„debug“ i „io“ pišu veoma mnogo i usporavaju ALUS; koristite ih kada prijavljujete problem."
+
+msgid "Errors only"
+msgstr "Samo greške"
+
+msgid "Warnings"
+msgstr "Upozorenja"
+
+msgid "Information"
+msgstr "Informacije"
+
+msgid "Debug"
+msgstr "Dijagnostika"
+
+msgid "Debug with input and output"
+msgstr "Dijagnostika sa ulazom i izlazom"
+
+msgid "Configuration"
+msgstr "Podešavanja"
+
+msgid "Open the configuration folder"
+msgstr "Otvori fasciklu sa podešavanjima"
+
+msgid "Where alus.ini, gestures.ini and the profiles are."
+msgstr "Tu su alus.ini, gestures.ini i profili."
+
+msgid "Reset every setting"
+msgstr "Vrati sva podešavanja"
+
+msgid "Returns every setting to its factory value. The gesture map and the profiles are not touched."
+msgstr "Vraća svako podešavanje na fabričku vrednost. Mapa gestova i profili se ne menjaju."
+
+msgid "Every setting has been reset"
+msgstr "Sva podešavanja su vraćena"
+
+msgid "Could not open the folder"
+msgstr "Fascikla nije otvorena"
+
+msgid "There are no such settings in this version"
+msgstr "U ovoj verziji nema takvih podešavanja"
+
+msgid "The settings window is not available: %s"
+msgstr "Prozor podešavanja nije dostupan: %s"
+
+msgid "ALUS Settings"
+msgstr "ALUS podešavanja"
+
+# -- Speech --
+
+msgid "Speech"
+msgstr "Govor"
+
+msgid "Synthesizer"
+msgstr "Sintetizator"
+
+msgid "ALUS speaks through speech-dispatcher, so every SSIP module already installed is available here."
+msgstr "ALUS govori preko speech-dispatcher-a, pa je ovde dostupan svaki već instaliran SSIP modul."
+
+msgid "speech-dispatcher"
+msgstr "speech-dispatcher"
+
+msgid "None"
+msgstr "Nijedan"
+
+msgid "Output module"
+msgstr "Izlazni modul"
+
+msgid "The speech-dispatcher module, e.g. espeak-ng or rhvoice. Empty means the module speech-dispatcher itself defaults to."
+msgstr "Modul speech-dispatcher-a, na primer espeak-ng ili rhvoice. Prazno znači modul koji speech-dispatcher sam podrazumeva."
+
+msgid "Voice"
+msgstr "Glas"
+
+msgid "Voice settings"
+msgstr "Podešavanja glasa"
+
+msgid "Rate"
+msgstr "Brzina"
+
+msgid "Pitch"
+msgstr "Visina"
+
+msgid "Volume"
+msgstr "Jačina"
+
+msgid "Inflection"
+msgstr "Intonacija"
+
+msgid "What is spoken"
+msgstr "Šta se izgovara"
+
+msgid "Punctuation and symbol level"
+msgstr "Nivo interpunkcije i simbola"
+
+msgid "How much punctuation is spoken. `alus+p` cycles this without opening the settings."
+msgstr "Koliko se interpunkcije izgovara. `alus+p` menja ovo bez otvaranja podešavanja."
+
+msgid "Some"
+msgstr "Nešto"
+
+msgid "Most"
+msgstr "Većina"
+
+msgid "All"
+msgstr "Sve"
+
+msgid "Character"
+msgstr "Znak"
+
+msgid "Follow the language of the text"
+msgstr "Prati jezik teksta"
+
+msgid "Switches the voice when a document says its text is in another language."
+msgstr "Menja glas kada dokument kaže da je njegov tekst na drugom jeziku."
+
+msgid "Follow the dialect too"
+msgstr "Prati i dijalekat"
+
+msgid "Switches between, for example, British and American English. Off by default."
+msgstr "Prebacuje, na primer, između britanskog i američkog engleskog. Podrazumevano isključeno."
+
+msgid "Normalize Unicode before speaking"
+msgstr "Normalizuj Unicode pre izgovaranja"
+
+msgid "Makes mathematical and styled letters readable: ℂ is spoken as C."
+msgstr "Čini matematička i stilizovana slova čitljivim: ℂ se izgovara kao C."
+
+# -- Braille --
+
+msgid "Braille"
+msgstr "Brajev red"
+
+msgid "Display"
+msgstr "Red"
+
+msgid "The display is driven through brltty's BrlAPI, so every display brltty supports works here."
+msgstr "Red se vodi preko brltty-jevog BrlAPI-ja, pa ovde radi svaki red koji brltty podržava."
+
+msgid "brltty (BrlAPI)"
+msgstr "brltty (BrlAPI)"
+
+msgid "No display"
+msgstr "Bez reda"
+
+msgid "BrlAPI host"
+msgstr "BrlAPI host"
+
+msgid "Empty is the normal case: whatever $BRLAPI_HOST or brltty's own default says."
+msgstr "Prazno je normalno: ono što kaže $BRLAPI_HOST ili brltty-jeva podrazumevana vrednost."
+
+msgid "Translation tables"
+msgstr "Tabele prevoda"
+
+msgid "Output table"
+msgstr "Izlazna tabela"
+
+msgid "A liblouis table file name, or \"auto\" for the table that matches the language."
+msgstr "Ime liblouis tabele, ili „auto“ za tabelu koja odgovara jeziku."
+
+msgid "Input table"
+msgstr "Ulazna tabela"
+
+msgid "Show the word at the cursor uncontracted"
+msgstr "Prikaži reč na kursoru bez skraćivanja"
+
+msgid "So a contracted table does not hide the characters being edited."
+msgstr "Da skraćena tabela ne skriva znakove koji se upravo uređuju."
+
+msgid "Normalize Unicode before translating"
+msgstr "Normalizuj Unicode pre prevođenja"
+
+msgid "Cursor"
+msgstr "Kursor"
+
+msgid "Show the cursor"
+msgstr "Prikaži kursor"
+
+msgid "Blink the cursor"
+msgstr "Trepći kursorom"
+
+msgid "Blink rate, in milliseconds"
+msgstr "Brzina treptanja, u milisekundama"
+
+msgid "Cursor shape when following the focus"
+msgstr "Oblik kursora kada prati fokus"
+
+msgid "Cursor shape when following review"
+msgstr "Oblik kursora kada prati pregled"
+
+msgid "Show the selection"
+msgstr "Prikaži selekciju"
+
+msgid "What the display follows"
+msgstr "Šta red prati"
+
+msgid "Tethered to"
+msgstr "Povezan sa"
+
+msgid "`alus+control+t` changes this without opening the settings."
+msgstr "`alus+control+t` menja ovo bez otvaranja podešavanja."
+
+msgid "Mode"
+msgstr "Režim"
+
+msgid "A routing key also moves the caret"
+msgstr "Taster za pozicioniranje pomera i karetu"
+
+msgid "How much context is shown"
+msgstr "Koliko se konteksta prikazuje"
+
+msgid "changedContext"
+msgstr "changedContext"
+
+msgid "fill"
+msgstr "fill"
+
+msgid "scroll"
+msgstr "scroll"
+
+msgid "Reading"
+msgstr "Čitanje"
+
+msgid "Word wrap"
+msgstr "Prelom reči"
+
+msgid "Break words"
+msgstr "Prelamaj reči"
+
+msgid "Break words and mark the break"
+msgstr "Prelamaj reči i označi prelom"
+
+msgid "At word boundaries"
+msgstr "Na granicama reči"
+
+msgid "At word or syllable boundaries"
+msgstr "Na granicama reči ili slogova"
+
+msgid "Read by paragraph"
+msgstr "Čitaj po paragrafima"
+
+msgid "Off by default: a paragraph on a 40-cell display is a lot of scrolling."
+msgstr "Podrazumevano isključeno: paragraf na redu od 40 ćelija je mnogo pomeranja."
+
+msgid "Automatic scroll rate, in cells per second"
+msgstr "Brzina automatskog pomeranja, u ćelijama u sekundi"
+
+msgid "Show messages"
+msgstr "Prikazuj poruke"
+
+msgid "For a while"
+msgstr "Neko vreme"
+
+msgid "Until dismissed"
+msgstr "Dok se ne odbaci"
+
+msgid "How long a message stays, in milliseconds"
+msgstr "Koliko poruka ostaje, u milisekundama"
+
+msgid "Speech alongside braille"
+msgstr "Govor uz brajev red"
+
+msgid "Speak the character a routing key lands on"
+msgstr "Izgovori znak na koji taster za pozicioniranje stane"
+
+msgid "Speak the line when the display's own keys move"
+msgstr "Izgovori liniju kada tasteri samog reda pomere čitanje"
+
+msgid "Braille keyboard"
+msgstr "Brajeva tastatura"
+
+msgid "Off by default, and that is a platform decision rather than a preference: on Wayland ALUS cannot inject a keystroke, so brltty types and ALUS does not. Turn this on and ALUS translates the cells itself, which is the only way a braille keyboard can issue ALUS commands."
+msgstr "Podrazumevano isključeno, i to je odluka platforme a ne stvar ukusa: na Waylandu ALUS ne može da ubaci pritisak tastera, pa kuca brltty a ne ALUS. Uključite ovo i ALUS sam prevodi ćelije, što je jedini način da brajeva tastatura izdaje ALUS komande."
+
+msgid "ALUS handles braille typing"
+msgstr "ALUS obrađuje pisanje na brajevoj tastaturi"
+
+# -- Keyboard --
+
+msgid "Keyboard"
+msgstr "Tastatura"
+
+msgid "Layout"
+msgstr "Raspored"
+
+msgid "Two layouts with the same commands: a desktop has a numeric keypad to review with, a laptop does not."
+msgstr "Dva rasporeda sa istim komandama: desktop ima numeričku tastaturu za pregled, laptop nema."
+
+msgid "Desktop"
+msgstr "Desktop"
+
+msgid "Laptop"
+msgstr "Laptop"
+
+msgid "The ALUS key"
+msgstr "ALUS taster"
+
+msgid "Which keys act as the ALUS modifier. More than one may be chosen; pressing one twice in quick succession sends the real key to the application."
+msgstr "Koji tasteri služe kao ALUS modifikator. Može se izabrati više njih; dvostruki brzi pritisak šalje pravi taster aplikaciji."
+
+msgid "Insert"
+msgstr "Insert"
+
+msgid "Numeric keypad Insert"
+msgstr "Insert na numeričkoj tastaturi"
+
+msgid "Caps Lock"
+msgstr "Caps Lock"
+
+msgid "How long a double press may take, in milliseconds"
+msgstr "Koliko dvostruki pritisak može da traje, u milisekundama"
+
+msgid "Typing echo"
+msgstr "Izgovaranje otkucanog"
+
+msgid "Speak typed characters"
+msgstr "Izgovaraj otkucane znakove"
+
+msgid "Speak typed words"
+msgstr "Izgovaraj otkucane reči"
+
+msgid "Speak command keys"
+msgstr "Izgovaraj komandne tastere"
+
+msgid "Says the name of every key that is not a character, which is what `alus+4` toggles."
+msgstr "Izgovara ime svakog tastera koji nije znak; to je ono što `alus+4` uključuje i isključuje."
+
+msgid "Interrupting speech"
+msgstr "Prekidanje govora"
+
+msgid "Typing a character stops speech"
+msgstr "Kucanje znaka zaustavlja govor"
+
+msgid "Enter stops speech"
+msgstr "Enter zaustavlja govor"
+
+msgid "Movement keys skim during say all"
+msgstr "Tasteri za kretanje preskaču tokom čitanja svega"
+
+msgid "Lets the arrow keys move within a say all instead of stopping it."
+msgstr "Dozvoljava strelicama da se kreću unutar čitanja svega umesto da ga zaustave."
+
+# -- Object presentation --
+
+msgid "Object presentation"
+msgstr "Prikaz objekata"
+
+msgid "What is announced about an object"
+msgstr "Šta se najavljuje o objektu"
+
+msgid "The defaults are deliberately sparse: a screen reader that announces everything it can is unusable."
+msgstr "Podrazumevane vrednosti su namerno skromne: čitač ekrana koji najavljuje sve što može je neupotrebljiv."
+
+msgid "Descriptions"
+msgstr "Opisi"
+
+msgid "Keyboard shortcuts"
+msgstr "Prečice na tastaturi"
+
+msgid "Position information"
+msgstr "Podaci o poziciji"
+
+msgid "\"3 of 7\", and an item's level in a tree."
+msgstr "„3 od 7“, i nivo stavke u drvetu."
+
+msgid "Tooltips"
+msgstr "Oblačići sa savetima"
+
+msgid "Off by default: a tooltip under the pointer is not what a keyboard user is doing."
+msgstr "Podrazumevano isključeno: oblačić pod pokazivačem nije ono što korisnik tastature radi."
+
+msgid "Help balloons and notifications"
+msgstr "Oblačići pomoći i obaveštenja"
+
+msgid "Whether a list allows several selections"
+msgstr "Da li lista dozvoljava više izabranih stavki"
+
+msgid "Text that changes by itself"
+msgstr "Tekst koji se sam menja"
+
+msgid "A terminal, a chat window, a log. On by default: a terminal that says nothing when a command finishes is unusable."
+msgstr "Terminal, prozor za ćaskanje, dnevnik. Podrazumevano uključeno: terminal koji ne kaže ništa kada se komanda završi je neupotrebljiv."
+
+msgid "Progress bars"
+msgstr "Trake napretka"
+
+msgid "Report progress with"
+msgstr "Najavljuj napredak"
+
+msgid "Nothing"
+msgstr "Nikako"
+
+msgid "A beep"
+msgstr "Bipom"
+
+msgid "Speech only"
+msgstr "Govorom"
+
+msgid "A beep and speech"
+msgstr "Bipom i govorom"
+
+msgid "Report progress bars in other windows"
+msgstr "Najavljuj trake napretka u drugim prozorima"
+
+msgid "Beep every N percent"
+msgstr "Bipni svakih N odsto"
+
+msgid "Speak every N percent"
+msgstr "Izgovori svakih N odsto"
+
+msgid "Annotations"
+msgstr "Napomene"
+
+msgid "That further details are available"
+msgstr "Da postoje dodatni detalji"
+
+msgid "An element's accessible description"
+msgstr "Pristupačni opis elementa"
+
+msgid "Object navigation"
+msgstr "Navigacija po objektima"
+
+msgid "Play a sound at the edge of the tree"
+msgstr "Pusti zvuk na ivici drveta"
+
+msgid "An expected failure must be noticeable without being an error."
+msgstr "Očekivani neuspeh mora da se primeti a da ne bude greška."
+
+# -- Review cursor --
+
+msgid "Review cursor"
+msgstr "Kursor pregleda"
+
+msgid "What the review cursor follows"
+msgstr "Šta kursor pregleda prati"
+
+msgid "The keyboard focus"
+msgstr "Fokus tastature"
+
+msgid "On by default, and the reason `alus+numpad5` says what was just focused."
+msgstr "Podrazumevano uključeno, i zato `alus+numpad5` kaže šta je upravo fokusirano."
+
+msgid "The caret"
+msgstr "Kareta"
+
+msgid "The mouse pointer"
+msgstr "Pokazivač miša"
+
+msgid "Simple review"
+msgstr "Jednostavan pregled"
+
+msgid "Skips the containers a toolkit uses for layout and that carry no information of their own."
+msgstr "Preskače kontejnere koje toolkit koristi za raspored a koji sami ne nose nikakvu informaciju."
+
+msgid "Caret"
+msgstr "Kareta"
+
+msgid "How long to wait for an application to move its caret, in milliseconds"
+msgstr "Koliko čekati da aplikacija pomeri svoju karetu, u milisekundama"
+
+msgid "Every toolkit reports caret movement differently; this is the budget before ALUS reports what is there anyway."
+msgstr "Svaki skup vidžeta drugačije prijavljuje pomeranje karete; ovo je rok posle kog ALUS ipak najavi šta je tu."
+
+msgid "Document navigation"
+msgstr "Navigacija po dokumentu"
+
+msgid "What ends a paragraph"
+msgstr "Šta završava paragraf"
+
+msgid "No toolkit on Linux answers the accessibility API's own paragraph granularity, so these two styles are the only way paragraph movement exists at all."
+msgstr "Nijedan toolkit na Linuxu ne odgovara na granularnost paragrafa iz samog API-ja za pristupačnost, pa su ova dva stila jedini način da kretanje po paragrafima uopšte postoji."
+
+msgid "The application decides"
+msgstr "Aplikacija odlučuje"
+
+msgid "A single line break"
+msgstr "Jedan prelom reda"
+
+msgid "A blank line"
+msgstr "Prazan red"
+
+msgid "Say all reads by"
+msgstr "Čitanje svega ide po"
+
+msgid "Paragraph"
+msgstr "Paragrafu"
+
+msgid "Line"
+msgstr "Liniji"
+
+# -- Document formatting --
+
+msgid "Document formatting"
+msgstr "Formatiranje dokumenta"
+
+msgid "Font"
+msgstr "Font"
+
+msgid "Font name"
+msgstr "Ime fonta"
+
+msgid "Font size"
+msgstr "Veličina fonta"
+
+msgid "Bold, italic and underline"
+msgstr "Podebljano, kurziv i podvučeno"
+
+msgid "Superscripts and subscripts"
+msgstr "Eksponenti i indeksi"
+
+msgid "Emphasis"
+msgstr "Naglašavanje"
+
+msgid "Highlighted text"
+msgstr "Istaknut tekst"
+
+msgid "Style name"
+msgstr "Ime stila"
+
+msgid "Colours"
+msgstr "Boje"
+
+msgid "Document information"
+msgstr "Podaci o dokumentu"
+
+msgid "Comments"
+msgstr "Komentari"
+
+msgid "Bookmarks"
+msgstr "Obeleživači"
+
+msgid "Editor revisions"
+msgstr "Izmene u uređivaču"
+
+msgid "Spelling errors"
+msgstr "Pravopisne greške"
+
+msgid "Grammar errors"
+msgstr "Gramatičke greške"
+
+msgid "Pages and spacing"
+msgstr "Strane i prored"
+
+msgid "Page numbers"
+msgstr "Brojevi strana"
+
+msgid "Line numbers"
+msgstr "Brojevi linija"
+
+msgid "Line indentation"
+msgstr "Uvlačenje linija"
+
+msgid "Tones"
+msgstr "Tonovima"
+
+msgid "Speech and tones"
+msgstr "Govorom i tonovima"
+
+msgid "How long an indentation tone lasts, in milliseconds"
+msgstr "Koliko ton uvlačenja traje, u milisekundama"
+
+msgid "Ignore blank lines when reporting indentation"
+msgstr "Ignoriši prazne linije pri najavi uvlačenja"
+
+msgid "Line spacing"
+msgstr "Prored"
+
+msgid "Alignment"
+msgstr "Poravnanje"
+
+msgid "Cell coordinates"
+msgstr "Koordinate ćelije"
+
+msgid "Table headers"
+msgstr "Zaglavlja tabele"
+
+msgid "Rows and columns"
+msgstr "Redovi i kolone"
+
+msgid "Rows only"
+msgstr "Samo redovi"
+
+msgid "Columns only"
+msgstr "Samo kolone"
+
+msgid "Cell borders"
+msgstr "Ivice ćelija"
+
+msgid "Tables used only for layout"
+msgstr "Tabele koje služe samo za raspored"
+
+msgid "`alus+shift+f` reports the formatting at the caret; this decides whether a table that only arranges a page counts as a table at all."
+msgstr "`alus+shift+f` najavljuje formatiranje na kareti; ovo odlučuje da li tabela koja samo raspoređuje stranu uopšte važi za tabelu."
+
+msgid "Elements"
+msgstr "Elementi"
+
+msgid "Headings"
+msgstr "Naslovi"
+
+msgid "Links"
+msgstr "Veze"
+
+msgid "Whether a link has been visited"
+msgstr "Da li je veza posećena"
+
+msgid "Graphics"
+msgstr "Grafika"
+
+msgid "Lists"
+msgstr "Liste"
+
+msgid "Block quotes"
+msgstr "Blokovski citati"
+
+msgid "Groupings"
+msgstr "Grupisanja"
+
+msgid "Landmarks and regions"
+msgstr "Orijentiri i regioni"
+
+msgid "Articles"
+msgstr "Članci"
+
+msgid "Frames"
+msgstr "Okviri"
+
+msgid "Figures and captions"
+msgstr "Slike i natpisi"
+
+msgid "Clickable elements"
+msgstr "Elementi na koje se može kliknuti"
+
+msgid "When formatting is reported"
+msgstr "Kada se formatiranje najavljuje"
+
+msgid "Report formatting changes after the cursor"
+msgstr "Najavljuj promene formatiranja posle kursora"
+
+msgid "Costs a call per line; off by default for that reason."
+msgstr "Košta jedan poziv po liniji; zato je podrazumevano isključeno."
+
+msgid "Bold, italic and underline on the display"
+msgstr "Podebljano, kurziv i podvučeno na redu"
+
+msgid "Spelling errors on the display"
+msgstr "Pravopisne greške na redu"
+
+# -- the Gestures page --
+
+msgid "Commands and keys"
+msgstr "Komande i tasteri"
+
+msgid "Every command ALUS knows, with the keys bound to it. A command with no description is not shown, because a command that cannot be explained cannot be rebound sensibly."
+msgstr "Svaka komanda koju ALUS zna, sa tasterima vezanim za nju. Komanda bez opisa se ne prikazuje, jer komanda koja se ne može objasniti ne može se ni razumno prevezati."
+
+msgid "Edit gestures"
+msgstr "Uredi gestove"
+
+msgid "Tables"
+msgstr "Tabele"
+
+# -- commands that are not in this version (data/commands-status.ini) --
+#
+# Spoken instead of nothing when a key runs a command ALUS has not written
+# yet. Short on purpose: the user knows which key they pressed, and what
+# matters is that the key is not silent (FAZA6.md O10, FAZA9.md N99).
+
+msgid "not in this version"
+msgstr "nema u ovoj verziji"
+
+# -- stopping ALUS from the keyboard (ALUS+q) --
+
+msgid "exiting"
+msgstr "izlazim"
+
+# Spoken when `quit` is run from something that does not own the loop --
+# alus-cli, or a test. Never silence: this is the one command a user cannot
+# work around without finding a terminal (FAZA9.md N99).
+msgid "cannot quit from here"
+msgstr "odavde ne mogu da izađem"
+
+# -- menjanje sinteze i glasa s tastature (alus+control+strelice) --
+#
+# Izgovara se kad prsten podešavanja sinteze nema šta da pomera: drajver ne
+# prijavljuje ni jedno podešavanje koje se može menjati. Upstream ovde kaže
+# "No settings", pa taj msgid dolazi iz njegovog kataloga; ovo ispod su
+# poruke koje ALUS ima a upstream nema.
+
+# Izgovara se kad komanda koja menja govor bude pokrenuta tamo gde govora
+# nema -- `alus-daemon --no-speech`, alus-cli, dijagnostika.
+msgid "speech is not available"
+msgstr "govor nije dostupan"
+
+# -- čuvanje i vraćanje podešavanja (alus+control+c, alus+control+r) --
+
+# Upisivanje datoteke nije uspelo: home koji se ne može pisati, pun disk.
+# Nikad tiho: korisnik koji veruje da je podešavanje sačuvano, a posle
+# restarta ga nema, nema načina da zna koja od te dve stvari nije prošla.
+msgid "Could not save configuration"
+msgstr "Ne mogu da sačuvam podešavanja"
+
+msgid "cannot save the configuration from here"
+msgstr "odavde ne mogu da sačuvam podešavanja"
+
+msgid "cannot revert the configuration from here"
+msgstr "odavde ne mogu da vratim podešavanja"
+
+# -- vreme i datum (alus+f12) --
+
+# Izgovara se kad lokalizacija ne daje nijedan upotrebljiv format vremena.
+# Nikad tišina: taster koji ne kaže ništa ne razlikuje se od tastera koji
+# nije ni stigao.
+msgid "cannot read the clock"
+msgstr "ne mogu da pročitam sat"
+
+# -- detalji na koje kontrola pokazuje (alus+d) --
+#
+# Upstream kaže "No additional details" kad relacije nema; ovo je drugi
+# slučaj: relacija postoji, ali meta ne nosi tekst koji ALUS može da pročita.
+# Dve različite činjenice, pa i dve poruke -- inače bi korisnik tražio
+# relaciju koja je tu.
+msgid "No details summary"
+msgstr "Nema sažetka detalja"
+
+# -- razvojne informacije o objektu (alus+f1) --
+#
+# Upstream otvara svoj prikazivač dnevnika; ALUS ga nema, pa jedino što ne
+# sme da se izostavi jeste GDE je informacija otišla -- inače taster izgleda
+# mrtav.
+msgid "Developer info written to the log"
+msgstr "Razvojne informacije su upisane u dnevnik"
+
+# -- izlazak iz ugnežđenog dokumenta (alus+control+space) --
+
+msgid "Not in a document"
+msgstr "Nije u dokumentu"
+
+msgid "No containing document"
+msgstr "Nema dokumenta koji ga sadrži"
+
+msgid "Could not move to the containing document"
+msgstr "Ne mogu da pređem na dokument koji ga sadrži"
+
+# -- ponavljanje poslednje izgovorenog (alus+x) --
+#
+# Upstream se ovde tiho vraća. ALUS ne: taster koji ne odgovori ništa ne
+# razlikuje se od tastera koji nije stigao (FAZA9.md N99).
+msgid "Nothing to repeat"
+msgstr "Nema šta da se ponovi"
+
+# Blizanac poruke za sistemski kursor ("Unable to determine the caret
+# position"), koju upstream ima; ovu, za pregledni kursor, nema.
+msgid "Unable to determine the review cursor position"
+msgstr "Ne mogu da utvrdim poziciju preglednog kursora"

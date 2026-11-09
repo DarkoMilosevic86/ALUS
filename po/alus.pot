@@ -1,0 +1,5368 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Darko Milošević
+# This file is distributed under the same license as the alus package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: alus 0.1.0\n"
+"Report-Msgid-Bugs-To: daremc86@gmail.com\n"
+"POT-Creation-Date: 2026-11-09 10:00+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#. Translators: the user asked about the navigator object and there is
+#. none.
+#. Translators: reported when there is nothing under the cursor to ask
+#. about.
+#: src/a11y/commands.cpp:101 src/a11y/commands.cpp:535
+msgid "No navigator object"
+msgstr ""
+
+#. Translators: there is no focused object.
+#: src/a11y/commands.cpp:126 src/a11y/commands.cpp:238
+#: src/a11y/commands.cpp:242 src/nav/text_commands.cpp:568
+#: src/nav/text_commands.cpp:599 src/nav/text_commands.cpp:624
+#: src/nav/text_commands.cpp:646 src/nav/text_commands.cpp:698
+#: src/nav/text_commands.cpp:793
+msgid "No focus"
+msgstr ""
+
+#. Translators: there is no object containing this one.
+#: src/a11y/commands.cpp:159
+msgid "No containing object"
+msgstr ""
+
+#. Translators: there is nothing inside this object.
+#: src/a11y/commands.cpp:168
+msgid "No objects inside"
+msgstr ""
+
+#. Translators: this is the last object.
+#: src/a11y/commands.cpp:177
+msgid "No next"
+msgstr ""
+
+#. Translators: this is the first object.
+#: src/a11y/commands.cpp:186
+msgid "No previous"
+msgstr ""
+
+#. Translators: the review cursor was moved to the object with focus.
+#: src/a11y/commands.cpp:246
+msgid "Move to focus"
+msgstr ""
+
+#. Translators: the keyboard focus was moved to the navigator object.
+#: src/a11y/commands.cpp:258
+msgid "Move focus"
+msgstr ""
+
+#. Translators: the object could not take the keyboard focus.
+#: src/a11y/commands.cpp:263
+msgid "Cannot focus this object"
+msgstr ""
+
+#. Translators: the object has no position on the screen.
+#. Translators: the caret has no position on the screen -- a terminal
+#. that reports no geometry, or a control scrolled out of view.
+#: src/a11y/commands.cpp:275 src/nav/text_commands.cpp:659
+#: src/nav/text_commands.cpp:666
+msgid "No location information"
+msgstr ""
+
+#. Translators: the action at the navigator object was
+#. performed. The toolkit's own word for it is used when it has
+#. one ("click", "press"), and "Activate" otherwise.
+#: src/a11y/commands.cpp:300
+msgid "Activate"
+msgstr ""
+
+#. Translators: nothing at the navigator object could be activated.
+#: src/a11y/commands.cpp:307
+msgid "No action"
+msgstr ""
+
+#. Translators: the active window has no title.
+#: src/a11y/commands.cpp:318
+msgid "No title"
+msgstr ""
+
+#. Translators: reported when the review cursor is set to follow
+#. the system caret (alus+6).
+#: src/a11y/commands.cpp:354
+msgid "caret moves review cursor on"
+msgstr ""
+
+#. Translators: reported when the review cursor no longer follows
+#. the system caret.
+#: src/a11y/commands.cpp:357
+msgid "caret moves review cursor off"
+msgstr ""
+
+#. Translators: reported when the navigator object is set to
+#. follow the focus (alus+7).
+#: src/a11y/commands.cpp:369
+msgid "focus moves navigator object on"
+msgstr ""
+
+#. Translators: reported when the navigator object no longer
+#. follows the focus.
+#: src/a11y/commands.cpp:372
+msgid "focus moves navigator object off"
+msgstr ""
+
+#. Translators: reported when text that changes by itself -- a
+#. terminal, a chat window, a log -- is announced again (alus+5).
+#: src/a11y/commands.cpp:385
+msgid "report dynamic content changes on"
+msgstr ""
+
+#. Translators: reported when text that changes by itself is no
+#. longer announced.
+#: src/a11y/commands.cpp:388
+msgid "report dynamic content changes off"
+msgstr ""
+
+#. Translators: a progress bar reporting mode (alus+u): nothing is
+#. reported.
+#: src/a11y/commands.cpp:402
+msgid "No progress bar updates"
+msgstr ""
+
+#. Translators: a progress bar reporting mode: the percentage is
+#. spoken.
+#: src/a11y/commands.cpp:408
+msgid "Speak progress bar updates"
+msgstr ""
+
+#. Translators: a progress bar reporting mode: a beep that rises
+#. in pitch as the bar fills.
+#: src/a11y/commands.cpp:414
+msgid "Beep for progress bar updates"
+msgstr ""
+
+#. Translators: a progress bar reporting mode: both the beep and
+#. the spoken percentage.
+#: src/a11y/commands.cpp:420
+msgid "Beep and speak progress bar updates"
+msgstr ""
+
+#. Translators: reported when the focused control has no keyboard
+#. shortcut of its own (shift+numpad2).
+#: src/a11y/commands.cpp:440
+msgid "No shortcut key"
+msgstr ""
+
+#. Translators: reported when the focused control points at no
+#. additional details (alus+d).
+#: src/a11y/commands.cpp:462
+msgid "No additional details"
+msgstr ""
+
+#. Translators: reported when the details a control points at exist
+#. but carry no readable text.
+#: src/a11y/commands.cpp:493
+msgid "No details summary"
+msgstr ""
+
+#. Translators: reported when the developer information about an object has
+#. been written to the log (alus+f1).
+#: src/a11y/commands.cpp:517
+msgid "Developer info written to the log"
+msgstr ""
+
+#. Translators: reported when the thing under the cursor is a link but
+#. the application does not say where it points.
+#: src/a11y/commands.cpp:548
+msgid "Link has no apparent destination"
+msgstr ""
+
+#. Translators: reported when the thing under the cursor is not a link at
+#. all (alus+k).
+#: src/a11y/commands.cpp:553
+msgid "Not a link."
+msgstr ""
+
+#. Translators: "3 rows", part of "with 3 rows and 2 columns".
+#: src/a11y/object_speech.cpp:44
+#, c-format
+msgid "%s row"
+msgid_plural "%s rows"
+msgstr[0] ""
+msgstr[1] ""
+
+#. Translators: "2 columns", part of "with 3 rows and 2 columns".
+#: src/a11y/object_speech.cpp:49
+#, c-format
+msgid "%s column"
+msgid_plural "%s columns"
+msgstr[0] ""
+msgstr[1] ""
+
+#. Translators: the compound form, e.g. "with 3 rows and 2 columns";
+#. the first %s is the row count and the second the column count.
+#: src/a11y/object_speech.cpp:60
+#, c-format
+msgid "with %s and %s"
+msgstr ""
+
+#. Translators: a table's size when only the column count is known,
+#. e.g. "with 2 columns".
+#. Translators: a table's size when only the row count is known.
+#: src/a11y/object_speech.cpp:66 src/a11y/object_speech.cpp:70
+#, c-format
+msgid "with %s"
+msgstr ""
+
+#. Translators: a state of an object is negated; %s is the state's own
+#. label (e.g. "selected"). NVDA keeps separate strings for the states that
+#. are commonly negated and falls back to this one for the rest.
+#: src/a11y/object_speech.cpp:211
+#, c-format
+msgid "not %s"
+msgstr ""
+
+#. Translators: the current row number, e.g. "row 3".
+#: src/a11y/object_speech.cpp:331
+#, c-format
+msgid "row %s"
+msgstr ""
+
+#. Translators: the row span, e.g. "through 5".
+#: src/a11y/object_speech.cpp:334 src/a11y/object_speech.cpp:350
+#, c-format
+msgid "through %s"
+msgstr ""
+
+#. Translators: the current column number, e.g. "column 3".
+#: src/a11y/object_speech.cpp:346
+#, c-format
+msgid "column %s"
+msgstr ""
+
+#: src/a11y/object_speech.cpp:360
+#, c-format
+msgid "through row %s column %s"
+msgstr ""
+
+#. Translators: there are further details that can be fetched.
+#: src/a11y/object_speech.cpp:383
+msgid "has details"
+msgstr ""
+
+#. Translators: "has comment", "has suggestion"; %s is the kind
+#. of detail.
+#. Translators: brailled when there are details of a known kind; %s is
+#. the abbreviation of the kind, e.g. "cmnt".
+#: src/a11y/object_speech.cpp:388 src/braille/properties.cpp:75
+#, c-format
+msgid "has %s"
+msgstr ""
+
+#. Translators: the position of an item in a group; the first %s is
+#. the item's number and the second how many there are, e.g. "3 of 7".
+#. Translators: the position of an item in a group, brailled; the
+#. first %s is the item's number and the second how many there are, so
+#. the result reads "3 of 7".
+#: src/a11y/object_speech.cpp:400 src/braille/properties.cpp:178
+#, c-format
+msgid "%s of %s"
+msgstr ""
+
+#. Translators: the item level in a tree, e.g. "level 2".
+#: src/a11y/object_speech.cpp:405
+#, c-format
+msgid "level %s"
+msgstr ""
+
+#: src/a11y/object_speech.cpp:842
+#, c-format
+msgid "%s percent"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:27
+msgid "unknown"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:28
+msgid "window"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:29
+msgid "title bar"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:30
+msgid "pane"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:31
+msgid "dialog"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:32 src/nav/quick_nav.cpp:79
+msgid "check box"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:33 src/nav/quick_nav.cpp:80
+msgid "radio button"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:34
+msgid "text"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:35
+msgid "edit"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:36 src/nav/quick_nav.cpp:78
+msgid "button"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:37
+msgid "menu bar"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:38
+msgid "menu item"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:39 src/a11y/role_tables.cpp:145
+msgid "menu"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:40 src/nav/quick_nav.cpp:81
+msgid "combo box"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:41 src/nav/quick_nav.cpp:76
+msgid "list"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:42 src/nav/quick_nav.cpp:75
+msgid "list item"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:43 src/nav/quick_nav.cpp:83
+msgid "graphic"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:44
+msgid "help balloon"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:45
+msgid "tool tip"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:46 src/nav/quick_nav.cpp:71
+msgid "link"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:47
+msgid "tree view"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:48
+msgid "tree view item"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:49 src/i18n/data_strings.cpp:445
+#: src/nav/quick_nav.cpp:96
+msgid "tab"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:50
+msgid "tab control"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:51
+msgid "slider"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:52
+msgid "progress bar"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:53
+msgid "scroll bar"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:54
+msgid "status bar"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:55 src/nav/quick_nav.cpp:77
+msgid "table"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:56
+msgid "cell"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:57
+msgid "column"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:58
+msgid "row"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:59
+msgid "column header"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:60
+msgid "row header"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:61 src/a11y/role_tables.cpp:139
+#: src/nav/quick_nav.cpp:86
+msgid "frame"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:62
+msgid "tool bar"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:63
+msgid "drop down button"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:64
+msgid "clock"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:65 src/nav/quick_nav.cpp:85
+msgid "separator"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:66 src/braille/labels.cpp:245
+msgid "form"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:67 src/nav/quick_nav.cpp:61
+msgid "heading"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:68
+msgid "heading 1"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:69
+msgid "heading 2"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:70
+msgid "heading 3"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:71
+msgid "heading 4"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:72
+msgid "heading 5"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:73
+msgid "heading 6"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:74
+msgid "paragraph"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:75 src/nav/quick_nav.cpp:84
+msgid "block quote"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:76
+msgid "table header"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:77
+msgid "table body"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:78
+msgid "table footer"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:79
+msgid "document"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:80
+msgid "animation"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:81
+msgid "application"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:82
+msgid "box"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:83 src/nav/quick_nav.cpp:93
+msgid "grouping"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:84
+msgid "property page"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:85
+msgid "canvas"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:86
+msgid "caption"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:87
+msgid "check menu item"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:88
+msgid "date edit"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:89
+msgid "icon"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:90
+msgid "directory pane"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:91 src/nav/quick_nav.cpp:88
+msgid "embedded object"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:92
+msgid "end note"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:93
+msgid "footer"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:94
+msgid "foot note"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:95
+msgid "glass pane"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:96
+msgid "header"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:97
+msgid "image map"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:98
+msgid "input window"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:99
+msgid "label"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:100
+msgid "note"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:101
+msgid "page"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:102
+msgid "radio menu item"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:103
+msgid "layered pane"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:104
+msgid "redundant object"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:105
+msgid "root pane"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:106
+msgid "edit bar"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:107
+msgid "terminal"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:108
+msgid "rich edit"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:109
+msgid "ruler"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:110
+msgid "scroll pane"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:111
+msgid "section"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:112
+msgid "shape"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:113
+msgid "split pane"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:114
+msgid "view port"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:115
+msgid "tear off menu"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:116
+msgid "text frame"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:117
+msgid "toggle button"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:118
+msgid "border"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:119
+msgid "caret"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:120
+msgid "character"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:121
+msgid "chart"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:122
+msgid "cursor"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:123
+msgid "diagram"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:124
+msgid "dial"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:125
+msgid "drop list"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:126
+msgid "split button"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:127
+msgid "menu button"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:128
+msgid "drop down button grid"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:129
+msgid "math"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:130
+msgid "grip"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:131
+msgid "hot key field"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:132
+msgid "indicator"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:133
+msgid "spin button"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:134
+msgid "sound"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:135
+msgid "white space"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:136
+msgid "tree view button"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:137
+msgid "IP address"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:138
+msgid "desktop icon"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:140
+msgid "desktop pane"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:141
+msgid "option pane"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:142
+msgid "color chooser"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:143
+msgid "file chooser"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:144
+msgid "filler"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:146
+msgid "panel"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:147
+msgid "password edit"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:148
+msgid "font chooser"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:149
+msgid "line"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:150
+msgid "font name"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:151
+msgid "font size"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:152
+msgid "bold"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:153
+msgid "italic"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:154
+msgid "underline"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:155
+msgid "foreground color"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:156
+msgid "background color"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:157
+msgid "superscript"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:158
+msgid "subscript"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:159
+msgid "style"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:160
+msgid "indent"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:161
+msgid "alignment"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:162
+msgid "alert"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:163
+msgid "data grid"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:164
+msgid "data item"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:165
+msgid "header item"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:166
+msgid "thumb control"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:167
+msgid "calendar"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:168
+msgid "video"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:169
+msgid "audio"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:170
+msgid "chart element"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:171
+msgid "deleted"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:172
+msgid "inserted"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:173 src/nav/quick_nav.cpp:87
+msgid "landmark"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:174 src/nav/quick_nav.cpp:92
+msgid "article"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:175
+msgid "region"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:176 src/nav/quick_nav.cpp:94
+msgid "figure"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:177
+msgid "highlighted"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:178
+msgid "busy indicator"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:179
+msgid "comment"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:180
+msgid "suggestion"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:181 src/braille/labels.cpp:135
+msgid "definition"
+msgstr ""
+
+#: src/a11y/role_tables.cpp:182
+msgid "switch"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:28
+msgid "unavailable"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:29
+msgid "focused"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:30
+msgid "not selected"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:30
+msgid "selected"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:31
+msgid "busy"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:32
+msgid "not pressed"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:32
+msgid "pressed"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:33
+msgid "checked"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:33
+msgid "not checked"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:34
+msgid "half checked"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:35
+msgid "read only"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:36
+msgid "expanded"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:37
+msgid "collapsed"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:38
+msgid "invisible"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:39
+msgid "visited"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:40
+msgid "linked"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:41
+msgid "subMenu"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:42
+msgid "protected"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:43
+msgid "required"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:44
+msgid "defunct"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:45
+msgid "invalid entry"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:46
+msgid "modal"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:47
+msgid "has auto complete"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:48
+msgid "multi line"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:49
+msgid "iconified"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:50
+msgid "off screen"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:51
+msgid "selectable"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:52
+msgid "focusable"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:53
+msgid "clickable"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:54
+msgid "editable"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:55
+msgid "checkable"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:56
+msgid "draggable"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:57
+msgid "dragging"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:58
+msgid "done dragging"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:58
+msgid "drop target"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:59
+msgid "sorted"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:60
+msgid "sorted ascending"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:61
+msgid "sorted descending"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:62
+msgid "has long description"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:63
+msgid "pinned"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:64
+msgid "has formula"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:65
+msgid "has comment"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:66
+msgid "obscured"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:67
+msgid "cropped"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:68
+msgid "overflowing"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:69
+msgid "unlocked"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:71
+msgid "has note"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:73
+msgid "half pressed"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:74 src/braille/commands.cpp:55
+msgid "off"
+msgstr ""
+
+#. Translators: a setting that is on or off.
+#: src/a11y/state_tables.cpp:74 src/braille/commands.cpp:55
+msgid "on"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:75
+msgid "opens dialog"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:76
+msgid "opens grid"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:77
+msgid "opens list"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:78
+msgid "opens tree"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:79
+msgid "same page"
+msgstr ""
+
+#: src/a11y/state_tables.cpp:80
+msgid "multi-select"
+msgstr ""
+
+#. Translators: spoken when the line has no indentation.
+#: src/a11y/text_speech.cpp:105
+msgid "no indent"
+msgstr ""
+
+#. Translators: the page number in a document; %s is the number.
+#: src/a11y/text_speech.cpp:195
+#, c-format
+msgid "page %s"
+msgstr ""
+
+#: src/a11y/text_speech.cpp:200
+#, c-format
+msgid "section %s"
+msgstr ""
+
+#. Translators: both the text and background colours changed; the
+#. first %s is the text colour and the second the background,
+#. e.g. "white on blue".
+#: src/a11y/text_speech.cpp:288
+#, c-format
+msgid "%s on %s"
+msgstr ""
+
+#. Translators: only the background colour changed; %s is the
+#. colour, e.g. "blue background".
+#: src/a11y/text_speech.cpp:294
+#, c-format
+msgid "%s background"
+msgstr ""
+
+#. Translators: Number of items in a list (example output: list with 5
+#. items); %s is the count.
+#: src/a11y/text_speech.cpp:570
+#, c-format
+msgid "with %s item"
+msgid_plural "with %s items"
+msgstr[0] ""
+msgstr[1] ""
+
+#. Translators: Indicates the end of something; %s is what is being
+#. left, so the result reads "out of list".
+#: src/a11y/text_speech.cpp:889
+#, c-format
+msgid "out of %s"
+msgstr ""
+
+#. Translators: spoken when the line is blank.
+#. Translators: spoken when a table row or column has no content.
+#. Translators: spoken when a paragraph is blank.
+#. Translators: spoken when a line or a field is empty.
+#. Translators: spoken when the review cursor reaches an empty line.
+#: src/a11y/text_speech.cpp:1367 src/nav/browse_mode.cpp:796
+#: src/nav/paragraph_nav.cpp:231 src/speech/presenter.cpp:291
+#: src/speech/spelling.cpp:149 src/speech/spelling.cpp:157
+msgid "blank"
+msgstr ""
+
+#. Translators: a large selection is reported by its size; %s is the
+#. number of characters.
+#: src/a11y/text_speech.cpp:1441
+#, c-format
+msgid "%s character"
+msgid_plural "%s characters"
+msgstr[0] ""
+msgstr[1] ""
+
+#. Translators: text that was ALREADY selected when the control got the
+#. focus. "selected" comes FIRST on purpose: the user may be about to
+#. overwrite it.
+#: src/a11y/text_speech.cpp:1482
+#, c-format
+msgid "selected %s"
+msgstr ""
+
+#. Translators: what has just been selected: "hello world selected".
+#. Translators: what is selected, e.g. "hello world selected".
+#: src/a11y/text_speech.cpp:1558 src/nav/text_commands.cpp:614
+#, c-format
+msgid "%s selected"
+msgstr ""
+
+#. Translators: what has just been unselected.
+#: src/a11y/text_speech.cpp:1568
+#, c-format
+msgid "%s unselected"
+msgstr ""
+
+#. Translators: the previous selection was replaced by a new one.
+#: src/a11y/text_speech.cpp:1573
+#, c-format
+msgid "%s selected instead"
+msgstr ""
+
+#. Translators: the selection was removed.
+#: src/a11y/text_speech.cpp:1576
+msgid "selection removed"
+msgstr ""
+
+#. Translators: reported when no application has the focus.
+#: src/app/commands.cpp:42 src/app/commands.cpp:84 src/app/commands.cpp:110
+msgid "No focused application"
+msgstr ""
+
+#. Translators: reported when the focused application has no status
+#. line, or when its status line is empty.
+#: src/app/commands.cpp:51
+msgid "No status line found"
+msgstr ""
+
+#. Translators: copying to the clipboard is not available yet.
+#: src/app/commands.cpp:68 src/nav/text_commands.cpp:422
+msgid "Clipboard support is not available yet"
+msgstr ""
+
+#. Translators: the app module loaded for the focused application.
+#: src/app/commands.cpp:96
+#, c-format
+msgid " %s module is loaded. "
+msgstr ""
+
+#. Translators: the program that is running, by its executable name.
+#: src/app/commands.cpp:99
+#, c-format
+msgid " %s is currently running."
+msgstr ""
+
+#. Translators: reported when ALUS is told to say nothing
+#. about the focused application, which speaks for itself.
+#: src/app/commands.cpp:124
+msgid "Sleep mode on"
+msgstr ""
+
+#. Translators: reported when ALUS goes back to announcing
+#. the focused application.
+#: src/app/commands.cpp:127
+msgid "Sleep mode off"
+msgstr ""
+
+#. Translators: reported when a table command is used outside a table.
+#: src/app/modules/libreoffice.cpp:176
+msgid "Not in a table"
+msgstr ""
+
+#. Translators: reported when the current cell's column has no header.
+#: src/app/modules/libreoffice.cpp:189
+msgid "No column header"
+msgstr ""
+
+#. Translators: reported when the current cell's row has no header.
+#: src/app/modules/libreoffice.cpp:191
+msgid "No row header"
+msgstr ""
+
+#. Translators: a braille cursor shape.
+#: src/braille/commands.cpp:32 src/gui/model.cpp:168 src/gui/model.cpp:173
+msgid "dot 8"
+msgstr ""
+
+#. Translators: a braille cursor shape.
+#: src/braille/commands.cpp:35 src/gui/model.cpp:169 src/gui/model.cpp:174
+msgid "all dots"
+msgstr ""
+
+#. Translators: a braille cursor shape.
+#: src/braille/commands.cpp:38 src/gui/model.cpp:167 src/gui/model.cpp:172
+msgid "dots 7 and 8"
+msgstr ""
+
+#. Translators: reported when there is no formatting information for
+#. the text under a braille cell.
+#. Translators: the application reports no formatting information.
+#: src/braille/commands.cpp:217 src/nav/text_commands.cpp:780
+msgid "No formatting information"
+msgstr ""
+
+#. Translators: reported when selection via routing keys is not
+#. possible.
+#: src/braille/commands.cpp:239
+msgid "Cannot select from braille routing keys"
+msgstr ""
+
+#. Translators: reported when the focused control does not support
+#. selecting from the braille display.
+#: src/braille/commands.cpp:246
+msgid "Selection not supported here"
+msgstr ""
+
+#. Translators: reports which position braille is tethered to; %s is
+#. "focus" or "review".
+#: src/braille/commands.cpp:348
+#, c-format
+msgid "Braille tethered %s"
+msgstr ""
+
+#. Translators: reported when switching braille modes; %s names the
+#. mode.
+#: src/braille/commands.cpp:365
+#, c-format
+msgid "Braille mode %s"
+msgstr ""
+
+#. Translators: reported when the braille cursor is turned on or off;
+#. %s is "on" or "off".
+#: src/braille/commands.cpp:384
+#, c-format
+msgid "Braille cursor %s"
+msgstr ""
+
+#. Translators: reported when the braille cursor shape cannot be
+#. changed because the cursor is off.
+#: src/braille/commands.cpp:393
+msgid "Cannot cycle braille cursor shape. The braille cursor is turned off"
+msgstr ""
+
+#. Translators: reported when braille selection indication is cycled;
+#. %s is "on" or "off".
+#: src/braille/commands.cpp:409
+#, c-format
+msgid "Braille show selection %s"
+msgstr ""
+
+#. Translators: reported when the action is unavailable because
+#. braille is tethered to focus.
+#: src/braille/commands.cpp:453
+msgid "Action unavailable. Braille is tethered to focus"
+msgstr ""
+
+#. Translators: reported when braille automatic scroll is turned on or
+#. off; %s is "on" or "off".
+#: src/braille/commands.cpp:504
+#, c-format
+msgid "Braille automatic scroll %s"
+msgstr ""
+
+#. Translators: reported when braille space is pressed with dots.
+#: src/braille/input.cpp:46
+msgid "space with dot"
+msgstr ""
+
+#. Translators: reported when braille dots are pressed.
+#: src/braille/input.cpp:49
+msgid "dot"
+msgstr ""
+
+#. Translators: reported when braille space is pressed.
+#: src/braille/input.cpp:52 src/i18n/data_strings.cpp:444
+msgid "space"
+msgstr ""
+
+#. Translators: used when describing keys on a braille keyboard.
+#: src/braille/input.cpp:111
+msgid "braille keyboard"
+msgstr ""
+
+#: src/braille/input.cpp:280
+msgid "Unsupported input"
+msgstr ""
+
+#: src/braille/input.cpp:405
+#, c-format
+msgid "dot %s"
+msgstr ""
+
+#. Translators: reported when a braille input modifier is
+#. released; %s is the modifier, e.g. "control released".
+#: src/braille/input.cpp:506
+#, c-format
+msgid "%s released"
+msgstr ""
+
+#. Translators: said once when braille typing is impossible on
+#. this platform.
+#: src/braille/input.cpp:580
+msgid "Braille typing is not available in this session"
+msgstr ""
+
+#: src/braille/labels.cpp:28
+msgid "wnd"
+msgstr ""
+
+#: src/braille/labels.cpp:30
+msgid "dlg"
+msgstr ""
+
+#: src/braille/labels.cpp:32
+msgid "chk"
+msgstr ""
+
+#: src/braille/labels.cpp:34
+msgid "rbtn"
+msgstr ""
+
+#: src/braille/labels.cpp:36
+msgid "edt"
+msgstr ""
+
+#: src/braille/labels.cpp:38
+msgid "btn"
+msgstr ""
+
+#: src/braille/labels.cpp:40
+msgid "mnubar"
+msgstr ""
+
+#: src/braille/labels.cpp:42
+msgid "mnuitem"
+msgstr ""
+
+#: src/braille/labels.cpp:45
+msgid "mnu"
+msgstr ""
+
+#: src/braille/labels.cpp:47
+msgid "cbo"
+msgstr ""
+
+#: src/braille/labels.cpp:49
+msgid "lst"
+msgstr ""
+
+#: src/braille/labels.cpp:51
+msgid "gra"
+msgstr ""
+
+#: src/braille/labels.cpp:53
+msgid "hlp"
+msgstr ""
+
+#: src/braille/labels.cpp:55
+msgid "tltip"
+msgstr ""
+
+#: src/braille/labels.cpp:57
+msgid "lnk"
+msgstr ""
+
+#: src/braille/labels.cpp:59
+msgid "tv"
+msgstr ""
+
+#: src/braille/labels.cpp:61
+msgid "tvitem"
+msgstr ""
+
+#: src/braille/labels.cpp:63
+msgid "tabctl"
+msgstr ""
+
+#: src/braille/labels.cpp:65
+msgid "prgbar"
+msgstr ""
+
+#: src/braille/labels.cpp:67
+msgid "bsyind"
+msgstr ""
+
+#: src/braille/labels.cpp:69
+msgid "scrlbar"
+msgstr ""
+
+#: src/braille/labels.cpp:71
+msgid "stbar"
+msgstr ""
+
+#: src/braille/labels.cpp:73
+msgid "tbl"
+msgstr ""
+
+#: src/braille/labels.cpp:75
+msgid "tlbar"
+msgstr ""
+
+#: src/braille/labels.cpp:77
+msgid "drbtn"
+msgstr ""
+
+#: src/braille/labels.cpp:81
+msgid "⠤⠤⠤⠤⠤"
+msgstr ""
+
+#: src/braille/labels.cpp:83
+msgid "bqt"
+msgstr ""
+
+#: src/braille/labels.cpp:85
+msgid "doc"
+msgstr ""
+
+#: src/braille/labels.cpp:87
+msgid "app"
+msgstr ""
+
+#: src/braille/labels.cpp:89
+msgid "grp"
+msgstr ""
+
+#: src/braille/labels.cpp:91
+msgid "cap"
+msgstr ""
+
+#: src/braille/labels.cpp:93
+msgid "embedded"
+msgstr ""
+
+#: src/braille/labels.cpp:95
+msgid "enote"
+msgstr ""
+
+#: src/braille/labels.cpp:97
+msgid "fnote"
+msgstr ""
+
+#: src/braille/labels.cpp:99
+msgid "term"
+msgstr ""
+
+#: src/braille/labels.cpp:101
+msgid "sect"
+msgstr ""
+
+#: src/braille/labels.cpp:103
+msgid "tgbtn"
+msgstr ""
+
+#: src/braille/labels.cpp:105
+msgid "splbtn"
+msgstr ""
+
+#: src/braille/labels.cpp:107
+msgid "mnubtn"
+msgstr ""
+
+#: src/braille/labels.cpp:109
+msgid "spnbtn"
+msgstr ""
+
+#: src/braille/labels.cpp:111
+msgid "tvbtn"
+msgstr ""
+
+#: src/braille/labels.cpp:113
+msgid "pnl"
+msgstr ""
+
+#: src/braille/labels.cpp:115
+msgid "pwdedt"
+msgstr ""
+
+#: src/braille/labels.cpp:117
+msgid "del"
+msgstr ""
+
+#: src/braille/labels.cpp:119
+msgid "ins"
+msgstr ""
+
+#: src/braille/labels.cpp:121
+msgid "lmk"
+msgstr ""
+
+#: src/braille/labels.cpp:123
+msgid "art"
+msgstr ""
+
+#: src/braille/labels.cpp:125
+msgid "rgn"
+msgstr ""
+
+#: src/braille/labels.cpp:127
+msgid "fig"
+msgstr ""
+
+#: src/braille/labels.cpp:129
+msgid "hlght"
+msgstr ""
+
+#. Translators: brailled when text contains a comment.
+#: src/braille/labels.cpp:131 src/braille/labels.cpp:197
+#: src/braille/properties.cpp:468
+msgid "cmnt"
+msgstr ""
+
+#: src/braille/labels.cpp:133
+msgid "sggstn"
+msgstr ""
+
+#: src/braille/labels.cpp:137
+msgid "swtch"
+msgstr ""
+
+#: src/braille/labels.cpp:156
+msgid "sel"
+msgstr ""
+
+#: src/braille/labels.cpp:161
+msgid "⢎⣿⡱"
+msgstr ""
+
+#: src/braille/labels.cpp:163
+msgid "⢎⣸⡱"
+msgstr ""
+
+#: src/braille/labels.cpp:165 src/braille/labels.cpp:199
+msgid "⣏⣿⣹"
+msgstr ""
+
+#: src/braille/labels.cpp:167
+msgid "⣏⣸⣹"
+msgstr ""
+
+#: src/braille/labels.cpp:169
+msgid "ro"
+msgstr ""
+
+#: src/braille/labels.cpp:171
+msgid "-"
+msgstr ""
+
+#: src/braille/labels.cpp:173
+msgid "+"
+msgstr ""
+
+#: src/braille/labels.cpp:175
+msgid "submnu"
+msgstr ""
+
+#: src/braille/labels.cpp:177
+msgid "***"
+msgstr ""
+
+#: src/braille/labels.cpp:179
+msgid "req"
+msgstr ""
+
+#: src/braille/labels.cpp:181
+msgid "invalid"
+msgstr ""
+
+#: src/braille/labels.cpp:183
+msgid "..."
+msgstr ""
+
+#: src/braille/labels.cpp:185
+msgid "mln"
+msgstr ""
+
+#: src/braille/labels.cpp:187
+msgid "clk"
+msgstr ""
+
+#: src/braille/labels.cpp:189
+msgid "sorted asc"
+msgstr ""
+
+#: src/braille/labels.cpp:191
+msgid "sorted desc"
+msgstr ""
+
+#: src/braille/labels.cpp:193
+msgid "ldesc"
+msgstr ""
+
+#: src/braille/labels.cpp:195
+msgid "frml"
+msgstr ""
+
+#: src/braille/labels.cpp:201
+msgid "smp"
+msgstr ""
+
+#: src/braille/labels.cpp:203
+msgid "msel"
+msgstr ""
+
+#: src/braille/labels.cpp:213
+msgid "nsel"
+msgstr ""
+
+#: src/braille/labels.cpp:215
+msgid "⢎⣀⡱"
+msgstr ""
+
+#: src/braille/labels.cpp:217 src/braille/labels.cpp:219
+msgid "⣏⣀⣹"
+msgstr ""
+
+#: src/braille/labels.cpp:227
+msgid "bnnr"
+msgstr ""
+
+#: src/braille/labels.cpp:230
+msgid "cmpl"
+msgstr ""
+
+#: src/braille/labels.cpp:233
+msgid "cinf"
+msgstr ""
+
+#: src/braille/labels.cpp:236
+msgid "main"
+msgstr ""
+
+#: src/braille/labels.cpp:239
+msgid "navi"
+msgstr ""
+
+#: src/braille/labels.cpp:242
+msgid "srch"
+msgstr ""
+
+#. Translators: brailled when there are further details that can be
+#. fetched manually, and the kind is unknown.
+#: src/braille/properties.cpp:70
+msgid "details"
+msgstr ""
+
+#. Translators: brailled for a heading with a level; %s is the
+#. level, so the result reads "h2".
+#. Translators: brailled for a heading with a level; %s is
+#. the level, so the result reads "h2".
+#: src/braille/properties.cpp:118 src/braille/properties.cpp:442
+#, c-format
+msgid "h%s"
+msgstr ""
+
+#. Translators: brailled for a link which has been visited.
+#: src/braille/properties.cpp:123
+msgid "vlnk"
+msgstr ""
+
+#. Translators: brailled for a multi select list.
+#: src/braille/properties.cpp:129
+msgid "mslst"
+msgstr ""
+
+#. Translators: brailled when an object has a hierarchical level; %s
+#. is the level.
+#: src/braille/properties.cpp:184
+#, c-format
+msgid "lv %s"
+msgstr ""
+
+#. Translators: a table cell's row number, brailled; %s is the number
+#. or the range of numbers, so the result reads "r3" or "r3-4".
+#: src/braille/properties.cpp:191
+#, c-format
+msgid "r%s"
+msgstr ""
+
+#. Translators: a table cell's column number, brailled; %s is the
+#. number or the range of numbers, so the result reads "c2".
+#: src/braille/properties.cpp:200
+#, c-format
+msgid "c%s"
+msgstr ""
+
+#. Translators: brailled when text contains a draft comment.
+#: src/braille/properties.cpp:462
+msgid "drft cmnt"
+msgstr ""
+
+#. Translators: brailled when text contains a resolved comment.
+#: src/braille/properties.cpp:465
+msgid "rslvd cmnt"
+msgstr ""
+
+#. Translators: brailled when text contains a bookmark.
+#: src/braille/properties.cpp:477
+msgid "bkmk"
+msgstr ""
+
+#. Translators: what `alus+control+t` reports.
+#: src/braille/settings.cpp:72 src/gui/model.cpp:184
+msgid "to focus"
+msgstr ""
+
+#: src/braille/settings.cpp:75 src/gui/model.cpp:185
+msgid "to review"
+msgstr ""
+
+#: src/braille/settings.cpp:78 src/braille/settings.cpp:80
+#: src/gui/model.cpp:183
+msgid "automatically"
+msgstr ""
+
+#: src/braille/settings.cpp:170 src/gui/model.cpp:187
+msgid "follow cursors"
+msgstr ""
+
+#. Translators: what `alus+alt+t` reports.
+#: src/braille/settings.cpp:170 src/gui/model.cpp:188
+msgid "speech output"
+msgstr ""
+
+#: src/braille/settings.cpp:197 src/braille/settings.cpp:207
+#: src/gui/model.cpp:191
+msgid "never"
+msgstr ""
+
+#: src/braille/settings.cpp:201 src/gui/model.cpp:192
+msgid "always"
+msgstr ""
+
+#: src/braille/settings.cpp:205 src/gui/model.cpp:194
+msgid "only when automatically tethered"
+msgstr ""
+
+#. Translators: spoken when the battery status cannot be read at all.
+#: src/commands/system.cpp:244
+msgid "Unknown power status"
+msgstr ""
+
+#. Translators: spoken on a machine with no battery -- a desktop, or a
+#. laptop with the battery taken out.
+#: src/commands/system.cpp:249
+msgid "No system battery"
+msgstr ""
+
+#. Translators: the current battery charge. %d is the percentage.
+#: src/commands/system.cpp:254
+#, c-format
+msgid "%d percent"
+msgid_plural "%d percent"
+msgstr[0] ""
+msgstr[1] ""
+
+#. Translators: spoken when less than a minute of battery is left.
+#: src/commands/system.cpp:263
+msgid "Less than 1 minute remaining"
+msgstr ""
+
+#: src/commands/system.cpp:268
+msgid "{hours:d} hour"
+msgid_plural "{hours:d} hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/commands/system.cpp:276
+msgid "{minutes:d} minute"
+msgid_plural "{minutes:d} minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/commands/system.cpp:282
+msgid "{hourText} and {minuteText} remaining"
+msgstr ""
+
+#: src/commands/system.cpp:288
+msgid "{hourText} remaining"
+msgstr ""
+
+#: src/commands/system.cpp:292
+msgid "{minuteText} remaining"
+msgstr ""
+
+#. Translators: spoken when the machine is on mains power.
+#: src/commands/system.cpp:299
+msgid "Plugged in"
+msgstr ""
+
+#. Translators: spoken when the machine is on battery.
+#: src/commands/system.cpp:301
+msgid "Unplugged"
+msgstr ""
+
+#. Translators: spoken when the clock cannot be read at all, which
+#. takes a locale with no time format. Never silence: a key that says
+#. nothing is indistinguishable from a key that did not arrive.
+#: src/commands/system.cpp:348
+msgid "cannot read the clock"
+msgstr ""
+
+#. Translators: spoken when the configuration cannot be saved because
+#. the command was run somewhere that has none, e.g. a diagnostic tool.
+#: src/config/commands.cpp:41
+msgid "cannot save the configuration from here"
+msgstr ""
+
+#. Translators: spoken when writing the configuration file failed --
+#. a read-only home directory, a full disk. NOT silent: a user who
+#. believes a setting was kept and finds it gone after a restart has
+#. no way to know which of the two went wrong.
+#: src/config/commands.cpp:51
+msgid "Could not save configuration"
+msgstr ""
+
+#. Translators: spoken when the configuration has been written to disk.
+#: src/config/commands.cpp:56
+msgid "Configuration saved"
+msgstr ""
+
+#. Translators: spoken when the configuration cannot be reloaded
+#. because the command was run outside the screen reader.
+#: src/config/commands.cpp:63
+msgid "cannot revert the configuration from here"
+msgstr ""
+
+#. Translators: spoken when the configuration has been reloaded from
+#. disk, undoing every change made since it was last saved.
+#: src/config/commands.cpp:76
+msgid "Configuration applied"
+msgstr ""
+
+#. Translators: spoken when every setting has been returned to its
+#. factory value.
+#: src/config/commands.cpp:84
+msgid "Configuration restored to factory defaults"
+msgstr ""
+
+#. Translators: spoken as the screen reader finishes starting.
+#. "ALUS" is the product name and is NOT translated.
+#: src/daemon/main.cpp:727
+msgid "ALUS started"
+msgstr ""
+
+#: src/daemon/main.cpp:735
+#, c-format
+msgid "The object model is not available: %s"
+msgstr ""
+
+#: src/daemon/main.cpp:749
+#, c-format
+msgid "Keyboard input is not available: %s"
+msgstr ""
+
+#. Translators: the title of the prompt that asks for a key to bind.
+#: src/gui/gesture_dialog.cpp:117
+msgid "Add a gesture"
+msgstr ""
+
+#. Translators: the prompt's explanation. It says the gesture is typed
+#. rather than pressed, which is a Wayland limitation and not a choice;
+#. %s is the command's description.
+#: src/gui/gesture_dialog.cpp:123
+#, c-format
+msgid ""
+"Type the gesture to bind to “%s”, the way it is written in gestures.ini, for "
+"example kb:alus+shift+t. Wayland does not let an application capture a key "
+"it has not already been granted, so the gesture cannot be pressed here."
+msgstr ""
+
+#. Translators: a button in the add-gesture prompt.
+#: src/gui/gesture_dialog.cpp:137
+msgid "Cancel"
+msgstr ""
+
+#. Translators: a button in the add-gesture prompt.
+#. Translators: the button that adds a gesture to the selected command.
+#: src/gui/gesture_dialog.cpp:140 src/gui/gesture_dialog.cpp:375
+msgid "Add"
+msgstr ""
+
+#. Translators: shown when the typed gesture is not a
+#. gesture ALUS can recognise; %s is what was typed.
+#: src/gui/gesture_dialog.cpp:175
+#, c-format
+msgid "“%s” is not a gesture ALUS recognises"
+msgstr ""
+
+#. Translators: shown when the gesture map could not be
+#. written; %s is the reason.
+#: src/gui/gesture_dialog.cpp:187 src/gui/gesture_dialog.cpp:227
+#, c-format
+msgid "Could not save the gesture: %s"
+msgstr ""
+
+#. Translators: shown after a gesture has been bound; the
+#. first %s is the gesture and the second the command.
+#: src/gui/gesture_dialog.cpp:199
+#, c-format
+msgid "%s is now bound to “%s”"
+msgstr ""
+
+#. Translators: shown after the user's own binding was deleted;
+#. %s is the gesture.
+#: src/gui/gesture_dialog.cpp:238
+#, c-format
+msgid "%s is no longer bound"
+msgstr ""
+
+#. Translators: shown after a built-in binding was shadowed
+#. rather than deleted, because the file it lives in is not
+#. the user's; %s is the gesture.
+#: src/gui/gesture_dialog.cpp:242
+#, c-format
+msgid ""
+"%s is now unbound for you; the default is kept in place for everything else"
+msgstr ""
+
+#. Translators: the title of the gesture dialog.
+#: src/gui/gesture_dialog.cpp:334 src/gui/model.cpp:544
+msgid "Gestures"
+msgstr ""
+
+#. Translators: the heading above the list of every ALUS command.
+#: src/gui/gesture_dialog.cpp:352
+msgid "Commands"
+msgstr ""
+
+#. Translators: the heading above the keys bound to the selected command.
+#: src/gui/gesture_dialog.cpp:363
+msgid "Gestures for this command"
+msgstr ""
+
+#. Translators: the button that removes the selected gesture.
+#: src/gui/gesture_dialog.cpp:377
+msgid "Remove"
+msgstr ""
+
+#. Translators: the name of the ALUS key -- Insert, numpad Insert
+#. and/or Caps Lock -- as it appears in a key combination in the
+#. gesture dialog. "ALUS" is the product name; translate this only if
+#. the name is written differently in your script.
+#: src/gui/gesture_model.cpp:58
+msgid "ALUS"
+msgstr ""
+
+#. Translators: a gesture that applies only to one keyboard
+#. layout, shown after the keys, e.g. "ALUS+h (laptop)".
+#: src/gui/gesture_model.cpp:83
+msgid "laptop"
+msgstr ""
+
+#. Translators: a gesture that applies only to one keyboard
+#. layout.
+#: src/gui/gesture_model.cpp:86
+msgid "desktop"
+msgstr ""
+
+#: src/gui/gesture_model.cpp:148
+msgid "yours"
+msgstr ""
+
+#: src/gui/gesture_model.cpp:152
+msgid "from the language"
+msgstr ""
+
+#: src/gui/gesture_model.cpp:156
+msgid "from the braille driver"
+msgstr ""
+
+#: src/gui/gesture_model.cpp:160
+msgid "from an application module"
+msgstr ""
+
+#: src/gui/gesture_model.cpp:164 src/gui/gesture_model.cpp:166
+msgid "built in"
+msgstr ""
+
+#: src/gui/model.cpp:23 src/gui/model.cpp:56 src/gui/model.cpp:219
+#: src/gui/model.cpp:457 src/gui/model.cpp:480 src/input/commands.cpp:39
+#: src/input/commands.cpp:48
+msgid "Off"
+msgstr ""
+
+#: src/gui/model.cpp:24 src/input/commands.cpp:43
+msgid "Only in edit controls"
+msgstr ""
+
+#: src/gui/model.cpp:25 src/input/commands.cpp:46
+msgid "Always"
+msgstr ""
+
+#: src/gui/model.cpp:36
+msgid "General"
+msgstr ""
+
+#: src/gui/model.cpp:38 src/gui/model.cpp:43
+msgid "Language"
+msgstr ""
+
+#: src/gui/model.cpp:39
+msgid ""
+"The language ALUS speaks and shows. Independent of the desktop's language on "
+"purpose: a user may want an English desktop and a Serbian screen reader."
+msgstr ""
+
+#: src/gui/model.cpp:44
+msgid "Takes effect immediately; ALUS does not need to be restarted."
+msgstr ""
+
+#: src/gui/model.cpp:46
+msgid "Same as the session"
+msgstr ""
+
+#: src/gui/model.cpp:47
+msgid "English"
+msgstr ""
+
+#: src/gui/model.cpp:48
+msgid "Serbian (Cyrillic)"
+msgstr ""
+
+#: src/gui/model.cpp:49
+msgid "Serbian (Latin)"
+msgstr ""
+
+#: src/gui/model.cpp:51
+msgid "Logging"
+msgstr ""
+
+#: src/gui/model.cpp:53
+msgid "Log level"
+msgstr ""
+
+#: src/gui/model.cpp:54
+msgid ""
+"\"debug\" and \"io\" write a great deal and slow ALUS down; use them when "
+"reporting a problem."
+msgstr ""
+
+#: src/gui/model.cpp:57
+msgid "Errors only"
+msgstr ""
+
+#: src/gui/model.cpp:58
+msgid "Warnings"
+msgstr ""
+
+#: src/gui/model.cpp:59
+msgid "Information"
+msgstr ""
+
+#: src/gui/model.cpp:60
+msgid "Debug"
+msgstr ""
+
+#: src/gui/model.cpp:61
+msgid "Debug with input and output"
+msgstr ""
+
+#: src/gui/model.cpp:63 src/i18n/data_strings.cpp:30
+msgid "Configuration"
+msgstr ""
+
+#: src/gui/model.cpp:65
+msgid "Open the configuration folder"
+msgstr ""
+
+#: src/gui/model.cpp:66
+msgid "Where alus.ini, gestures.ini and the profiles are."
+msgstr ""
+
+#: src/gui/model.cpp:68
+msgid "Reset every setting"
+msgstr ""
+
+#: src/gui/model.cpp:69
+msgid ""
+"Returns every setting to its factory value. The gesture map and the profiles "
+"are not touched."
+msgstr ""
+
+#: src/gui/model.cpp:79 src/i18n/data_strings.cpp:36
+msgid "Speech"
+msgstr ""
+
+#: src/gui/model.cpp:81 src/gui/model.cpp:85
+msgid "Synthesizer"
+msgstr ""
+
+#: src/gui/model.cpp:82
+msgid ""
+"ALUS speaks through speech-dispatcher, so every SSIP module already "
+"installed is available here."
+msgstr ""
+
+#: src/gui/model.cpp:87 src/gui/model.cpp:107
+msgid "None"
+msgstr ""
+
+#: src/gui/model.cpp:87
+msgid "speech-dispatcher"
+msgstr ""
+
+#: src/gui/model.cpp:88
+msgid "Output module"
+msgstr ""
+
+#: src/gui/model.cpp:89
+msgid ""
+"The speech-dispatcher module, e.g. espeak-ng or rhvoice. Empty means the "
+"module speech-dispatcher itself defaults to."
+msgstr ""
+
+#: src/gui/model.cpp:92
+msgid "Voice"
+msgstr ""
+
+#: src/gui/model.cpp:94
+msgid "Voice settings"
+msgstr ""
+
+#: src/gui/model.cpp:96
+msgid "Rate"
+msgstr ""
+
+#: src/gui/model.cpp:97
+msgid "Pitch"
+msgstr ""
+
+#: src/gui/model.cpp:98
+msgid "Volume"
+msgstr ""
+
+#: src/gui/model.cpp:99
+msgid "Inflection"
+msgstr ""
+
+#: src/gui/model.cpp:101
+msgid "What is spoken"
+msgstr ""
+
+#: src/gui/model.cpp:104
+msgid "Punctuation and symbol level"
+msgstr ""
+
+#: src/gui/model.cpp:105
+msgid ""
+"How much punctuation is spoken. `alus+p` cycles this without opening the "
+"settings."
+msgstr ""
+
+#: src/gui/model.cpp:108
+msgid "Some"
+msgstr ""
+
+#: src/gui/model.cpp:109
+msgid "Most"
+msgstr ""
+
+#: src/gui/model.cpp:110
+msgid "All"
+msgstr ""
+
+#: src/gui/model.cpp:111
+msgid "Character"
+msgstr ""
+
+#: src/gui/model.cpp:113
+msgid "Follow the language of the text"
+msgstr ""
+
+#: src/gui/model.cpp:114
+msgid ""
+"Switches the voice when a document says its text is in another language."
+msgstr ""
+
+#: src/gui/model.cpp:117
+msgid "Follow the dialect too"
+msgstr ""
+
+#: src/gui/model.cpp:118
+msgid ""
+"Switches between, for example, British and American English. Off by default."
+msgstr ""
+
+#: src/gui/model.cpp:121
+msgid "Normalize Unicode before speaking"
+msgstr ""
+
+#: src/gui/model.cpp:122
+msgid "Makes mathematical and styled letters readable: ℂ is spoken as C."
+msgstr ""
+
+#: src/gui/model.cpp:131 src/gui/model.cpp:527 src/i18n/data_strings.cpp:33
+msgid "Braille"
+msgstr ""
+
+#: src/gui/model.cpp:133 src/gui/model.cpp:137
+msgid "Display"
+msgstr ""
+
+#: src/gui/model.cpp:134
+msgid ""
+"The display is driven through brltty's BrlAPI, so every display brltty "
+"supports works here."
+msgstr ""
+
+#: src/gui/model.cpp:139
+msgid "No display"
+msgstr ""
+
+#: src/gui/model.cpp:139
+msgid "brltty (BrlAPI)"
+msgstr ""
+
+#: src/gui/model.cpp:140
+msgid "BrlAPI host"
+msgstr ""
+
+#: src/gui/model.cpp:141
+msgid ""
+"Empty is the normal case: whatever $BRLAPI_HOST or brltty's own default says."
+msgstr ""
+
+#: src/gui/model.cpp:144
+msgid "Translation tables"
+msgstr ""
+
+#: src/gui/model.cpp:147
+msgid "Output table"
+msgstr ""
+
+#: src/gui/model.cpp:148
+msgid ""
+"A liblouis table file name, or \"auto\" for the table that matches the "
+"language."
+msgstr ""
+
+#: src/gui/model.cpp:150
+msgid "Input table"
+msgstr ""
+
+#: src/gui/model.cpp:153
+msgid "Show the word at the cursor uncontracted"
+msgstr ""
+
+#: src/gui/model.cpp:154
+msgid "So a contracted table does not hide the characters being edited."
+msgstr ""
+
+#: src/gui/model.cpp:157
+msgid "Normalize Unicode before translating"
+msgstr ""
+
+#: src/gui/model.cpp:159
+msgid "Cursor"
+msgstr ""
+
+#: src/gui/model.cpp:161
+msgid "Show the cursor"
+msgstr ""
+
+#: src/gui/model.cpp:162
+msgid "Blink the cursor"
+msgstr ""
+
+#: src/gui/model.cpp:164
+msgid "Blink rate, in milliseconds"
+msgstr ""
+
+#: src/gui/model.cpp:166
+msgid "Cursor shape when following the focus"
+msgstr ""
+
+#: src/gui/model.cpp:171
+msgid "Cursor shape when following review"
+msgstr ""
+
+#: src/gui/model.cpp:176
+msgid "Show the selection"
+msgstr ""
+
+#: src/gui/model.cpp:178
+msgid "What the display follows"
+msgstr ""
+
+#: src/gui/model.cpp:180
+msgid "Tethered to"
+msgstr ""
+
+#: src/gui/model.cpp:181
+msgid "`alus+control+t` changes this without opening the settings."
+msgstr ""
+
+#: src/gui/model.cpp:186
+msgid "Mode"
+msgstr ""
+
+#: src/gui/model.cpp:190
+msgid "A routing key also moves the caret"
+msgstr ""
+
+#: src/gui/model.cpp:196
+msgid "How much context is shown"
+msgstr ""
+
+#: src/gui/model.cpp:197
+msgid "changedContext"
+msgstr ""
+
+#: src/gui/model.cpp:198
+msgid "fill"
+msgstr ""
+
+#: src/gui/model.cpp:199
+msgid "scroll"
+msgstr ""
+
+#: src/gui/model.cpp:201
+msgid "Reading"
+msgstr ""
+
+#: src/gui/model.cpp:203
+msgid "Word wrap"
+msgstr ""
+
+#: src/gui/model.cpp:205
+msgid "Break words"
+msgstr ""
+
+#: src/gui/model.cpp:206
+msgid "Break words and mark the break"
+msgstr ""
+
+#: src/gui/model.cpp:207
+msgid "At word boundaries"
+msgstr ""
+
+#: src/gui/model.cpp:209
+msgid "At word or syllable boundaries"
+msgstr ""
+
+#: src/gui/model.cpp:211
+msgid "Read by paragraph"
+msgstr ""
+
+#: src/gui/model.cpp:212
+msgid "Off by default: a paragraph on a 40-cell display is a lot of scrolling."
+msgstr ""
+
+#: src/gui/model.cpp:215
+msgid "Automatic scroll rate, in cells per second"
+msgstr ""
+
+#: src/gui/model.cpp:217
+msgid "Show messages"
+msgstr ""
+
+#: src/gui/model.cpp:220
+msgid "For a while"
+msgstr ""
+
+#: src/gui/model.cpp:221
+msgid "Until dismissed"
+msgstr ""
+
+#: src/gui/model.cpp:223
+msgid "How long a message stays, in milliseconds"
+msgstr ""
+
+#: src/gui/model.cpp:226
+msgid "Speech alongside braille"
+msgstr ""
+
+#: src/gui/model.cpp:229
+msgid "Speak the character a routing key lands on"
+msgstr ""
+
+#: src/gui/model.cpp:231
+msgid "Speak the line when the display's own keys move"
+msgstr ""
+
+#: src/gui/model.cpp:233
+msgid "Braille keyboard"
+msgstr ""
+
+#: src/gui/model.cpp:234
+msgid ""
+"Off by default, and that is a platform decision rather than a preference: on "
+"Wayland ALUS cannot inject a keystroke, so brltty types and ALUS does not. "
+"Turn this on and ALUS translates the cells itself, which is the only way a "
+"braille keyboard can issue ALUS commands."
+msgstr ""
+
+#: src/gui/model.cpp:241
+msgid "ALUS handles braille typing"
+msgstr ""
+
+#: src/gui/model.cpp:249
+msgid "Keyboard"
+msgstr ""
+
+#: src/gui/model.cpp:251 src/gui/model.cpp:253
+msgid "Layout"
+msgstr ""
+
+#: src/gui/model.cpp:254
+msgid ""
+"Two layouts with the same commands: a desktop has a numeric keypad to review "
+"with, a laptop does not."
+msgstr ""
+
+#: src/gui/model.cpp:256
+msgid "Desktop"
+msgstr ""
+
+#: src/gui/model.cpp:256
+msgid "Laptop"
+msgstr ""
+
+#: src/gui/model.cpp:258
+msgid "The ALUS key"
+msgstr ""
+
+#: src/gui/model.cpp:259
+msgid ""
+"Which keys act as the ALUS modifier. More than one may be chosen; pressing "
+"one twice in quick succession sends the real key to the application."
+msgstr ""
+
+#: src/gui/model.cpp:263
+msgid "Insert"
+msgstr ""
+
+#: src/gui/model.cpp:265
+msgid "Numeric keypad Insert"
+msgstr ""
+
+#: src/gui/model.cpp:267
+msgid "Caps Lock"
+msgstr ""
+
+#: src/gui/model.cpp:269
+msgid "How long a double press may take, in milliseconds"
+msgstr ""
+
+#: src/gui/model.cpp:272
+msgid "Typing echo"
+msgstr ""
+
+#: src/gui/model.cpp:275
+msgid "Speak typed characters"
+msgstr ""
+
+#: src/gui/model.cpp:277
+msgid "Speak typed words"
+msgstr ""
+
+#: src/gui/model.cpp:279
+msgid "Speak command keys"
+msgstr ""
+
+#: src/gui/model.cpp:280
+msgid ""
+"Says the name of every key that is not a character, which is what `alus+4` "
+"toggles."
+msgstr ""
+
+#: src/gui/model.cpp:283
+msgid "Interrupting speech"
+msgstr ""
+
+#: src/gui/model.cpp:286
+msgid "Typing a character stops speech"
+msgstr ""
+
+#: src/gui/model.cpp:288
+msgid "Enter stops speech"
+msgstr ""
+
+#: src/gui/model.cpp:290
+msgid "Movement keys skim during say all"
+msgstr ""
+
+#: src/gui/model.cpp:291
+msgid "Lets the arrow keys move within a say all instead of stopping it."
+msgstr ""
+
+#: src/gui/model.cpp:300
+msgid "Object presentation"
+msgstr ""
+
+#: src/gui/model.cpp:302
+msgid "What is announced about an object"
+msgstr ""
+
+#: src/gui/model.cpp:303
+msgid ""
+"The defaults are deliberately sparse: a screen reader that announces "
+"everything it can is unusable."
+msgstr ""
+
+#: src/gui/model.cpp:307
+msgid "Descriptions"
+msgstr ""
+
+#: src/gui/model.cpp:309
+msgid "Keyboard shortcuts"
+msgstr ""
+
+#: src/gui/model.cpp:312
+msgid "Position information"
+msgstr ""
+
+#: src/gui/model.cpp:313
+msgid "\"3 of 7\", and an item's level in a tree."
+msgstr ""
+
+#: src/gui/model.cpp:315
+msgid "Tooltips"
+msgstr ""
+
+#: src/gui/model.cpp:316
+msgid ""
+"Off by default: a tooltip under the pointer is not what a keyboard user is "
+"doing."
+msgstr ""
+
+#: src/gui/model.cpp:319
+msgid "Help balloons and notifications"
+msgstr ""
+
+#: src/gui/model.cpp:321
+msgid "Whether a list allows several selections"
+msgstr ""
+
+#: src/gui/model.cpp:324
+msgid "Text that changes by itself"
+msgstr ""
+
+#: src/gui/model.cpp:325
+msgid ""
+"A terminal, a chat window, a log. On by default: a terminal that says "
+"nothing when a command finishes is unusable."
+msgstr ""
+
+#: src/gui/model.cpp:329
+msgid "Progress bars"
+msgstr ""
+
+#: src/gui/model.cpp:332
+msgid "Report progress with"
+msgstr ""
+
+#: src/gui/model.cpp:333
+msgid "Nothing"
+msgstr ""
+
+#: src/gui/model.cpp:334
+msgid "A beep"
+msgstr ""
+
+#: src/gui/model.cpp:335 src/gui/model.cpp:458
+msgid "Speech only"
+msgstr ""
+
+#: src/gui/model.cpp:336
+msgid "A beep and speech"
+msgstr ""
+
+#: src/gui/model.cpp:339
+msgid "Report progress bars in other windows"
+msgstr ""
+
+#: src/gui/model.cpp:342
+msgid "Beep every N percent"
+msgstr ""
+
+#: src/gui/model.cpp:345
+msgid "Speak every N percent"
+msgstr ""
+
+#: src/gui/model.cpp:347
+msgid "Annotations"
+msgstr ""
+
+#: src/gui/model.cpp:350
+msgid "That further details are available"
+msgstr ""
+
+#: src/gui/model.cpp:352
+msgid "An element's accessible description"
+msgstr ""
+
+#: src/gui/model.cpp:354 src/i18n/data_strings.cpp:41
+msgid "Object navigation"
+msgstr ""
+
+#: src/gui/model.cpp:357
+msgid "Play a sound at the edge of the tree"
+msgstr ""
+
+#: src/gui/model.cpp:358
+msgid "An expected failure must be noticeable without being an error."
+msgstr ""
+
+#: src/gui/model.cpp:367
+msgid "Review cursor"
+msgstr ""
+
+#: src/gui/model.cpp:369
+msgid "What the review cursor follows"
+msgstr ""
+
+#: src/gui/model.cpp:372
+msgid "The keyboard focus"
+msgstr ""
+
+#: src/gui/model.cpp:373
+msgid ""
+"On by default, and the reason `alus+numpad5` says what was just focused."
+msgstr ""
+
+#: src/gui/model.cpp:376
+msgid "The caret"
+msgstr ""
+
+#: src/gui/model.cpp:378
+msgid "The mouse pointer"
+msgstr ""
+
+#: src/gui/model.cpp:380
+msgid "Simple review"
+msgstr ""
+
+#: src/gui/model.cpp:381
+msgid ""
+"Skips the containers a toolkit uses for layout and that carry no information "
+"of their own."
+msgstr ""
+
+#: src/gui/model.cpp:384
+msgid "Caret"
+msgstr ""
+
+#: src/gui/model.cpp:387
+msgid "How long to wait for an application to move its caret, in milliseconds"
+msgstr ""
+
+#: src/gui/model.cpp:389
+msgid ""
+"Every toolkit reports caret movement differently; this is the budget before "
+"ALUS reports what is there anyway."
+msgstr ""
+
+#: src/gui/model.cpp:394
+msgid "Document navigation"
+msgstr ""
+
+#: src/gui/model.cpp:397
+msgid "What ends a paragraph"
+msgstr ""
+
+#: src/gui/model.cpp:398
+msgid ""
+"No toolkit on Linux answers the accessibility API's own paragraph "
+"granularity, so these two styles are the only way paragraph movement exists "
+"at all."
+msgstr ""
+
+#: src/gui/model.cpp:401
+msgid "The application decides"
+msgstr ""
+
+#: src/gui/model.cpp:402
+msgid "A single line break"
+msgstr ""
+
+#: src/gui/model.cpp:403
+msgid "A blank line"
+msgstr ""
+
+#: src/gui/model.cpp:405
+msgid "Say all reads by"
+msgstr ""
+
+#: src/gui/model.cpp:406
+msgid "Line"
+msgstr ""
+
+#: src/gui/model.cpp:406
+msgid "Paragraph"
+msgstr ""
+
+#: src/gui/model.cpp:414 src/i18n/data_strings.cpp:44
+msgid "Document formatting"
+msgstr ""
+
+#: src/gui/model.cpp:416
+msgid "Font"
+msgstr ""
+
+#: src/gui/model.cpp:419
+msgid "Font name"
+msgstr ""
+
+#: src/gui/model.cpp:421
+msgid "Font size"
+msgstr ""
+
+#: src/gui/model.cpp:423
+msgid "Bold, italic and underline"
+msgstr ""
+
+#: src/gui/model.cpp:426
+msgid "Superscripts and subscripts"
+msgstr ""
+
+#: src/gui/model.cpp:428
+msgid "Emphasis"
+msgstr ""
+
+#: src/gui/model.cpp:430
+msgid "Highlighted text"
+msgstr ""
+
+#: src/gui/model.cpp:432
+msgid "Style name"
+msgstr ""
+
+#: src/gui/model.cpp:434
+msgid "Colours"
+msgstr ""
+
+#: src/gui/model.cpp:436
+msgid "Document information"
+msgstr ""
+
+#: src/gui/model.cpp:439
+msgid "Comments"
+msgstr ""
+
+#: src/gui/model.cpp:441
+msgid "Bookmarks"
+msgstr ""
+
+#: src/gui/model.cpp:443
+msgid "Editor revisions"
+msgstr ""
+
+#: src/gui/model.cpp:445
+msgid "Spelling errors"
+msgstr ""
+
+#: src/gui/model.cpp:447
+msgid "Grammar errors"
+msgstr ""
+
+#: src/gui/model.cpp:449
+msgid "Pages and spacing"
+msgstr ""
+
+#: src/gui/model.cpp:452
+msgid "Page numbers"
+msgstr ""
+
+#: src/gui/model.cpp:454
+msgid "Line numbers"
+msgstr ""
+
+#: src/gui/model.cpp:456
+msgid "Line indentation"
+msgstr ""
+
+#: src/gui/model.cpp:459
+msgid "Tones"
+msgstr ""
+
+#: src/gui/model.cpp:460
+msgid "Speech and tones"
+msgstr ""
+
+#: src/gui/model.cpp:462
+msgid "How long an indentation tone lasts, in milliseconds"
+msgstr ""
+
+#: src/gui/model.cpp:466
+msgid "Ignore blank lines when reporting indentation"
+msgstr ""
+
+#: src/gui/model.cpp:468
+msgid "Line spacing"
+msgstr ""
+
+#: src/gui/model.cpp:470
+msgid "Alignment"
+msgstr ""
+
+#: src/gui/model.cpp:472 src/gui/model.cpp:475
+msgid "Tables"
+msgstr ""
+
+#: src/gui/model.cpp:477
+msgid "Cell coordinates"
+msgstr ""
+
+#: src/gui/model.cpp:479
+msgid "Table headers"
+msgstr ""
+
+#: src/gui/model.cpp:481
+msgid "Rows and columns"
+msgstr ""
+
+#: src/gui/model.cpp:482
+msgid "Rows only"
+msgstr ""
+
+#: src/gui/model.cpp:483
+msgid "Columns only"
+msgstr ""
+
+#: src/gui/model.cpp:485
+msgid "Cell borders"
+msgstr ""
+
+#: src/gui/model.cpp:487
+msgid "Tables used only for layout"
+msgstr ""
+
+#: src/gui/model.cpp:488
+msgid ""
+"`alus+shift+f` reports the formatting at the caret; this decides whether a "
+"table that only arranges a page counts as a table at all."
+msgstr ""
+
+#: src/gui/model.cpp:492
+msgid "Elements"
+msgstr ""
+
+#: src/gui/model.cpp:495
+msgid "Headings"
+msgstr ""
+
+#: src/gui/model.cpp:497
+msgid "Links"
+msgstr ""
+
+#: src/gui/model.cpp:499
+msgid "Whether a link has been visited"
+msgstr ""
+
+#: src/gui/model.cpp:501
+msgid "Graphics"
+msgstr ""
+
+#: src/gui/model.cpp:503
+msgid "Lists"
+msgstr ""
+
+#: src/gui/model.cpp:505
+msgid "Block quotes"
+msgstr ""
+
+#: src/gui/model.cpp:507
+msgid "Groupings"
+msgstr ""
+
+#: src/gui/model.cpp:509
+msgid "Landmarks and regions"
+msgstr ""
+
+#: src/gui/model.cpp:511
+msgid "Articles"
+msgstr ""
+
+#: src/gui/model.cpp:513
+msgid "Frames"
+msgstr ""
+
+#: src/gui/model.cpp:515
+msgid "Figures and captions"
+msgstr ""
+
+#: src/gui/model.cpp:517
+msgid "Clickable elements"
+msgstr ""
+
+#: src/gui/model.cpp:519
+msgid "When formatting is reported"
+msgstr ""
+
+#: src/gui/model.cpp:523
+msgid "Report formatting changes after the cursor"
+msgstr ""
+
+#: src/gui/model.cpp:524
+msgid "Costs a call per line; off by default for that reason."
+msgstr ""
+
+#: src/gui/model.cpp:531
+msgid "Bold, italic and underline on the display"
+msgstr ""
+
+#: src/gui/model.cpp:534
+msgid "Spelling errors on the display"
+msgstr ""
+
+#: src/gui/model.cpp:546
+msgid "Commands and keys"
+msgstr ""
+
+#: src/gui/model.cpp:547
+msgid ""
+"Every command ALUS knows, with the keys bound to it. A command with no "
+"description is not shown, because a command that cannot be explained cannot "
+"be rebound sensibly."
+msgstr ""
+
+#: src/gui/model.cpp:551
+msgid "Edit gestures"
+msgstr ""
+
+#. Translators: spoken when a settings shortcut names a settings
+#. panel this version of ALUS does not have.
+#: src/gui/service.cpp:315 src/gui/service.cpp:329
+msgid "There are no such settings in this version"
+msgstr ""
+
+#: src/gui/service.cpp:338
+#, c-format
+msgid "The settings window is not available: %s"
+msgstr ""
+
+#. Translators: the label of the button on a settings row that opens
+#. something else.
+#: src/gui/window.cpp:153
+msgid "Open"
+msgstr ""
+
+#. Translators: spoken when the file manager
+#. could not be started.
+#: src/gui/window.cpp:189
+msgid "Could not open the folder"
+msgstr ""
+
+#. Translators: spoken after a factory reset.
+#: src/gui/window.cpp:198
+msgid "Every setting has been reset"
+msgstr ""
+
+#. Translators: the title of ALUS's settings window. "ALUS" is the product
+#. name and is not translated.
+#: src/gui/window.cpp:326
+msgid "ALUS Settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:28 src/nav/tree_interceptor.cpp:58
+msgid "Browse mode"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:29
+msgid "Miscellaneous"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:31
+msgid "Tools"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:32
+msgid "Configuration profiles"
+msgstr ""
+
+#. Translators: the name of the gesture-dialog category that holds the
+#. emulated system keyboard keys. N_ and not _: this is a constexpr, so it
+#. carries the msgid and the point of use translates it.
+#: src/i18n/data_strings.cpp:34 src/script/dispatch.cpp:27
+msgid "Emulated system keyboard keys"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:35
+msgid "System caret"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:37
+msgid "System focus"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:38
+msgid "Audio"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:39
+msgid "System status"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:40
+msgid "Mouse"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:42
+msgid "Input"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:43
+msgid "Text review"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:50
+msgid "Toggles native selection mode on and off"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:51
+msgid ""
+"Toggles on and off if the screen layout is preserved while rendering the "
+"document content"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:52
+msgid "moves to the next annotation"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:53
+msgid "moves to the next article"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:54
+msgid "moves to the next block quote"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:55
+msgid "moves to the next button"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:56
+msgid "moves to the next check box"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:57
+msgid "moves to the next clickable element"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:58
+msgid "moves to the next combo box"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:59
+msgid "moves to the next different style text"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:60
+msgid "moves to the next edit field"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:61
+msgid "moves to the next embedded object"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:62
+msgid "moves to the next error"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:63
+msgid "moves to the next figure"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:64
+msgid "moves to the next form field"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:65
+msgid "moves to the next frame"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:66
+msgid "moves to the next graphic"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:67
+msgid "moves to the next grouping"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:68
+msgid "moves to the next heading"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:69
+msgid "Moves to the next heading at level 1"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:70
+msgid "Moves to the next heading at level 2"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:71
+msgid "Moves to the next heading at level 3"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:72
+msgid "Moves to the next heading at level 4"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:73
+msgid "Moves to the next heading at level 5"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:74
+msgid "Moves to the next heading at level 6"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:75
+msgid "Moves to the next heading at level 7"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:76
+msgid "Moves to the next heading at level 8"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:77
+msgid "Moves to the next heading at level 9"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:78
+msgid "moves to the next landmark"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:79
+msgid "moves to the next link"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:80
+msgid "moves to the next list"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:81
+msgid "moves to the next list item"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:82
+msgid "moves to the next menu item"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:83
+msgid "skips forward past a block of links"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:84
+msgid "moves to the next progress bar"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:85
+msgid "moves to the next radio button"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:86
+msgid "moves to the next reference"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:87
+msgid "moves to the next same style text"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:88
+msgid ""
+"Moves to the next element of the selected type in browse mode touch "
+"navigation"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:89
+msgid "moves to the next separator"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:90
+msgid "moves to the next slider"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:91
+msgid "moves to the next tab"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:92
+msgid "moves to the next table"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:93
+msgid "moves to the next text paragraph"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:94
+msgid "moves to the next toggle button"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:95
+msgid "moves to the next unvisited link"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:96
+msgid "moves to the next vertically aligned paragraph"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:97
+msgid "moves to the next visited link"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:98
+msgid ""
+"Moves to the previous element of the selected type in browse mode touch "
+"navigation"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:99
+msgid "moves to the previous annotation"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:100
+msgid "moves to the previous article"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:101
+msgid "moves to the previous block quote"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:102
+msgid "moves to the previous button"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:103
+msgid "moves to the previous check box"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:104
+msgid "moves to the previous clickable element"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:105
+msgid "moves to the previous combo box"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:106
+msgid "moves to the previous different style text"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:107
+msgid "moves to the previous edit field"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:108
+msgid "moves to the previous embedded object"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:109
+msgid "moves to the previous error"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:110
+msgid "moves to the previous figure"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:111
+msgid "moves to the previous form field"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:112
+msgid "moves to the previous frame"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:113
+msgid "moves to the previous graphic"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:114
+msgid "moves to the previous grouping"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:115
+msgid "moves to the previous heading"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:116
+msgid "Moves to the previous heading at level 1"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:117
+msgid "Moves to the previous heading at level 2"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:118
+msgid "Moves to the previous heading at level 3"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:119
+msgid "Moves to the previous heading at level 4"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:120
+msgid "Moves to the previous heading at level 5"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:121
+msgid "Moves to the previous heading at level 6"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:122
+msgid "Moves to the previous heading at level 7"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:123
+msgid "Moves to the previous heading at level 8"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:124
+msgid "Moves to the previous heading at level 9"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:125
+msgid "moves to the previous landmark"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:126
+msgid "moves to the previous link"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:127
+msgid "moves to the previous list"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:128
+msgid "moves to the previous list item"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:129
+msgid "moves to the previous menu item"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:130
+msgid "skips backward past a block of links"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:131
+msgid "moves to the previous progress bar"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:132
+msgid "moves to the previous radio button"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:133
+msgid "moves to the previous reference"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:134
+msgid "moves to the previous same style text"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:135
+msgid "moves to the previous separator"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:136
+msgid "moves to the previous slider"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:137
+msgid "moves to the previous tab"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:138
+msgid "moves to the previous table"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:139
+msgid "moves to the previous text paragraph"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:140
+msgid "moves to the previous toggle button"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:141
+msgid "moves to the previous unvisited link"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:142
+msgid "moves to the previous vertically aligned paragraph"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:143
+msgid "moves to the previous visited link"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:144
+msgid ""
+"find the next occurrence of the previously entered text string from the "
+"current cursor's position"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:145
+msgid ""
+"find the previous occurrence of the previously entered text string from the "
+"current cursor's position"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:146
+msgid "Shows ALUS's Add-on Store settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:147
+msgid ""
+"Activates the Add-on Store to browse and manage add-on packages for ALUS"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:148
+msgid "Shows ALUS's Advanced settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:149
+msgid "Shows ALUS's audio settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:150
+msgid "Shows the ALUS braille display selection dialog"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:151
+msgid "Shows ALUS's braille settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:152
+msgid "Shows ALUS's browse mode settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:153
+msgid "Shows the ALUS Configuration Profiles dialog"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:154
+msgid "Shows the ALUS default dictionary dialog"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:155
+msgid "Shows ALUS's document formatting settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:156
+msgid "Shows ALUS's general settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:157
+msgid "Shows ALUS's input composition settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:158
+msgid "Shows the ALUS input gestures dialog"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:159
+msgid "Shows ALUS's keyboard settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:160
+msgid "Shows ALUS's mouse settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:161
+msgid "Shows ALUS's object presentation settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:162
+msgid "Shows ALUS's privacy and security settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:163
+msgid "Activates the ALUS Python Console, primarily useful for development"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:164
+msgid "Shows ALUS's review cursor settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:165
+msgid "Shows the ALUS symbol pronunciation dialog"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:166
+msgid "Shows the ALUS synthesizer selection dialog"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:167
+msgid "Shows the ALUS temporary dictionary dialog"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:168
+msgid "Shows ALUS's speech settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:169
+msgid "Shows the ALUS voice-specific dictionary dialog"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:170
+msgid "Cycle through the braille cursor shapes"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:171
+msgid ""
+"Cycle through the braille move system caret when routing review cursor states"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:172
+msgid "Cycle through the braille show messages modes"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:173
+msgid "Cycle through the braille show selection states"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:174
+msgid "Cycle through the braille Unicode normalization states"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:175
+msgid "Inputs braille dots via the braille keyboard"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:176
+msgid "Translates any braille input and presses the enter key"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:177
+msgid "Erases the last entered braille cell or character"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:178
+msgid "Moves the braille display to the next line"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:179
+msgid "Moves the braille display to the previous line"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:180
+msgid "Reports formatting info for the text under this braille cell"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:181
+msgid "Routes the cursor to or activates the object under this braille cell"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:182
+msgid "Scrolls the braille display back"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:183
+msgid "Scrolls the braille display forward"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:184
+msgid "Selects the text from the first up to the last braille cell"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:185
+msgid "Moves the braille display to the current focus"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:186
+msgid ""
+"Virtually toggles the alt key to emulate a keyboard shortcut with braille "
+"input"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:187
+msgid ""
+"Virtually toggles the alt and shift keys to emulate a keyboard shortcut with "
+"braille input"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:188
+msgid ""
+"Virtually toggles the control key to emulate a keyboard shortcut with "
+"braille input"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:189
+msgid ""
+"Virtually toggles the control and alt keys to emulate a keyboard shortcut "
+"with braille input"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:190
+msgid ""
+"Virtually toggles the control, alt, and shift keys to emulate a keyboard "
+"shortcut with braille input"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:191
+msgid ""
+"Virtually toggles the control and shift keys to emulate a keyboard shortcut "
+"with braille input"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:192
+msgid "Toggle the way context information is presented in braille"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:193
+msgid ""
+"Virtually toggles the ALUS key to emulate a keyboard shortcut with braille "
+"input"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:194
+msgid ""
+"Virtually toggles the ALUS and shift keys to emulate a keyboard shortcut "
+"with braille input"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:195
+msgid ""
+"Virtually toggles the shift key to emulate a keyboard shortcut with braille "
+"input"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:196
+msgid "Toggle the braille cursor on and off"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:197
+msgid ""
+"Toggles speaking the character under the cursor when routing cursor in text"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:198
+msgid "Toggle tethering of braille between the focus and the review position"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:199
+msgid ""
+"Virtually toggles the left windows key to emulate a keyboard shortcut with "
+"braille input"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:200
+msgid ""
+"Virtually toggles the left windows and shift keys to emulate a keyboard "
+"shortcut with braille input"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:201
+msgid "Translates any braille input"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:202
+msgid ""
+"Reports information about the location of the text or object at the position "
+"of system caret. Pressing twice may provide further detail."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:203
+msgid "Copies the last spoken information to the clipboard."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:204
+msgid ""
+"Copies content of the status bar of current application to the clipboard."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:205
+msgid ""
+"Cycles through audio ducking modes which determine when ALUS lowers the "
+"volume of other sounds"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:206
+msgid "Cycles through paragraph navigation styles"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:207
+msgid "Cycles through sound split modes"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:208
+msgid ""
+"Cycles through the possible choices for automatic language switching: off, "
+"language only and language and dialect."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:209
+msgid ""
+"Cycles through speech symbol levels which determine what symbols are spoken"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:210
+msgid ""
+"If pressed once, reports the current time. If pressed twice, reports the "
+"current date"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:211
+msgid "Decreases the rate for braille automatic scroll"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:212
+msgid ""
+"Decreases the currently active setting in the synth settings ring in a "
+"larger step"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:213
+msgid "Decreases the currently active setting in the synth settings ring"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:214
+msgid "Set the first value of the current setting in the synth settings ring"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:215
+msgid "Increases the rate for braille automatic scroll"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:216
+msgid ""
+"Increases the currently active setting in the synth settings ring in a "
+"larger step"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:217
+msgid "Increases the currently active setting in the synth settings ring"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:218
+msgid "Set the last value of the current setting in the synth settings ring"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:219
+msgid "Clicks the left mouse button once at the current mouse position"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:220
+msgid ""
+"Mark the current end of the log as the start of the fragment to be copied to "
+"clipboard by pressing again."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:221
+msgid "Scroll down at the mouse position"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:222
+msgid "Scroll left at the mouse position"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:223
+msgid "Scroll right at the mouse position"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:224
+msgid "Scroll up at the mouse position"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:225
+msgid "Moves the mouse pointer to the current navigator object"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:226
+msgid ""
+"Sets the navigator object to the current object under the mouse pointer and "
+"speaks it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:227
+msgid ""
+"Moves the focus out of the current embedded object and into the document "
+"that contains it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:228
+msgid ""
+"Reports the current navigator object. Pressing twice spells this "
+"information, and pressing three times Copies name and value of this object "
+"to the clipboard"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:229
+msgid ""
+"Reports information about the location of the text or object at the review "
+"cursor. Pressing twice may provide further detail."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:230
+msgid ""
+"Logs information about the current navigator object which is useful to "
+"developers and activates the log viewer so the information can be examined."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:231
+msgid "Moves the navigator object to the first object inside it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:232
+msgid ""
+"Pressed once sets the keyboard focus to the navigator object, pressed twice "
+"sets the system caret to the position of the review cursor"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:233
+msgid "Moves the navigator object to the next object"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:234
+msgid ""
+"Moves to the next object in a flattened view of the object navigation "
+"hierarchy"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:235
+msgid "Moves the navigator object to the object containing it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:236
+msgid "Moves the navigator object to the previous object"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:237
+msgid ""
+"Moves to the previous object in a flattened view of the object navigation "
+"hierarchy"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:238
+msgid ""
+"Sets the navigator object to the current focus, and the review cursor to the "
+"position of the caret inside it, if possible."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:239
+msgid "Moves to the next available setting in the synth settings ring"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:240
+msgid "Opens ALUS configuration directory for the current user."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:241
+msgid ""
+"The next key that is pressed will not be handled at all by ALUS, it will be "
+"passed directly through to the application."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:242
+msgid "Moves to the previous available setting in the synth settings ring"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:243
+msgid "Quits ALUS!"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:244
+msgid "Reads the current application status bar."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:245
+msgid ""
+"Reloads app modules and global plugins without restarting ALUS, which can be "
+"Useful for developers"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:246
+msgid ""
+"Repeat the last spoken information. Pressing twice shows it in a browsable "
+"message."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:247
+msgid "Reports the name of the current ALUS configuration profile"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:248
+msgid ""
+"Speaks the filename of the active application along with the name of the "
+"currently loaded appModule"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:249
+msgid ""
+"Reports the language for the text under the caret. If pressed twice, "
+"presents the information in browse mode"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:250
+msgid ""
+"Reports information about the location of the text at the caret, or location "
+"of the currently focused object if there is no caret."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:251
+msgid ""
+"Reports the text on the system clipboard. Pressing twice spells this "
+"information. Pressing three times spells it using character descriptions."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:252
+msgid ""
+"Reports the object with focus. If pressed twice, spells the information. "
+"Pressing three times spells it using character descriptions."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:253
+msgid ""
+"Reports the current line under the application cursor. Pressing this key "
+"twice will spell the current line. Pressing three times will spell the line "
+"using character descriptions."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:254
+msgid "Reports information about the location of the current navigator object."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:255
+msgid ""
+"Announces the current selection in edit controls and documents. Pressing "
+"twice spells this information. Pressing three times spells it using "
+"character descriptions. Pressing four times shows it in a browsable message."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:256
+msgid "Report summary of any annotation details at the system caret."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:257
+msgid "Reports the shortcut key of the currently focused object"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:258
+msgid "Reports information about the location of the currently focused object."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:259
+msgid ""
+"Reports formatting info for the current review cursor position. If pressed "
+"twice, presents the information in browse mode"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:260
+msgid "Reports formatting info for the text under the caret."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:261
+msgid "Reports formatting info for the current review cursor position."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:262
+msgid ""
+"Report the destination URL of the link at the position of caret or focus. If "
+"pressed twice, shows the URL in a window for easier review."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:263
+msgid ""
+"Displays the destination URL of the link at the position of caret or focus "
+"in a window, instead of just speaking it. May be preferred by braille users."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:264
+msgid ""
+"Reports formatting info for the text under the caret. If pressed twice, "
+"presents the information in browse mode"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:265
+msgid ""
+"Reports information about the location of the text at the review cursor, or "
+"location of the navigator object if there is no text under review cursor."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:266
+msgid ""
+"Reads the current application status bar. If pressed twice, spells the "
+"information. If pressed three times, copies the status bar to the clipboard"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:267
+msgid "Restarts ALUS!"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:268
+msgid ""
+"Pressing once reverts the current configuration to the most recently saved "
+"state. Pressing three times resets to factory defaults."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:269
+msgid ""
+"Reads the current application status bar and moves navigator object into it."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:270
+msgid ""
+"Switches to the next review mode (e.g. object, document or screen) and "
+"positions the review position at the point of the navigator object"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:271
+msgid ""
+"Switches to the previous review mode (e.g. object, document or screen) and "
+"positions the review position at the point of the navigator object"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:272
+msgid ""
+"Performs the default action on the current navigator object (example: "
+"presses it if it is a button)."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:273
+msgid ""
+"Moves the review cursor to the bottom line of the current navigator object "
+"and speaks it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:274
+msgid ""
+"If pressed once, the text from the previously set start marker up to and "
+"including the current position of the review cursor is selected. If pressed "
+"twice, the text is copied to the clipboard"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:275
+msgid ""
+"Reports the character of the current navigator object where the review "
+"cursor is situated. Pressing twice reports a description or example of that "
+"character. Pressing three times reports the numeric value of the character "
+"in decimal and hexadecimal"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:276
+msgid ""
+"Reports the line of the current navigator object where the review cursor is "
+"situated. If this key is pressed twice, the current line will be spelled. "
+"Pressing three times will spell the line using character descriptions."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:277
+msgid ""
+"Reports the symbol where the review cursor is positioned. Pressed twice, "
+"shows the symbol and the text used to speak it in browse mode"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:278
+msgid ""
+"Speaks the word of the current navigator object where the review cursor is "
+"situated. Pressing twice spells the word. Pressing three times spells the "
+"word using character descriptions"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:279
+msgid ""
+"Moves the review cursor to the last character of the line where it is "
+"situated in the current navigator object and speaks it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:280
+msgid ""
+"Moves the review cursor to the last character of the selection, and speaks it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:281
+msgid ""
+"Marks the current position of the review cursor as the start of text to be "
+"selected or copied"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:282
+msgid ""
+"Move the review cursor to the position marked as the start of text to be "
+"selected or copied"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:283
+msgid ""
+"Moves the review cursor to the next character of the current navigator "
+"object and speaks it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:284
+msgid ""
+"Moves the review cursor to the next line of the current navigator object and "
+"speaks it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:285
+msgid ""
+"Moves the review cursor to the next page of the current navigator object and "
+"speaks it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:286
+msgid ""
+"Moves the review cursor to the next word of the current navigator object and "
+"speaks it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:287
+msgid ""
+"Moves the review cursor to the previous character of the current navigator "
+"object and speaks it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:288
+msgid ""
+"Moves the review cursor to the previous line of the current navigator object "
+"and speaks it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:289
+msgid ""
+"Moves the review cursor to the previous page of the current navigator object "
+"and speaks it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:290
+msgid ""
+"Moves the review cursor to the previous word of the current navigator object "
+"and speaks it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:291
+msgid ""
+"Reads from the review cursor up to the end of the current text, moving the "
+"review cursor as it goes"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:292
+msgid ""
+"Moves the review cursor to the first character of the line where it is "
+"situated in the current navigator object and speaks it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:293
+msgid ""
+"Moves the review cursor to the first character of the selection, and speaks "
+"it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:294
+msgid ""
+"Moves the review cursor to the top line of the current navigator object and "
+"speaks it"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:295
+msgid "Clicks the right mouse button once at the current mouse position"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:296
+msgid "Saves the current ALUS configuration"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:297
+msgid ""
+"Reads from the system caret up to the end of the text, moving the caret as "
+"it goes"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:298
+msgid "Reports battery status and time remaining if AC is not plugged in"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:299
+msgid "Presents, in browse mode, formatting info for the text under the caret."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:300
+msgid ""
+"Presents, in browse mode, formatting info for the current review cursor "
+"position."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:301
+msgid "Shows the ALUS menu"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:302
+msgid "Reads all controls in the active window"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:303
+msgid "Cycles between speech modes."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:304
+msgid "Cycle through the speech Unicode normalization states"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:305
+msgid "Spells the current application status bar."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:306
+msgid ""
+"Opens the WX GUI inspection tool. Used to get more information about the "
+"state of GUI components."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:307
+msgid ""
+"Reports the title of the current application or foreground window. If "
+"pressed twice, spells the title. If pressed three times, copies the title to "
+"the clipboard"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:308
+msgid "Toggles braille automatic scroll"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:309
+msgid "Toggles braille mode"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:310
+msgid ""
+"Toggles on and off the movement of the review cursor due to the caret moving."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:311
+msgid ""
+"Toggles disabling of all configuration profile triggers. Disabling remains "
+"in effect until ALUS is restarted"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:312
+msgid "Toggles sleep mode on and off for the active application."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:313
+msgid ""
+"Toggles on and off delayed descriptions for characters on cursor movement"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:314
+msgid ""
+"Toggles on and off the movement of the navigator object due to focus changes"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:315
+msgid ""
+"Turns input help on or off. When on, any input such as pressing a key on the "
+"keyboard will tell you what script is associated with that input, if any."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:316
+msgid "Toggles between desktop and laptop keyboard layout"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:317
+msgid "Locks or unlocks the left mouse button"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:318
+msgid "Toggles beeps that report mouse coordinates as the mouse moves"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:319
+msgid "Toggles how much text will be spoken when the mouse moves"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:320
+msgid "Toggles the reporting of information as the mouse moves"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:321
+msgid ""
+"Toggles between beeps, speech, beeps and speech, and off, for reporting "
+"progress bar updates"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:322
+msgid "Toggles on and off the reporting of text alignment"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:323
+msgid "Toggles on and off the reporting of articles"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:324
+msgid "Toggles on and off the reporting of block quotes"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:325
+msgid "Toggles on and off the reporting of CLDR characters, such as emojis"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:326
+msgid "Cycles through the cell border reporting settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:327
+msgid "Toggles on and off reporting if clickable"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:328
+msgid "Toggles on and off the reporting of colors"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:329
+msgid "Toggles on and off the reporting of comments"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:330
+msgid ""
+"Toggles on and off the reporting of dynamic content changes, such as new "
+"text in dos console windows"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:331
+msgid "Toggles on and off the reporting of emphasis"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:332
+msgid "Toggles on and off the reporting of figures and captions"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:333
+msgid ""
+"Cycles font attribute reporting between speech, braille, speech and braille, "
+"and off."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:334
+msgid "Toggles on and off the reporting of font changes"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:335
+msgid "Toggles on and off the reporting of font size changes"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:336
+msgid "Toggles on and off the reporting of frames"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:337
+msgid "Toggles on and off the reporting of graphics"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:338
+msgid "Toggles on and off the reporting of groupings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:339
+msgid "Toggles on and off the reporting of headings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:340
+msgid "Toggles on and off the reporting of highlighted text"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:341
+msgid "Toggles on and off the reporting of landmarks"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:342
+msgid "Cycles through line indentation settings"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:343
+msgid "Toggles on and off the reporting of line numbers"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:344
+msgid "Toggles on and off the reporting of line spacing"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:345
+msgid "Toggles on and off the reporting of link type"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:346
+msgid "Toggles on and off the reporting of links"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:347
+msgid "Toggles on and off the reporting of lists"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:348
+msgid "Toggles on and off the reporting of pages"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:349
+msgid "Toggles on and off the reporting of paragraph indentation"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:350
+msgid "Toggles on and off the reporting of revisions"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:351
+msgid "Cycles through options for how to report spelling or grammar errors"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:352
+msgid "Toggles reporting spelling or grammar errors in braille"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:353
+msgid "Toggles on and off the reporting of style changes"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:354
+msgid "Toggles on and off the reporting of superscripts and subscripts"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:355
+msgid "Toggles on and off the reporting of table cell coordinates"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:356
+msgid "Cycle through the possible modes to report table row and column headers"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:357
+msgid "Toggles on and off the reporting of tables"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:358
+msgid "Locks or unlocks the right mouse button"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:359
+msgid "Toggles simple review mode on and off"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:360
+msgid "Toggles on and off the speaking of command keys"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:361
+msgid "Cycles through options for when to speak typed characters."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:362
+msgid "Cycles through options for when to speak typed words."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:363
+msgid ""
+"Toggles on and off speaking when navigating by lines or paragraph with "
+"braille"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:364
+msgid ""
+"Toggles between browse mode and focus mode. When in focus mode, keys will "
+"pass straight through to the application, allowing you to interact directly "
+"with a control. When in browse mode, you can navigate the document with the "
+"cursor, quick navigation keys, etc."
+msgstr ""
+
+#: src/i18n/data_strings.cpp:365
+msgid ""
+"Toggles on and off the ignoring of blank lines for line indentation reporting"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:373
+msgid "alt"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:374
+msgid "applications"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:375
+msgid "backspace"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:376
+msgid "break"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:377
+msgid "back"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:378
+msgid "favorites"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:379
+msgid "forward"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:380
+msgid "home page"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:381
+msgid "refresh"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:382
+msgid "search page"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:383
+msgid "browser stop"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:384
+msgid "caps lock"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:385
+msgid "ctrl"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:386
+msgid "delete"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:387
+msgid "down arrow"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:388
+msgid "end"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:389
+msgid "enter"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:390
+msgid "escape"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:391
+msgid "home"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:392
+msgid "insert"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:393
+msgid "custom application 1"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:394
+msgid "custom application 2"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:395
+msgid "email"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:396
+msgid "media player"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:397
+msgid "left alt"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:398
+msgid "left arrow"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:399
+msgid "left control"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:400
+msgid "left shift"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:401
+msgid "left windows"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:402
+msgid "next track"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:403
+msgid "play pause"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:404
+msgid "previous track"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:405
+msgid "stop"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:406
+msgid "num lock"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:407
+msgid "numLock numpad 0"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:408
+msgid "numLock numpad 1"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:409
+msgid "numLock numpad 2"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:410
+msgid "numLock numpad 3"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:411
+msgid "numLock numpad 4"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:412
+msgid "numLock numpad 5"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:413
+msgid "numLock numpad 6"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:414
+msgid "numLock numpad 7"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:415
+msgid "numLock numpad 8"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:416
+msgid "numLock numpad 9"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:417
+msgid "numpad 1"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:418
+msgid "numpad 2"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:419
+msgid "numpad 3"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:420
+msgid "numpad 4"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:421
+msgid "numpad 5"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:422
+msgid "numpad 6"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:423
+msgid "numpad 7"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:424
+msgid "numpad 8"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:425
+msgid "numpad 9"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:426
+msgid "numpad decimal"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:427
+msgid "numpad delete"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:428
+msgid "numpad divide"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:429
+msgid "numpad enter"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:430
+msgid "numpad insert"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:431
+msgid "numpad minus"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:432
+msgid "numpad multiply"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:433
+msgid "numpad plus"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:434
+msgid "page down"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:435
+msgid "page up"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:436
+msgid "print screen"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:437
+msgid "right alt"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:438
+msgid "right arrow"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:439
+msgid "right control"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:440
+msgid "right shift"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:441
+msgid "right windows"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:442
+msgid "scroll lock"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:443
+msgid "shift"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:446
+msgid "up arrow"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:447
+msgid "volume down"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:448
+msgid "mute"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:449
+msgid "volume up"
+msgstr ""
+
+#: src/i18n/data_strings.cpp:450
+msgid "windows"
+msgstr ""
+
+#. Translators: reported when input help is turned on.
+#: src/input/commands.cpp:94
+msgid "input help on. Press the same keys again to turn it off."
+msgstr ""
+
+#. Translators: reported when input help is turned off.
+#: src/input/commands.cpp:96
+msgid "input help off"
+msgstr ""
+
+#. Translators: spoken to indicate that the next key press goes straight to
+#. the application, as though ALUS were not running.
+#: src/input/commands.cpp:106
+msgid "Pass next key through"
+msgstr ""
+
+#. Translators: reported when cycling the speaking of typed characters.
+#. Translators: reported when the typed-character echo is cycled; %s is
+#. the new setting ("off", "always", "edit controls only").
+#: src/input/commands.cpp:133
+#, c-format
+msgid "Speak typed characters %s"
+msgstr ""
+
+#. Translators: reported when cycling the speaking of typed words.
+#. Translators: reported when the typed-word echo is cycled; %s is the
+#. new setting.
+#: src/input/commands.cpp:151
+#, c-format
+msgid "Speak typed words %s"
+msgstr ""
+
+#. Translators: reported when the speaking of command keys is toggled.
+#: src/input/commands.cpp:166
+msgid "speak command keys on"
+msgstr ""
+
+#. Translators: spoken when ALUS cannot stop itself, e.g. because the
+#. command was run from a diagnostic tool rather than the screen
+#. reader.
+#: src/input/commands.cpp:178
+msgid "cannot quit from here"
+msgstr ""
+
+#. Translators: spoken as ALUS shuts down, on the user's own command.
+#: src/input/commands.cpp:183
+msgid "exiting"
+msgstr ""
+
+#. Translators: spoken when a movement command reaches the edge of the
+#. document.
+#: src/nav/browse_mode.cpp:382 src/nav/browse_mode.cpp:655
+msgid "edge of document"
+msgstr ""
+
+#: src/nav/browse_mode.cpp:402
+#, c-format
+msgid "no next %s"
+msgstr ""
+
+#: src/nav/browse_mode.cpp:402
+#, c-format
+msgid "no previous %s"
+msgstr ""
+
+#. Translators: spoken when the whole document is selected.
+#: src/nav/browse_mode.cpp:562
+msgid "selected all"
+msgstr ""
+
+#. Translators: spoken when there is nothing selected to copy.
+#: src/nav/browse_mode.cpp:569
+msgid "no selection"
+msgstr ""
+
+#: src/nav/browse_mode.cpp:575
+msgid "copied"
+msgstr ""
+
+#. Translators: spoken when a search finds nothing.
+#: src/nav/browse_mode.cpp:582 src/nav/browse_mode.cpp:591
+msgid "text not found"
+msgstr ""
+
+#. Translators: spoken when a feature is not available yet.
+#: src/nav/browse_mode.cpp:603
+msgid "find dialog not available yet"
+msgstr ""
+
+#. Translators: spoken when the caret is not inside a container.
+#: src/nav/browse_mode.cpp:637 src/nav/browse_mode.cpp:649
+msgid "not in a container"
+msgstr ""
+
+#. Translators: spoken when a table command is used outside a table.
+#: src/nav/browse_mode.cpp:696 src/nav/browse_mode.cpp:701
+#: src/nav/browse_mode.cpp:754
+msgid "not in a table"
+msgstr ""
+
+#. Translators: spoken when a table movement reaches the table's edge.
+#: src/nav/browse_mode.cpp:725 src/nav/browse_mode.cpp:737
+msgid "edge of table"
+msgstr ""
+
+#. Translators: spoken when layout table reporting is turned on or off.
+#: src/nav/browse_mode.cpp:819
+msgid "layout tables on"
+msgstr ""
+
+#: src/nav/browse_mode.cpp:820
+msgid "layout tables off"
+msgstr ""
+
+#. Translators: reported when the single letters of
+#. browse mode jump between elements again.
+#: src/nav/browse_mode.cpp:849
+msgid "Single letter navigation on"
+msgstr ""
+
+#. Translators: reported when the single letters of
+#. browse mode are handed to the application instead.
+#: src/nav/browse_mode.cpp:852
+msgid "Single letter navigation off"
+msgstr ""
+
+#. Translators: reported when there is no next text
+#. paragraph in the document (`p`).
+#: src/nav/browse_mode.cpp:945
+msgid "no next text paragraph"
+msgstr ""
+
+#. Translators: reported when there is no previous
+#. text paragraph in the document (`shift+p`).
+#: src/nav/browse_mode.cpp:948
+msgid "no previous text paragraph"
+msgstr ""
+
+#. Translators: the caret's position in a document; the first %s is the
+#. line number and the second the number of lines. ONE pattern rather than
+#. three concatenated pieces, because the word order is not English's in
+#. every language.
+#: src/nav/document_range.cpp:980
+#, c-format
+msgid "line %s of %s"
+msgstr ""
+
+#. Translators: there is no paragraph in that direction.
+#. Translators: there is no paragraph after this one.
+#. Translators: there is no paragraph before this one.
+#: src/nav/paragraph_nav.cpp:224
+msgid "No next paragraph"
+msgstr ""
+
+#: src/nav/paragraph_nav.cpp:224
+msgid "No previous paragraph"
+msgstr ""
+
+#: src/nav/paragraph_nav.cpp:258 src/nav/paragraph_nav.cpp:268
+msgid "Application paragraph navigation"
+msgstr ""
+
+#: src/nav/paragraph_nav.cpp:262
+msgid "Single line break paragraph navigation"
+msgstr ""
+
+#: src/nav/paragraph_nav.cpp:266
+msgid "Multi line break paragraph navigation"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:62
+msgid "heading at level 1"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:63
+msgid "heading at level 2"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:64
+msgid "heading at level 3"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:65
+msgid "heading at level 4"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:66
+msgid "heading at level 5"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:67
+msgid "heading at level 6"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:68
+msgid "heading at level 7"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:69
+msgid "heading at level 8"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:70
+msgid "heading at level 9"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:72
+msgid "visited link"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:73
+msgid "unvisited link"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:74
+msgid "form field"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:82
+msgid "edit field"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:89
+msgid "annotation"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:90
+msgid "error"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:91
+msgid "text paragraph"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:95
+msgid "clickable element"
+msgstr ""
+
+#: src/nav/quick_nav.cpp:97
+msgid "more text"
+msgstr ""
+
+#: src/nav/review.cpp:55 src/nav/review.cpp:63
+msgid "Object review"
+msgstr ""
+
+#: src/nav/review.cpp:58
+msgid "Document review"
+msgstr ""
+
+#: src/nav/review.cpp:61
+msgid "Screen review"
+msgstr ""
+
+#. Translators: there is nothing to review.
+#: src/nav/text_commands.cpp:105
+msgid "No review position"
+msgstr ""
+
+#. Translators: the review cursor is at the top line already.
+#: src/nav/text_commands.cpp:215
+msgid "Top"
+msgstr ""
+
+#. Translators: the review cursor is at the bottom line already.
+#: src/nav/text_commands.cpp:220
+msgid "Bottom"
+msgstr ""
+
+#. Translators: there is nothing to read from here.
+#. Translators: there is nothing to read.
+#: src/nav/text_commands.cpp:312 src/nav/text_commands.cpp:491
+#: src/nav/text_commands.cpp:499 src/nav/text_commands.cpp:508
+msgid "No text to read"
+msgstr ""
+
+#. Translators: the last review mode is already in use.
+#: src/nav/text_commands.cpp:330
+msgid "No next review mode"
+msgstr ""
+
+#. Translators: the first review mode is already in use.
+#: src/nav/text_commands.cpp:343
+msgid "No previous review mode"
+msgstr ""
+
+#. Translators: the start of the text to copy has been marked.
+#: src/nav/text_commands.cpp:358
+msgid "Start marked"
+msgstr ""
+
+#. Translators: no start marker has been set.
+#: src/nav/text_commands.cpp:364 src/nav/text_commands.cpp:384
+msgid "No start marker set"
+msgstr ""
+
+#. Translators: the marked position is in another object.
+#: src/nav/text_commands.cpp:389
+msgid "The start marker must reside within the same object"
+msgstr ""
+
+#. Translators: nothing has been selected.
+#: src/nav/text_commands.cpp:400
+msgid "No text to copy"
+msgstr ""
+
+#. Translators: the object refused to change its selection.
+#: src/nav/text_commands.cpp:408
+msgid "Cannot select text here"
+msgstr ""
+
+#. Translators: the text has been selected.
+#: src/nav/text_commands.cpp:412
+msgid "Selected"
+msgstr ""
+
+#. Translators: there is no selection.
+#. Translators: no text is selected.
+#: src/nav/text_commands.cpp:438 src/nav/text_commands.cpp:460
+#: src/nav/text_commands.cpp:605
+msgid "No selection"
+msgstr ""
+
+#. Translators: reported when the command needs a document and the
+#. text layer is not running (`alus-daemon --no-nav`).
+#: src/nav/text_commands.cpp:518 src/nav/text_commands.cpp:523
+msgid "Not in a document"
+msgstr ""
+
+#. Translators: reported when there is no document around this one to
+#. move out to (alus+control+space).
+#: src/nav/text_commands.cpp:543
+msgid "No containing document"
+msgstr ""
+
+#. Translators: reported when the containing document refused the
+#. focus, which only the application can decide.
+#: src/nav/text_commands.cpp:556
+msgid "Could not move to the containing document"
+msgstr ""
+
+#. Translators: the focused object has no caret.
+#: src/nav/text_commands.cpp:630 src/nav/text_commands.cpp:641
+#: src/nav/text_commands.cpp:651 src/nav/text_commands.cpp:703
+#: src/nav/text_commands.cpp:798
+msgid "No caret"
+msgstr ""
+
+#. Translators: the caret's position could not be worked out.
+#: src/nav/text_commands.cpp:635
+msgid "Unable to determine the caret position"
+msgstr ""
+
+#. Translators: the review cursor's position could not be worked out. The
+#. same message as for the caret above -- and it was an untranslated
+#. string literal here while its twin was translated.
+#: src/nav/text_commands.cpp:688
+msgid "Unable to determine the review cursor position"
+msgstr ""
+
+#. Translators: the application does not report the language of its text.
+#: src/nav/text_commands.cpp:724
+msgid "Language not supported"
+msgstr ""
+
+#. Translators: spoken when switching between browse mode and focus
+#. mode.
+#: src/nav/tree_interceptor.cpp:58
+msgid "Focus mode"
+msgstr ""
+
+#. Translators: spoken when a key runs a command that this
+#. version of ALUS does not have yet. Short on purpose: what
+#. matters is that the key is not silent.
+#: src/script/command_status.cpp:153
+msgid "not in this version"
+msgstr ""
+
+#: src/script/dispatch.cpp:88
+#, c-format
+msgid "Emulates pressing %s on the system keyboard"
+msgstr ""
+
+#: src/speech/global_commands.cpp:35
+msgctxt "speechModes"
+msgid "off"
+msgstr ""
+
+#: src/speech/global_commands.cpp:39
+msgctxt "speechModes"
+msgid "beeps"
+msgstr ""
+
+#: src/speech/global_commands.cpp:42
+msgctxt "speechModes"
+msgid "talk"
+msgstr ""
+
+#: src/speech/global_commands.cpp:46
+msgctxt "speechModes"
+msgid "on-demand"
+msgstr ""
+
+#: src/speech/global_commands.cpp:61
+msgctxt "symbolLevel"
+msgid "none"
+msgstr ""
+
+#: src/speech/global_commands.cpp:64
+msgctxt "symbolLevel"
+msgid "some"
+msgstr ""
+
+#: src/speech/global_commands.cpp:67
+msgctxt "symbolLevel"
+msgid "most"
+msgstr ""
+
+#: src/speech/global_commands.cpp:71
+msgctxt "symbolLevel"
+msgid "all"
+msgstr ""
+
+#: src/speech/global_commands.cpp:75
+msgctxt "symbolLevel"
+msgid "character"
+msgstr ""
+
+#. Translators: spoken when the synthesizer settings ring
+#. (alus+control+arrows) has nothing in it, because the synthesizer
+#. reports no setting that can be stepped.
+#: src/speech/global_commands.cpp:129
+msgid "No settings"
+msgstr ""
+
+#. Translators: spoken when a command that needs the speech pipeline is
+#. run where there is none, e.g. under `alus-daemon --no-speech`.
+#: src/speech/global_commands.cpp:137 src/speech/global_commands.cpp:164
+#: src/speech/global_commands.cpp:182
+msgid "speech is not available"
+msgstr ""
+
+#. Translators: announced when the speech mode is changed; {mode} is the
+#. new mode ("off", "beeps", "talk", "on-demand").
+#.
+#. The brace is upstream's, and it is copied exactly: the msgid is the key
+#. into upstream's Serbian catalogue, so a pattern rewritten to "%s" would
+#. be an untranslated string (i18n::substituteNamed says more).
+#: src/speech/global_commands.cpp:153
+msgid "Speech mode {mode}"
+msgstr ""
+
+#. Translators: reported when the punctuation and symbol level is cycled;
+#. %s is the new level ("none", "some", "most", "all").
+#: src/speech/global_commands.cpp:176
+#, c-format
+msgid "Symbol level %s"
+msgstr ""
+
+#. Translators: reported when `alus+x` is pressed before ALUS has said
+#. anything there is to repeat.
+#: src/speech/global_commands.cpp:193
+msgid "Nothing to repeat"
+msgstr ""
+
+#: src/speech/settings_ring.cpp:52
+msgctxt "synth setting"
+msgid "Voice"
+msgstr ""
+
+#: src/speech/settings_ring.cpp:56
+msgctxt "synth setting"
+msgid "Rate"
+msgstr ""
+
+#: src/speech/settings_ring.cpp:60
+msgctxt "synth setting"
+msgid "Pitch"
+msgstr ""
+
+#: src/speech/settings_ring.cpp:64
+msgctxt "synth setting"
+msgid "Inflection"
+msgstr ""
+
+#: src/speech/settings_ring.cpp:68
+msgctxt "synth setting"
+msgid "Volume"
+msgstr ""
+
+#. Translators: the current position's screen coordinates in pixels; the
+#. first %s is the horizontal and the second the vertical coordinate.
+#: src/text/range.cpp:93
+#, c-format
+msgid "Positioned at %s, %s"
+msgstr ""

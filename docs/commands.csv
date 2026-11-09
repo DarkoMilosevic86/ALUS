@@ -1,0 +1,317 @@
+category,script,location,desktop,laptop,description
+Audio,cycleAudioDuckingMode,globalCommands.GlobalCommands,ALUS+shift+d,ALUS+shift+d,Cycles through audio ducking modes which determine when ALUS lowers the volume of other sounds
+Audio,cycleSoundSplit,globalCommands.GlobalCommands,ALUS+alt+s,ALUS+alt+s,Cycles through sound split modes
+Braille,braille_cycleCursorShape,globalCommands.GlobalCommands,,,Cycle through the braille cursor shapes
+Braille,braille_cycleReviewRoutingMovesSystemCaret,globalCommands.GlobalCommands,,,Cycle through the braille move system caret when routing review cursor states
+Braille,braille_cycleShowMessages,globalCommands.GlobalCommands,,,Cycle through the braille show messages modes
+Braille,braille_cycleShowSelection,globalCommands.GlobalCommands,,,Cycle through the braille show selection states
+Braille,braille_cycleUnicodeNormalization,globalCommands.GlobalCommands,,,Cycle through the braille Unicode normalization states
+Braille,braille_dots,globalCommands.GlobalCommands,bk:dots,bk:dots,Inputs braille dots via the braille keyboard
+Braille,braille_enter,globalCommands.GlobalCommands,bk:dot8,bk:dot8,Translates any braille input and presses the enter key
+Braille,braille_eraseLastCell,globalCommands.GlobalCommands,bk:dot7,bk:dot7,Erases the last entered braille cell or character
+Braille,braille_nextLine,globalCommands.GlobalCommands,,,Moves the braille display to the next line
+Braille,braille_previousLine,globalCommands.GlobalCommands,,,Moves the braille display to the previous line
+Braille,braille_reportFormatting,globalCommands.GlobalCommands,,,Reports formatting info for the text under this braille cell
+Braille,braille_routeTo,globalCommands.GlobalCommands,,,Routes the cursor to or activates the object under this braille cell
+Braille,braille_scrollBack,globalCommands.GlobalCommands,,,Scrolls the braille display back
+Braille,braille_scrollForward,globalCommands.GlobalCommands,,,Scrolls the braille display forward
+Braille,braille_selectRange,globalCommands.GlobalCommands,,,Selects the text from the first up to the last braille cell
+Braille,braille_toFocus,globalCommands.GlobalCommands,,,Moves the braille display to the current focus
+Braille,braille_toggleFocusContextPresentation,globalCommands.GlobalCommands,,,Toggle the way context information is presented in braille
+Braille,braille_toggleShowCursor,globalCommands.GlobalCommands,,,Toggle the braille cursor on and off
+Braille,braille_toggleSpeakOnRouting,globalCommands.GlobalCommands,,,Toggles speaking the character under the cursor when routing cursor in text
+Braille,braille_toggleTether,globalCommands.GlobalCommands,ALUS+control+t,ALUS+control+t,Toggle tethering of braille between the focus and the review position
+Braille,braille_translate,globalCommands.GlobalCommands,bk:dot7+dot8,bk:dot7+dot8,Translates any braille input
+Braille,decreaseBrailleAutoScrollRate,globalCommands.GlobalCommands,ALUS+alt+j,ALUS+alt+j,Decreases the rate for braille automatic scroll
+Braille,increaseBrailleAutoScrollRate,globalCommands.GlobalCommands,ALUS+alt+l,ALUS+alt+l,Increases the rate for braille automatic scroll
+Braille,toggleBrailleAutoScroll,globalCommands.GlobalCommands,ALUS+alt+k,ALUS+alt+k,Toggles braille automatic scroll
+Braille,toggleBrailleMode,globalCommands.GlobalCommands,ALUS+alt+t,ALUS+alt+t,Toggles braille mode
+Braille,toggleSpeakingOnNavigatingByUnit,globalCommands.GlobalCommands,,,Toggles on and off speaking when navigating by lines or paragraph with braille
+Browse mode,findNext,cursorManager.CursorManager,ALUS+f3,ALUS+f3,find the next occurrence of the previously entered text string from the current cursor's position
+Browse mode,findPrevious,cursorManager.CursorManager,ALUS+shift+f3,ALUS+shift+f3,find the previous occurrence of the previously entered text string from the current cursor's position
+Browse mode,nextAnnotation,browseMode.BrowseModeTreeInterceptor,a,a,moves to the next annotation
+Browse mode,nextArticle,browseMode.BrowseModeTreeInterceptor,,,moves to the next article
+Browse mode,nextBlockQuote,browseMode.BrowseModeTreeInterceptor,q,q,moves to the next block quote
+Browse mode,nextButton,browseMode.BrowseModeTreeInterceptor,b,b,moves to the next button
+Browse mode,nextCheckBox,browseMode.BrowseModeTreeInterceptor,x,x,moves to the next check box
+Browse mode,nextClickable,browseMode.BrowseModeTreeInterceptor,,,moves to the next clickable element
+Browse mode,nextComboBox,browseMode.BrowseModeTreeInterceptor,c,c,moves to the next combo box
+Browse mode,nextDifferentStyle,browseMode.BrowseModeTreeInterceptor,,,moves to the next different style text
+Browse mode,nextEdit,browseMode.BrowseModeTreeInterceptor,e,e,moves to the next edit field
+Browse mode,nextEmbeddedObject,browseMode.BrowseModeTreeInterceptor,o,o,moves to the next embedded object
+Browse mode,nextError,browseMode.BrowseModeTreeInterceptor,w,w,moves to the next error
+Browse mode,nextFigure,browseMode.BrowseModeTreeInterceptor,,,moves to the next figure
+Browse mode,nextFormField,browseMode.BrowseModeTreeInterceptor,f,f,moves to the next form field
+Browse mode,nextFrame,browseMode.BrowseModeTreeInterceptor,m,m,moves to the next frame
+Browse mode,nextGraphic,browseMode.BrowseModeTreeInterceptor,g,g,moves to the next graphic
+Browse mode,nextGrouping,browseMode.BrowseModeTreeInterceptor,,,moves to the next grouping
+Browse mode,nextHeading,browseMode.BrowseModeTreeInterceptor,h,h,moves to the next heading
+Browse mode,nextHeading1,browseMode.BrowseModeTreeInterceptor,1,1,Moves to the next heading at level 1
+Browse mode,nextHeading2,browseMode.BrowseModeTreeInterceptor,2,2,Moves to the next heading at level 2
+Browse mode,nextHeading3,browseMode.BrowseModeTreeInterceptor,3,3,Moves to the next heading at level 3
+Browse mode,nextHeading4,browseMode.BrowseModeTreeInterceptor,4,4,Moves to the next heading at level 4
+Browse mode,nextHeading5,browseMode.BrowseModeTreeInterceptor,5,5,Moves to the next heading at level 5
+Browse mode,nextHeading6,browseMode.BrowseModeTreeInterceptor,6,6,Moves to the next heading at level 6
+Browse mode,nextHeading7,browseMode.BrowseModeTreeInterceptor,7,7,Moves to the next heading at level 7
+Browse mode,nextHeading8,browseMode.BrowseModeTreeInterceptor,8,8,Moves to the next heading at level 8
+Browse mode,nextHeading9,browseMode.BrowseModeTreeInterceptor,9,9,Moves to the next heading at level 9
+Browse mode,nextLandmark,browseMode.BrowseModeTreeInterceptor,d,d,moves to the next landmark
+Browse mode,nextLink,browseMode.BrowseModeTreeInterceptor,k,k,moves to the next link
+Browse mode,nextList,browseMode.BrowseModeTreeInterceptor,l,l,moves to the next list
+Browse mode,nextListItem,browseMode.BrowseModeTreeInterceptor,i,i,moves to the next list item
+Browse mode,nextMenuItem,browseMode.BrowseModeTreeInterceptor,,,moves to the next menu item
+Browse mode,nextNotLinkBlock,browseMode.BrowseModeTreeInterceptor,n,n,skips forward past a block of links
+Browse mode,nextProgressBar,browseMode.BrowseModeTreeInterceptor,,,moves to the next progress bar
+Browse mode,nextRadioButton,browseMode.BrowseModeTreeInterceptor,r,r,moves to the next radio button
+Browse mode,nextReference,browseMode.BrowseModeTreeInterceptor,,,moves to the next reference
+Browse mode,nextSameStyle,browseMode.BrowseModeTreeInterceptor,,,moves to the next same style text
+Browse mode,nextSelectedElement,browseMode.BrowseModeTreeInterceptor,,,Moves to the next element of the selected type in browse mode touch navigation
+Browse mode,nextSeparator,browseMode.BrowseModeTreeInterceptor,s,s,moves to the next separator
+Browse mode,nextSlider,browseMode.BrowseModeTreeInterceptor,,,moves to the next slider
+Browse mode,nextTab,browseMode.BrowseModeTreeInterceptor,,,moves to the next tab
+Browse mode,nextTable,browseMode.BrowseModeTreeInterceptor,t,t,moves to the next table
+Browse mode,nextTextParagraph,browseMode.BrowseModeTreeInterceptor,p,p,moves to the next text paragraph
+Browse mode,nextToggleButton,browseMode.BrowseModeTreeInterceptor,,,moves to the next toggle button
+Browse mode,nextUnvisitedLink,browseMode.BrowseModeTreeInterceptor,u,u,moves to the next unvisited link
+Browse mode,nextVerticalParagraph,browseMode.BrowseModeTreeInterceptor,,,moves to the next vertically aligned paragraph
+Browse mode,nextVisitedLink,browseMode.BrowseModeTreeInterceptor,v,v,moves to the next visited link
+Browse mode,prevSelectedElement,browseMode.BrowseModeTreeInterceptor,,,Moves to the previous element of the selected type in browse mode touch navigation
+Browse mode,previousAnnotation,browseMode.BrowseModeTreeInterceptor,shift+a,shift+a,moves to the previous annotation
+Browse mode,previousArticle,browseMode.BrowseModeTreeInterceptor,,,moves to the previous article
+Browse mode,previousBlockQuote,browseMode.BrowseModeTreeInterceptor,shift+q,shift+q,moves to the previous block quote
+Browse mode,previousButton,browseMode.BrowseModeTreeInterceptor,shift+b,shift+b,moves to the previous button
+Browse mode,previousCheckBox,browseMode.BrowseModeTreeInterceptor,shift+x,shift+x,moves to the previous check box
+Browse mode,previousClickable,browseMode.BrowseModeTreeInterceptor,,,moves to the previous clickable element
+Browse mode,previousComboBox,browseMode.BrowseModeTreeInterceptor,shift+c,shift+c,moves to the previous combo box
+Browse mode,previousDifferentStyle,browseMode.BrowseModeTreeInterceptor,,,moves to the previous different style text
+Browse mode,previousEdit,browseMode.BrowseModeTreeInterceptor,shift+e,shift+e,moves to the previous edit field
+Browse mode,previousEmbeddedObject,browseMode.BrowseModeTreeInterceptor,shift+o,shift+o,moves to the previous embedded object
+Browse mode,previousError,browseMode.BrowseModeTreeInterceptor,shift+w,shift+w,moves to the previous error
+Browse mode,previousFigure,browseMode.BrowseModeTreeInterceptor,,,moves to the previous figure
+Browse mode,previousFormField,browseMode.BrowseModeTreeInterceptor,shift+f,shift+f,moves to the previous form field
+Browse mode,previousFrame,browseMode.BrowseModeTreeInterceptor,shift+m,shift+m,moves to the previous frame
+Browse mode,previousGraphic,browseMode.BrowseModeTreeInterceptor,shift+g,shift+g,moves to the previous graphic
+Browse mode,previousGrouping,browseMode.BrowseModeTreeInterceptor,,,moves to the previous grouping
+Browse mode,previousHeading,browseMode.BrowseModeTreeInterceptor,shift+h,shift+h,moves to the previous heading
+Browse mode,previousHeading1,browseMode.BrowseModeTreeInterceptor,shift+1,shift+1,Moves to the previous heading at level 1
+Browse mode,previousHeading2,browseMode.BrowseModeTreeInterceptor,shift+2,shift+2,Moves to the previous heading at level 2
+Browse mode,previousHeading3,browseMode.BrowseModeTreeInterceptor,shift+3,shift+3,Moves to the previous heading at level 3
+Browse mode,previousHeading4,browseMode.BrowseModeTreeInterceptor,shift+4,shift+4,Moves to the previous heading at level 4
+Browse mode,previousHeading5,browseMode.BrowseModeTreeInterceptor,shift+5,shift+5,Moves to the previous heading at level 5
+Browse mode,previousHeading6,browseMode.BrowseModeTreeInterceptor,shift+6,shift+6,Moves to the previous heading at level 6
+Browse mode,previousHeading7,browseMode.BrowseModeTreeInterceptor,shift+7,shift+7,Moves to the previous heading at level 7
+Browse mode,previousHeading8,browseMode.BrowseModeTreeInterceptor,shift+8,shift+8,Moves to the previous heading at level 8
+Browse mode,previousHeading9,browseMode.BrowseModeTreeInterceptor,shift+9,shift+9,Moves to the previous heading at level 9
+Browse mode,previousLandmark,browseMode.BrowseModeTreeInterceptor,shift+d,shift+d,moves to the previous landmark
+Browse mode,previousLink,browseMode.BrowseModeTreeInterceptor,shift+k,shift+k,moves to the previous link
+Browse mode,previousList,browseMode.BrowseModeTreeInterceptor,shift+l,shift+l,moves to the previous list
+Browse mode,previousListItem,browseMode.BrowseModeTreeInterceptor,shift+i,shift+i,moves to the previous list item
+Browse mode,previousMenuItem,browseMode.BrowseModeTreeInterceptor,,,moves to the previous menu item
+Browse mode,previousNotLinkBlock,browseMode.BrowseModeTreeInterceptor,shift+n,shift+n,skips backward past a block of links
+Browse mode,previousProgressBar,browseMode.BrowseModeTreeInterceptor,,,moves to the previous progress bar
+Browse mode,previousRadioButton,browseMode.BrowseModeTreeInterceptor,shift+r,shift+r,moves to the previous radio button
+Browse mode,previousReference,browseMode.BrowseModeTreeInterceptor,,,moves to the previous reference
+Browse mode,previousSameStyle,browseMode.BrowseModeTreeInterceptor,,,moves to the previous same style text
+Browse mode,previousSeparator,browseMode.BrowseModeTreeInterceptor,shift+s,shift+s,moves to the previous separator
+Browse mode,previousSlider,browseMode.BrowseModeTreeInterceptor,,,moves to the previous slider
+Browse mode,previousTab,browseMode.BrowseModeTreeInterceptor,,,moves to the previous tab
+Browse mode,previousTable,browseMode.BrowseModeTreeInterceptor,shift+t,shift+t,moves to the previous table
+Browse mode,previousTextParagraph,browseMode.BrowseModeTreeInterceptor,shift+p,shift+p,moves to the previous text paragraph
+Browse mode,previousToggleButton,browseMode.BrowseModeTreeInterceptor,,,moves to the previous toggle button
+Browse mode,previousUnvisitedLink,browseMode.BrowseModeTreeInterceptor,shift+u,shift+u,moves to the previous unvisited link
+Browse mode,previousVerticalParagraph,browseMode.BrowseModeTreeInterceptor,,,moves to the previous vertically aligned paragraph
+Browse mode,previousVisitedLink,browseMode.BrowseModeTreeInterceptor,shift+v,shift+v,moves to the previous visited link
+Browse mode,toggleNativeAppSelectionMode,browseMode.BrowseModeDocumentTreeInterceptor,ALUS+shift+f10,ALUS+shift+f10,Toggles native selection mode on and off
+Browse mode,toggleScreenLayout,browseMode.BrowseModeDocumentTreeInterceptor,ALUS+v,ALUS+v,Toggles on and off if the screen layout is preserved while rendering the document content
+Browse mode,toggleVirtualBufferPassThrough,globalCommands.GlobalCommands,ALUS+space,ALUS+space,"Toggles between browse mode and focus mode. When in focus mode, keys will pass straight through to the application, allowing you to interact directly with a control. When in browse mode, you can navigate the document with the cursor, quick navigation keys, etc."
+Configuration,activateAddonStoreSettings,globalCommands.GlobalCommands,,,Shows ALUS's Add-on Store settings
+Configuration,activateAdvancedSettings,globalCommands.GlobalCommands,,,Shows ALUS's Advanced settings
+Configuration,activateAudioSettingsDialog,globalCommands.GlobalCommands,ALUS+control+u,ALUS+control+u,Shows ALUS's audio settings
+Configuration,activateBrailleDisplayDialog,globalCommands.GlobalCommands,ALUS+control+a,ALUS+control+a,Shows the ALUS braille display selection dialog
+Configuration,activateBrailleSettingsDialog,globalCommands.GlobalCommands,,,Shows ALUS's braille settings
+Configuration,activateBrowseModeDialog,globalCommands.GlobalCommands,ALUS+control+b,ALUS+control+b,Shows ALUS's browse mode settings
+Configuration,activateDefaultDictionaryDialog,globalCommands.GlobalCommands,,,Shows the ALUS default dictionary dialog
+Configuration,activateDocumentFormattingDialog,globalCommands.GlobalCommands,ALUS+control+d,ALUS+control+d,Shows ALUS's document formatting settings
+Configuration,activateGeneralSettingsDialog,globalCommands.GlobalCommands,ALUS+control+g,ALUS+control+g,Shows ALUS's general settings
+Configuration,activateInputCompositionDialog,globalCommands.GlobalCommands,,,Shows ALUS's input composition settings
+Configuration,activateInputGesturesDialog,globalCommands.GlobalCommands,,,Shows the ALUS input gestures dialog
+Configuration,activateKeyboardSettingsDialog,globalCommands.GlobalCommands,ALUS+control+k,ALUS+control+k,Shows ALUS's keyboard settings
+Configuration,activateMouseSettingsDialog,globalCommands.GlobalCommands,ALUS+control+m,ALUS+control+m,Shows ALUS's mouse settings
+Configuration,activateObjectPresentationDialog,globalCommands.GlobalCommands,ALUS+control+o,ALUS+control+o,Shows ALUS's object presentation settings
+Configuration,activatePrivacyAndSecuritySettings,globalCommands.GlobalCommands,,,Shows ALUS's privacy and security settings
+Configuration,activateReviewCursorDialog,globalCommands.GlobalCommands,,,Shows ALUS's review cursor settings
+Configuration,activateSpeechSymbolsDialog,globalCommands.GlobalCommands,,,Shows the ALUS symbol pronunciation dialog
+Configuration,activateSynthesizerDialog,globalCommands.GlobalCommands,ALUS+control+s,ALUS+control+s,Shows the ALUS synthesizer selection dialog
+Configuration,activateTemporaryDictionaryDialog,globalCommands.GlobalCommands,,,Shows the ALUS temporary dictionary dialog
+Configuration,activateVoiceDialog,globalCommands.GlobalCommands,ALUS+control+v,ALUS+control+v,Shows ALUS's speech settings
+Configuration,activateVoiceDictionaryDialog,globalCommands.GlobalCommands,,,Shows the ALUS voice-specific dictionary dialog
+Configuration,reportActiveConfigurationProfile,globalCommands.GlobalCommands,,,Reports the name of the current ALUS configuration profile
+Configuration,revertConfiguration,globalCommands.GlobalCommands,ALUS+control+r,ALUS+control+r,Pressing once reverts the current configuration to the most recently saved state. Pressing three times resets to factory defaults.
+Configuration,saveConfiguration,globalCommands.GlobalCommands,ALUS+control+c,ALUS+control+c,Saves the current ALUS configuration
+Configuration,toggleConfigProfileTriggers,globalCommands.GlobalCommands,,,Toggles disabling of all configuration profile triggers. Disabling remains in effect until ALUS is restarted
+Configuration profiles,activateConfigProfilesDialog,globalCommands.GlobalCommands,ALUS+control+p,ALUS+control+p,Shows the ALUS Configuration Profiles dialog
+Document formatting,toggleReportAlignment,globalCommands.GlobalCommands,,,Toggles on and off the reporting of text alignment
+Document formatting,toggleReportArticles,globalCommands.GlobalCommands,,,Toggles on and off the reporting of articles
+Document formatting,toggleReportBlockQuotes,globalCommands.GlobalCommands,,,Toggles on and off the reporting of block quotes
+Document formatting,toggleReportCellBorders,globalCommands.GlobalCommands,,,Cycles through the cell border reporting settings
+Document formatting,toggleReportClickable,globalCommands.GlobalCommands,,,Toggles on and off reporting if clickable
+Document formatting,toggleReportColor,globalCommands.GlobalCommands,,,Toggles on and off the reporting of colors
+Document formatting,toggleReportComments,globalCommands.GlobalCommands,,,Toggles on and off the reporting of comments
+Document formatting,toggleReportEmphasis,globalCommands.GlobalCommands,,,Toggles on and off the reporting of emphasis
+Document formatting,toggleReportFigures,globalCommands.GlobalCommands,,,Toggles on and off the reporting of figures and captions
+Document formatting,toggleReportFontAttributes,globalCommands.GlobalCommands,,,"Cycles font attribute reporting between speech, braille, speech and braille, and off."
+Document formatting,toggleReportFontName,globalCommands.GlobalCommands,,,Toggles on and off the reporting of font changes
+Document formatting,toggleReportFontSize,globalCommands.GlobalCommands,,,Toggles on and off the reporting of font size changes
+Document formatting,toggleReportFrames,globalCommands.GlobalCommands,,,Toggles on and off the reporting of frames
+Document formatting,toggleReportGraphics,globalCommands.GlobalCommands,,,Toggles on and off the reporting of graphics
+Document formatting,toggleReportGroupings,globalCommands.GlobalCommands,,,Toggles on and off the reporting of groupings
+Document formatting,toggleReportHeadings,globalCommands.GlobalCommands,,,Toggles on and off the reporting of headings
+Document formatting,toggleReportHighlightedText,globalCommands.GlobalCommands,,,Toggles on and off the reporting of highlighted text
+Document formatting,toggleReportLandmarks,globalCommands.GlobalCommands,,,Toggles on and off the reporting of landmarks
+Document formatting,toggleReportLineIndentation,globalCommands.GlobalCommands,,,Cycles through line indentation settings
+Document formatting,toggleReportLineNumber,globalCommands.GlobalCommands,,,Toggles on and off the reporting of line numbers
+Document formatting,toggleReportLineSpacing,globalCommands.GlobalCommands,,,Toggles on and off the reporting of line spacing
+Document formatting,toggleReportLinkType,globalCommands.GlobalCommands,,,Toggles on and off the reporting of link type
+Document formatting,toggleReportLinks,globalCommands.GlobalCommands,,,Toggles on and off the reporting of links
+Document formatting,toggleReportLists,globalCommands.GlobalCommands,,,Toggles on and off the reporting of lists
+Document formatting,toggleReportPage,globalCommands.GlobalCommands,,,Toggles on and off the reporting of pages
+Document formatting,toggleReportParagraphIndentation,globalCommands.GlobalCommands,,,Toggles on and off the reporting of paragraph indentation
+Document formatting,toggleReportRevisions,globalCommands.GlobalCommands,,,Toggles on and off the reporting of revisions
+Document formatting,toggleReportSpellingErrors,globalCommands.GlobalCommands,,,Cycles through options for how to report spelling or grammar errors
+Document formatting,toggleReportSpellingErrorsInBraille,globalCommands.GlobalCommands,,,Toggles reporting spelling or grammar errors in braille
+Document formatting,toggleReportStyle,globalCommands.GlobalCommands,,,Toggles on and off the reporting of style changes
+Document formatting,toggleReportSuperscriptsAndSubscripts,globalCommands.GlobalCommands,,,Toggles on and off the reporting of superscripts and subscripts
+Document formatting,toggleReportTableCellCoords,globalCommands.GlobalCommands,,,Toggles on and off the reporting of table cell coordinates
+Document formatting,toggleReportTableHeaders,globalCommands.GlobalCommands,,,Cycle through the possible modes to report table row and column headers
+Document formatting,toggleReportTables,globalCommands.GlobalCommands,,,Toggles on and off the reporting of tables
+Document formatting,toggleignoreBlankLinesForReportLineIndentation,globalCommands.GlobalCommands,,,Toggles on and off the ignoring of blank lines for line indentation reporting
+Emulated system keyboard keys,braille_toggleAlt,globalCommands.GlobalCommands,,,Virtually toggles the alt key to emulate a keyboard shortcut with braille input
+Emulated system keyboard keys,braille_toggleAltShift,globalCommands.GlobalCommands,,,Virtually toggles the alt and shift keys to emulate a keyboard shortcut with braille input
+Emulated system keyboard keys,braille_toggleAlusKey,globalCommands.GlobalCommands,,,Virtually toggles the ALUS key to emulate a keyboard shortcut with braille input
+Emulated system keyboard keys,braille_toggleAlusKeyShift,globalCommands.GlobalCommands,,,Virtually toggles the ALUS and shift keys to emulate a keyboard shortcut with braille input
+Emulated system keyboard keys,braille_toggleControl,globalCommands.GlobalCommands,,,Virtually toggles the control key to emulate a keyboard shortcut with braille input
+Emulated system keyboard keys,braille_toggleControlAlt,globalCommands.GlobalCommands,,,Virtually toggles the control and alt keys to emulate a keyboard shortcut with braille input
+Emulated system keyboard keys,braille_toggleControlAltShift,globalCommands.GlobalCommands,,,"Virtually toggles the control, alt, and shift keys to emulate a keyboard shortcut with braille input"
+Emulated system keyboard keys,braille_toggleControlShift,globalCommands.GlobalCommands,,,Virtually toggles the control and shift keys to emulate a keyboard shortcut with braille input
+Emulated system keyboard keys,braille_toggleShift,globalCommands.GlobalCommands,,,Virtually toggles the shift key to emulate a keyboard shortcut with braille input
+Emulated system keyboard keys,braille_toggleWindows,globalCommands.GlobalCommands,,,Virtually toggles the left windows key to emulate a keyboard shortcut with braille input
+Emulated system keyboard keys,braille_toggleWindowsShift,globalCommands.GlobalCommands,,,Virtually toggles the left windows and shift keys to emulate a keyboard shortcut with braille input
+Input,passNextKeyThrough,globalCommands.GlobalCommands,ALUS+f2,ALUS+f2,"The next key that is pressed will not be handled at all by ALUS, it will be passed directly through to the application."
+Input,toggleInputHelp,globalCommands.GlobalCommands,ALUS+1,ALUS+1,"Turns input help on or off. When on, any input such as pressing a key on the keyboard will tell you what script is associated with that input, if any."
+Input,toggleKeyboardLayout,globalCommands.GlobalCommands,,,Toggles between desktop and laptop keyboard layout
+Miscellaneous,quit,globalCommands.GlobalCommands,ALUS+q,ALUS+q,Quits ALUS!
+Miscellaneous,restart,globalCommands.GlobalCommands,,,Restarts ALUS!
+Miscellaneous,showGui,globalCommands.GlobalCommands,ALUS+a,ALUS+n,Shows the ALUS menu
+Miscellaneous,toggleCurrentAppSleepMode,globalCommands.GlobalCommands,ALUS+shift+s,ALUS+shift+z,Toggles sleep mode on and off for the active application.
+Mouse,leftMouseClick,globalCommands.GlobalCommands,numpadDivide,"numpadDivide, ALUS+[",Clicks the left mouse button once at the current mouse position
+Mouse,mouseScrollDown,globalCommands.GlobalCommands,,,Scroll down at the mouse position
+Mouse,mouseScrollLeft,globalCommands.GlobalCommands,,,Scroll left at the mouse position
+Mouse,mouseScrollRight,globalCommands.GlobalCommands,,,Scroll right at the mouse position
+Mouse,mouseScrollUp,globalCommands.GlobalCommands,,,Scroll up at the mouse position
+Mouse,moveMouseToNavigatorObject,globalCommands.GlobalCommands,ALUS+numpadDivide,"ALUS+numpadDivide, ALUS+shift+m",Moves the mouse pointer to the current navigator object
+Mouse,moveNavigatorObjectToMouse,globalCommands.GlobalCommands,ALUS+numpadMultiply,"ALUS+numpadMultiply, ALUS+shift+n",Sets the navigator object to the current object under the mouse pointer and speaks it
+Mouse,rightMouseClick,globalCommands.GlobalCommands,numpadMultiply,"numpadMultiply, ALUS+]",Clicks the right mouse button once at the current mouse position
+Mouse,toggleLeftMouseButton,globalCommands.GlobalCommands,shift+numpadDivide,"shift+numpadDivide, ALUS+control+[",Locks or unlocks the left mouse button
+Mouse,toggleMouseAudioCoordinates,globalCommands.GlobalCommands,,,Toggles beeps that report mouse coordinates as the mouse moves
+Mouse,toggleMouseTextResolution,globalCommands.GlobalCommands,,,Toggles how much text will be spoken when the mouse moves
+Mouse,toggleMouseTracking,globalCommands.GlobalCommands,ALUS+m,ALUS+m,Toggles the reporting of information as the mouse moves
+Mouse,toggleRightMouseButton,globalCommands.GlobalCommands,shift+numpadMultiply,"shift+numpadMultiply, ALUS+control+]",Locks or unlocks the right mouse button
+Object navigation,navigatorObject_current,globalCommands.GlobalCommands,ALUS+numpad5,"ALUS+numpad5, ALUS+shift+o","Reports the current navigator object. Pressing twice spells this information, and pressing three times Copies name and value of this object to the clipboard"
+Object navigation,navigatorObject_currentDimensions,globalCommands.GlobalCommands,ALUS+shift+numpadDelete,"ALUS+shift+numpadDelete, ALUS+shift+delete",Reports information about the location of the text or object at the review cursor. Pressing twice may provide further detail.
+Object navigation,navigatorObject_firstChild,globalCommands.GlobalCommands,ALUS+numpad2,"ALUS+numpad2, ALUS+shift+downArrow",Moves the navigator object to the first object inside it
+Object navigation,navigatorObject_moveFocus,globalCommands.GlobalCommands,ALUS+shift+numpadMinus,"ALUS+shift+numpadMinus, ALUS+shift+backspace","Pressed once sets the keyboard focus to the navigator object, pressed twice sets the system caret to the position of the review cursor"
+Object navigation,navigatorObject_next,globalCommands.GlobalCommands,ALUS+numpad6,"ALUS+numpad6, ALUS+shift+rightArrow",Moves the navigator object to the next object
+Object navigation,navigatorObject_nextInFlow,globalCommands.GlobalCommands,ALUS+numpad3,"ALUS+numpad3, shift+ALUS+]",Moves to the next object in a flattened view of the object navigation hierarchy
+Object navigation,navigatorObject_parent,globalCommands.GlobalCommands,ALUS+numpad8,"ALUS+numpad8, ALUS+shift+upArrow",Moves the navigator object to the object containing it
+Object navigation,navigatorObject_previous,globalCommands.GlobalCommands,ALUS+numpad4,"ALUS+numpad4, ALUS+shift+leftArrow",Moves the navigator object to the previous object
+Object navigation,navigatorObject_previousInFlow,globalCommands.GlobalCommands,ALUS+numpad9,"ALUS+numpad9, shift+ALUS+[",Moves to the previous object in a flattened view of the object navigation hierarchy
+Object navigation,navigatorObject_toFocus,globalCommands.GlobalCommands,ALUS+numpadMinus,"ALUS+numpadMinus, ALUS+backspace","Sets the navigator object to the current focus, and the review cursor to the position of the caret inside it, if possible."
+Object navigation,reportCurrentNavigatorObjectLocation,globalCommands.GlobalCommands,,,Reports information about the location of the current navigator object.
+Object navigation,reportReviewCursorLocation,globalCommands.GlobalCommands,,,"Reports information about the location of the text at the review cursor, or location of the navigator object if there is no text under review cursor."
+Object navigation,reviewCursorToStatusLine,globalCommands.GlobalCommands,,,Reads the current application status bar and moves navigator object into it.
+Object navigation,review_activate,globalCommands.GlobalCommands,ALUS+numpadEnter,"ALUS+numpadEnter, ALUS+enter",Performs the default action on the current navigator object (example: presses it if it is a button).
+Object navigation,toggleFocusMovesNavigatorObject,globalCommands.GlobalCommands,ALUS+7,ALUS+7,Toggles on and off the movement of the navigator object due to focus changes
+Object navigation,toggleSimpleReviewMode,globalCommands.GlobalCommands,,,Toggles simple review mode on and off
+Speech,copyLastSpokenInformation,globalCommands.GlobalCommands,ALUS+control+x,ALUS+control+x,Copies the last spoken information to the clipboard.
+Speech,cycleSpeechAutomaticLanguageSwitching,globalCommands.GlobalCommands,,,"Cycles through the possible choices for automatic language switching: off, language only and language and dialect."
+Speech,cycleSpeechSymbolLevel,globalCommands.GlobalCommands,ALUS+p,ALUS+p,Cycles through speech symbol levels which determine what symbols are spoken
+Speech,decreaseLargeSynthSetting,globalCommands.GlobalCommands,ALUS+control+pageDown,ALUS+control+shift+pageDown,Decreases the currently active setting in the synth settings ring in a larger step
+Speech,decreaseSynthSetting,globalCommands.GlobalCommands,ALUS+control+downArrow,ALUS+control+shift+downArrow,Decreases the currently active setting in the synth settings ring
+Speech,firstValueSynthRing,globalCommands.GlobalCommands,,,Set the first value of the current setting in the synth settings ring
+Speech,increaseLargeSynthSetting,globalCommands.GlobalCommands,ALUS+control+pageUp,ALUS+shift+control+pageUp,Increases the currently active setting in the synth settings ring in a larger step
+Speech,increaseSynthSetting,globalCommands.GlobalCommands,ALUS+control+upArrow,ALUS+shift+control+upArrow,Increases the currently active setting in the synth settings ring
+Speech,lastValueSynthRing,globalCommands.GlobalCommands,,,Set the last value of the current setting in the synth settings ring
+Speech,nextSynthSetting,globalCommands.GlobalCommands,ALUS+control+rightArrow,ALUS+shift+control+rightArrow,Moves to the next available setting in the synth settings ring
+Speech,previousSynthSetting,globalCommands.GlobalCommands,ALUS+control+leftArrow,ALUS+shift+control+leftArrow,Moves to the previous available setting in the synth settings ring
+Speech,repeatLastSpokenInformation,globalCommands.GlobalCommands,ALUS+x,ALUS+x,Repeat the last spoken information. Pressing twice shows it in a browsable message.
+Speech,speechMode,globalCommands.GlobalCommands,ALUS+s,ALUS+s,Cycles between speech modes.
+Speech,speech_cycleUnicodeNormalization,globalCommands.GlobalCommands,,,Cycle through the speech Unicode normalization states
+Speech,toggleDelayedCharacterDescriptions,globalCommands.GlobalCommands,,,Toggles on and off delayed descriptions for characters on cursor movement
+Speech,toggleProgressBarOutput,globalCommands.GlobalCommands,ALUS+u,ALUS+u,"Toggles between beeps, speech, beeps and speech, and off, for reporting progress bar updates"
+Speech,toggleReportCLDR,globalCommands.GlobalCommands,,,"Toggles on and off the reporting of CLDR characters, such as emojis"
+Speech,toggleReportDynamicContentChanges,globalCommands.GlobalCommands,ALUS+5,ALUS+5,"Toggles on and off the reporting of dynamic content changes, such as new text in dos console windows"
+Speech,toggleSpeakCommandKeys,globalCommands.GlobalCommands,ALUS+4,ALUS+4,Toggles on and off the speaking of command keys
+Speech,toggleSpeakTypedCharacters,globalCommands.GlobalCommands,ALUS+2,ALUS+2,Cycles through options for when to speak typed characters.
+Speech,toggleSpeakTypedWords,globalCommands.GlobalCommands,ALUS+3,ALUS+3,Cycles through options for when to speak typed words.
+System caret,caretPos_currentDimensions,globalCommands.GlobalCommands,ALUS+numpadDelete,"ALUS+numpadDelete, ALUS+delete",Reports information about the location of the text or object at the position of system caret. Pressing twice may provide further detail.
+System caret,cycleParagraphStyle,globalCommands.GlobalCommands,,,Cycles through paragraph navigation styles
+System caret,reportCaretLanguage,globalCommands.GlobalCommands,,,"Reports the language for the text under the caret. If pressed twice, presents the information in browse mode"
+System caret,reportCaretLocation,globalCommands.GlobalCommands,,,"Reports information about the location of the text at the caret, or location of the currently focused object if there is no caret."
+System caret,reportCurrentLine,globalCommands.GlobalCommands,ALUS+upArrow,ALUS+l,Reports the current line under the application cursor. Pressing this key twice will spell the current line. Pressing three times will spell the line using character descriptions.
+System caret,reportCurrentSelection,globalCommands.GlobalCommands,ALUS+shift+upArrow,ALUS+shift+s,Announces the current selection in edit controls and documents. Pressing twice spells this information. Pressing three times spells it using character descriptions. Pressing four times shows it in a browsable message.
+System caret,reportDetailsSummary,globalCommands.GlobalCommands,ALUS+d,ALUS+d,Report summary of any annotation details at the system caret.
+System caret,reportFormattingAtCaret,globalCommands.GlobalCommands,,,Reports formatting info for the text under the caret.
+System caret,reportOrShowFormattingAtCaret,globalCommands.GlobalCommands,ALUS+f,ALUS+f,"Reports formatting info for the text under the caret. If pressed twice, presents the information in browse mode"
+System caret,sayAll,globalCommands.GlobalCommands,ALUS+downArrow,ALUS+a,"Reads from the system caret up to the end of the text, moving the caret as it goes"
+System caret,showFormattingAtCaret,globalCommands.GlobalCommands,,,"Presents, in browse mode, formatting info for the text under the caret."
+System focus,copyStatusLine,globalCommands.GlobalCommands,,,Copies content of the status bar of current application to the clipboard.
+System focus,moveToParentTreeInterceptor,globalCommands.GlobalCommands,ALUS+control+space,ALUS+control+space,Moves the focus out of the current embedded object and into the document that contains it
+System focus,readStatusLine,globalCommands.GlobalCommands,,,Reads the current application status bar.
+System focus,reportCurrentFocus,globalCommands.GlobalCommands,ALUS+tab,ALUS+tab,"Reports the object with focus. If pressed twice, spells the information. Pressing three times spells it using character descriptions."
+System focus,reportFocusObjectAccelerator,globalCommands.GlobalCommands,shift+numpad2,"shift+numpad2, ALUS+control+shift+.",Reports the shortcut key of the currently focused object
+System focus,reportFocusObjectLocation,globalCommands.GlobalCommands,,,Reports information about the location of the currently focused object.
+System focus,reportStatusLine,globalCommands.GlobalCommands,ALUS+end,ALUS+shift+end,"Reads the current application status bar. If pressed twice, spells the information. If pressed three times, copies the status bar to the clipboard"
+System focus,speakForeground,globalCommands.GlobalCommands,ALUS+b,ALUS+b,Reads all controls in the active window
+System focus,spellStatusLine,globalCommands.GlobalCommands,,,Spells the current application status bar.
+System focus,title,globalCommands.GlobalCommands,ALUS+t,ALUS+t,"Reports the title of the current application or foreground window. If pressed twice, spells the title. If pressed three times, copies the title to the clipboard"
+System status,dateTime,globalCommands.GlobalCommands,ALUS+f12,ALUS+f12,"If pressed once, reports the current time. If pressed twice, reports the current date"
+System status,reportClipboardText,globalCommands.GlobalCommands,ALUS+c,ALUS+c,Reports the text on the system clipboard. Pressing twice spells this information. Pressing three times spells it using character descriptions.
+System status,say_battery_status,globalCommands.GlobalCommands,ALUS+shift+b,ALUS+shift+b,Reports battery status and time remaining if AC is not plugged in
+Text review,reportFormatting,globalCommands.GlobalCommands,ALUS+shift+f,ALUS+shift+f,"Reports formatting info for the current review cursor position. If pressed twice, presents the information in browse mode"
+Text review,reportFormattingAtReview,globalCommands.GlobalCommands,,,Reports formatting info for the current review cursor position.
+Text review,reviewMode_next,globalCommands.GlobalCommands,ALUS+numpad7,"ALUS+numpad7, ALUS+pageUp","Switches to the next review mode (e.g. object, document or screen) and positions the review position at the point of the navigator object"
+Text review,reviewMode_previous,globalCommands.GlobalCommands,ALUS+numpad1,"ALUS+numpad1, ALUS+pageDown","Switches to the previous review mode (e.g. object, document or screen) and positions the review position at the point of the navigator object"
+Text review,review_bottom,globalCommands.GlobalCommands,shift+numpad9,"shift+numpad9, ALUS+control+end",Moves the review cursor to the bottom line of the current navigator object and speaks it
+Text review,review_copy,globalCommands.GlobalCommands,ALUS+f10,ALUS+f10,"If pressed once, the text from the previously set start marker up to and including the current position of the review cursor is selected. If pressed twice, the text is copied to the clipboard"
+Text review,review_currentCharacter,globalCommands.GlobalCommands,numpad2,"numpad2, ALUS+.",Reports the character of the current navigator object where the review cursor is situated. Pressing twice reports a description or example of that character. Pressing three times reports the numeric value of the character in decimal and hexadecimal
+Text review,review_currentLine,globalCommands.GlobalCommands,numpad8,"numpad8, ALUS+shift+.","Reports the line of the current navigator object where the review cursor is situated. If this key is pressed twice, the current line will be spelled. Pressing three times will spell the line using character descriptions."
+Text review,review_currentSymbol,globalCommands.GlobalCommands,,,"Reports the symbol where the review cursor is positioned. Pressed twice, shows the symbol and the text used to speak it in browse mode"
+Text review,review_currentWord,globalCommands.GlobalCommands,numpad5,"numpad5, ALUS+control+.",Speaks the word of the current navigator object where the review cursor is situated. Pressing twice spells the word. Pressing three times spells the word using character descriptions
+Text review,review_endOfLine,globalCommands.GlobalCommands,shift+numpad3,"shift+numpad3, ALUS+end",Moves the review cursor to the last character of the line where it is situated in the current navigator object and speaks it
+Text review,review_endOfSelection,globalCommands.GlobalCommands,ALUS+alt+end,ALUS+alt+end,"Moves the review cursor to the last character of the selection, and speaks it"
+Text review,review_markStartForCopy,globalCommands.GlobalCommands,ALUS+f9,ALUS+f9,Marks the current position of the review cursor as the start of text to be selected or copied
+Text review,review_moveToStartMarkedForCopy,globalCommands.GlobalCommands,ALUS+shift+F9,ALUS+shift+F9,Move the review cursor to the position marked as the start of text to be selected or copied
+Text review,review_nextCharacter,globalCommands.GlobalCommands,numpad3,"numpad3, ALUS+rightArrow",Moves the review cursor to the next character of the current navigator object and speaks it
+Text review,review_nextLine,globalCommands.GlobalCommands,numpad9,"numpad9, ALUS+downArrow",Moves the review cursor to the next line of the current navigator object and speaks it
+Text review,review_nextPage,globalCommands.GlobalCommands,ALUS+pageDown,"ALUS+pageDown, ALUS+shift+pageDown",Moves the review cursor to the next page of the current navigator object and speaks it
+Text review,review_nextWord,globalCommands.GlobalCommands,numpad6,"numpad6, ALUS+control+rightArrow",Moves the review cursor to the next word of the current navigator object and speaks it
+Text review,review_previousCharacter,globalCommands.GlobalCommands,numpad1,"numpad1, ALUS+leftArrow",Moves the review cursor to the previous character of the current navigator object and speaks it
+Text review,review_previousLine,globalCommands.GlobalCommands,numpad7,"numpad7, ALUS+upArrow",Moves the review cursor to the previous line of the current navigator object and speaks it
+Text review,review_previousPage,globalCommands.GlobalCommands,ALUS+pageUp,"ALUS+pageUp, ALUS+shift+pageUp",Moves the review cursor to the previous page of the current navigator object and speaks it
+Text review,review_previousWord,globalCommands.GlobalCommands,numpad4,"numpad4, ALUS+control+leftArrow",Moves the review cursor to the previous word of the current navigator object and speaks it
+Text review,review_sayAll,globalCommands.GlobalCommands,numpadPlus,"numpadPlus, ALUS+shift+a","Reads from the review cursor up to the end of the current text, moving the review cursor as it goes"
+Text review,review_startOfLine,globalCommands.GlobalCommands,shift+numpad1,"shift+numpad1, ALUS+home",Moves the review cursor to the first character of the line where it is situated in the current navigator object and speaks it
+Text review,review_startOfSelection,globalCommands.GlobalCommands,ALUS+alt+home,ALUS+alt+home,"Moves the review cursor to the first character of the selection, and speaks it"
+Text review,review_top,globalCommands.GlobalCommands,shift+numpad7,"shift+numpad7, ALUS+control+home",Moves the review cursor to the top line of the current navigator object and speaks it
+Text review,showFormattingAtReview,globalCommands.GlobalCommands,,,"Presents, in browse mode, formatting info for the current review cursor position."
+Text review,toggleCaretMovesReviewCursor,globalCommands.GlobalCommands,ALUS+6,ALUS+6,Toggles on and off the movement of the review cursor due to the caret moving.
+Tools,activateAddonsManager,globalCommands.GlobalCommands,,,Activates the Add-on Store to browse and manage add-on packages for ALUS
+Tools,activatePythonConsole,globalCommands.GlobalCommands,ALUS+control+z,ALUS+control+z,"Activates the ALUS Python Console, primarily useful for development"
+Tools,log_markStartThenCopy,globalCommands.GlobalCommands,ALUS+control+shift+f1,ALUS+control+shift+f1,Mark the current end of the log as the start of the fragment to be copied to clipboard by pressing again.
+Tools,navigatorObject_devInfo,globalCommands.GlobalCommands,ALUS+f1,ALUS+f1,Logs information about the current navigator object which is useful to developers and activates the log viewer so the information can be examined.
+Tools,openUserConfigurationDirectory,globalCommands.GlobalCommands,,,Opens ALUS configuration directory for the current user.
+Tools,reloadPlugins,globalCommands.GlobalCommands,ALUS+control+f3,ALUS+control+f3,"Reloads app modules and global plugins without restarting ALUS, which can be Useful for developers"
+Tools,reportAppModuleInfo,globalCommands.GlobalCommands,ALUS+control+f1,ALUS+control+f1,Speaks the filename of the active application along with the name of the currently loaded appModule
+Tools,reportLinkDestination,globalCommands.GlobalCommands,ALUS+k,ALUS+k,"Report the destination URL of the link at the position of caret or focus. If pressed twice, shows the URL in a window for easier review."
+Tools,reportLinkDestinationInWindow,globalCommands.GlobalCommands,,,"Displays the destination URL of the link at the position of caret or focus in a window, instead of just speaking it. May be preferred by braille users."
+Tools,startWxInspectionTool,globalCommands.GlobalCommands,,,Opens the WX GUI inspection tool. Used to get more information about the state of GUI components.

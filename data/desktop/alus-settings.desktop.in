@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2026 Darko Milošević <daremc86@gmail.com>
+#
+# The settings window, as a launcher.
+#
+# `alus-settings` is a program of its own, and that was measured rather than
+# chosen: a window in the screen reader's own process cannot be read at all,
+# because ALUS's synchronous AT-SPI calls about it are answered from the very
+# main loop they are blocking (claude/FAZA9.md N79). So this entry starts a
+# program, and it works whether or not ALUS itself is running -- a user can
+# set the voice before turning the screen reader on.
+[Desktop Entry]
+Type=Application
+Name=ALUS Settings
+Name[sr]=ALUS подешавања
+Name[sr@latin]=ALUS podešavanja
+Comment=Configure the ALUS screen reader
+Comment[sr]=Подешавање ALUS читача екрана
+Comment[sr@latin]=Podešavanje ALUS čitača ekrana
+Exec=@bindir@/alus-settings
+Icon=preferences-desktop-accessibility
+Terminal=false
+Categories=Settings;Accessibility;
+Keywords=screen reader;accessibility;braille;speech;
+Keywords[sr]=читач екрана;приступачност;брајево писмо;говор;
+Keywords[sr@latin]=čitač ekrana;pristupačnost;brajevo pismo;govor;

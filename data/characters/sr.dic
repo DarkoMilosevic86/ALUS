@@ -1,0 +1,79 @@
+# ALUS character descriptions (sr).
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Format: character<TAB>description[<TAB>further description...]
+# Taken from NVDA source/locale/sr/characterDescriptions.dic, which is the
+# same data a user of NVDA already knows by ear.
+#Serbian characterDescriptions.dic
+#A part of NonVisual Desktop Access (NVDA)
+#URL: https://www.nvda-project.org/
+#
+# Both scripts, each describing itself: a Latin key gets a Latin mnemonic and a
+# Cyrillic key a Cyrillic one. That matters for braille rather than for speech
+# -- a Serbian voice reads either script the same way, but sr-Cyrl.ctb does
+# not, so a Cyrillic mnemonic under a Latin key would come out as the wrong
+# cells. ALUS changed exactly one line of the inherited file for that reason:
+# `x` had a Cyrillic mnemonic among Latin ones.
+
+
+a	Avala
+b	Beograd
+c	Cetinje
+č	Čačak
+ć	Ćuprija
+d	Drina
+đ	Đakovica
+e	Evropa
+f	Futog
+g	Golija
+h	Heroj
+i	Igalo
+j	Jadran
+k	Kosovo
+l	Lovćen
+m	Morava
+n	Niš
+o	Obilić
+p	Pirot
+q	Kvorum
+r	Ruma
+s	Sava
+š	Šabac
+t	Timok
+u	Užice
+v	Valjevo
+w	Duplo ve
+x	Iks
+y	Ipsilon
+z	Zemun
+ž	Žabljak
+а	Авала
+б	Београд
+в	Ваљево
+г	Голија
+д	Дрина
+ђ	Ђаковица
+е	Европа
+ж	Жабљак
+з	Земун
+и	Игало
+ј	Јадран
+к	Косово
+л	Ловћен
+љ	Љубовија
+м	Морава
+н	Ниш
+њ	Његош
+о	Обилић
+п	Пирот
+р	Рума
+с	Сава
+т	Тимок
+ћ	Ћуприја
+у	Ужице
+ф	Футог
+х	Херој
+ц	Цетиње
+ч	Чачак
+џ	Џеп
+ш	Шабац

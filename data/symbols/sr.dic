@@ -1,0 +1,86 @@
+﻿# ALUS српска изговорна правила за симболе.
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2026 Darko Milošević <daremc86@gmail.com>
+#
+# Енглески речник је увек основа (видети SymbolRegistry): овде стоји само оно
+# што се разликује. Формат је описан у en.dic.
+
+complexSymbols:
+# identifier<TAB>regular expression
+# Серпски користи запету као децимални знак, а тачку као раздвајач хиљада —
+# обрнуто од енглеског. Ова правила су пре енглеских у смени, па побеђују.
+decimal comma	(?<=\d),(?=\d)
+thousands dot	(?<=\d)\.(?=\d\d\d)
+
+symbols:
+decimal comma		none	always
+thousands dot		none	always
+. sentence ending	тачка	all	always
+! sentence ending	узвичник	all	always
+? sentence ending	питање	all	always
+; phrase ending	тачка запета	most	always
+: phrase ending	две тачке	most	always
+multiple .	више тачака	all	always
+in-word '	апостроф	all	norep
+negative number	минус	none	norep
+
+\0	празно	char	# null
+\t	таб
+\n	нови ред	char
+\r	повратак	char
+\f	прелом странице	none
+ 	размак	char
+ 	размак	char	# непреломиви размак
+
+!	узвичник	all
+"	наводник	most
+\#	тараба	some
+$	долар	all	norep
+£	фунта	all	norep
+€	евро	all	norep
+%	проценат	some
+&	и	some
+'	апостроф	all
+(	отворена заграда	most
+)	затворена заграда	most
+*	звездица	some
++	плус	some
+,	запета	all	always
+-	цртица	most
+.	тачка	all
+/	коса црта	some
+:	две тачке	most	norep
+;	тачка запета	most
+<	мање	most
+=	једнако	some
+>	веће	most
+?	питање	all
+@	ет	some
+[	отворена угласта	most
+\\	обрнута коса црта	most
+]	затворена угласта	most
+^	стрелица горе	most
+_	доња црта	most
+`	кратки акценат	most
+{	отворена витичаста	most
+|	вертикална црта	most
+}	затворена витичаста	most
+~	тилда	most
+
+–	цртица	most	# en dash
+—	цртица	most	# em dash
+…	три тачке	all	always
+“	отворени наводник	most
+”	затворени наводник	most
+„	отворени наводник	most
+•	знак за ставку	some
+°	степени	some
+±	плус минус	some
+×	пута	some
+÷	подељено са	some
+→	стрелица десно	some
+←	стрелица лево	some
+™	заштићени знак	some
+©	ауторско право	some
+®	регистровано	some
+§	параграф	some

@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2026 Darko Milošević <daremc86@gmail.com>
+#
+# ALUS as a systemd user unit.
+#
+# WHY BOTH THIS AND THE XDG AUTOSTART FILE. They are for two different
+# desktops, and shipping only one leaves half the users out:
+#
+#   * the .desktop entry is what GNOME's Accessibility switch drives, through
+#     its AutostartCondition. On GNOME that switch is where a user looks.
+#   * this unit is for a session that has no XDG autostart at all (a tiling
+#     compositor, a login shell, sway), and for a user who wants the screen
+#     reader supervised with the rest of their session.
+#
+# They must not both run. `alus-daemon` owns a session bus name and refuses to
+# start twice (SingleInstance), so the second one exits cleanly with a message
+# rather than fighting for the keyboard -- but the user still gets no screen
+# reader from it, so `alus-cli autostart --status` reports when both are
+# enabled.
+[Unit]
+Description=ALUS Screen Reader
+# No Documentation= line: there is no man page yet, and a unit that points at
+# one that does not exist is worse than one that points at nothing
+# (systemd-analyze verify says so, which is how this was found).
+# The accessibility bus and the sound server have to be up first. Wanted and
+# not Required: ALUS starts and SAYS what is missing rather than refusing to
+# start, which is the whole point of the health reporting in phases 3 and 4.
+After=graphical-session.target at-spi-dbus-bus.service
+Wants=at-spi-dbus-bus.service
+PartOf=graphical-session.target
+# No rate limit on the restarts below: giving up after N restarts is giving up
+# on the user's session, and they cannot see that it happened. In [Unit] and
+# not in [Service], which is where it looks like it belongs and where systemd
+# silently ignores it.
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+ExecStart=@bindir@/alus-daemon
+# A screen reader that dies leaves a blind user with a silent computer, and
+# they cannot see that it died. Always, with a short delay, forever.
+Restart=always
+RestartSec=2
+# SIGTERM is handled: the grabs go back to the compositor and the synthesizer
+# is closed before the process exits. Long enough for that and no longer.
+TimeoutStopSec=10
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=graphical-session.target

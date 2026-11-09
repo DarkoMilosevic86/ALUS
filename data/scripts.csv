@@ -1,0 +1,441 @@
+module,class,script,category,description,gestures,gestures_desktop,gestures_laptop,gestures_touch,can_propagate,bypass_input_help,allow_in_sleep_mode,speak_on_demand,resume_say_all_mode,scope,scope_reason,origin
+browseMode,BrowseModeDocumentTreeInterceptor,activateLongDesc,Browse mode,,,,,,0,0,0,0,,v1,,docstring
+browseMode,BrowseModeDocumentTreeInterceptor,collapseOrExpandControl,Browse mode,,,,,,0,0,0,0,,v1,,docstring
+browseMode,BrowseModeDocumentTreeInterceptor,movePastEndOfContainer,Browse mode,,"kb:,",,,,0,0,0,0,,v1,,docstring
+browseMode,BrowseModeDocumentTreeInterceptor,moveToStartOfContainer,Browse mode,,"kb:shift+,",,,,0,0,0,0,,v1,,docstring
+browseMode,BrowseModeDocumentTreeInterceptor,shiftTab,Browse mode,,kb:shift+tab,,,,0,0,0,0,,v1,,docstring
+browseMode,BrowseModeDocumentTreeInterceptor,tab,Browse mode,,kb:tab,,,,0,0,0,0,,v1,,docstring
+browseMode,BrowseModeDocumentTreeInterceptor,toggleNativeAppSelectionMode,Browse mode,Toggles native selection mode on and off,kb:ALUS+shift+f10,,,,0,0,0,0,,v1,,decorator
+browseMode,BrowseModeDocumentTreeInterceptor,toggleScreenLayout,Browse mode,Toggles on and off if the screen layout is preserved while rendering the document content,kb:ALUS+v,,,,0,0,0,0,,v1,,decorator
+browseMode,BrowseModeTreeInterceptor,activatePosition,Browse mode,,kb:enter kb:numpadEnter kb:space,,,,0,0,0,0,,v1,,docstring
+browseMode,BrowseModeTreeInterceptor,disablePassThrough,Browse mode,,kb:escape,,,,0,0,0,0,,v1,,docstring
+browseMode,BrowseModeTreeInterceptor,elementsList,Browse mode,,kb:ALUS+f7,,,,0,0,0,0,,v1,,docstring
+browseMode,BrowseModeTreeInterceptor,nextAnnotation,Browse mode,moves to the next annotation,kb:a,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextArticle,Browse mode,moves to the next article,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextBlockQuote,Browse mode,moves to the next block quote,kb:q,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextBrowseElement,Browse mode,Selects the next element type for browse mode touch navigation,,,,ts(browse):flickDown,0,0,0,0,,deferred,script is a v1.0 non-goal,decorator
+browseMode,BrowseModeTreeInterceptor,nextButton,Browse mode,moves to the next button,kb:b,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextCheckBox,Browse mode,moves to the next check box,kb:x,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextClickable,Browse mode,moves to the next clickable element,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextComboBox,Browse mode,moves to the next combo box,kb:c,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextDifferentStyle,Browse mode,moves to the next different style text,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextEdit,Browse mode,moves to the next edit field,kb:e,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextEmbeddedObject,Browse mode,moves to the next embedded object,kb:o,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextError,Browse mode,moves to the next error,kb:w,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextFigure,Browse mode,moves to the next figure,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextFormField,Browse mode,moves to the next form field,kb:f,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextFrame,Browse mode,moves to the next frame,kb:m,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextGraphic,Browse mode,moves to the next graphic,kb:g,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextGrouping,Browse mode,moves to the next grouping,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextHeading,Browse mode,moves to the next heading,kb:h,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextHeading1,Browse mode,Moves to the next heading at level 1,kb:1,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextHeading2,Browse mode,Moves to the next heading at level 2,kb:2,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextHeading3,Browse mode,Moves to the next heading at level 3,kb:3,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextHeading4,Browse mode,Moves to the next heading at level 4,kb:4,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextHeading5,Browse mode,Moves to the next heading at level 5,kb:5,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextHeading6,Browse mode,Moves to the next heading at level 6,kb:6,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextHeading7,Browse mode,Moves to the next heading at level 7,kb:7,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextHeading8,Browse mode,Moves to the next heading at level 8,kb:8,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextHeading9,Browse mode,Moves to the next heading at level 9,kb:9,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextLandmark,Browse mode,moves to the next landmark,kb:d,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextLink,Browse mode,moves to the next link,kb:k,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextList,Browse mode,moves to the next list,kb:l,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextListItem,Browse mode,moves to the next list item,kb:i,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextMath,Browse mode,moves to the next math formula,,,,,0,0,0,0,caret,deferred,script is a v1.0 non-goal,quicknav
+browseMode,BrowseModeTreeInterceptor,nextMenuItem,Browse mode,moves to the next menu item,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextNotLinkBlock,Browse mode,skips forward past a block of links,kb:n,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextProgressBar,Browse mode,moves to the next progress bar,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextRadioButton,Browse mode,moves to the next radio button,kb:r,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextReference,Browse mode,moves to the next reference,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextSameStyle,Browse mode,moves to the next same style text,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextSelectedElement,Browse mode,Moves to the next element of the selected type in browse mode touch navigation,,,,ts(browse):flickRight,0,0,0,0,,v1,,decorator
+browseMode,BrowseModeTreeInterceptor,nextSeparator,Browse mode,moves to the next separator,kb:s,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextSlider,Browse mode,moves to the next slider,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextTab,Browse mode,moves to the next tab,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextTable,Browse mode,moves to the next table,kb:t,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextTextParagraph,Browse mode,moves to the next text paragraph,kb:p,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextToggleButton,Browse mode,moves to the next toggle button,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextUnvisitedLink,Browse mode,moves to the next unvisited link,kb:u,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextVerticalParagraph,Browse mode,moves to the next vertically aligned paragraph,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,nextVisitedLink,Browse mode,moves to the next visited link,kb:v,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,passThrough,Browse mode,,kb:control+enter kb:control+numpadEnter kb:shift+enter kb:shift+numpadEnter kb:control+shift+enter kb:control+shift+numpadEnter kb:alt+enter kb:alt+numpadEnter kb:applications kb:shift+applications kb:shift+f10,,,,0,0,0,0,,v1,,docstring
+browseMode,BrowseModeTreeInterceptor,prevBrowseElement,Browse mode,Selects the previous element type for browse mode touch navigation,,,,ts(browse):flickUp,0,0,0,0,,deferred,script is a v1.0 non-goal,decorator
+browseMode,BrowseModeTreeInterceptor,prevSelectedElement,Browse mode,Moves to the previous element of the selected type in browse mode touch navigation,,,,ts(browse):flickLeft,0,0,0,0,,v1,,decorator
+browseMode,BrowseModeTreeInterceptor,previousAnnotation,Browse mode,moves to the previous annotation,kb:shift+a,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousArticle,Browse mode,moves to the previous article,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousBlockQuote,Browse mode,moves to the previous block quote,kb:shift+q,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousButton,Browse mode,moves to the previous button,kb:shift+b,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousCheckBox,Browse mode,moves to the previous check box,kb:shift+x,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousClickable,Browse mode,moves to the previous clickable element,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousComboBox,Browse mode,moves to the previous combo box,kb:shift+c,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousDifferentStyle,Browse mode,moves to the previous different style text,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousEdit,Browse mode,moves to the previous edit field,kb:shift+e,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousEmbeddedObject,Browse mode,moves to the previous embedded object,kb:shift+o,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousError,Browse mode,moves to the previous error,kb:shift+w,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousFigure,Browse mode,moves to the previous figure,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousFormField,Browse mode,moves to the previous form field,kb:shift+f,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousFrame,Browse mode,moves to the previous frame,kb:shift+m,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousGraphic,Browse mode,moves to the previous graphic,kb:shift+g,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousGrouping,Browse mode,moves to the previous grouping,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousHeading,Browse mode,moves to the previous heading,kb:shift+h,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousHeading1,Browse mode,Moves to the previous heading at level 1,kb:shift+1,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousHeading2,Browse mode,Moves to the previous heading at level 2,kb:shift+2,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousHeading3,Browse mode,Moves to the previous heading at level 3,kb:shift+3,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousHeading4,Browse mode,Moves to the previous heading at level 4,kb:shift+4,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousHeading5,Browse mode,Moves to the previous heading at level 5,kb:shift+5,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousHeading6,Browse mode,Moves to the previous heading at level 6,kb:shift+6,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousHeading7,Browse mode,Moves to the previous heading at level 7,kb:shift+7,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousHeading8,Browse mode,Moves to the previous heading at level 8,kb:shift+8,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousHeading9,Browse mode,Moves to the previous heading at level 9,kb:shift+9,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousLandmark,Browse mode,moves to the previous landmark,kb:shift+d,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousLink,Browse mode,moves to the previous link,kb:shift+k,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousList,Browse mode,moves to the previous list,kb:shift+l,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousListItem,Browse mode,moves to the previous list item,kb:shift+i,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousMath,Browse mode,moves to the previous math formula,,,,,0,0,0,0,caret,deferred,script is a v1.0 non-goal,quicknav
+browseMode,BrowseModeTreeInterceptor,previousMenuItem,Browse mode,moves to the previous menu item,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousNotLinkBlock,Browse mode,skips backward past a block of links,kb:shift+n,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousProgressBar,Browse mode,moves to the previous progress bar,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousRadioButton,Browse mode,moves to the previous radio button,kb:shift+r,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousReference,Browse mode,moves to the previous reference,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousSameStyle,Browse mode,moves to the previous same style text,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousSeparator,Browse mode,moves to the previous separator,kb:shift+s,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousSlider,Browse mode,moves to the previous slider,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousTab,Browse mode,moves to the previous tab,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousTable,Browse mode,moves to the previous table,kb:shift+t,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousTextParagraph,Browse mode,moves to the previous text paragraph,kb:shift+p,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousToggleButton,Browse mode,moves to the previous toggle button,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousUnvisitedLink,Browse mode,moves to the previous unvisited link,kb:shift+u,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousVerticalParagraph,Browse mode,moves to the previous vertically aligned paragraph,,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,previousVisitedLink,Browse mode,moves to the previous visited link,kb:shift+v,,,,0,0,0,0,caret,v1,,quicknav
+browseMode,BrowseModeTreeInterceptor,toggleSingleLetterNav,Browse mode,,kb:ALUS+shift+space,,,,0,0,0,0,,v1,,docstring
+browseMode,BrowseModeTreeInterceptor,trapNonCommandGesture,Browse mode,,,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,bottomOfDocument,Browse mode,,kb:control+end,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,copyToClipboard,Browse mode,,kb:control+c,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,endOfLine,Browse mode,,kb:end,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,find,Browse mode,,kb:ALUS+Control+f,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,findNext,Browse mode,find the next occurrence of the previously entered text string from the current cursor's position,kb:ALUS+f3,,,,0,0,0,0,caret,v1,,decorator
+cursorManager,CursorManager,findPrevious,Browse mode,find the previous occurrence of the previously entered text string from the current cursor's position,kb:ALUS+shift+f3,,,,0,0,0,0,caret,v1,,decorator
+cursorManager,CursorManager,moveByCharacter_back,Browse mode,,kb:leftArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,moveByCharacter_forward,Browse mode,,kb:rightArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,moveByLine_back,Browse mode,,kb:upArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,moveByLine_forward,Browse mode,,kb:downArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,moveByPage_back,Browse mode,,kb:pageUp,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,moveByPage_forward,Browse mode,,kb:pageDown,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,moveByParagraph_back,Browse mode,,kb:control+upArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,moveByParagraph_forward,Browse mode,,kb:control+downArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,moveBySentence_back,Browse mode,,kb:alt+upArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,moveBySentence_forward,Browse mode,,kb:alt+downArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,moveByWord_back,Browse mode,,kb:control+leftArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,moveByWord_forward,Browse mode,,kb:control+rightArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,selectAll,Browse mode,,kb:control+a,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,selectCharacter_back,Browse mode,,kb:shift+leftArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,selectCharacter_forward,Browse mode,,kb:shift+rightArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,selectLine_back,Browse mode,,kb:shift+upArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,selectLine_forward,Browse mode,,kb:shift+downArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,selectPage_back,Browse mode,,kb:shift+pageUp,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,selectPage_forward,Browse mode,,kb:shift+pageDown,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,selectParagraph_back,Browse mode,,kb:shift+control+upArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,selectParagraph_forward,Browse mode,,kb:shift+control+downArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,selectToBeginningOfLine,Browse mode,,kb:shift+home,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,selectToBottomOfDocument,Browse mode,,kb:shift+control+end,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,selectToEndOfLine,Browse mode,,kb:shift+end,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,selectToTopOfDocument,Browse mode,,kb:shift+control+home,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,selectWord_back,Browse mode,,kb:shift+control+leftArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,selectWord_forward,Browse mode,,kb:shift+control+rightArrow,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,startOfLine,Browse mode,,kb:home,,,,0,0,0,0,,v1,,docstring
+cursorManager,CursorManager,topOfDocument,Browse mode,,kb:control+home,,,,0,0,0,0,,v1,,docstring
+documentBase,DocumentWithTableNavigation,firstColumn,Miscellaneous,,kb:control+alt+home,,,,0,0,0,0,,v1,,docstring
+documentBase,DocumentWithTableNavigation,firstRow,Miscellaneous,,kb:control+alt+pageUp,,,,0,0,0,0,,v1,,docstring
+documentBase,DocumentWithTableNavigation,lastColumn,Miscellaneous,,kb:control+alt+end,,,,0,0,0,0,,v1,,docstring
+documentBase,DocumentWithTableNavigation,lastRow,Miscellaneous,,kb:control+alt+pageDown,,,,0,0,0,0,,v1,,docstring
+documentBase,DocumentWithTableNavigation,nextColumn,Miscellaneous,,kb:control+alt+rightArrow,,,,0,0,0,0,,v1,,docstring
+documentBase,DocumentWithTableNavigation,nextRow,Miscellaneous,,kb:control+alt+downArrow,,,,0,0,0,0,,v1,,docstring
+documentBase,DocumentWithTableNavigation,previousColumn,Miscellaneous,,kb:control+alt+leftArrow,,,,0,0,0,0,,v1,,docstring
+documentBase,DocumentWithTableNavigation,previousRow,Miscellaneous,,kb:control+alt+upArrow,,,,0,0,0,0,,v1,,docstring
+documentBase,DocumentWithTableNavigation,sayAllColumn,Miscellaneous,,kb:ALUS+control+alt+downArrow,,,,0,0,0,0,,v1,,docstring
+documentBase,DocumentWithTableNavigation,sayAllRow,Miscellaneous,,kb:ALUS+control+alt+rightArrow,,,,0,0,0,0,,v1,,docstring
+documentBase,DocumentWithTableNavigation,speakColumn,Miscellaneous,,kb:ALUS+control+alt+upArrow,,,,0,0,0,0,,v1,,docstring
+documentBase,DocumentWithTableNavigation,speakRow,Miscellaneous,,kb:ALUS+control+alt+leftArrow,,,,0,0,0,0,,v1,,docstring
+documentBase,DocumentWithTableNavigation,toggleIncludeLayoutTables,Miscellaneous,,,,,,0,0,0,0,,v1,,docstring
+editableText,EditableText,caret_backspaceCharacter,Miscellaneous,,kb:backspace kb:shift+backspace,,,,0,0,0,0,,v1,,docstring
+editableText,EditableText,caret_backspaceWord,Miscellaneous,,kb:control+backspace,,,,0,0,0,0,,v1,,docstring
+editableText,EditableText,caret_deleteCharacter,Miscellaneous,,kb:delete kb:shift+delete kb:numpadDelete kb:shift+numpadDelete,,,,0,0,0,0,,v1,,docstring
+editableText,EditableText,caret_deleteWord,Miscellaneous,,kb:control+delete kb:control+numpadDelete,,,,0,0,0,0,,v1,,docstring
+editableText,EditableText,caret_moveByCharacter,Miscellaneous,,kb:leftArrow kb:rightArrow kb:home kb:end,,,,0,0,0,0,,v1,,docstring
+editableText,EditableText,caret_moveByLine,Miscellaneous,,kb:upArrow kb:downArrow kb:pageUp kb:pageDown kb:control+home kb:control+end,,,,0,0,0,0,,v1,,docstring
+editableText,EditableText,caret_moveByParagraph,Miscellaneous,,,,,,0,0,0,0,,v1,,docstring
+editableText,EditableText,caret_moveByWord,Miscellaneous,,kb:control+leftArrow kb:control+rightArrow,,,,0,0,0,0,,v1,,docstring
+editableText,EditableText,caret_newLine,Miscellaneous,,,,,,0,0,0,0,,v1,,docstring
+editableText,EditableText,caret_nextParagraph,Miscellaneous,,kb:control+downArrow,,,,0,0,0,0,,v1,,docstring
+editableText,EditableText,caret_nextSentence,Miscellaneous,,kb:alt+downArrow,,,,0,0,0,0,,v1,,docstring
+editableText,EditableText,caret_previousParagraph,Miscellaneous,,kb:control+upArrow,,,,0,0,0,0,,v1,,docstring
+editableText,EditableText,caret_previousSentence,Miscellaneous,,kb:alt+upArrow,,,,0,0,0,0,,v1,,docstring
+editableText,EditableTextWithoutAutoSelectDetection,caret_changeSelection,Miscellaneous,,,,,,0,0,0,0,,v1,,docstring
+globalCommands,GlobalCommands,activateAddonStoreSettings,Configuration,Shows ALUS's Add-on Store settings,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateAddonsManager,Tools,Activates the Add-on Store to browse and manage add-on packages for ALUS,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateAdvancedSettings,Configuration,Shows ALUS's Advanced settings,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateAudioSettingsDialog,Configuration,Shows ALUS's audio settings,kb:ALUS+control+u,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateBrailleDisplayDialog,Configuration,Shows the ALUS braille display selection dialog,kb:ALUS+control+a,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateBrailleSettingsDialog,Configuration,Shows ALUS's braille settings,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateBrowseModeDialog,Configuration,Shows ALUS's browse mode settings,kb:ALUS+control+b,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateConfigProfilesDialog,Configuration profiles,Shows the ALUS Configuration Profiles dialog,kb:ALUS+control+p,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateDefaultDictionaryDialog,Configuration,Shows the ALUS default dictionary dialog,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateDocumentFormattingDialog,Configuration,Shows ALUS's document formatting settings,kb:ALUS+control+d,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateGeneralSettingsDialog,Configuration,Shows ALUS's general settings,kb:ALUS+control+g,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateInputCompositionDialog,Configuration,Shows ALUS's input composition settings,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateInputGesturesDialog,Configuration,Shows the ALUS input gestures dialog,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateKeyboardSettingsDialog,Configuration,Shows ALUS's keyboard settings,kb:ALUS+control+k,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateMagnifierSettingsDialog,Configuration,Shows ALUS's magnifier settings,kb:ALUS+control+w,,,,0,0,0,0,,deferred,script is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,activateMouseSettingsDialog,Configuration,Shows ALUS's mouse settings,kb:ALUS+control+m,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateObjectPresentationDialog,Configuration,Shows ALUS's object presentation settings,kb:ALUS+control+o,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activatePrivacyAndSecuritySettings,Configuration,Shows ALUS's privacy and security settings,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activatePythonConsole,Tools,"Activates the ALUS Python Console, primarily useful for development",kb:ALUS+control+z,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateRemoteAccessSettings,Configuration,Shows the Remote Access settings,,,,,0,0,0,0,,deferred,script is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,activateReviewCursorDialog,Configuration,Shows ALUS's review cursor settings,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateSpeechSymbolsDialog,Configuration,Shows the ALUS symbol pronunciation dialog,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateSynthesizerDialog,Configuration,Shows the ALUS synthesizer selection dialog,kb:ALUS+control+s,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateTemporaryDictionaryDialog,Configuration,Shows the ALUS temporary dictionary dialog,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateVisionSettingsDialog,Configuration,Shows ALUS's vision settings,,,,,0,0,0,0,,deferred,script is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,activateVoiceDialog,Configuration,Shows ALUS's speech settings,kb:ALUS+control+v,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateVoiceDictionaryDialog,Configuration,Shows the ALUS voice-specific dictionary dialog,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,activateWindowsOCRSettings,Configuration,Shows ALUS's Windows OCR settings,,,,,0,0,0,0,,deferred,script is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,braille_cycleCursorShape,Braille,Cycle through the braille cursor shapes,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_cycleReviewRoutingMovesSystemCaret,Braille,Cycle through the braille move system caret when routing review cursor states,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_cycleShowMessages,Braille,Cycle through the braille show messages modes,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_cycleShowSelection,Braille,Cycle through the braille show selection states,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_cycleUnicodeNormalization,Braille,Cycle through the braille Unicode normalization states,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_dots,Braille,Inputs braille dots via the braille keyboard,bk:dots,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_enter,Braille,Translates any braille input and presses the enter key,bk:dot8,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_eraseLastCell,Braille,Erases the last entered braille cell or character,bk:dot7,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_nextLine,Braille,Moves the braille display to the next line,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_previousLine,Braille,Moves the braille display to the previous line,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_reportFormatting,Braille,Reports formatting info for the text under this braille cell,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_routeTo,Braille,Routes the cursor to or activates the object under this braille cell,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_scrollBack,Braille,Scrolls the braille display back,,,,,0,1,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_scrollForward,Braille,Scrolls the braille display forward,,,,,0,1,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_selectRange,Braille,Selects the text from the first up to the last braille cell,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toFocus,Braille,Moves the braille display to the current focus,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toggleAlt,Emulated system keyboard keys,Virtually toggles the alt key to emulate a keyboard shortcut with braille input,,,,,0,1,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toggleAltShift,Emulated system keyboard keys,Virtually toggles the alt and shift keys to emulate a keyboard shortcut with braille input,,,,,0,1,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toggleControl,Emulated system keyboard keys,Virtually toggles the control key to emulate a keyboard shortcut with braille input,,,,,0,1,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toggleControlAlt,Emulated system keyboard keys,Virtually toggles the control and alt keys to emulate a keyboard shortcut with braille input,,,,,0,1,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toggleControlAltShift,Emulated system keyboard keys,"Virtually toggles the control, alt, and shift keys to emulate a keyboard shortcut with braille input",,,,,0,1,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toggleControlShift,Emulated system keyboard keys,Virtually toggles the control and shift keys to emulate a keyboard shortcut with braille input,,,,,0,1,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toggleFocusContextPresentation,Braille,Toggle the way context information is presented in braille,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toggleAlusKey,Emulated system keyboard keys,Virtually toggles the ALUS key to emulate a keyboard shortcut with braille input,,,,,0,1,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toggleAlusKeyShift,Emulated system keyboard keys,Virtually toggles the ALUS and shift keys to emulate a keyboard shortcut with braille input,,,,,0,1,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toggleShift,Emulated system keyboard keys,Virtually toggles the shift key to emulate a keyboard shortcut with braille input,,,,,0,1,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toggleShowCursor,Braille,Toggle the braille cursor on and off,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toggleSpeakOnRouting,Braille,Toggles speaking the character under the cursor when routing cursor in text,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toggleTether,Braille,Toggle tethering of braille between the focus and the review position,kb:ALUS+control+t,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toggleWindows,Emulated system keyboard keys,Virtually toggles the left windows key to emulate a keyboard shortcut with braille input,,,,,0,1,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_toggleWindowsShift,Emulated system keyboard keys,Virtually toggles the left windows and shift keys to emulate a keyboard shortcut with braille input,,,,,0,1,0,0,,v1,,decorator
+globalCommands,GlobalCommands,braille_translate,Braille,Translates any braille input,bk:dot7+dot8,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,caretPos_currentDimensions,System caret,Reports information about the location of the text or object at the position of system caret. Pressing twice may provide further detail.,kb:ALUS+numpadDelete,,kb(laptop):ALUS+delete,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,connectToRemote,Remote Access,Connects to a remote computer,,,,,0,0,0,0,,deferred,category 'Remote Access' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,copyLastSpokenInformation,Speech,Copies the last spoken information to the clipboard.,kb:ALUS+control+x,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,copyRemoteLink,Remote Access,Copies a link to the current Remote Access session to the clipboard,,,,,0,0,0,0,,deferred,category 'Remote Access' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,copyStatusLine,System focus,Copies content of the status bar of current application to the clipboard.,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,cycleAudioDuckingMode,Audio,Cycles through audio ducking modes which determine when ALUS lowers the volume of other sounds,kb:ALUS+shift+d,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,cycleFilters,Magnifier,Cycle through the color filters,kb:ALUS+shift+i,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,cycleOcrLanguage,Miscellaneous,Cycles through the available languages for Windows OCR,,,,,0,0,0,0,,deferred,script is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,cycleParagraphStyle,System caret,Cycles through paragraph navigation styles,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,cycleSoundSplit,Audio,Cycles through sound split modes,kb:ALUS+alt+s,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,cycleSpeechAutomaticLanguageSwitching,Speech,"Cycles through the possible choices for automatic language switching: off, language only and language and dialect.",,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,cycleSpeechSymbolLevel,Speech,Cycles through speech symbol levels which determine what symbols are spoken,kb:ALUS+p,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,cycleTrackingModes,Magnifier,Cycle through tracking modes,,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,dateTime,System status,"If pressed once, reports the current time. If pressed twice, reports the current date",kb:ALUS+f12,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,decreaseBrailleAutoScrollRate,Braille,Decreases the rate for braille automatic scroll,kb:ALUS+alt+j,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,decreaseLargeSynthSetting,Speech,Decreases the currently active setting in the synth settings ring in a larger step,,kb(desktop):ALUS+control+pageDown,kb(laptop):ALUS+control+shift+pageDown,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,decreaseSynthSetting,Speech,Decreases the currently active setting in the synth settings ring,,kb(desktop):ALUS+control+downArrow,kb(laptop):ALUS+control+shift+downArrow,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,disconnectFromRemote,Remote Access,Disconnects from the current Remote Access session,,,,,0,0,0,0,,deferred,category 'Remote Access' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,firstValueSynthRing,Speech,Set the first value of the current setting in the synth settings ring,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,increaseBrailleAutoScrollRate,Braille,Increases the rate for braille automatic scroll,kb:ALUS+alt+l,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,increaseLargeSynthSetting,Speech,Increases the currently active setting in the synth settings ring in a larger step,,kb(desktop):ALUS+control+pageUp,kb(laptop):ALUS+shift+control+pageUp,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,increaseSynthSetting,Speech,Increases the currently active setting in the synth settings ring,,kb(desktop):ALUS+control+upArrow,kb(laptop):ALUS+shift+control+upArrow,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,interactWithMath,Math navigation,Begins interaction with math content,kb:ALUS+alt+m,,,,0,0,0,0,,deferred,category 'Math navigation' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,lastValueSynthRing,Speech,Set the last value of the current setting in the synth settings ring,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,leftMouseClick,Mouse,Clicks the left mouse button once at the current mouse position,kb:numpadDivide,,kb(laptop):ALUS+[,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,log_markStartThenCopy,Tools,Mark the current end of the log as the start of the fragment to be copied to clipboard by pressing again.,kb:ALUS+control+shift+f1,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,mouseScrollDown,Mouse,Scroll down at the mouse position,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,mouseScrollLeft,Mouse,Scroll left at the mouse position,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,mouseScrollRight,Mouse,Scroll right at the mouse position,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,mouseScrollUp,Mouse,Scroll up at the mouse position,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,moveMouseToNavigatorObject,Mouse,Moves the mouse pointer to the current navigator object,kb:ALUS+numpadDivide,,kb(laptop):ALUS+shift+m,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,moveMouseToView,Magnifier,Moves the mouse cursor to the center of the magnified view,,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,moveNavigatorObjectToMouse,Mouse,Sets the navigator object to the current object under the mouse pointer and speaks it,kb:ALUS+numpadMultiply,,kb(laptop):ALUS+shift+n,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,moveToParentTreeInterceptor,System focus,Moves the focus out of the current embedded object and into the document that contains it,kb:ALUS+control+space,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,navigatorObject_current,Object navigation,"Reports the current navigator object. Pressing twice spells this information, and pressing three times Copies name and value of this object to the clipboard",kb:ALUS+numpad5,,kb(laptop):ALUS+shift+o,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,navigatorObject_currentDimensions,Object navigation,Reports information about the location of the text or object at the review cursor. Pressing twice may provide further detail.,kb:ALUS+shift+numpadDelete,,kb(laptop):ALUS+shift+delete,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,navigatorObject_devInfo,Tools,Logs information about the current navigator object which is useful to developers and activates the log viewer so the information can be examined.,kb:ALUS+f1,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,navigatorObject_firstChild,Object navigation,Moves the navigator object to the first object inside it,kb:ALUS+numpad2,,kb(laptop):ALUS+shift+downArrow,ts(object):flickdown,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,navigatorObject_moveFocus,Object navigation,"Pressed once sets the keyboard focus to the navigator object, pressed twice sets the system caret to the position of the review cursor",kb:ALUS+shift+numpadMinus,,kb(laptop):ALUS+shift+backspace,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,navigatorObject_next,Object navigation,Moves the navigator object to the next object,kb:ALUS+numpad6,,kb(laptop):ALUS+shift+rightArrow,ts(object):2finger_flickright,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,navigatorObject_nextInFlow,Object navigation,Moves to the next object in a flattened view of the object navigation hierarchy,kb:ALUS+numpad3,,kb(laptop):shift+ALUS+],ts(object):flickright,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,navigatorObject_parent,Object navigation,Moves the navigator object to the object containing it,kb:ALUS+numpad8,,kb(laptop):ALUS+shift+upArrow,ts(object):flickup,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,navigatorObject_previous,Object navigation,Moves the navigator object to the previous object,kb:ALUS+numpad4,,kb(laptop):ALUS+shift+leftArrow,ts(object):2finger_flickleft,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,navigatorObject_previousInFlow,Object navigation,Moves to the previous object in a flattened view of the object navigation hierarchy,kb:ALUS+numpad9,,kb(laptop):shift+ALUS+[,ts(object):flickleft,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,navigatorObject_toFocus,Object navigation,"Sets the navigator object to the current focus, and the review cursor to the position of the caret inside it, if possible.",kb:ALUS+numpadMinus,,kb(laptop):ALUS+backspace,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,nextSynthSetting,Speech,Moves to the next available setting in the synth settings ring,,kb(desktop):ALUS+control+rightArrow,kb(laptop):ALUS+shift+control+rightArrow,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,openUserConfigurationDirectory,Tools,Opens ALUS configuration directory for the current user.,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,panDown,Magnifier,Pan the magnified view down,kb:ALUS+alt+downArrow,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,panLeft,Magnifier,Pan the magnified view left,kb:ALUS+alt+leftArrow,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,panRight,Magnifier,Pan the magnified view right,kb:ALUS+alt+rightArrow,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,panToBottomEdge,Magnifier,Pan the magnified view to bottom edge,kb:ALUS+shift+alt+downArrow,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,panToLeftEdge,Magnifier,Pan the magnified view to left edge,kb:ALUS+shift+alt+leftArrow,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,panToRightEdge,Magnifier,Pan the magnified view to right edge,kb:ALUS+shift+alt+rightArrow,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,panToTopEdge,Magnifier,Pan the magnified view to top edge,kb:ALUS+shift+alt+upArrow,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,panUp,Magnifier,Pan the magnified view up,kb:ALUS+alt+upArrow,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,passNextKeyThrough,Input,"The next key that is pressed will not be handled at all by ALUS, it will be passed directly through to the application.",kb:ALUS+f2,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,previousSynthSetting,Speech,Moves to the previous available setting in the synth settings ring,,kb(desktop):ALUS+control+leftArrow,kb(laptop):ALUS+shift+control+leftArrow,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,pushClipboard,Remote Access,Sends the contents of the clipboard to the remote computer,,,,,0,0,0,0,,deferred,category 'Remote Access' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,quit,Miscellaneous,Quits ALUS!,kb:ALUS+q,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,readStatusLine,System focus,Reads the current application status bar.,,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,recognizeWithUwpOcr,Miscellaneous,Recognizes the content of the current navigator object with Windows OCR,kb:ALUS+r,,,,0,0,0,0,,deferred,script is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,reloadPlugins,Tools,"Reloads app modules and global plugins without restarting ALUS, which can be Useful for developers",kb:ALUS+control+f3,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,repeatLastSpokenInformation,Speech,Repeat the last spoken information. Pressing twice shows it in a browsable message.,kb:ALUS+x,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportActiveConfigurationProfile,Configuration,Reports the name of the current ALUS configuration profile,,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportAppModuleInfo,Tools,Speaks the filename of the active application along with the name of the currently loaded appModule,kb:ALUS+control+f1,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportCaretLanguage,System caret,"Reports the language for the text under the caret. If pressed twice, presents the information in browse mode",,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportCaretLocation,System caret,"Reports information about the location of the text at the caret, or location of the currently focused object if there is no caret.",,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportClipboardText,System status,Reports the text on the system clipboard. Pressing twice spells this information. Pressing three times spells it using character descriptions.,kb:ALUS+c,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportCurrentFocus,System focus,"Reports the object with focus. If pressed twice, spells the information. Pressing three times spells it using character descriptions.",kb:ALUS+tab,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportCurrentLine,System caret,Reports the current line under the application cursor. Pressing this key twice will spell the current line. Pressing three times will spell the line using character descriptions.,,kb(desktop):ALUS+upArrow,kb(laptop):ALUS+l,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportCurrentNavigatorObjectLocation,Object navigation,Reports information about the location of the current navigator object.,,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportCurrentSelection,System caret,Announces the current selection in edit controls and documents. Pressing twice spells this information. Pressing three times spells it using character descriptions. Pressing four times shows it in a browsable message.,,kb(desktop):ALUS+shift+upArrow,kb(laptop):ALUS+shift+s,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportDetailsSummary,System caret,Report summary of any annotation details at the system caret.,kb:ALUS+d,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportFocusObjectAccelerator,System focus,Reports the shortcut key of the currently focused object,kb:shift+numpad2,,kb(laptop):ALUS+control+shift+.,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportFocusObjectLocation,System focus,Reports information about the location of the currently focused object.,,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportFormatting,Text review,"Reports formatting info for the current review cursor position. If pressed twice, presents the information in browse mode",kb:ALUS+shift+f,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportFormattingAtCaret,System caret,Reports formatting info for the text under the caret.,,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportFormattingAtReview,Text review,Reports formatting info for the current review cursor position.,,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportLinkDestination,Tools,"Report the destination URL of the link at the position of caret or focus. If pressed twice, shows the URL in a window for easier review.",kb:ALUS+k,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportLinkDestinationInWindow,Tools,"Displays the destination URL of the link at the position of caret or focus in a window, instead of just speaking it. May be preferred by braille users.",,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,reportOrShowFormattingAtCaret,System caret,"Reports formatting info for the text under the caret. If pressed twice, presents the information in browse mode",kb:ALUS+f,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportReviewCursorLocation,Object navigation,"Reports information about the location of the text at the review cursor, or location of the navigator object if there is no text under review cursor.",,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,reportScreenCurtainState,Miscellaneous,Reports the state of the screen curtain.,,,,,0,0,0,1,,deferred,script is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,reportStatusLine,System focus,"Reads the current application status bar. If pressed twice, spells the information. If pressed three times, copies the status bar to the clipboard",,kb(desktop):ALUS+end,kb(laptop):ALUS+shift+end,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,restart,Miscellaneous,Restarts ALUS!,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,revertConfiguration,Configuration,Pressing once reverts the current configuration to the most recently saved state. Pressing three times resets to factory defaults.,kb:ALUS+control+r,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,reviewCursorToStatusLine,Object navigation,Reads the current application status bar and moves navigator object into it.,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,reviewMode_next,Text review,"Switches to the next review mode (e.g. object, document or screen) and positions the review position at the point of the navigator object",kb:ALUS+numpad7,,kb(laptop):ALUS+pageUp,ts(object):2finger_flickUp,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,reviewMode_previous,Text review,"Switches to the previous review mode (e.g. object, document or screen) and positions the review position at the point of the navigator object",kb:ALUS+numpad1,,kb(laptop):ALUS+pageDown,ts(object):2finger_flickDown,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,review_activate,Object navigation,Performs the default action on the current navigator object (example: presses it if it is a button).,kb:ALUS+numpadEnter,,kb(laptop):ALUS+enter,ts:double_tap,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,review_bottom,Text review,Moves the review cursor to the bottom line of the current navigator object and speaks it,kb:shift+numpad9,,kb(laptop):ALUS+control+end,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,review_copy,Text review,"If pressed once, the text from the previously set start marker up to and including the current position of the review cursor is selected. If pressed twice, the text is copied to the clipboard",kb:ALUS+f10,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,review_currentCharacter,Text review,Reports the character of the current navigator object where the review cursor is situated. Pressing twice reports a description or example of that character. Pressing three times reports the numeric value of the character in decimal and hexadecimal,kb:numpad2,,kb(laptop):ALUS+.,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,review_currentLine,Text review,"Reports the line of the current navigator object where the review cursor is situated. If this key is pressed twice, the current line will be spelled. Pressing three times will spell the line using character descriptions.",kb:numpad8,,kb(laptop):ALUS+shift+.,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,review_currentSymbol,Text review,"Reports the symbol where the review cursor is positioned. Pressed twice, shows the symbol and the text used to speak it in browse mode",,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,review_currentWord,Text review,Speaks the word of the current navigator object where the review cursor is situated. Pressing twice spells the word. Pressing three times spells the word using character descriptions,kb:numpad5,,kb(laptop):ALUS+control+.,ts(text):hoverUp,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,review_endOfLine,Text review,Moves the review cursor to the last character of the line where it is situated in the current navigator object and speaks it,kb:shift+numpad3,,kb(laptop):ALUS+end,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,review_endOfSelection,Text review,"Moves the review cursor to the last character of the selection, and speaks it",kb:ALUS+alt+end,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,review_markStartForCopy,Text review,Marks the current position of the review cursor as the start of text to be selected or copied,kb:ALUS+f9,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,review_moveToStartMarkedForCopy,Text review,Move the review cursor to the position marked as the start of text to be selected or copied,kb:ALUS+shift+F9,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,review_nextCharacter,Text review,Moves the review cursor to the next character of the current navigator object and speaks it,kb:numpad3,,kb(laptop):ALUS+rightArrow,ts(text):flickRight,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,review_nextLine,Text review,Moves the review cursor to the next line of the current navigator object and speaks it,kb:numpad9,,kb(laptop):ALUS+downArrow,ts(text):flickDown,0,0,0,0,review,v1,,decorator
+globalCommands,GlobalCommands,review_nextPage,Text review,Moves the review cursor to the next page of the current navigator object and speaks it,kb:ALUS+pageDown,,kb(laptop):ALUS+shift+pageDown,,0,0,0,0,review,v1,,decorator
+globalCommands,GlobalCommands,review_nextWord,Text review,Moves the review cursor to the next word of the current navigator object and speaks it,kb:numpad6,,kb(laptop):ALUS+control+rightArrow,ts(text):2finger_flickRight,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,review_previousCharacter,Text review,Moves the review cursor to the previous character of the current navigator object and speaks it,kb:numpad1,,kb(laptop):ALUS+leftArrow,ts(text):flickLeft,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,review_previousLine,Text review,Moves the review cursor to the previous line of the current navigator object and speaks it,kb:numpad7,,kb(laptop):ALUS+upArrow,ts(text):flickUp,0,0,0,0,review,v1,,decorator
+globalCommands,GlobalCommands,review_previousPage,Text review,Moves the review cursor to the previous page of the current navigator object and speaks it,kb:ALUS+pageUp,,kb(laptop):ALUS+shift+pageUp,,0,0,0,0,review,v1,,decorator
+globalCommands,GlobalCommands,review_previousWord,Text review,Moves the review cursor to the previous word of the current navigator object and speaks it,kb:numpad4,,kb(laptop):ALUS+control+leftArrow,ts(text):2finger_flickLeft,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,review_sayAll,Text review,"Reads from the review cursor up to the end of the current text, moving the review cursor as it goes",kb:numpadPlus,,kb(laptop):ALUS+shift+a,ts(text):3finger_flickDown,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,review_startOfLine,Text review,Moves the review cursor to the first character of the line where it is situated in the current navigator object and speaks it,kb:shift+numpad1,,kb(laptop):ALUS+home,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,review_startOfSelection,Text review,"Moves the review cursor to the first character of the selection, and speaks it",kb:ALUS+alt+home,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,review_top,Text review,Moves the review cursor to the top line of the current navigator object and speaks it,kb:shift+numpad7,,kb(laptop):ALUS+control+home,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,rightMouseClick,Mouse,Clicks the right mouse button once at the current mouse position,kb:numpadMultiply,,kb(laptop):ALUS+],,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,saveConfiguration,Configuration,Saves the current ALUS configuration,kb:ALUS+control+c,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,sayAll,System caret,"Reads from the system caret up to the end of the text, moving the caret as it goes",,kb(desktop):ALUS+downArrow,kb(laptop):ALUS+a,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,say_battery_status,System status,Reports battery status and time remaining if AC is not plugged in,kb:ALUS+shift+b,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,sendKeys,Remote Access,Switches whether the keyboard controls the local or remote computer,kb:ALUS+alt+tab,,,,0,0,0,0,,deferred,category 'Remote Access' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,sendSAS,Remote Access,Sends control+alt+delete to the controlled computer.,,,,,0,0,0,0,,deferred,category 'Remote Access' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,showEntireScreenOverview,Magnifier,Temporarily show an overview of the entire screen,kb:ALUS+shift+l,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,showFormattingAtCaret,System caret,"Presents, in browse mode, formatting info for the text under the caret.",,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,showFormattingAtReview,Text review,"Presents, in browse mode, formatting info for the current review cursor position.",,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,showGui,Miscellaneous,Shows the ALUS menu,,kb(desktop):ALUS+a,kb(laptop):ALUS+n,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,speakForeground,System focus,Reads all controls in the active window,kb:ALUS+b,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,speechMode,Speech,Cycles between speech modes.,kb:ALUS+s,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,speech_cycleUnicodeNormalization,Speech,Cycle through the speech Unicode normalization states,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,spellStatusLine,System focus,Spells the current application status bar.,,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,startWxInspectionTool,Tools,Opens the WX GUI inspection tool. Used to get more information about the state of GUI components.,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,test_navigatorDisplayModelText,Miscellaneous,,,kb(desktop):ALUS+control+f2,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,title,System focus,"Reports the title of the current application or foreground window. If pressed twice, spells the title. If pressed three times, copies the title to the clipboard",kb:ALUS+t,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,toggleAllFollow,Magnifier,Toggle all magnifier tracking settings,,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,toggleAutomaticRefreshOfRecogResult,Miscellaneous,Toggle periodical refresh of a Windows OCR result,,,,,0,0,0,0,,deferred,script is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,toggleBrailleAutoScroll,Braille,Toggles braille automatic scroll,kb:ALUS+alt+k,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleBrailleMode,Braille,Toggles braille mode,kb:ALUS+alt+t,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleBrailleViewer,Tools,"Toggles the ALUS Braille viewer, a floating window that allows you to view braille output, and the text equivalent for each braille character",,,,,0,0,0,0,,deferred,script is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,toggleCaretMovesReviewCursor,Text review,Toggles on and off the movement of the review cursor due to the caret moving.,kb:ALUS+6,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleConfigProfileTriggers,Configuration,Toggles disabling of all configuration profile triggers. Disabling remains in effect until ALUS is restarted,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleCurrentAppSleepMode,Miscellaneous,Toggles sleep mode on and off for the active application.,,kb(desktop):ALUS+shift+s,kb(laptop):ALUS+shift+z,,0,0,1,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleDelayedCharacterDescriptions,Speech,Toggles on and off delayed descriptions for characters on cursor movement,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleFocusMovesNavigatorObject,Object navigation,Toggles on and off the movement of the navigator object due to focus changes,kb:ALUS+7,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleFollowMouse,Magnifier,Toggle magnifier mouse tracking,,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,toggleFollowNavigatorObject,Magnifier,Toggle magnifier navigator object tracking,,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,toggleFollowReview,Magnifier,Toggle magnifier review cursor tracking,,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,toggleFollowSystemFocus,Magnifier,Toggle magnifier system focus tracking,,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,toggleInputHelp,Input,"Turns input help on or off. When on, any input such as pressing a key on the keyboard will tell you what script is associated with that input, if any.",kb:ALUS+1,,,,0,0,0,1,,v1,,decorator
+globalCommands,GlobalCommands,toggleKeyboardLayout,Input,Toggles between desktop and laptop keyboard layout,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleLeftMouseButton,Mouse,Locks or unlocks the left mouse button,kb:shift+numpadDivide,,kb(laptop):ALUS+control+[,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleMagnifier,Magnifier,Toggle the magnifier on and off,kb:ALUS+shift+w,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,toggleMouseAudioCoordinates,Mouse,Toggles beeps that report mouse coordinates as the mouse moves,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleMouseTextResolution,Mouse,Toggles how much text will be spoken when the mouse moves,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleMouseTracking,Mouse,Toggles the reporting of information as the mouse moves,kb:ALUS+m,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleProgressBarOutput,Speech,"Toggles between beeps, speech, beeps and speech, and off, for reporting progress bar updates",kb:ALUS+u,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleRemoteConnection,Remote Access,Toggles whether Remote Access is connected,kb:ALUS+alt+r,,,,0,0,0,0,,deferred,category 'Remote Access' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,toggleRemoteMute,Remote Access,Mutes or unmutes the speech coming from the remote computer,,,,,0,0,0,0,,deferred,category 'Remote Access' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,toggleReportAlignment,Document formatting,Toggles on and off the reporting of text alignment,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportArticles,Document formatting,Toggles on and off the reporting of articles,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportBlockQuotes,Document formatting,Toggles on and off the reporting of block quotes,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportCLDR,Speech,"Toggles on and off the reporting of CLDR characters, such as emojis",,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportCellBorders,Document formatting,Cycles through the cell border reporting settings,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportClickable,Document formatting,Toggles on and off reporting if clickable,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportColor,Document formatting,Toggles on and off the reporting of colors,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportComments,Document formatting,Toggles on and off the reporting of comments,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportDynamicContentChanges,Speech,"Toggles on and off the reporting of dynamic content changes, such as new text in dos console windows",kb:ALUS+5,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportEmphasis,Document formatting,Toggles on and off the reporting of emphasis,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportFigures,Document formatting,Toggles on and off the reporting of figures and captions,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportFontAttributes,Document formatting,"Cycles font attribute reporting between speech, braille, speech and braille, and off.",,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportFontName,Document formatting,Toggles on and off the reporting of font changes,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportFontSize,Document formatting,Toggles on and off the reporting of font size changes,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportFrames,Document formatting,Toggles on and off the reporting of frames,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportGraphics,Document formatting,Toggles on and off the reporting of graphics,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportGroupings,Document formatting,Toggles on and off the reporting of groupings,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportHeadings,Document formatting,Toggles on and off the reporting of headings,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportHighlightedText,Document formatting,Toggles on and off the reporting of highlighted text,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportLandmarks,Document formatting,Toggles on and off the reporting of landmarks,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportLineIndentation,Document formatting,Cycles through line indentation settings,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportLineNumber,Document formatting,Toggles on and off the reporting of line numbers,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportLineSpacing,Document formatting,Toggles on and off the reporting of line spacing,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportLinkType,Document formatting,Toggles on and off the reporting of link type,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportLinks,Document formatting,Toggles on and off the reporting of links,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportLists,Document formatting,Toggles on and off the reporting of lists,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportPage,Document formatting,Toggles on and off the reporting of pages,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportParagraphIndentation,Document formatting,Toggles on and off the reporting of paragraph indentation,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportRevisions,Document formatting,Toggles on and off the reporting of revisions,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportSpellingErrors,Document formatting,Cycles through options for how to report spelling or grammar errors,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportSpellingErrorsInBraille,Document formatting,Toggles reporting spelling or grammar errors in braille,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportStyle,Document formatting,Toggles on and off the reporting of style changes,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportSuperscriptsAndSubscripts,Document formatting,Toggles on and off the reporting of superscripts and subscripts,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportTableCellCoords,Document formatting,Toggles on and off the reporting of table cell coordinates,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportTableHeaders,Document formatting,Cycle through the possible modes to report table row and column headers,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleReportTables,Document formatting,Toggles on and off the reporting of tables,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleRightMouseButton,Mouse,Locks or unlocks the right mouse button,kb:shift+numpadMultiply,,kb(laptop):ALUS+control+],,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleScreenCurtain,Miscellaneous,"Toggles the state of the screen curtain, enable to make the screen black or disable to show the contents of the screen. Pressed once, screen curtain is enabled until you restart ALUS. Pressed twice, screen curtain is enabled until you disable it",kb:ALUS+control+escape,,,,0,0,0,0,,deferred,script is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,toggleSimpleReviewMode,Object navigation,Toggles simple review mode on and off,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleSpeakCommandKeys,Speech,Toggles on and off the speaking of command keys,kb:ALUS+4,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleSpeakTypedCharacters,Speech,Cycles through options for when to speak typed characters.,kb:ALUS+2,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleSpeakTypedWords,Speech,Cycles through options for when to speak typed words.,kb:ALUS+3,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleSpeakingOnNavigatingByUnit,Braille,Toggles on and off speaking when navigating by lines or paragraph with braille,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleSpeechViewer,Tools,"Toggles the ALUS Speech viewer, a floating window that allows you to view all the text that ALUS is currently speaking",,,,,0,0,0,0,,deferred,script is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,toggleTouchSupport,Touch screen,Toggles the support of touch interaction,kb:ALUS+control+alt+t,,,,0,0,0,0,,deferred,category 'Touch screen' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,toggleVirtualBufferPassThrough,Browse mode,"Toggles between browse mode and focus mode. When in focus mode, keys will pass straight through to the application, allowing you to interact directly with a control. When in browse mode, you can navigate the document with the cursor, quick navigation keys, etc.",kb:ALUS+space,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,toggleignoreBlankLinesForReportLineIndentation,Document formatting,Toggles on and off the ignoring of blank lines for line indentation reporting,,,,,0,0,0,0,,v1,,decorator
+globalCommands,GlobalCommands,touch_changeMode,Touch screen,Cycles between available touch modes,,,,ts:3finger_tap,0,0,0,0,,deferred,category 'Touch screen' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,touch_explore,Touch screen,Reports the new object or content under your finger if different to where your finger was last,,,,ts:hover,0,0,0,0,,deferred,category 'Touch screen' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,touch_hoverUp,Touch screen,,,,,ts:hoverUp,0,0,0,0,,deferred,category 'Touch screen' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,touch_newExplore,Touch screen,Reports the object and content directly under your finger,,,,ts:tap ts:hoverDown,0,0,0,0,,deferred,category 'Touch screen' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,touch_rightClick,Touch screen,Clicks the right mouse button at the current touch position. This is generally used to activate a context menu.,,,,ts:tapAndHold,0,0,0,0,,deferred,category 'Touch screen' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,zoomIn,Magnifier,Increase the magnification level,kb:ALUS+shift+=,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+globalCommands,GlobalCommands,zoomOut,Magnifier,Decrease the magnification level,kb:ALUS+shift+-,,,,0,0,0,0,,deferred,category 'Magnifier' is a v1.0 non-goal,decorator
+virtualBuffers,VirtualBuffer,refreshBuffer,Browse mode,,kb:ALUS+f5,,,,0,0,0,0,,v1,,docstring

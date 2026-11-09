@@ -1,0 +1,43 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2026 Darko Milošević <daremc86@gmail.com>
+#
+# ALUS's autostart entry.
+#
+# WHY `AutostartCondition` AND NOT A PLAIN AUTOSTART. GNOME starts the entry
+# that names this GSettings key when the user turns the screen reader on --
+# from Settings, or with `super+alt+s`. Without the condition ALUS would start
+# in every session whether the user wanted a screen reader or not; with it, the
+# switch in GNOME's own Accessibility panel turns ALUS on and off, which is
+# where a user looks for it.
+#
+# THE CONSEQUENCE, AND IT IS NOT A SMALL ONE: Orca ships an entry with the
+# SAME condition (/etc/xdg/autostart/orca-autostart.desktop). Both would start,
+# and then the second one to ask the compositor for
+# org.freedesktop.a11y.KeyboardMonitor gets nothing -- a screen reader that
+# says "ALUS started" and then answers no key at all (findings N1, N7, N8, N15,
+# N18). So installing this file is NOT enough: Orca's entry has to be masked,
+# which is a per-user decision and is therefore NOT done by `meson install`.
+# `alus-cli autostart --status` reports the situation and `--enable` makes the
+# change, after saying what it is about to do (03-RIZICI.md R12: offer it,
+# never do it silently).
+[Desktop Entry]
+Type=Application
+Name=ALUS Screen Reader
+Name[sr]=ALUS читач екрана
+Name[sr@latin]=ALUS čitač ekrana
+Comment=Access Linux Using Speech
+Comment[sr]=Приступ Линуксу говором
+Comment[sr@latin]=Pristup Linuxu govorom
+Exec=@bindir@/alus-daemon
+Icon=preferences-desktop-accessibility
+Terminal=false
+NoDisplay=true
+Categories=Utility;Accessibility;
+# The switch in GNOME's Accessibility panel.
+AutostartCondition=GSettings org.gnome.desktop.a11y.applications screen-reader-enabled
+# A screen reader that dies must come back: the user cannot see that it died.
+X-GNOME-AutoRestart=true
+# Deliberately NOT X-GNOME-Autostart-Phase=Initialization. Orca sets it (it is
+# commented out in its own file) and ALUS must not: the keyboard grab needs
+# Mutter's a11y manager to be up, and the Initialization phase runs before it.
+OnlyShowIn=GNOME;MATE;Unity;Cinnamon;KDE;XFCE;

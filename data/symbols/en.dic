@@ -1,0 +1,110 @@
+﻿# ALUS English symbol pronunciation.
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2026 Darko Milošević <daremc86@gmail.com>
+#
+# Format (01-ARHITEKTURA.md §11.1, the upstream symbols.dic format):
+#   identifier<TAB>replacement[<TAB>level][<TAB>preserve][<TAB># display name]
+# level    = the lowest verbosity at which the REPLACEMENT is spoken
+#            (none < some < most < all < char); default: all
+# preserve = whether the symbol itself is also sent to the synthesizer
+#            (never | always | norep); default: never
+# Only this built-in file may define complex (regular expression) symbols.
+
+complexSymbols:
+# identifier<TAB>regular expression
+# Sentence and phrase endings: punctuation that ends a clause, as opposed to
+# the same character used inside a word or a number.
+. sentence ending	(?<=[^\s.])\.(?=[\"'”’)\s]|$)
+! sentence ending	(?<=[^\s!])\!(?=[\"'”’)\s]|$)
+? sentence ending	(?<=[^\s?])\?(?=[\"'”’)\s]|$)
+; phrase ending	(?<=[^\s;]);(?=\s|$)
+: phrase ending	(?<=[^\s:]):(?=\s|$)
+# A run of dots used for layout, as in a table of contents.
+multiple .	\.{4,}
+# A decimal point and a thousands separator are not punctuation to be spoken.
+decimal point	(?<![^\d -])\.(?=\d)
+thousands separator	(?<=\d),(?=\d\d\d)
+# An apostrophe inside a word: "don't", not "don tick t".
+in-word '	(?<=[^\W_])['’]
+# A leading minus belongs to the number.
+negative number	(?<!\w)[-−](?=[$£€]?\d)
+
+symbols:
+# Complex symbols, in the order above.
+. sentence ending	dot	all	always
+! sentence ending	bang	all	always
+? sentence ending	question	all	always
+; phrase ending	semi	most	always
+: phrase ending	colon	most	always
+multiple .	multiple dots	all	always
+decimal point		none	always
+thousands separator		none	always
+in-word '	tick	all	norep
+negative number	minus	none	norep
+
+# Whitespace and control characters.
+\0	blank	char	# null
+\t	tab
+\n	line feed	char
+\r	carriage return	char
+\f	page break	none
+ 	space	char
+ 	space	char	# no-break space
+
+# Punctuation.
+!	bang	all
+"	quote	most
+\#	number	some
+$	dollar	all	norep
+£	pound	all	norep
+€	euro	all	norep
+%	percent	some
+&	and	some
+'	tick	all
+(	left paren	most
+)	right paren	most
+*	star	some
++	plus	some
+,	comma	all	always
+-	dash	most
+.	dot	all
+/	slash	some
+:	colon	most	norep
+;	semi	most
+<	less	most
+=	equals	some
+>	greater	most
+?	question	all
+@	at	some
+[	left bracket	most
+\\	backslash	most
+]	right bracket	most
+^	caret	most
+_	line	most
+`	graav	most
+{	left brace	most
+|	bar	most
+}	right brace	most
+~	tilde	most
+
+# Common typography.
+–	dash	most	# en dash
+—	dash	most	# em dash
+…	dot dot dot	all	always
+“	left quote	most
+”	right quote	most
+‘	left tick	most
+’	tick	most
+•	bullet	some
+·	dot	most
+°	degrees	some
+±	plus or minus	some
+×	times	some
+÷	divided by	some
+→	right arrow	some
+←	left arrow	some
+™	trademark	some
+©	copyright	some
+®	registered	some
+§	section	some
+¶	paragraph	some

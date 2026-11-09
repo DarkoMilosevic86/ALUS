@@ -1,0 +1,67 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2026 Darko Milošević <daremc86@gmail.com>
+#
+# This file is part of ALUS (Access Linux Using Speech).
+#
+# Valgrind suppressions for leaks that belong to GLib/GIO, not to ALUS.
+#
+# GLib starts worker threads that it never joins by design: the "gmain" worker
+# (which UNIX signal sources need), the GTask thread pool, and the GDBus worker
+# created by g_bus_get_sync(). Their thread stacks and TLS blocks are still
+# referenced when the process exits, so Memcheck reports them as "possibly
+# lost". Nothing ALUS can free: they are not ours and GLib offers no teardown.
+#
+# Each suppression names the GLib entry point, so a thread ALUS leaks itself is
+# still reported.
+
+{
+   glib-worker-thread-tls
+   Memcheck:Leak
+   match-leak-kinds: possible
+   ...
+   fun:pthread_create@@GLIBC_2.34
+   ...
+   fun:g_thread_new
+   ...
+}
+
+{
+   glib-thread-pool-tls
+   Memcheck:Leak
+   match-leak-kinds: possible
+   ...
+   fun:pthread_create@@GLIBC_2.34
+   ...
+   fun:g_thread_pool_new_full
+   ...
+}
+
+{
+   glib-thread-pool-push-tls
+   Memcheck:Leak
+   match-leak-kinds: possible
+   ...
+   fun:pthread_create@@GLIBC_2.34
+   ...
+   fun:g_thread_pool_push
+   ...
+}
+
+# Debian's libglib exports no symbol for its internal thread entry point, so
+# the GDBus worker that `g_bus_get_sync()` starts cannot be matched by function
+# name the way the three suppressions above are. It is matched by LIBRARY
+# instead, in the frame directly above pthread_create: a thread ALUS starts
+# itself has its own code in that frame and is still reported.
+#
+# Measured while adding the input backend (phase 3): with the real backend the
+# process ends with exactly one such block, 368 bytes, GLib's never-joined
+# worker. See claude/FAZA3.md.
+{
+   glib-unnamed-worker-thread-tls
+   Memcheck:Leak
+   match-leak-kinds: possible
+   ...
+   fun:pthread_create@@GLIBC_2.34
+   obj:*/libglib-2.0.so*
+   ...
+}
