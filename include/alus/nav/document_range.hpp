@@ -234,6 +234,35 @@ private:
     bool stepLeaf(DocumentPosition& position, bool forwards) const;
     bool normalise(DocumentPosition& position) const;
 
+    // ---- positions INSIDE a link (FAZA10.md N117) ----
+    //
+    // A link inside a line is not a leaf: it is one U+FFFC in its parent's
+    // text, and the parent is the leaf (DocumentLeaves says why). NVDA lets
+    // the arrow keys go INTO the link's text, and so does this: a position's
+    // object may be such an inline child, and these are the only functions
+    // that know it.
+    //
+    // The leaf that holds `object` as one of its placeholders, or null when
+    // `object` is a leaf of its own (or not in this document).
+    a11y::ObjectPtr inlineParent(const a11y::ObjectPtr& object) const;
+    // Where `child` sits in `parent`'s text: the offset of its U+FFFC.
+    std::optional<int> placeholderOffset(const a11y::ObjectPtr& parent,
+                                         const a11y::ObjectPtr& child) const;
+    // The link (or other object with text) a placeholder at `offset` stands
+    // for; null when the character there is not a placeholder, or the object
+    // behind it has no text to walk into (an image stays one stop).
+    a11y::ObjectPtr inlineChildAt(const a11y::ObjectPtr& leaf, int offset) const;
+    // A position in a link, as its parent's coordinates: the placeholder's
+    // offset. Lines, paragraphs and sentences are the PARENT's units.
+    DocumentPosition toParent(const DocumentPosition& position, bool after = false) const;
+    // After a character or word step landed on a placeholder, go inside the
+    // link: at its first unit going forwards, at its last going backwards.
+    void descendIfInline(DocumentPosition& position, text::TextUnit unit, bool forwards) const;
+    // One character or word step that knows about links. False when the step
+    // could not be made inside the current leaf and the caller has to cross
+    // into the next one.
+    bool stepUnit(DocumentPosition& position, text::TextUnit unit, bool forwards) const;
+
     a11y::ObjectPtr root_;
     text::FormatReportSettings settings_;
     DocumentPosition start_;

@@ -353,6 +353,16 @@ Object::Object(Registry& registry, Ref ref)
                             }
                             if (objectName.empty() && objectDescription.empty()) {
                                 switch (currentRole) {
+                                    // FILLER is AT-SPI's, not NVDA's (MSAA
+                                    // has none, so NVDA's list does not
+                                    // need it). GTK and the desktop-icons
+                                    // extension wrap every column of icons
+                                    // in an unnamed filler, and moving to an
+                                    // icon in another column announced
+                                    // "filler" as a new focus ancestor --
+                                    // the "popunjavanje" a user reported as
+                                    // noise. Orca never speaks a filler.
+                                    case Role::Filler:
                                     case Role::Window:
                                     case Role::Panel:
                                     case Role::PropertyPage:

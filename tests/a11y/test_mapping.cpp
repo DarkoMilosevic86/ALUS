@@ -128,11 +128,17 @@ TEST_CASE("the four state inversions", "[a11y][mapping]") {
         CHECK(states.has(State::Offscreen));
     }
 
-    SECTION("not sensitive is unavailable even when enabled") {
+    SECTION("N111: enabled but not sensitive -- GTK 3's notebook tab -- is NOT unavailable") {
+        // This said the opposite ("not sensitive is unavailable even when
+        // enabled"). Measured on gnome-terminal: its tab reports enabled=True,
+        // sensitive=False and is plainly usable; announcing it as
+        // "unavailable, selected" was the result.
         const std::uint64_t bits = platformStateBit(PlatformState::Enabled) |
+                                   platformStateBit(PlatformState::Selectable) |
                                    platformStateBit(PlatformState::Visible) |
                                    platformStateBit(PlatformState::Showing);
-        CHECK(statesFromPlatform(bits, PlatformRole::Button).has(State::Unavailable));
+        CHECK_FALSE(statesFromPlatform(bits, PlatformRole::PageTab).has(State::Unavailable));
+        CHECK_FALSE(statesFromPlatform(bits, PlatformRole::Button).has(State::Unavailable));
     }
 
     SECTION("N111: GTK 4's answer -- sensitive, never enabled -- is NOT unavailable") {

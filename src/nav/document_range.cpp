@@ -490,6 +490,21 @@ int DocumentTextRange::comparePositions(const DocumentPosition& a,
     if (!a.valid() || !b.valid()) {
         return 0;
     }
+    // A position inside a link compares as its placeholder in the parent, and
+    // then by its offset inside the link: (parent, ph) < (link, any) <
+    // (parent, ph + 1). N117.
+    if (!a.leaf->sameAs(*b.leaf) && (inlineParent(a.leaf) != nullptr ||
+                                     inlineParent(b.leaf) != nullptr)) {
+        const DocumentPosition outerA = toParent(a);
+        const DocumentPosition outerB = toParent(b);
+        const int outer = comparePositions(outerA, outerB);
+        if (outer != 0) {
+            return outer;
+        }
+        const int innerA = inlineParent(a.leaf) != nullptr ? a.offset : -1;
+        const int innerB = inlineParent(b.leaf) != nullptr ? b.offset : -1;
+        return innerA < innerB ? -1 : innerA > innerB ? 1 : 0;
+    }
     if (a.leaf->sameAs(*b.leaf)) {
         if (a.offset < b.offset) {
             return -1;
@@ -520,16 +535,27 @@ std::vector<DocumentTextRange::LeafSpan> DocumentTextRange::leafSpans() const {
         spans.push_back(LeafSpan{start_.leaf, start_.offset, end_.offset});
         return spans;
     }
-    ObjectPtr current = start_.leaf;
-    spans.push_back(LeafSpan{current, start_.offset, leafLength(current)});
+    // A range that starts or ends INSIDE a link and reaches past it is walked
+    // in the parent's coordinates, the whole link included (its placeholder
+    // carries its text into the stream, N114). Only a range wholly inside one
+    // link -- a character, a word -- is read from the link itself, above.
+    const DocumentPosition first = toParent(start_);
+    const DocumentPosition last = toParent(end_, /*after=*/true);
+    if (first.leaf->sameAs(*last.leaf)) {
+        spans.push_back(LeafSpan{first.leaf, first.offset, last.offset});
+        return spans;
+    }
+    const DocumentPosition& endAt = last;
+    ObjectPtr current = first.leaf;
+    spans.push_back(LeafSpan{current, first.offset, leafLength(current)});
     for (int step = 0; step < kMaxWalk; ++step) {
         current = DocumentLeaves::next(root_, current);
         if (current == nullptr) {
             ALUS_DEBUG("document range: end leaf not reached walking forwards");
             break;
         }
-        if (current->sameAs(*end_.leaf)) {
-            spans.push_back(LeafSpan{current, 0, end_.offset});
+        if (current->sameAs(*endAt.leaf)) {
+            spans.push_back(LeafSpan{current, 0, endAt.offset});
             break;
         }
         spans.push_back(LeafSpan{current, 0, leafLength(current)});
@@ -726,6 +752,11 @@ bool DocumentTextRange::expand(text::TextUnit unit) {
         end_ = DocumentPosition{lastLeaf, leafLength(lastLeaf)};
         return true;
     }
+    // Inside a link only a character and a word are the LINK's units; a line,
+    // a paragraph, a sentence are its parent's (N117).
+    if (resolved != text::TextUnit::Character && resolved != text::TextUnit::Word) {
+        start_ = toParent(start_);
+    }
     // A leaf is never split across a unit smaller than itself, so the unit
     // work is the leaf's -- which is the point of the compound design: phase
     // 5 already measured lines, words and sentences against four toolkits.
@@ -742,6 +773,138 @@ bool DocumentTextRange::expand(text::TextUnit unit) {
     start_ = DocumentPosition{start_.leaf, static_cast<int>(mark.start)};
     end_ = DocumentPosition{start_.leaf, static_cast<int>(mark.end)};
     return true;
+}
+
+// ---------------------------------------------------------------------------
+// Positions inside a link (N117)
+// ---------------------------------------------------------------------------
+
+ObjectPtr DocumentTextRange::inlineParent(const ObjectPtr& object) const {
+    if (object == nullptr) {
+        return nullptr;
+    }
+    const ObjectPtr parent = object->parent();
+    if (parent == nullptr || parent->sameAs(*root_) || !hasText(*parent) ||
+        !DocumentLeaves::isLeaf(*parent)) {
+        return nullptr;
+    }
+    // A child of a leaf is never visited by the leaf walk, so it can only be
+    // reached as one of the leaf's placeholders: that is what makes it inline.
+    return parent;
+}
+
+std::optional<int> DocumentTextRange::placeholderOffset(const ObjectPtr& parent,
+                                                        const ObjectPtr& child) const {
+    text::TextRangePtr range = rangeFor(parent, 0, 0);
+    const auto* objectRange = dynamic_cast<a11y::ObjectTextRange*>(range.get());
+    if (objectRange == nullptr || child == nullptr) {
+        return std::nullopt;
+    }
+    if (const auto offsets = objectRange->offsetsForObject(*child)) {
+        return offsets->start;
+    }
+    return std::nullopt;
+}
+
+ObjectPtr DocumentTextRange::inlineChildAt(const ObjectPtr& leaf, int offset) const {
+    if (leaf == nullptr || offset < 0 || offset >= leafLength(leaf) ||
+        DocumentLeaves::isEmbeddedLeaf(*leaf)) {
+        return nullptr;
+    }
+    if (leaf->textRange(offset, offset + 1) != kObjectReplacement) {
+        return nullptr;
+    }
+    text::TextRangePtr range = rangeFor(leaf, offset, offset);
+    const auto* objectRange = dynamic_cast<a11y::ObjectTextRange*>(range.get());
+    ObjectPtr child = objectRange != nullptr ? objectRange->objectAtOffset(offset) : nullptr;
+    if (child == nullptr || child->sameAs(*leaf) || !hasText(*child) ||
+        child->characterCount() <= 0) {
+        return nullptr;
+    }
+    // An image link -- its own text only placeholders -- stays one stop: there
+    // is nothing to walk through, and its name is what the field says.
+    if (textIsAllPlaceholders(child->textRange(0, -1))) {
+        return nullptr;
+    }
+    return child;
+}
+
+DocumentPosition DocumentTextRange::toParent(const DocumentPosition& position, bool after) const {
+    if (!position.valid()) {
+        return position;
+    }
+    const ObjectPtr parent = inlineParent(position.leaf);
+    if (parent == nullptr) {
+        return position;
+    }
+    const std::optional<int> offset = placeholderOffset(parent, position.leaf);
+    return DocumentPosition{parent, offset.value_or(0) + (after ? 1 : 0)};
+}
+
+void DocumentTextRange::descendIfInline(DocumentPosition& position, text::TextUnit unit,
+                                        bool forwards) const {
+    const ObjectPtr child = inlineChildAt(position.leaf, position.offset);
+    if (child == nullptr) {
+        return;
+    }
+    if (forwards) {
+        position = DocumentPosition{child, 0};
+        return;
+    }
+    const int length = leafLength(child);
+    position = DocumentPosition{child, 0};
+    if (text::TextRangePtr range = rangeFor(child, length, length)) {
+        if (range->move(unit, -1) != 0) {
+            position.offset = static_cast<int>(range->bookmark().start);
+        }
+    }
+}
+
+bool DocumentTextRange::stepUnit(DocumentPosition& position, text::TextUnit unit,
+                                 bool forwards) const {
+    // Inside a link: move within it, and at its edge step out into the parent.
+    if (const ObjectPtr parent = inlineParent(position.leaf)) {
+        if (text::TextRangePtr range = rangeFor(position.leaf, position.offset, position.offset)) {
+            if (range->move(unit, forwards ? 1 : -1) != 0) {
+                const int landed = static_cast<int>(range->bookmark().start);
+                // The #12808 guard again: moving past the last unit "succeeds"
+                // onto the exclusive end, where there is nothing.
+                if (!forwards || landed < leafLength(position.leaf)) {
+                    position.offset = landed;
+                    return true;
+                }
+            }
+        }
+        const std::optional<int> placeholder = placeholderOffset(parent, position.leaf);
+        if (!placeholder.has_value()) {
+            position = DocumentPosition{parent, 0};
+            return false;
+        }
+        if (forwards) {
+            // Just after the link. If the parent's text ends there, the next
+            // stop is in the next leaf, which the caller's crossing finds.
+            position = DocumentPosition{parent, *placeholder + 1};
+            if (position.offset >= leafLength(parent)) {
+                return false;
+            }
+            descendIfInline(position, unit, true);
+            return true;
+        }
+        // Back out to the placeholder, then one unit back in the parent.
+        position = DocumentPosition{parent, *placeholder};
+    }
+    // In a leaf: the leaf's own unit, then into a link if it landed on one.
+    if (text::TextRangePtr range = rangeFor(position.leaf, position.offset, position.offset)) {
+        if (range->move(unit, forwards ? 1 : -1) != 0) {
+            const int landed = static_cast<int>(range->bookmark().start);
+            if (!(forwards && landed >= leafLength(position.leaf))) {
+                position.offset = landed;
+                descendIfInline(position, unit, forwards);
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 bool DocumentTextRange::stepLeaf(DocumentPosition& position, bool forwards) const {
@@ -766,10 +929,19 @@ int DocumentTextRange::move(text::TextUnit unit, int direction,
 
     DocumentPosition position =
         endPoint == text::EndPoint::End ? end_ : start_;
+    // N117: characters and words go INTO a link's text; every other unit is
+    // the parent's, so a position inside a link is lifted out first.
+    const bool inlineUnit =
+        resolved == text::TextUnit::Character || resolved == text::TextUnit::Word;
+    if (!inlineUnit) {
+        position = toParent(position);
+    }
     int moved = 0;
     for (int step = 0; step < wanted; ++step) {
         bool stepped = false;
-        if (!DocumentLeaves::isEmbeddedLeaf(*position.leaf)) {
+        if (inlineUnit && !DocumentLeaves::isEmbeddedLeaf(*position.leaf)) {
+            stepped = stepUnit(position, resolved, forwards);
+        } else if (!DocumentLeaves::isEmbeddedLeaf(*position.leaf)) {
             if (text::TextRangePtr inLeaf =
                     rangeFor(position.leaf, position.offset, position.offset)) {
                 if (inLeaf->move(resolved, forwards ? 1 : -1) != 0) {
@@ -811,6 +983,11 @@ int DocumentTextRange::move(text::TextUnit unit, int direction,
                         position.offset = static_cast<int>(mark.start);
                     }
                 }
+            }
+            // A leaf that begins (or, going back, ends) with a link: the
+            // first stop is inside the link, not its placeholder.
+            if (inlineUnit) {
+                descendIfInline(position, resolved, forwards);
             }
         }
         ++moved;
@@ -917,20 +1094,58 @@ text::Bookmark DocumentTextRange::bookmark() const {
     if (!start_.valid()) {
         return mark;
     }
-    mark.start = start_.offset;
-    mark.end = end_.offset;
+    // INSIDE A LINK (N117): the link is not a leaf, so the walk that restores
+    // a bookmark would never find it. The PARENT's path goes with it after
+    // ASCII RS, and the restore finds the parent first and the link among its
+    // children. A range that only starts or ends inside a link is kept in the
+    // parent's coordinates instead.
+    if (const ObjectPtr parent = inlineParent(start_.leaf);
+        parent != nullptr && end_.valid() && end_.leaf->sameAs(*start_.leaf)) {
+        mark.start = start_.offset;
+        mark.end = end_.offset;
+        mark.data = start_.leaf->path() + "\x1e" + parent->path();
+        return mark;
+    }
+    const DocumentPosition first = toParent(start_);
+    const DocumentPosition last = end_.valid() ? toParent(end_, /*after=*/true) : first;
+    mark.start = first.offset;
+    mark.end = last.offset;
     // The leaf identity, so a bookmark survives the object cache being thrown
     // away between pump cycles -- which is what the N49 rule requires of
     // anything an object owns.
-    mark.data = start_.leaf->path();
-    if (end_.valid() && !end_.leaf->sameAs(*start_.leaf)) {
-        mark.data += "\x1f" + end_.leaf->path();
+    mark.data = first.leaf->path();
+    if (!last.leaf->sameAs(*first.leaf)) {
+        mark.data += "\x1f" + last.leaf->path();
     }
     return mark;
 }
 
 bool DocumentTextRange::moveToBookmark(const text::Bookmark& mark) {
     if (!mark.valid() || mark.data.empty()) {
+        return false;
+    }
+    if (const std::size_t rs = mark.data.find('\x1e'); rs != std::string::npos) {
+        const std::string childPath = mark.data.substr(0, rs);
+        const std::string parentPath = mark.data.substr(rs + 1);
+        for (ObjectPtr leaf = DocumentLeaves::first(root_); leaf != nullptr;
+             leaf = DocumentLeaves::next(root_, leaf)) {
+            if (leaf->path() != parentPath) {
+                continue;
+            }
+            for (const ObjectPtr& child : leaf->children()) {
+                if (child != nullptr && child->path() == childPath) {
+                    start_ = DocumentPosition{child, static_cast<int>(mark.start)};
+                    end_ = DocumentPosition{child, static_cast<int>(mark.end)};
+                    normalise(start_);
+                    normalise(end_);
+                    return true;
+                }
+            }
+            // The link is gone (the page changed) but its line is not: stay
+            // there rather than falling back to the top of the page.
+            start_ = end_ = DocumentPosition{leaf, 0};
+            return true;
+        }
         return false;
     }
     const std::size_t separator = mark.data.find('\x1f');

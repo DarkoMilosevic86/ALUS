@@ -57,6 +57,10 @@ LOG="${ALUS_SWITCH_LOG:-$HOME/alus.log}"
 OTHER_LOG="${ALUS_SWITCH_OTHER_LOG:-$HOME/alus-switch-other.log}"
 WAIT_STOP=10                         # seconds to wait for a reader to exit
 WAIT_START=8                         # seconds to wait for one to come up
+# The other reader is slower to come up than ALUS, MEASURED: twice in one
+# afternoon it was not up after 8 s and the rollback put ALUS back -- which is
+# what the rollback is for, but the user had asked for the other reader.
+WAIT_OTHER_START=20
 DAEMON_ARGS=()                       # extra alus-daemon arguments (measure)
 
 here=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
@@ -144,8 +148,8 @@ wait_keyboard_held() {
 }
 
 wait_alive() {  # a process that exits one second after starting never started
-  local name=$1 waited=0
-  while [ "$waited" -lt "$WAIT_START" ]; do
+  local name=$1 waited=0 limit=${2:-$WAIT_START}
+  while [ "$waited" -lt "$limit" ]; do
     sleep 1; waited=$((waited + 1))
     pgrep -x "$name" >/dev/null 2>&1 && { sleep 1; pgrep -x "$name" >/dev/null 2>&1 && return 0; }
   done
@@ -176,7 +180,7 @@ to_alus() {
 
   if ! wait_keyboard_free; then
     say "the keyboard did not come free; putting $OTHER_NAME back"
-    [ "$had_switch" = "true" ] && { switch_set true; setsid "${OTHER_START[@]}" >"$OTHER_LOG" 2>&1 < /dev/null & }
+    [ "$had_switch" = "true" ] && { switch_set true; setsid "${OTHER_START[@]}" >>"$OTHER_LOG" 2>&1 < /dev/null & }
     exit 1
   fi
 
@@ -195,7 +199,7 @@ to_alus() {
   say "ALUS failed to start; putting $OTHER_NAME back"
   [ -n "$LOG" ] && [ -f "$LOG" ] && tail -5 "$LOG"
   switch_set true
-  setsid "${OTHER_START[@]}" >"$OTHER_LOG" 2>&1 < /dev/null &
+  setsid "${OTHER_START[@]}" >>"$OTHER_LOG" 2>&1 < /dev/null &
   wait_alive "$OTHER_BIN" \
     && say "$OTHER_NAME is running; ALUS did not start, see $LOG" \
     || say "WARNING: neither reader is running. Log out and back in to get one."
@@ -217,17 +221,20 @@ to_other() {
 
   switch_set true
   if ! other_running; then
-    setsid "${OTHER_START[@]}" >"$OTHER_LOG" 2>&1 < /dev/null &
+    # APPENDED, with a time: it was overwritten by the next start, and the
+    # one time the reason mattered it was gone.
+    printf -- '--- %s: starting %s\n' "$(date '+%F %T')" "$OTHER_BIN" >>"$OTHER_LOG"
+    setsid "${OTHER_START[@]}" >>"$OTHER_LOG" 2>&1 < /dev/null &
   fi
-  if wait_alive "$OTHER_BIN"; then
+  if wait_alive "$OTHER_BIN" "$WAIT_OTHER_START"; then
     # RUNNING IS NOT HOLDING THE KEYBOARD. A reader whose process is up but
     # which has not registered with the accessibility manager hears no key,
     # and to the user that is the same silent computer. One restart if it has
     # not taken the keyboard, because the measured failure was exactly a
     # first start that did not take.
     if wait_keyboard_held || { stop_and_wait "$OTHER_BIN"
-                               setsid "${OTHER_START[@]}" >"$OTHER_LOG" 2>&1 < /dev/null &
-                               wait_alive "$OTHER_BIN" && wait_keyboard_held; }; then
+                               setsid "${OTHER_START[@]}" >>"$OTHER_LOG" 2>&1 < /dev/null &
+                               wait_alive "$OTHER_BIN" "$WAIT_OTHER_START" && wait_keyboard_held; }; then
       say "$OTHER_NAME is running"
       exit 0
     fi

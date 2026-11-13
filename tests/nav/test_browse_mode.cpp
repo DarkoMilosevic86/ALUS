@@ -1164,3 +1164,89 @@ TEST_CASE("N116: a heading's text is not said twice when its name is its content
         CHECK_FALSE(named->getBool("labelledByContent").value_or(false));
     }
 }
+
+TEST_CASE("N117: the arrow keys go into a link's text, as NVDA does", "[browsemode][N117]") {
+    // "Pročitaj ovde više." with "ovde" a link: Chrome gives the paragraph the
+    // text "Pročitaj U+FFFC više." and the link its own text. The link used
+    // to be ONE press of the right arrow; NVDA spells through it.
+    NavFixture fixture;
+    WebDocumentTree tree{fixture.backend};
+    const a11y::Ref paragraph =
+        fixture.backend.add(tree.document, PlatformRole::Paragraph);
+    {
+        MockNode& node = fixture.backend.node(paragraph);
+        node.interfaces |= a11y::Interface::Text;
+        node.text = std::string("Pročitaj ") + kPlaceholder + " više.";
+    }
+    fixture.backend.addState(paragraph, PlatformState::Showing);
+    const a11y::Ref link =
+        addTextLeaf(fixture.backend, paragraph, PlatformRole::Link, "ovde", "ovde");
+    fixture.backend.node(link).actionNames.push_back("jump");
+    fixture.backend.node(paragraph).links.push_back(a11y::LinkInfo{9, 10, link, "#"});
+    makeContainer(fixture.backend, tree.document,
+                  static_cast<int>(fixture.backend.node(tree.document).children.size()));
+
+    const a11y::ObjectPtr root = fixture.registry.objectFor(tree.document);
+    const a11y::ObjectPtr leaf = fixture.registry.objectFor(paragraph);
+    REQUIRE(nav::DocumentLeaves::isLeaf(*leaf));
+    const text::FormatReportSettings settings;
+
+    const auto walk = [&](text::TextRangePtr range, int direction, int steps) {
+        std::vector<std::string> out;
+        for (int step = 0; step < steps; ++step) {
+            text::TextRangePtr character = range->copy();
+            REQUIRE(character->expand(text::TextUnit::Character));
+            out.push_back(character->text());
+            if (range->move(text::TextUnit::Character, direction) == 0) {
+                break;
+            }
+        }
+        return out;
+    };
+
+    SECTION("forwards: through the paragraph, into the link and out again") {
+        text::TextRangePtr range = nav::DocumentTextRange::makeAt(
+            root, settings, nav::DocumentPosition{leaf, 0}, nav::DocumentPosition{leaf, 0});
+        REQUIRE(range != nullptr);
+        const std::vector<std::string> letters = walk(std::move(range), 1, 19);
+        const std::vector<std::string> expected{"P", "r", "o", "č", "i", "t", "a", "j", " ",
+                                                "o", "v", "d", "e", " ", "v", "i", "š", "e",
+                                                "."};
+        CHECK(letters == expected);
+    }
+
+    SECTION("backwards: into the link from its end, and out at its start") {
+        text::TextRangePtr range = nav::DocumentTextRange::makeAt(
+            root, settings, nav::DocumentPosition{leaf, 10}, nav::DocumentPosition{leaf, 10});
+        REQUIRE(range != nullptr);
+        // From the space after the link, back: e, d, v, o, then the space
+        // before it, then "j".
+        const std::vector<std::string> letters = walk(std::move(range), -1, 7);
+        const std::vector<std::string> expected{" ", "e", "d", "v", "o", " ", "j"};
+        CHECK(letters == expected);
+    }
+
+    SECTION("inside the link, the LINE is still the paragraph's") {
+        text::TextRangePtr range = nav::DocumentTextRange::makeAt(
+            root, settings, nav::DocumentPosition{fixture.registry.objectFor(link), 2},
+            nav::DocumentPosition{fixture.registry.objectFor(link), 2});
+        REQUIRE(range != nullptr);
+        REQUIRE(range->expand(text::TextUnit::Line));
+        // The paragraph's whole line, with the link's placeholder in it (its
+        // text arrives through the field, N114).
+        CHECK(range->text() == std::string("Pročitaj ") + kPlaceholder + " više.");
+    }
+
+    SECTION("a position inside the link survives a bookmark round trip") {
+        text::TextRangePtr range = nav::DocumentTextRange::makeAt(
+            root, settings, nav::DocumentPosition{fixture.registry.objectFor(link), 2},
+            nav::DocumentPosition{fixture.registry.objectFor(link), 3});
+        REQUIRE(range != nullptr);
+        const text::Bookmark mark = range->bookmark();
+        text::TextRangePtr restored =
+            nav::DocumentTextRange::make(root, settings, text::Position::First);
+        REQUIRE(restored != nullptr);
+        REQUIRE(restored->moveToBookmark(mark));
+        CHECK(restored->text() == "d");
+    }
+}

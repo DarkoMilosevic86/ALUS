@@ -473,3 +473,22 @@ TEST_CASE("a toolkit that claims two billion children is capped", "[a11y][object
         CHECK(listObject->children().size() == 50);
     }
 }
+
+TEST_CASE("a filler is scaffolding: never an announced ancestor", "[a11y][object]") {
+    // The desktop-icons extension wraps every column of icons in an unnamed
+    // FILLER; moving to an icon in another column announced "filler" (in
+    // Serbian "popunjavanje") as a new focus ancestor, which a user reported
+    // as noise. AT-SPI has the role and MSAA does not, so NVDA's own list
+    // never needed it. Orca never speaks it.
+    A11yFixture fixture;
+    MockBackend& backend = fixture.backend;
+    const Ref window = backend.add(backend.desktopRef(), PlatformRole::Frame, "Desktop icons");
+    const Ref filler = backend.add(window, PlatformRole::Filler);
+    const Ref namedFiller = backend.add(window, PlatformRole::Filler, "Recent");
+
+    CHECK(fixture.registry.objectFor(filler)->presentationType() == PresentationType::Layout);
+    CHECK_FALSE(fixture.registry.objectFor(filler)->isPresentableFocusAncestor());
+    // A filler somebody NAMED is a group with a name, and the name is said.
+    CHECK(fixture.registry.objectFor(namedFiller)->presentationType() ==
+          PresentationType::Content);
+}

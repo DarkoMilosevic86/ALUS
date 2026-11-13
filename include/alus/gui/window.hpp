@@ -70,6 +70,10 @@ struct Context {
     // by alus-settings when it starts; empty means "not asked", and the rows
     // then offer only their fixed entries.
     SpeechChoices speech;
+    // Asks again for one module, when the user chooses another output module,
+    // so the voice row shows THAT module's voices without the window being
+    // closed. Null in the tests, and then the voice row keeps what it has.
+    std::function<SpeechChoices(const std::string& module)> requerySpeech;
 };
 
 // Whether a GUI can run in this session at all. Checks for a display and that

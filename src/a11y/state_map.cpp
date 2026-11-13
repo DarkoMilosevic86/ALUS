@@ -175,32 +175,29 @@ StateSet statesFromPlatform(std::uint64_t bits, PlatformRole platform) {
     // Without this guard the whole desktop is announced as unavailable,
     // invisible and off-screen -- which is how this was found.
     if (bits != 0) {
-        // A control is unavailable when the toolkit says it is not SENSITIVE.
-        // SENSITIVE ALONE, which is finding N111 and Orca's rule
-        // (ax_utilities_state.py: `is_sensitive` is a test of SENSITIVE and
-        // nothing else).
+        // A control is unavailable when the toolkit reports NEITHER ENABLED
+        // NOR SENSITIVE -- both absent, and not either one.
         //
-        // This was `!ENABLED || !SENSITIVE`, on the reasoning that ATK
-        // distinguishes "logically disabled" from "cannot take input". GTK 4
-        // does not: its AT-SPI bridge reports SENSITIVE on every widget and
-        // ENABLED on NONE of them -- measured on GTK 4 / libadwaita 1 /
-        // AT-SPI 2.56.2 with an independent binding (Atspi through GObject
-        // introspection), where even the Close button of a dialog answers
-        // `enabled=False sensitive=True`. So every GTK 4 object was
-        // "unavailable", and ALUS's own settings window -- a GTK 4 program --
-        // was announced as disabled from the title to the last button: 161 of
-        // the 207 things said while a user walked it contained the word. The
-        // user concluded, correctly from what they heard, that nothing in it
-        // could be changed.
+        // Each half of that was learned the hard way (FAZA10.md N111):
+        //   * GTK 4 reports SENSITIVE on every widget and ENABLED on none --
+        //     measured with an independent binding; even a dialog's Close
+        //     button answers enabled=False, sensitive=True. The original
+        //     `!ENABLED || !SENSITIVE` made every GTK 4 program "unavailable",
+        //     ALUS's own settings window included.
+        //   * GTK 3's notebook tab does the OPPOSITE: enabled=True,
+        //     sensitive=False (measured on gnome-terminal's tab). The first
+        //     fix, SENSITIVE alone (Orca's test), made that tab
+        //     "unavailable, selected".
+        // A widget that is really greyed out has neither, in GTK 3 (ATK sets
+        // both from the one sensitivity), in GTK 4 and in the browsers.
         //
-        // AND ONLY FOR A ROLE THAT CAN BE DISABLED, which is the second half
-        // of the same rule in Orca: its `_generate_state_sensitive` is called
-        // from the generators for buttons, check boxes, menu items, sliders
-        // and the rest, and from no container's. It matters for toolkits that
-        // leave SENSITIVE off their containers -- gnome-shell's own panels
-        // read as "unavailable" without it. The list is in
-        // roleReportsSensitivity().
-        if (roleReportsSensitivity(platform) && !hasBit(bits, PlatformState::Sensitive)) {
+        // AND ONLY FOR A ROLE THAT CAN BE DISABLED, the other half of Orca's
+        // rule (its `_generate_state_sensitive` is called from the generators
+        // of controls and of no container): gnome-shell's panels report
+        // neither bit and are not things that can be greyed out. The list is
+        // in roleReportsSensitivity().
+        if (roleReportsSensitivity(platform) && !hasBit(bits, PlatformState::Enabled) &&
+            !hasBit(bits, PlatformState::Sensitive)) {
             states.add(State::Unavailable);
         }
         if (!hasBit(bits, PlatformState::Visible)) {

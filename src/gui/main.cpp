@@ -108,6 +108,9 @@ struct Session {
     std::unique_ptr<alus::script::Dispatcher> dispatcher;
     std::unique_ptr<alus::input::GestureManager> gestures;
     std::unique_ptr<alus::gui::Window> window;
+    // A setting changed and has not been written yet. Written when the window
+    // closes (see `settingChanged`).
+    bool pending = false;
 };
 
 Session* session() {
@@ -326,21 +329,35 @@ int main(int argc, char* argv[]) {
     guiContext.message = [](const std::string& text) {
         ALUS_INFO("settings: {}", text);
     };
-    // A setting is written to the file immediately, and the daemon notices
-    // through its own file monitor. No section-by-section call here: this
-    // process does not own the subsystems.
-    guiContext.settingChanged = [s](const std::string& /*section*/) {
-        std::string saveError;
-        if (!s->config->save(&saveError)) {
-            ALUS_WARNING("could not save the configuration: {}", saveError);
-        }
+    // NOTHING IS WRITTEN UNTIL THE WINDOW CLOSES -- NVDA's OK, and what the
+    // user asked for: "until I close the settings I do not want the voice to
+    // change". It also had to be this way for a second reason that was only
+    // found by listening: every write of alus.ini makes the daemon run a FULL
+    // resetConfiguration (its file monitor cannot know which section
+    // changed), which terminates speech, input -- every key grab -- and the
+    // object model and brings them back. One write per arrow press on the
+    // rate, one per item looked at in a list, meant the screen reader went
+    // silent and cut itself off for as long as the user was in the window.
+    // Now there is one write, and one reset, when the window closes.
+    guiContext.settingChanged = [s](const std::string& section) {
+        s->pending = true;
+        ALUS_DEBUG("settings: [{}] changed; written when the window closes", section);
     };
+    // The voice list is the output MODULE's, so choosing another module asks
+    // speech-dispatcher again -- in this process, through its own connection,
+    // without touching the screen reader's synthesizer.
+    guiContext.requerySpeech = [](const std::string& module) {
+        return alus::gui::querySpeechChoices(module);
+    };
+    // A factory reset is written AT ONCE: it is a deliberate, confirmed
+    // action, and the user expects to hear its effect.
     guiContext.resetAll = [s] {
         s->config->reset(/*factoryDefaults=*/true);
         std::string saveError;
         if (!s->config->save(&saveError)) {
             ALUS_WARNING("could not save the configuration: {}", saveError);
         }
+        s->pending = false;
     };
 
     s->window = std::make_unique<alus::gui::Window>(std::move(guiContext));
@@ -375,6 +392,17 @@ int main(int argc, char* argv[]) {
     // raise nothing.
     while (s->window->isOpen() || s->window->isGesturesOpen()) {
         g_main_context_iteration(g_main_context_default(), TRUE);
+    }
+
+    // The window is closed: now the changes go to the file, in ONE write, and
+    // the running screen reader applies them once.
+    if (s->pending) {
+        std::string saveError;
+        if (s->config->save(&saveError)) {
+            ALUS_INFO("settings: written on close");
+        } else {
+            ALUS_WARNING("could not save the configuration: {}", saveError);
+        }
     }
 
     if (bus != nullptr) {

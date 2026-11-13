@@ -44,8 +44,8 @@ std::vector<Page> build() {
                      "desktop and a Serbian screen reader."),
                   {
                       Row{RowKind::Choice, "general", "language", N_("Language"),
-                          N_("Takes effect immediately; ALUS does not need to be "
-                             "restarted."),
+                          N_("Takes effect when this window closes; ALUS does not "
+                             "need to be restarted."),
                           {{"", N_("Same as the session")},
                            {"en", N_("English")},
                            {"sr", N_("Serbian (Cyrillic)")},
@@ -89,14 +89,13 @@ std::vector<Page> build() {
                           nullptr,
                           {{"ssip", N_("speech-dispatcher")}, {"none", N_("None")}}},
                       Row{RowKind::Choice, "speech", "outputModule", N_("Output module"),
-                          N_("The speech-dispatcher module. Takes effect when ALUS "
-                             "restarts its speech, which happens on the next "
-                             "configuration reset."),
+                          N_("The speech-dispatcher module. Choosing one shows its "
+                             "voices below; nothing changes until this window "
+                             "closes."),
                           {{"", N_("Default")}}, 0, 100, 1, {}, "speech-modules"},
                       Row{RowKind::Choice, "speech", "voice", N_("Voice"),
-                          N_("The voices of the output module above. After changing "
-                             "the module, close and reopen this window to see its "
-                             "voices."),
+                          N_("The voices of the output module above. The new voice "
+                             "is heard when this window closes."),
                           {{"", N_("Default")}}, 0, 100, 1, {}, "speech-voices"},
                   }},
             Group{N_("Voice settings"), nullptr,

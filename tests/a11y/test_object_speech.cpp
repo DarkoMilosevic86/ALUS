@@ -444,3 +444,16 @@ TEST_CASE("OnlyCache says nothing and still remembers", "[a11y][speech]") {
     CHECK(joined(getObjectPropertiesSpeech(*object, OutputReason::Change, selection)) ==
           "checked");
 }
+
+TEST_CASE("the word 'filler' is never said, even when it is all there is", "[a11y][speech]") {
+    A11yFixture fixture;
+    MockBackend& backend = fixture.backend;
+    const Ref window = backend.add(backend.desktopRef(), PlatformRole::Frame, "Desktop icons");
+    const Ref filler = backend.add(window, PlatformRole::Filler);
+    const Ref named = backend.add(window, PlatformRole::Filler, "Recent");
+    CHECK(say(*fixture.registry.objectFor(filler), OutputReason::Focus).find("filler") ==
+          std::string::npos);
+    const std::string namedSpeech = say(*fixture.registry.objectFor(named), OutputReason::Focus);
+    CHECK(namedSpeech.find("Recent") != std::string::npos);
+    CHECK(namedSpeech.find("filler") == std::string::npos);
+}

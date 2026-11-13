@@ -27,6 +27,7 @@
 
 #include <chrono>
 #include <cstdlib>
+#include <algorithm>
 #include <string>
 #include <vector>
 
@@ -115,17 +116,104 @@ void onToggle(GObject* object, GParamSpec* /*spec*/, gpointer data) {
     noteChanged(*binding);
 }
 
+void onChoice(GObject* object, GParamSpec* spec, gpointer data);
+
+// Fills a combo row from `choices` and selects `current`, with the change
+// signal blocked: filling the model moves the selection, and a selection moved
+// by the program must not be written back as if the user had chosen it.
+void fillChoices(GtkWidget* widget, RowBinding* binding, std::vector<Choice> choices,
+                 const std::string& current) {
+    std::vector<std::string> owned;
+    owned.reserve(choices.size());
+    for (const Choice& choice : choices) {
+        owned.push_back(!choice.text.empty() ? choice.text
+                        : choice.label != nullptr ? std::string{_(choice.label)}
+                                                  : choice.value);
+    }
+    std::vector<const char*> labels;
+    labels.reserve(owned.size() + 1);
+    for (const std::string& label : owned) {
+        labels.push_back(label.c_str());
+    }
+    labels.push_back(nullptr);
+    guint selected = 0;
+    for (guint i = 0; i < choices.size(); ++i) {
+        if (choices[i].value == current) {
+            selected = i;
+            break;
+        }
+    }
+    g_signal_handlers_block_by_func(widget, reinterpret_cast<gpointer>(onChoice), binding);
+    GtkStringList* list = gtk_string_list_new(labels.data());
+    adw_combo_row_set_model(ADW_COMBO_ROW(widget), G_LIST_MODEL(list));
+    g_object_unref(list);
+    adw_combo_row_set_selected(ADW_COMBO_ROW(widget), selected);
+    g_signal_handlers_unblock_by_func(widget, reinterpret_cast<gpointer>(onChoice), binding);
+    binding->choices = std::move(choices);
+}
+
+// The voice row beside a module row: a sibling in the same preferences group,
+// found by its binding rather than by position so that a reordered page does
+// not refill the wrong row.
+GtkWidget* findSiblingRow(GtkWidget* row, std::string_view key) {
+    GtkWidget* parent = gtk_widget_get_parent(row);
+    for (GtkWidget* child = parent != nullptr ? gtk_widget_get_first_child(parent) : nullptr;
+         child != nullptr; child = gtk_widget_get_next_sibling(child)) {
+        const auto* binding =
+            static_cast<const RowBinding*>(g_object_get_data(G_OBJECT(child), "alus-binding"));
+        if (binding != nullptr && binding->row != nullptr && binding->row->key == key) {
+            return child;
+        }
+    }
+    return nullptr;
+}
+
+// The output module changed: the voices are that module's now.
+void refreshVoicesFor(GtkWidget* moduleRow, RowBinding& moduleBinding, const std::string& module) {
+    Context& context = *moduleBinding.context;
+    if (!context.requerySpeech) {
+        return;
+    }
+    GtkWidget* voiceRow = findSiblingRow(moduleRow, "voice");
+    if (voiceRow == nullptr) {
+        return;
+    }
+    auto* voiceBinding =
+        static_cast<RowBinding*>(g_object_get_data(G_OBJECT(voiceRow), "alus-binding"));
+    if (voiceBinding == nullptr) {
+        return;
+    }
+    context.speech = context.requerySpeech(module);
+    std::string current = context.config->getString("speech", "voice");
+    // A voice of the OLD module means nothing to the new one: the voice
+    // becomes Default rather than a name the new module would refuse (which
+    // is how `voice=` went stale in N107).
+    const std::vector<Choice> offered = resolveChoices(*voiceBinding->row, context.speech, "");
+    const bool stillOffered = std::any_of(offered.begin(), offered.end(),
+                                          [&current](const Choice& c) { return c.value == current; });
+    if (!stillOffered && !current.empty()) {
+        current.clear();
+        context.config->setString("speech", "voice", "");
+        noteChanged(*voiceBinding);
+    }
+    fillChoices(voiceRow, voiceBinding, resolveChoices(*voiceBinding->row, context.speech, current),
+                current);
+}
+
 void onChoice(GObject* object, GParamSpec* /*spec*/, gpointer data) {
-    const auto* binding = static_cast<RowBinding*>(data);
+    auto* binding = static_cast<RowBinding*>(data);
     const guint selected = adw_combo_row_get_selected(ADW_COMBO_ROW(object));
     if (selected >= binding->choices.size()) {
         return;
     }
     // The CHOICE's value and never its label: the label is translated and the
     // configuration file must not be.
-    binding->context->config->setString(binding->row->section, binding->row->key,
-                                        binding->choices[selected].value);
+    const std::string value = binding->choices[selected].value;
+    binding->context->config->setString(binding->row->section, binding->row->key, value);
     noteChanged(*binding);
+    if (binding->row->source == "speech-modules") {
+        refreshVoicesFor(GTK_WIDGET(object), *binding, value);
+    }
 }
 
 void onInteger(GObject* object, GParamSpec* /*spec*/, gpointer data) {
@@ -226,36 +314,11 @@ GtkWidget* buildRow(Context& context, const Row& row, Window& window) {
         case RowKind::Choice: {
             widget = adw_combo_row_new();
             const std::string current = context.config->getString(row.section, row.key);
-            std::vector<Choice> choices = resolveChoices(row, context.speech, current);
-            // GtkStringList of the labels as the user sees them: a msgid
-            // translated, or a runtime name (a voice) shown as it is. The
-            // values stay in the binding and are looked up by index.
-            std::vector<std::string> owned;
-            owned.reserve(choices.size());
-            for (const Choice& choice : choices) {
-                owned.push_back(!choice.text.empty() ? choice.text
-                                : choice.label != nullptr ? std::string{_(choice.label)}
-                                                          : choice.value);
-            }
-            std::vector<const char*> labels;
-            labels.reserve(owned.size() + 1);
-            for (const std::string& label : owned) {
-                labels.push_back(label.c_str());
-            }
-            labels.push_back(nullptr);
-            GtkStringList* list = gtk_string_list_new(labels.data());
-            adw_combo_row_set_model(ADW_COMBO_ROW(widget), G_LIST_MODEL(list));
-
-            guint selected = 0;
-            for (guint i = 0; i < choices.size(); ++i) {
-                if (choices[i].value == current) {
-                    selected = i;
-                    break;
-                }
-            }
-            adw_combo_row_set_selected(ADW_COMBO_ROW(widget), selected);
             RowBinding* binding = bind(widget, context, row);
-            binding->choices = std::move(choices);
+            // Labels as the user sees them: a msgid translated, or a runtime
+            // name (a voice) shown as it is. The values stay in the binding
+            // and are looked up by index.
+            fillChoices(widget, binding, resolveChoices(row, context.speech, current), current);
             g_signal_connect(widget, "notify::selected", G_CALLBACK(onChoice), binding);
             break;
         }

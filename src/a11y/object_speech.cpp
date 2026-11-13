@@ -281,7 +281,13 @@ speech::SpeechSequence getPropertiesSpeech(const PropertyValues& values, OutputR
     const bool hasSomethingElse = !values.name.value_or(std::string{}).empty() ||
                                   !value.empty() || !cellCoordsText.empty() || rowNumber != 0 ||
                                   columnNumber != 0;
-    if (speakRole &&
+    // FILLER is never said. It is AT-SPI's word for "a box with nothing to
+    // say" -- GTK pads layouts with it, and the desktop-icons extension wraps
+    // every column of icons in one -- so the role label is the one property
+    // of it that is certainly not information. NVDA never meets it (MSAA has
+    // no filler) and Orca never speaks it. A filler with a NAME still has its
+    // name said; only the word "filler" goes.
+    if (speakRole && role != Role::Filler &&
         (!roleText.empty() || !quietReason || !hasSomethingElse || !isSilentOnFocus(role)) &&
         (role != Role::Math ||
          (reason != OutputReason::Caret && reason != OutputReason::SayAll))) {

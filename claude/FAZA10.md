@@ -251,6 +251,38 @@ Provera se sada preskače bez pravog sintetizatora.
 linka **unutar** reda je jedan korak (link zauzima jedan offset u roditelju), a
 NVDA ulazi u tekst linka; i kašnjenje taster → govor.
 
+## Treći živi prolaz (N111 dopuna, N117–N119)
+
+| Nalaz | Šta se čulo | Uzrok | Popravka |
+|---|---|---|---|
+| **N111, dopuna** | kartica terminala: „jezičak, nedostupno, izabrano" | GTK3 kartica javlja **ENABLED bez SENSITIVE** — obrnuto od GTK4. Pravilo „samo SENSITIVE" (Orcino) ju je proglasilo onemogućenom. | onemogućeno **samo kad nema nijednog** od dva bita — tačno i za GTK4, GTK3 karticu, stvarno onemogućene kontrole u oba toolkita i skrivena polja ljuske |
+| **N117** | strelica levo/desno preskače link unutar reda u jednom koraku | link u redu je jedan U+FFFC u roditeljskom listu, a pozicija je bila samo (list, pomeraj) | pozicije **unutar linka**: znak i reč ulaze u tekst linka i izlaze iz njega u oba smera; red/pasus/rečenica ostaju roditeljevi; bookmark nosi roditelja (ASCII RS) |
+| **N118** | „popunjavanje" pri kretanju po ikonicama radne površine | proširenje za ikonice pakuje svaku kolonu u FILLER bez imena; AT-SPI ima tu rolu, MSAA nema, pa je NVDA-ina lista „layout" nije sadržala | filler bez imena je layout (ne najavljuje se kao predak), a reč „filler" se ne izgovara nikad — samo ime, ako ga ima |
+| **N119** | u podešavanjima sinteze govor ćuti i seče se; glas se menja dok se tek bira | **svaka** promena u prozoru je upisivala `alus.ini`, a ALUS na svaki upis radi **pun `resetConfiguration`** — gasi i diže govor, tastaturu (sve grabove) i objektni model | prozor sve promene čuva i **upisuje jednom, pri zatvaranju** (NVDA-ino „U redu"); izbor izlaznog modula **odmah osvežava listu glasova** u istom prozoru (nov upit speech-dispatcher-u u procesu podešavanja); glas starog modula postaje „Podrazumevano"; fabrički reset se i dalje upisuje odmah |
+
+N119 je proveren na živom prozoru u delu koji se spolja može proveriti: dok je
+prozor otvoren, `alus.ini` ostaje **nepromenjen**. Osvežavanje liste glasova
+nije moguće izazvati spolja — AdwComboRow prema AT-SPI ne izlaže ni akciju ni
+izbor — pa ostaje za živi prolaz.
+
+`tools/alus-switch.sh`: drugi čitač dobija 20 s da se digne (dvaput nije stigao
+za 8 s i rollback je vratio ALUS), a njegov dnevnik se dopisuje sa vremenom
+umesto da se prepisuje.
+
+Testovi: `[N117]` (napred i nazad kroz link, red u linku je red pasusa,
+bookmark u linku), filler u `test_object.cpp` i `test_object_speech.cpp`,
+GTK3 kartica u `test_mapping.cpp`. Valgrind nad `browsemode`, `nav`, `a11y`,
+`gui`: 0 grešaka, 0 izgubljenih bajtova.
+
+**Otvoreno: Super taster ne govori ništa.** U prolazu je ALUS video pritisak
+(Super_L stiže, nije progutan, GNOME otvara pregled aktivnosti), posle toga su
+stigli događaji iz gnome-shell-a, ali je upit o objektu vraćao „The
+application no longer exists" i ništa nije izgovoreno. Kad se pregled otvori
+preko D-Bus-a dok Orca radi, ALUS ga **čita** („Pregled, panel", „polje za
+uređivanje, Upišite željeno"). Razlika između dva uslova je ili
+`screen-reader-enabled=false` (koji `alus-switch.sh` postavlja), ili put
+samog tastera — što traži živu probu sa ALUS-om na tastaturi.
+
 ### Sitniji nalazi
 
 * `nav::TextCommands::reportReviewCursorLocation()` je izgovarao **neprevedeni

@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alus 0.1.0\n"
 "Report-Msgid-Bugs-To: daremc86@gmail.com\n"
-"POT-Creation-Date: 2026-11-13 12:42+0000\n"
-"PO-Revision-Date: 2026-11-13 12:42+0000\n"
+"POT-Creation-Date: 2026-11-13 13:53+0000\n"
+"PO-Revision-Date: 2026-11-13 13:53+0000\n"
 "Last-Translator: tools/import-nvda-po.py\n"
 "Language-Team: Serbian (Cyrillic)\n"
 "Language: sr_RS\n"
@@ -234,26 +234,26 @@ msgid "not %s"
 msgstr "није %s"
 
 #. Translators: the current row number, e.g. "row 3".
-#: src/a11y/object_speech.cpp:331
+#: src/a11y/object_speech.cpp:337
 msgid "row %s"
 msgstr "ред%s"
 
 #. Translators: the row span, e.g. "through 5".
-#: src/a11y/object_speech.cpp:334 src/a11y/object_speech.cpp:350
+#: src/a11y/object_speech.cpp:340 src/a11y/object_speech.cpp:356
 msgid "through %s"
 msgstr "до %s"
 
 #. Translators: the current column number, e.g. "column 3".
-#: src/a11y/object_speech.cpp:346
+#: src/a11y/object_speech.cpp:352
 msgid "column %s"
 msgstr "колона %s"
 
-#: src/a11y/object_speech.cpp:360
+#: src/a11y/object_speech.cpp:366
 msgid "through row %s column %s"
 msgstr "до реда %s колоне %s"
 
 #. Translators: there are further details that can be fetched.
-#: src/a11y/object_speech.cpp:383
+#: src/a11y/object_speech.cpp:389
 msgid "has details"
 msgstr "има детаље"
 
@@ -261,7 +261,7 @@ msgstr "има детаље"
 #. of detail.
 #. Translators: brailled when there are details of a known kind; %s is
 #. the abbreviation of the kind, e.g. "cmnt".
-#: src/a11y/object_speech.cpp:388 src/braille/properties.cpp:75
+#: src/a11y/object_speech.cpp:394 src/braille/properties.cpp:75
 msgid "has %s"
 msgstr "има %s"
 
@@ -270,16 +270,16 @@ msgstr "има %s"
 #. Translators: the position of an item in a group, brailled; the
 #. first %s is the item's number and the second how many there are, so
 #. the result reads "3 of 7".
-#: src/a11y/object_speech.cpp:400 src/braille/properties.cpp:178
+#: src/a11y/object_speech.cpp:406 src/braille/properties.cpp:178
 msgid "%s of %s"
 msgstr "%s од %s"
 
 #. Translators: the item level in a tree, e.g. "level 2".
-#: src/a11y/object_speech.cpp:405
+#: src/a11y/object_speech.cpp:411
 msgid "level %s"
 msgstr "ниво %s"
 
-#: src/a11y/object_speech.cpp:842
+#: src/a11y/object_speech.cpp:848
 msgid "%s percent"
 msgstr "%s одсто"
 
@@ -1267,17 +1267,17 @@ msgid "No row header"
 msgstr "Нема заглавља реда"
 
 #. Translators: a braille cursor shape.
-#: src/braille/commands.cpp:32 src/gui/model.cpp:176 src/gui/model.cpp:181
+#: src/braille/commands.cpp:32 src/gui/model.cpp:175 src/gui/model.cpp:180
 msgid "dot 8"
 msgstr "тачка 8"
 
 #. Translators: a braille cursor shape.
-#: src/braille/commands.cpp:35 src/gui/model.cpp:177 src/gui/model.cpp:182
+#: src/braille/commands.cpp:35 src/gui/model.cpp:176 src/gui/model.cpp:181
 msgid "all dots"
 msgstr "све тачке"
 
 #. Translators: a braille cursor shape.
-#: src/braille/commands.cpp:38 src/gui/model.cpp:175 src/gui/model.cpp:180
+#: src/braille/commands.cpp:38 src/gui/model.cpp:174 src/gui/model.cpp:179
 msgid "dots 7 and 8"
 msgstr "тачке 7 и 8"
 
@@ -1773,36 +1773,36 @@ msgid "bkmk"
 msgstr "mark"
 
 #. Translators: what `alus+control+t` reports.
-#: src/braille/settings.cpp:72 src/gui/model.cpp:192
+#: src/braille/settings.cpp:72 src/gui/model.cpp:191
 msgid "to focus"
 msgstr "фокус"
 
-#: src/braille/settings.cpp:75 src/gui/model.cpp:193
+#: src/braille/settings.cpp:75 src/gui/model.cpp:192
 msgid "to review"
 msgstr "преглед"
 
-#: src/braille/settings.cpp:78 src/braille/settings.cpp:80 src/gui/model.cpp:191
+#: src/braille/settings.cpp:78 src/braille/settings.cpp:80 src/gui/model.cpp:190
 msgid "automatically"
 msgstr "аутоматски"
 
-#: src/braille/settings.cpp:170 src/gui/model.cpp:195
+#: src/braille/settings.cpp:170 src/gui/model.cpp:194
 msgid "follow cursors"
 msgstr "прати курсоре"
 
 #. Translators: what `alus+alt+t` reports.
-#: src/braille/settings.cpp:170 src/gui/model.cpp:196
+#: src/braille/settings.cpp:170 src/gui/model.cpp:195
 msgid "speech output"
 msgstr "говорни излаз"
 
-#: src/braille/settings.cpp:197 src/braille/settings.cpp:207 src/gui/model.cpp:199
+#: src/braille/settings.cpp:197 src/braille/settings.cpp:207 src/gui/model.cpp:198
 msgid "never"
 msgstr "никад"
 
-#: src/braille/settings.cpp:201 src/gui/model.cpp:200
+#: src/braille/settings.cpp:201 src/gui/model.cpp:199
 msgid "always"
 msgstr "увек"
 
-#: src/braille/settings.cpp:205 src/gui/model.cpp:202
+#: src/braille/settings.cpp:205 src/gui/model.cpp:201
 msgid "only when automatically tethered"
 msgstr "само када је аутоматски повезан"
 
@@ -1979,7 +1979,7 @@ msgid "%s is now unbound for you; the default is kept in place for everything el
 msgstr "%s је за вас одвезан; подразумевано везивање остаје за све остало"
 
 #. Translators: the title of the gesture dialog.
-#: src/gui/gesture_dialog.cpp:334 src/gui/model.cpp:552
+#: src/gui/gesture_dialog.cpp:334 src/gui/model.cpp:551
 msgid "Gestures"
 msgstr "Гестови"
 
@@ -2038,8 +2038,8 @@ msgstr "из модула апликације"
 msgid "built in"
 msgstr "уграђен"
 
-#: src/gui/model.cpp:26 src/gui/model.cpp:59 src/gui/model.cpp:227
-#: src/gui/model.cpp:465 src/gui/model.cpp:488 src/input/commands.cpp:39
+#: src/gui/model.cpp:26 src/gui/model.cpp:59 src/gui/model.cpp:226
+#: src/gui/model.cpp:464 src/gui/model.cpp:487 src/input/commands.cpp:39
 #: src/input/commands.cpp:48
 msgid "Off"
 msgstr "Искључено"
@@ -2065,8 +2065,8 @@ msgid "The language ALUS speaks and shows. Independent of the desktop's language
 msgstr "Језик којим ALUS говори и пише. Намерно независан од језика радне површине: корисник може желети радну површину на енглеском а читач екрана на српском."
 
 #: src/gui/model.cpp:47
-msgid "Takes effect immediately; ALUS does not need to be restarted."
-msgstr "Примењује се одмах; ALUS не треба рестартовати."
+msgid "Takes effect when this window closes; ALUS does not need to be restarted."
+msgstr "Примењује се кад се овај прозор затвори; ALUS не треба поново покретати."
 
 #: src/gui/model.cpp:49
 msgid "Same as the session"
@@ -2148,7 +2148,7 @@ msgstr "Синтетизатор"
 msgid "ALUS speaks through speech-dispatcher, so every SSIP module already installed is available here."
 msgstr "ALUS говори преко speech-dispatcher-а, па је овде доступан сваки већ инсталиран SSIP модул."
 
-#: src/gui/model.cpp:90 src/gui/model.cpp:115
+#: src/gui/model.cpp:90 src/gui/model.cpp:114
 msgid "None"
 msgstr "Ниједан"
 
@@ -2161,10 +2161,10 @@ msgid "Output module"
 msgstr "Излазни модул"
 
 #: src/gui/model.cpp:92
-msgid "The speech-dispatcher module. Takes effect when ALUS restarts its speech, which happens on the next configuration reset."
-msgstr "Модул speech-dispatcher-а. Примењује се кад ALUS поново покрене говор, што се дешава при следећем враћању подешавања."
+msgid "The speech-dispatcher module. Choosing one shows its voices below; nothing changes until this window closes."
+msgstr "Модул speech-dispatcher-а. Избор модула одмах приказује његове гласове испод; ништа се не мења док се овај прозор не затвори."
 
-#: src/gui/model.cpp:95 src/gui/model.cpp:100
+#: src/gui/model.cpp:95 src/gui/model.cpp:99
 msgid "Default"
 msgstr "Подразумевани"
 
@@ -2173,778 +2173,778 @@ msgid "Voice"
 msgstr "Глас"
 
 #: src/gui/model.cpp:97
-msgid "The voices of the output module above. After changing the module, close and reopen this window to see its voices."
-msgstr "Гласови излазног модула изнад. После промене модула затворите и поново отворите овај прозор да бисте видели његове гласове."
+msgid "The voices of the output module above. The new voice is heard when this window closes."
+msgstr "Гласови излазног модула изнад. Нови глас се чује кад се овај прозор затвори."
 
-#: src/gui/model.cpp:102
+#: src/gui/model.cpp:101
 msgid "Voice settings"
 msgstr "Подешавања гласа"
 
-#: src/gui/model.cpp:104
+#: src/gui/model.cpp:103
 msgid "Rate"
 msgstr "Брзина"
 
-#: src/gui/model.cpp:105
+#: src/gui/model.cpp:104
 msgid "Pitch"
 msgstr "Висина"
 
-#: src/gui/model.cpp:106
+#: src/gui/model.cpp:105
 msgid "Volume"
 msgstr "Јачина"
 
-#: src/gui/model.cpp:107
+#: src/gui/model.cpp:106
 msgid "Inflection"
 msgstr "Интонација"
 
-#: src/gui/model.cpp:109
+#: src/gui/model.cpp:108
 msgid "What is spoken"
 msgstr "Шта се изговара"
 
-#: src/gui/model.cpp:112
+#: src/gui/model.cpp:111
 msgid "Punctuation and symbol level"
 msgstr "Ниво интерпункције и симбола"
 
-#: src/gui/model.cpp:113
+#: src/gui/model.cpp:112
 msgid "How much punctuation is spoken. `alus+p` cycles this without opening the settings."
 msgstr "Колико се интерпункције изговара. `алус+п` мења ово без отварања подешавања."
 
-#: src/gui/model.cpp:116
+#: src/gui/model.cpp:115
 msgid "Some"
 msgstr "Нешто"
 
-#: src/gui/model.cpp:117
+#: src/gui/model.cpp:116
 msgid "Most"
 msgstr "Већина"
 
-#: src/gui/model.cpp:118
+#: src/gui/model.cpp:117
 msgid "All"
 msgstr "Све"
 
-#: src/gui/model.cpp:119
+#: src/gui/model.cpp:118
 msgid "Character"
 msgstr "Знак"
 
-#: src/gui/model.cpp:121
+#: src/gui/model.cpp:120
 msgid "Follow the language of the text"
 msgstr "Прати језик текста"
 
-#: src/gui/model.cpp:122
+#: src/gui/model.cpp:121
 msgid "Switches the voice when a document says its text is in another language."
 msgstr "Мења глас када документ каже да је његов текст на другом језику."
 
-#: src/gui/model.cpp:125
+#: src/gui/model.cpp:124
 msgid "Follow the dialect too"
 msgstr "Прати и дијалекат"
 
-#: src/gui/model.cpp:126
+#: src/gui/model.cpp:125
 msgid "Switches between, for example, British and American English. Off by default."
 msgstr "Пребацује, на пример, између британског и америчког енглеског. Подразумевано искључено."
 
-#: src/gui/model.cpp:129
+#: src/gui/model.cpp:128
 msgid "Normalize Unicode before speaking"
 msgstr "Нормализуј Unicode пре изговарања"
 
-#: src/gui/model.cpp:130
+#: src/gui/model.cpp:129
 msgid "Makes mathematical and styled letters readable: ℂ is spoken as C."
 msgstr "Чини математичка и стилизована слова читљивим: ℂ се изговара као Ц."
 
-#: src/gui/model.cpp:139 src/gui/model.cpp:535 src/i18n/data_strings.cpp:33
+#: src/gui/model.cpp:138 src/gui/model.cpp:534 src/i18n/data_strings.cpp:33
 msgid "Braille"
 msgstr "Брајев ред"
 
-#: src/gui/model.cpp:141 src/gui/model.cpp:145
+#: src/gui/model.cpp:140 src/gui/model.cpp:144
 msgid "Display"
 msgstr "Ред"
 
-#: src/gui/model.cpp:142
+#: src/gui/model.cpp:141
 msgid "The display is driven through brltty's BrlAPI, so every display brltty supports works here."
 msgstr "Ред се води преко brltty-јевог BrlAPI-ја, па овде ради сваки ред који brltty подржава."
 
-#: src/gui/model.cpp:147
+#: src/gui/model.cpp:146
 msgid "No display"
 msgstr "Без реда"
 
-#: src/gui/model.cpp:147
+#: src/gui/model.cpp:146
 msgid "brltty (BrlAPI)"
 msgstr "brltty (BrlAPI)"
 
-#: src/gui/model.cpp:148
+#: src/gui/model.cpp:147
 msgid "BrlAPI host"
 msgstr "BrlAPI хост"
 
-#: src/gui/model.cpp:149
+#: src/gui/model.cpp:148
 msgid "Empty is the normal case: whatever $BRLAPI_HOST or brltty's own default says."
 msgstr "Празно је нормално: оно што каже $БРЛАПИ_ХОСТ или brltty-јева подразумевана вредност."
 
-#: src/gui/model.cpp:152
+#: src/gui/model.cpp:151
 msgid "Translation tables"
 msgstr "Табеле превода"
 
-#: src/gui/model.cpp:155
+#: src/gui/model.cpp:154
 msgid "Output table"
 msgstr "Излазна табела"
 
-#: src/gui/model.cpp:156
+#: src/gui/model.cpp:155
 msgid "A liblouis table file name, or \"auto\" for the table that matches the language."
 msgstr "Име liblouis табеле, или „ауто“ за табелу која одговара језику."
 
-#: src/gui/model.cpp:158
+#: src/gui/model.cpp:157
 msgid "Input table"
 msgstr "Улазна табела"
 
-#: src/gui/model.cpp:161
+#: src/gui/model.cpp:160
 msgid "Show the word at the cursor uncontracted"
 msgstr "Прикажи реч на курсору без скраћивања"
 
-#: src/gui/model.cpp:162
+#: src/gui/model.cpp:161
 msgid "So a contracted table does not hide the characters being edited."
 msgstr "Да скраћена табела не скрива знакове који се управо уређују."
 
-#: src/gui/model.cpp:165
+#: src/gui/model.cpp:164
 msgid "Normalize Unicode before translating"
 msgstr "Нормализуј Unicode пре превођења"
 
-#: src/gui/model.cpp:167
+#: src/gui/model.cpp:166
 msgid "Cursor"
 msgstr "Курсор"
 
-#: src/gui/model.cpp:169
+#: src/gui/model.cpp:168
 msgid "Show the cursor"
 msgstr "Прикажи курсор"
 
-#: src/gui/model.cpp:170
+#: src/gui/model.cpp:169
 msgid "Blink the cursor"
 msgstr "Трепћи курсором"
 
-#: src/gui/model.cpp:172
+#: src/gui/model.cpp:171
 msgid "Blink rate, in milliseconds"
 msgstr "Брзина трептања, у милисекундама"
 
-#: src/gui/model.cpp:174
+#: src/gui/model.cpp:173
 msgid "Cursor shape when following the focus"
 msgstr "Облик курсора када прати фокус"
 
-#: src/gui/model.cpp:179
+#: src/gui/model.cpp:178
 msgid "Cursor shape when following review"
 msgstr "Облик курсора када прати преглед"
 
-#: src/gui/model.cpp:184
+#: src/gui/model.cpp:183
 msgid "Show the selection"
 msgstr "Прикажи селекцију"
 
-#: src/gui/model.cpp:186
+#: src/gui/model.cpp:185
 msgid "What the display follows"
 msgstr "Шта ред прати"
 
-#: src/gui/model.cpp:188
+#: src/gui/model.cpp:187
 msgid "Tethered to"
 msgstr "Повезан са"
 
-#: src/gui/model.cpp:189
+#: src/gui/model.cpp:188
 msgid "`alus+control+t` changes this without opening the settings."
 msgstr "`алус+цонтрол+т` мења ово без отварања подешавања."
 
-#: src/gui/model.cpp:194
+#: src/gui/model.cpp:193
 msgid "Mode"
 msgstr "Режим"
 
-#: src/gui/model.cpp:198
+#: src/gui/model.cpp:197
 msgid "A routing key also moves the caret"
 msgstr "Тастер за позиционирање помера и карету"
 
-#: src/gui/model.cpp:204
+#: src/gui/model.cpp:203
 msgid "How much context is shown"
 msgstr "Колико се контекста приказује"
 
-#: src/gui/model.cpp:205
+#: src/gui/model.cpp:204
 msgid "changedContext"
 msgstr "changedContext"
 
-#: src/gui/model.cpp:206
+#: src/gui/model.cpp:205
 msgid "fill"
 msgstr "филл"
 
-#: src/gui/model.cpp:207
+#: src/gui/model.cpp:206
 msgid "scroll"
 msgstr "сцролл"
 
-#: src/gui/model.cpp:209
+#: src/gui/model.cpp:208
 msgid "Reading"
 msgstr "Читање"
 
-#: src/gui/model.cpp:211
+#: src/gui/model.cpp:210
 msgid "Word wrap"
 msgstr "Прелом речи"
 
-#: src/gui/model.cpp:213
+#: src/gui/model.cpp:212
 msgid "Break words"
 msgstr "Преламај речи"
 
-#: src/gui/model.cpp:214
+#: src/gui/model.cpp:213
 msgid "Break words and mark the break"
 msgstr "Преламај речи и означи прелом"
 
-#: src/gui/model.cpp:215
+#: src/gui/model.cpp:214
 msgid "At word boundaries"
 msgstr "На границама речи"
 
-#: src/gui/model.cpp:217
+#: src/gui/model.cpp:216
 msgid "At word or syllable boundaries"
 msgstr "На границама речи или слогова"
 
-#: src/gui/model.cpp:219
+#: src/gui/model.cpp:218
 msgid "Read by paragraph"
 msgstr "Читај по параграфима"
 
-#: src/gui/model.cpp:220
+#: src/gui/model.cpp:219
 msgid "Off by default: a paragraph on a 40-cell display is a lot of scrolling."
 msgstr "Подразумевано искључено: параграф на реду од 40 ћелија је много померања."
 
-#: src/gui/model.cpp:223
+#: src/gui/model.cpp:222
 msgid "Automatic scroll rate, in cells per second"
 msgstr "Брзина аутоматског померања, у ћелијама у секунди"
 
-#: src/gui/model.cpp:225
+#: src/gui/model.cpp:224
 msgid "Show messages"
 msgstr "Приказуј поруке"
 
-#: src/gui/model.cpp:228
+#: src/gui/model.cpp:227
 msgid "For a while"
 msgstr "Неко време"
 
-#: src/gui/model.cpp:229
+#: src/gui/model.cpp:228
 msgid "Until dismissed"
 msgstr "Док се не одбаци"
 
-#: src/gui/model.cpp:231
+#: src/gui/model.cpp:230
 msgid "How long a message stays, in milliseconds"
 msgstr "Колико порука остаје, у милисекундама"
 
-#: src/gui/model.cpp:234
+#: src/gui/model.cpp:233
 msgid "Speech alongside braille"
 msgstr "Говор уз брајев ред"
 
-#: src/gui/model.cpp:237
+#: src/gui/model.cpp:236
 msgid "Speak the character a routing key lands on"
 msgstr "Изговори знак на који тастер за позиционирање стане"
 
-#: src/gui/model.cpp:239
+#: src/gui/model.cpp:238
 msgid "Speak the line when the display's own keys move"
 msgstr "Изговори линију када тастери самог реда помере читање"
 
-#: src/gui/model.cpp:241
+#: src/gui/model.cpp:240
 msgid "Braille keyboard"
 msgstr "Брајева тастатура"
 
-#: src/gui/model.cpp:242
+#: src/gui/model.cpp:241
 msgid "Off by default, and that is a platform decision rather than a preference: on Wayland ALUS cannot inject a keystroke, so brltty types and ALUS does not. Turn this on and ALUS translates the cells itself, which is the only way a braille keyboard can issue ALUS commands."
 msgstr "Подразумевано искључено, и то је одлука платформе а не ствар укуса: на Waylandu ALUS не може да убаци притисак тастера, па куца brltty а не ALUS. Укључите ово и ALUS сам преводи ћелије, што је једини начин да брајева тастатура издаје ALUS команде."
 
-#: src/gui/model.cpp:249
+#: src/gui/model.cpp:248
 msgid "ALUS handles braille typing"
 msgstr "ALUS обрађује писање на брајевој тастатури"
 
-#: src/gui/model.cpp:257
+#: src/gui/model.cpp:256
 msgid "Keyboard"
 msgstr "Тастатура"
 
-#: src/gui/model.cpp:259 src/gui/model.cpp:261
+#: src/gui/model.cpp:258 src/gui/model.cpp:260
 msgid "Layout"
 msgstr "Распоред"
 
-#: src/gui/model.cpp:262
+#: src/gui/model.cpp:261
 msgid "Two layouts with the same commands: a desktop has a numeric keypad to review with, a laptop does not."
 msgstr "Два распореда са истим командама: десктоп има нумеричку тастатуру за преглед, лаптоп нема."
 
-#: src/gui/model.cpp:264
+#: src/gui/model.cpp:263
 msgid "Desktop"
 msgstr "Десктоп"
 
-#: src/gui/model.cpp:264
+#: src/gui/model.cpp:263
 msgid "Laptop"
 msgstr "Лаптоп"
 
-#: src/gui/model.cpp:266
+#: src/gui/model.cpp:265
 msgid "The ALUS key"
 msgstr "ALUS тастер"
 
-#: src/gui/model.cpp:267
+#: src/gui/model.cpp:266
 msgid "Which keys act as the ALUS modifier. More than one may be chosen; pressing one twice in quick succession sends the real key to the application."
 msgstr "Који тастери служе као ALUS модификатор. Може се изабрати више њих; двоструки брзи притисак шаље прави тастер апликацији."
 
-#: src/gui/model.cpp:271
+#: src/gui/model.cpp:270
 msgid "Insert"
 msgstr "Инсерт"
 
-#: src/gui/model.cpp:273
+#: src/gui/model.cpp:272
 msgid "Numeric keypad Insert"
 msgstr "Инсерт на нумеричкој тастатури"
 
-#: src/gui/model.cpp:275
+#: src/gui/model.cpp:274
 msgid "Caps Lock"
 msgstr "Цапс Лоцк"
 
-#: src/gui/model.cpp:277
+#: src/gui/model.cpp:276
 msgid "How long a double press may take, in milliseconds"
 msgstr "Колико двоструки притисак може да траје, у милисекундама"
 
-#: src/gui/model.cpp:280
+#: src/gui/model.cpp:279
 msgid "Typing echo"
 msgstr "Изговарање откуцаног"
 
-#: src/gui/model.cpp:283
+#: src/gui/model.cpp:282
 msgid "Speak typed characters"
 msgstr "Изговарај откуцане знакове"
 
-#: src/gui/model.cpp:285
+#: src/gui/model.cpp:284
 msgid "Speak typed words"
 msgstr "Изговарај откуцане речи"
 
-#: src/gui/model.cpp:287
+#: src/gui/model.cpp:286
 msgid "Speak command keys"
 msgstr "Изговарај командне тастере"
 
-#: src/gui/model.cpp:288
+#: src/gui/model.cpp:287
 msgid "Says the name of every key that is not a character, which is what `alus+4` toggles."
 msgstr "Изговара име сваког тастера који није знак; то је оно што `алус+4` укључује и искључује."
 
-#: src/gui/model.cpp:291
+#: src/gui/model.cpp:290
 msgid "Interrupting speech"
 msgstr "Прекидање говора"
 
-#: src/gui/model.cpp:294
+#: src/gui/model.cpp:293
 msgid "Typing a character stops speech"
 msgstr "Куцање знака зауставља говор"
 
-#: src/gui/model.cpp:296
+#: src/gui/model.cpp:295
 msgid "Enter stops speech"
 msgstr "Ентер зауставља говор"
 
-#: src/gui/model.cpp:298
+#: src/gui/model.cpp:297
 msgid "Movement keys skim during say all"
 msgstr "Тастери за кретање прескачу током читања свега"
 
-#: src/gui/model.cpp:299
+#: src/gui/model.cpp:298
 msgid "Lets the arrow keys move within a say all instead of stopping it."
 msgstr "Дозвољава стрелицама да се крећу унутар читања свега уместо да га зауставе."
 
-#: src/gui/model.cpp:308
+#: src/gui/model.cpp:307
 msgid "Object presentation"
 msgstr "Приказ објеката"
 
-#: src/gui/model.cpp:310
+#: src/gui/model.cpp:309
 msgid "What is announced about an object"
 msgstr "Шта се најављује о објекту"
 
-#: src/gui/model.cpp:311
+#: src/gui/model.cpp:310
 msgid "The defaults are deliberately sparse: a screen reader that announces everything it can is unusable."
 msgstr "Подразумеване вредности су намерно скромне: читач екрана који најављује све што може је неупотребљив."
 
-#: src/gui/model.cpp:315
+#: src/gui/model.cpp:314
 msgid "Descriptions"
 msgstr "Описи"
 
-#: src/gui/model.cpp:317
+#: src/gui/model.cpp:316
 msgid "Keyboard shortcuts"
 msgstr "Пречице на тастатури"
 
-#: src/gui/model.cpp:320
+#: src/gui/model.cpp:319
 msgid "Position information"
 msgstr "Подаци о позицији"
 
-#: src/gui/model.cpp:321
+#: src/gui/model.cpp:320
 msgid "\"3 of 7\", and an item's level in a tree."
 msgstr "„3 од 7“, и ниво ставке у дрвету."
 
-#: src/gui/model.cpp:323
+#: src/gui/model.cpp:322
 msgid "Tooltips"
 msgstr "Облачићи са саветима"
 
-#: src/gui/model.cpp:324
+#: src/gui/model.cpp:323
 msgid "Off by default: a tooltip under the pointer is not what a keyboard user is doing."
 msgstr "Подразумевано искључено: облачић под показивачем није оно што корисник тастатуре ради."
 
-#: src/gui/model.cpp:327
+#: src/gui/model.cpp:326
 msgid "Help balloons and notifications"
 msgstr "Облачићи помоћи и обавештења"
 
-#: src/gui/model.cpp:329
+#: src/gui/model.cpp:328
 msgid "Whether a list allows several selections"
 msgstr "Да ли листа дозвољава више изабраних ставки"
 
-#: src/gui/model.cpp:332
+#: src/gui/model.cpp:331
 msgid "Text that changes by itself"
 msgstr "Текст који се сам мења"
 
-#: src/gui/model.cpp:333
+#: src/gui/model.cpp:332
 msgid "A terminal, a chat window, a log. On by default: a terminal that says nothing when a command finishes is unusable."
 msgstr "Терминал, прозор за ћаскање, дневник. Подразумевано укључено: терминал који не каже ништа када се команда заврши је неупотребљив."
 
-#: src/gui/model.cpp:337
+#: src/gui/model.cpp:336
 msgid "Progress bars"
 msgstr "Траке напретка"
 
-#: src/gui/model.cpp:340
+#: src/gui/model.cpp:339
 msgid "Report progress with"
 msgstr "Најављуј напредак"
 
-#: src/gui/model.cpp:341
+#: src/gui/model.cpp:340
 msgid "Nothing"
 msgstr "Никако"
 
-#: src/gui/model.cpp:342
+#: src/gui/model.cpp:341
 msgid "A beep"
 msgstr "Бипом"
 
-#: src/gui/model.cpp:343 src/gui/model.cpp:466
+#: src/gui/model.cpp:342 src/gui/model.cpp:465
 msgid "Speech only"
 msgstr "Говором"
 
-#: src/gui/model.cpp:344
+#: src/gui/model.cpp:343
 msgid "A beep and speech"
 msgstr "Бипом и говором"
 
-#: src/gui/model.cpp:347
+#: src/gui/model.cpp:346
 msgid "Report progress bars in other windows"
 msgstr "Најављуј траке напретка у другим прозорима"
 
-#: src/gui/model.cpp:350
+#: src/gui/model.cpp:349
 msgid "Beep every N percent"
 msgstr "Бипни сваких Н одсто"
 
-#: src/gui/model.cpp:353
+#: src/gui/model.cpp:352
 msgid "Speak every N percent"
 msgstr "Изговори сваких Н одсто"
 
-#: src/gui/model.cpp:355
+#: src/gui/model.cpp:354
 msgid "Annotations"
 msgstr "Напомене"
 
-#: src/gui/model.cpp:358
+#: src/gui/model.cpp:357
 msgid "That further details are available"
 msgstr "Да постоје додатни детаљи"
 
-#: src/gui/model.cpp:360
+#: src/gui/model.cpp:359
 msgid "An element's accessible description"
 msgstr "Приступачни опис елемента"
 
-#: src/gui/model.cpp:362 src/i18n/data_strings.cpp:41
+#: src/gui/model.cpp:361 src/i18n/data_strings.cpp:41
 msgid "Object navigation"
 msgstr "Навигација по објектима"
 
-#: src/gui/model.cpp:365
+#: src/gui/model.cpp:364
 msgid "Play a sound at the edge of the tree"
 msgstr "Пусти звук на ивици дрвета"
 
-#: src/gui/model.cpp:366
+#: src/gui/model.cpp:365
 msgid "An expected failure must be noticeable without being an error."
 msgstr "Очекивани неуспех мора да се примети а да не буде грешка."
 
-#: src/gui/model.cpp:375
+#: src/gui/model.cpp:374
 msgid "Review cursor"
 msgstr "Курсор прегледа"
 
-#: src/gui/model.cpp:377
+#: src/gui/model.cpp:376
 msgid "What the review cursor follows"
 msgstr "Шта курсор прегледа прати"
 
-#: src/gui/model.cpp:380
+#: src/gui/model.cpp:379
 msgid "The keyboard focus"
 msgstr "Фокус тастатуре"
 
-#: src/gui/model.cpp:381
+#: src/gui/model.cpp:380
 msgid "On by default, and the reason `alus+numpad5` says what was just focused."
 msgstr "Подразумевано укључено, и зато `алус+нумпад5` каже шта је управо фокусирано."
 
-#: src/gui/model.cpp:384
+#: src/gui/model.cpp:383
 msgid "The caret"
 msgstr "Карета"
 
-#: src/gui/model.cpp:386
+#: src/gui/model.cpp:385
 msgid "The mouse pointer"
 msgstr "Показивач миша"
 
-#: src/gui/model.cpp:388
+#: src/gui/model.cpp:387
 msgid "Simple review"
 msgstr "Једноставан преглед"
 
-#: src/gui/model.cpp:389
+#: src/gui/model.cpp:388
 msgid "Skips the containers a toolkit uses for layout and that carry no information of their own."
 msgstr "Прескаче контејнере које тоолкит користи за распоред а који сами не носе никакву информацију."
 
-#: src/gui/model.cpp:392
+#: src/gui/model.cpp:391
 msgid "Caret"
 msgstr "Карета"
 
-#: src/gui/model.cpp:395
+#: src/gui/model.cpp:394
 msgid "How long to wait for an application to move its caret, in milliseconds"
 msgstr "Колико чекати да апликација помери своју карету, у милисекундама"
 
-#: src/gui/model.cpp:397
+#: src/gui/model.cpp:396
 msgid "Every toolkit reports caret movement differently; this is the budget before ALUS reports what is there anyway."
 msgstr "Сваки скуп виџета другачије пријављује померање карете; ово је рок после ког ALUS ипак најави шта је ту."
 
-#: src/gui/model.cpp:402
+#: src/gui/model.cpp:401
 msgid "Document navigation"
 msgstr "Навигација по документу"
 
-#: src/gui/model.cpp:405
+#: src/gui/model.cpp:404
 msgid "What ends a paragraph"
 msgstr "Шта завршава параграф"
 
-#: src/gui/model.cpp:406
+#: src/gui/model.cpp:405
 msgid "No toolkit on Linux answers the accessibility API's own paragraph granularity, so these two styles are the only way paragraph movement exists at all."
 msgstr "Ниједан тоолкит на Linuxu не одговара на грануларност параграфа из самог API-ја за приступачност, па су ова два стила једини начин да кретање по параграфима уопште постоји."
 
-#: src/gui/model.cpp:409
+#: src/gui/model.cpp:408
 msgid "The application decides"
 msgstr "Апликација одлучује"
 
-#: src/gui/model.cpp:410
+#: src/gui/model.cpp:409
 msgid "A single line break"
 msgstr "Један прелом реда"
 
-#: src/gui/model.cpp:411
+#: src/gui/model.cpp:410
 msgid "A blank line"
 msgstr "Празан ред"
 
-#: src/gui/model.cpp:413
+#: src/gui/model.cpp:412
 msgid "Say all reads by"
 msgstr "Читање свега иде по"
 
-#: src/gui/model.cpp:414
+#: src/gui/model.cpp:413
 msgid "Line"
 msgstr "Линији"
 
-#: src/gui/model.cpp:414
+#: src/gui/model.cpp:413
 msgid "Paragraph"
 msgstr "Параграфу"
 
-#: src/gui/model.cpp:422 src/i18n/data_strings.cpp:44
+#: src/gui/model.cpp:421 src/i18n/data_strings.cpp:44
 msgid "Document formatting"
 msgstr "Форматирање документа"
 
-#: src/gui/model.cpp:424
+#: src/gui/model.cpp:423
 msgid "Font"
 msgstr "Фонт"
 
-#: src/gui/model.cpp:427
+#: src/gui/model.cpp:426
 msgid "Font name"
 msgstr "Име фонта"
 
-#: src/gui/model.cpp:429
+#: src/gui/model.cpp:428
 msgid "Font size"
 msgstr "Величина фонта"
 
-#: src/gui/model.cpp:431
+#: src/gui/model.cpp:430
 msgid "Bold, italic and underline"
 msgstr "Подебљано, курзив и подвучено"
 
-#: src/gui/model.cpp:434
+#: src/gui/model.cpp:433
 msgid "Superscripts and subscripts"
 msgstr "Експоненти и индекси"
 
-#: src/gui/model.cpp:436
+#: src/gui/model.cpp:435
 msgid "Emphasis"
 msgstr "Наглашавање"
 
-#: src/gui/model.cpp:438
+#: src/gui/model.cpp:437
 msgid "Highlighted text"
 msgstr "Истакнут текст"
 
-#: src/gui/model.cpp:440
+#: src/gui/model.cpp:439
 msgid "Style name"
 msgstr "Име стила"
 
-#: src/gui/model.cpp:442
+#: src/gui/model.cpp:441
 msgid "Colours"
 msgstr "Боје"
 
-#: src/gui/model.cpp:444
+#: src/gui/model.cpp:443
 msgid "Document information"
 msgstr "Подаци о документу"
 
-#: src/gui/model.cpp:447
+#: src/gui/model.cpp:446
 msgid "Comments"
 msgstr "Коментари"
 
-#: src/gui/model.cpp:449
+#: src/gui/model.cpp:448
 msgid "Bookmarks"
 msgstr "Обележивачи"
 
-#: src/gui/model.cpp:451
+#: src/gui/model.cpp:450
 msgid "Editor revisions"
 msgstr "Измене у уређивачу"
 
-#: src/gui/model.cpp:453
+#: src/gui/model.cpp:452
 msgid "Spelling errors"
 msgstr "Правописне грешке"
 
-#: src/gui/model.cpp:455
+#: src/gui/model.cpp:454
 msgid "Grammar errors"
 msgstr "Граматичке грешке"
 
-#: src/gui/model.cpp:457
+#: src/gui/model.cpp:456
 msgid "Pages and spacing"
 msgstr "Стране и проред"
 
-#: src/gui/model.cpp:460
+#: src/gui/model.cpp:459
 msgid "Page numbers"
 msgstr "Бројеви страна"
 
-#: src/gui/model.cpp:462
+#: src/gui/model.cpp:461
 msgid "Line numbers"
 msgstr "Бројеви линија"
 
-#: src/gui/model.cpp:464
+#: src/gui/model.cpp:463
 msgid "Line indentation"
 msgstr "Увлачење линија"
 
-#: src/gui/model.cpp:467
+#: src/gui/model.cpp:466
 msgid "Tones"
 msgstr "Тоновима"
 
-#: src/gui/model.cpp:468
+#: src/gui/model.cpp:467
 msgid "Speech and tones"
 msgstr "Говором и тоновима"
 
-#: src/gui/model.cpp:470
+#: src/gui/model.cpp:469
 msgid "How long an indentation tone lasts, in milliseconds"
 msgstr "Колико тон увлачења траје, у милисекундама"
 
-#: src/gui/model.cpp:474
+#: src/gui/model.cpp:473
 msgid "Ignore blank lines when reporting indentation"
 msgstr "Игнориши празне линије при најави увлачења"
 
-#: src/gui/model.cpp:476
+#: src/gui/model.cpp:475
 msgid "Line spacing"
 msgstr "Проред"
 
-#: src/gui/model.cpp:478
+#: src/gui/model.cpp:477
 msgid "Alignment"
 msgstr "Поравнање"
 
-#: src/gui/model.cpp:480 src/gui/model.cpp:483
+#: src/gui/model.cpp:479 src/gui/model.cpp:482
 msgid "Tables"
 msgstr "Табеле"
 
-#: src/gui/model.cpp:485
+#: src/gui/model.cpp:484
 msgid "Cell coordinates"
 msgstr "Координате ћелије"
 
-#: src/gui/model.cpp:487
+#: src/gui/model.cpp:486
 msgid "Table headers"
 msgstr "Заглавља табеле"
 
-#: src/gui/model.cpp:489
+#: src/gui/model.cpp:488
 msgid "Rows and columns"
 msgstr "Редови и колоне"
 
-#: src/gui/model.cpp:490
+#: src/gui/model.cpp:489
 msgid "Rows only"
 msgstr "Само редови"
 
-#: src/gui/model.cpp:491
+#: src/gui/model.cpp:490
 msgid "Columns only"
 msgstr "Само колоне"
 
-#: src/gui/model.cpp:493
+#: src/gui/model.cpp:492
 msgid "Cell borders"
 msgstr "Ивице ћелија"
 
-#: src/gui/model.cpp:495
+#: src/gui/model.cpp:494
 msgid "Tables used only for layout"
 msgstr "Табеле које служе само за распоред"
 
-#: src/gui/model.cpp:496
+#: src/gui/model.cpp:495
 msgid "`alus+shift+f` reports the formatting at the caret; this decides whether a table that only arranges a page counts as a table at all."
 msgstr "`алус+схифт+ф` најављује форматирање на карети; ово одлучује да ли табела која само распоређује страну уопште важи за табелу."
 
-#: src/gui/model.cpp:500
+#: src/gui/model.cpp:499
 msgid "Elements"
 msgstr "Елементи"
 
-#: src/gui/model.cpp:503
+#: src/gui/model.cpp:502
 msgid "Headings"
 msgstr "Наслови"
 
-#: src/gui/model.cpp:505
+#: src/gui/model.cpp:504
 msgid "Links"
 msgstr "Везе"
 
-#: src/gui/model.cpp:507
+#: src/gui/model.cpp:506
 msgid "Whether a link has been visited"
 msgstr "Да ли је веза посећена"
 
-#: src/gui/model.cpp:509
+#: src/gui/model.cpp:508
 msgid "Graphics"
 msgstr "Графика"
 
-#: src/gui/model.cpp:511
+#: src/gui/model.cpp:510
 msgid "Lists"
 msgstr "Листе"
 
-#: src/gui/model.cpp:513
+#: src/gui/model.cpp:512
 msgid "Block quotes"
 msgstr "Блоковски цитати"
 
-#: src/gui/model.cpp:515
+#: src/gui/model.cpp:514
 msgid "Groupings"
 msgstr "Груписања"
 
-#: src/gui/model.cpp:517
+#: src/gui/model.cpp:516
 msgid "Landmarks and regions"
 msgstr "Оријентири и региони"
 
-#: src/gui/model.cpp:519
+#: src/gui/model.cpp:518
 msgid "Articles"
 msgstr "Чланци"
 
-#: src/gui/model.cpp:521
+#: src/gui/model.cpp:520
 msgid "Frames"
 msgstr "Оквири"
 
-#: src/gui/model.cpp:523
+#: src/gui/model.cpp:522
 msgid "Figures and captions"
 msgstr "Слике и натписи"
 
-#: src/gui/model.cpp:525
+#: src/gui/model.cpp:524
 msgid "Clickable elements"
 msgstr "Елементи на које се може кликнути"
 
-#: src/gui/model.cpp:527
+#: src/gui/model.cpp:526
 msgid "When formatting is reported"
 msgstr "Када се форматирање најављује"
 
-#: src/gui/model.cpp:531
+#: src/gui/model.cpp:530
 msgid "Report formatting changes after the cursor"
 msgstr "Најављуј промене форматирања после курсора"
 
-#: src/gui/model.cpp:532
+#: src/gui/model.cpp:531
 msgid "Costs a call per line; off by default for that reason."
 msgstr "Кошта један позив по линији; зато је подразумевано искључено."
 
-#: src/gui/model.cpp:539
+#: src/gui/model.cpp:538
 msgid "Bold, italic and underline on the display"
 msgstr "Подебљано, курзив и подвучено на реду"
 
-#: src/gui/model.cpp:542
+#: src/gui/model.cpp:541
 msgid "Spelling errors on the display"
 msgstr "Правописне грешке на реду"
 
-#: src/gui/model.cpp:554
+#: src/gui/model.cpp:553
 msgid "Commands and keys"
 msgstr "Команде и тастери"
 
-#: src/gui/model.cpp:555
+#: src/gui/model.cpp:554
 msgid "Every command ALUS knows, with the keys bound to it. A command with no description is not shown, because a command that cannot be explained cannot be rebound sensibly."
 msgstr "Свака команда коју ALUS зна, са тастерима везаним за њу. Команда без описа се не приказује, јер команда која се не може објаснити не може се ни разумно превезати."
 
-#: src/gui/model.cpp:559
+#: src/gui/model.cpp:558
 msgid "Edit gestures"
 msgstr "Уреди гестове"
 
-#: src/gui/model.cpp:618
+#: src/gui/model.cpp:617
 msgid "%s (not offered by the synthesizer)"
 msgstr "%s (синтетизатор га не нуди)"
 
@@ -2960,24 +2960,24 @@ msgstr "Прозор подешавања није доступан: %s"
 
 #. Translators: the label of the button on a settings row that opens
 #. something else.
-#: src/gui/window.cpp:157
+#: src/gui/window.cpp:245
 msgid "Open"
 msgstr "Отвори"
 
 #. Translators: spoken when the file manager
 #. could not be started.
-#: src/gui/window.cpp:193
+#: src/gui/window.cpp:281
 msgid "Could not open the folder"
 msgstr "Фасцикла није отворена"
 
 #. Translators: spoken after a factory reset.
-#: src/gui/window.cpp:202
+#: src/gui/window.cpp:290
 msgid "Every setting has been reset"
 msgstr "Сва подешавања су враћена"
 
 #. Translators: the title of ALUS's settings window. "ALUS" is the product
 #. name and is not translated.
-#: src/gui/window.cpp:340
+#: src/gui/window.cpp:403
 msgid "ALUS Settings"
 msgstr "ALUS подешавања"
 
@@ -4744,7 +4744,7 @@ msgstr "нема претходног пасуса текста"
 #. line number and the second the number of lines. ONE pattern rather than
 #. three concatenated pieces, because the word order is not English's in
 #. every language.
-#: src/nav/document_range.cpp:1058
+#: src/nav/document_range.cpp:1273
 msgid "line %s of %s"
 msgstr "линија %s од %s"
 

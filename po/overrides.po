@@ -1309,3 +1309,19 @@ msgstr "Glasovi izlaznog modula iznad. Posle promene modula zatvorite i ponovo o
 # inače korisnik ne zna šta treba da zameni. %s je ime, pod navodnicima.
 msgid "%s (not offered by the synthesizer)"
 msgstr "%s (sintetizator ga ne nudi)"
+
+# -- podešavanja se primenjuju kad se prozor zatvori --
+#
+# Ranije je svaka promena odmah upisivala fajl, a ALUS je na svaki upis radio
+# pun restart podsistema (govor, tastatura, objektni model), pa je govor
+# ćutao i sekao se dok je korisnik bio u prozoru. Sada je jedan upis, pri
+# zatvaranju.
+
+msgid "Takes effect when this window closes; ALUS does not need to be restarted."
+msgstr "Primenjuje se kad se ovaj prozor zatvori; ALUS ne treba ponovo pokretati."
+
+msgid "The speech-dispatcher module. Choosing one shows its voices below; nothing changes until this window closes."
+msgstr "Modul speech-dispatcher-a. Izbor modula odmah prikazuje njegove glasove ispod; ništa se ne menja dok se ovaj prozor ne zatvori."
+
+msgid "The voices of the output module above. The new voice is heard when this window closes."
+msgstr "Glasovi izlaznog modula iznad. Novi glas se čuje kad se ovaj prozor zatvori."
