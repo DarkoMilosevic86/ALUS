@@ -305,14 +305,33 @@ std::string AtspiBackend::path(Ref ref) {
     if (ref == 0) {
         return {};
     }
-    noteCall();
-    GErrorScope scope;
-    const CharPtr id{atspi_accessible_get_accessible_id(toAccessible(ref), &scope.error)};
-    if (scope.failed()) {
-        noteError("get_accessible_id", scope.message());
+    // THE OBJECT'S ADDRESS ON THE ACCESSIBILITY BUS: the application's bus
+    // name and the object path, which together are unique for as long as the
+    // object exists. Both are public fields of AtspiObject and
+    // AtspiApplication, so this costs no D-Bus round trip at all.
+    //
+    // It was `atspi_accessible_get_accessible_id()`, and that is a different
+    // thing: AccessibleId is an identifier the APPLICATION chooses -- on the
+    // web, the element's HTML `id` -- and most objects have none. Every
+    // paragraph, heading and link without an `id` answered the same empty
+    // string, so a browse-mode bookmark (DocumentTextRange::moveToBookmark
+    // matches leaves by this path) restored to the FIRST leaf with an empty
+    // path: the top of the page. Every caret move therefore started from the
+    // top -- `h` found the first heading again and again, the down arrow read
+    // the second line forever, the up arrow said "edge of document" -- which
+    // is what the second live pass heard in Chrome (claude/MERENJE-ORCA.md,
+    // FAZA10.md N112). The mock backend had always answered a unique path, so
+    // no test could see it.
+    auto* object = ATSPI_OBJECT(toAccessible(ref));
+    if (object == nullptr || object->path == nullptr) {
         return {};
     }
-    return id.str();
+    std::string out;
+    if (object->app != nullptr && object->app->bus_name != nullptr) {
+        out = object->app->bus_name;
+    }
+    out += object->path;
+    return out;
 }
 
 Ref AtspiBackend::parent(Ref ref) {

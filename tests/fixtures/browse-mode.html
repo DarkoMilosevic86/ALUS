@@ -1,0 +1,26 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: GPL-2.0-or-later
+     The page the live browse-mode checks are run against (claude/MERENJE-ORCA.md).
+     Its shape is chosen to need what a real site needs: headings at several
+     levels, prose in nested containers (which Chrome exposes as embedded
+     objects, U+FFFC in the parent's text -- N47), a list of links, a
+     landmark, and a form field. Every line is unique, so a test that reads
+     the same line twice can tell. -->
+<html lang="sr">
+<head><meta charset="utf-8"><title>ALUS browse mode probe</title></head>
+<body>
+<header><nav aria-label="Glavni meni"><a href="#a">Početna</a> <a href="#b">Vesti</a> <a href="#c">Kontakt</a></nav></header>
+<main>
+  <h1>Prvi naslov stranice</h1>
+  <div><div><p>Prvi pasus je proza. Ima dve rečenice.</p></div></div>
+  <h2>Drugi naslov</h2>
+  <div><p>Drugi pasus, u jednom omotaču.</p><p>Treći pasus, odmah ispod.</p></div>
+  <ul><li><a href="#x">Prva veza u listi</a></li><li><a href="#y">Druga veza u listi</a></li></ul>
+  <h2>Treći naslov</h2>
+  <section><div><div><p>Četvrti pasus, duboko ugnežđen.</p></div></div></section>
+  <label>Pretraga <input type="text" name="q"></label>
+  <h3>Četvrti naslov, nivo tri</h3>
+  <p>Poslednji pasus na stranici.</p>
+</main>
+</body>
+</html>

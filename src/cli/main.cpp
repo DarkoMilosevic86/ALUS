@@ -22,6 +22,14 @@
 // stays owned by the spike: 11.5 ms p95 to first sample, 29.0 ms p95 to
 // silence after cancel, on the target system.
 #include "alus/a11y/atspi_backend.hpp"
+#include "alus/core/queue.hpp"
+#include "alus/script/script.hpp"
+#include "alus/input/gesture.hpp"
+#include "alus/speech/synth.hpp"
+#include "alus/speech/dictionaries.hpp"
+#include "alus/nav/service.hpp"
+#include "alus/a11y/service.hpp"
+#include "alus/a11y/object_speech.hpp"
 #include "alus/a11y/object.hpp"
 #include "alus/a11y/registry.hpp"
 #include "alus/a11y/text_range.hpp"
@@ -115,6 +123,8 @@ void usage() {
         "                      depth 3; app limits it to one application)\n"
         "  text-info           what the text layer sees: units, formatting, screen review\n"
         "  browse-info         whether browse mode works here, and what quick nav costs\n"
+        "  browse-walk [title] run h, the arrows and the character keys over a live\n"
+        "                      page and print what would be said (no keys taken)\n"
         "  braille-info        whether braille works here: liblouis, the tables, brltty\n"
         "  app-info            which app module every running application would get,\n"
         "                      and which plugins are installed\n"
@@ -741,6 +751,152 @@ alus::a11y::ObjectPtr biggestDocument(alus::a11y::Registry& registry) {
         }
     }
     return best;
+}
+
+// The first web document whose name contains `title`. For `browse-walk`,
+// which has to run against ONE known page (tests/fixtures/browse-mode.html)
+// and not against whichever page happens to be biggest.
+alus::a11y::ObjectPtr documentNamed(alus::a11y::Registry& registry, const std::string& title) {
+    std::vector<alus::a11y::ObjectPtr> queue;
+    if (const alus::a11y::ObjectPtr& desktop = registry.api().desktopObject();
+        desktop != nullptr) {
+        queue.push_back(desktop);
+    }
+    for (std::size_t head = 0; head < queue.size() && head < 4000; ++head) {
+        const alus::a11y::ObjectPtr node = queue[head];
+        if (node == nullptr) {
+            continue;
+        }
+        if (alus::nav::BrowseMode::isDocumentRoot(*node)) {
+            if (node->name().find(title) != std::string::npos) {
+                return node;
+            }
+            continue;
+        }
+        const std::vector<alus::a11y::ObjectPtr>& children = node->children();
+        const std::size_t limit = std::min<std::size_t>(children.size(), 60);
+        for (std::size_t i = 0; i < limit; ++i) {
+            if (children[i] != nullptr) {
+                queue.push_back(children[i]);
+            }
+        }
+    }
+    return nullptr;
+}
+
+// `alus-cli browse-walk [title]`: browse mode over a live page, driven with
+// the same scripts the keys run, and what WOULD be spoken printed after each.
+//
+// It exists because browse mode met a real browser for the first time in the
+// second live pass (claude/MERENJE-ORCA.md) and failed in three ways at once
+// -- `h` found the same heading every time, the down arrow read "U+FFFC", the
+// up arrow said "edge of document" -- and every one of those had to be
+// diagnosed by asking a blind user to press keys and then reading a log. This
+// reproduces them with no keyboard, no grab and no sound: the synthesizer at
+// the bottom is a NullSynth that records.
+int commandBrowseWalk(Loop& loop, const std::string& title) {
+    alus::a11y::AtspiBackend::Options backendOptions;
+    backendOptions.mainContext = loop.context();
+    alus::a11y::AtspiBackend backend{backendOptions};
+    std::string error;
+    if (!backend.initialize(&error)) {
+        std::fprintf(stderr, "alus-cli: %s\n", error.c_str());
+        return 1;
+    }
+    alus::a11y::Registry registry{loop, backend};
+    if (!registry.start(&error)) {
+        std::fprintf(stderr, "alus-cli: %s\n", error.c_str());
+        return 1;
+    }
+    const alus::a11y::ObjectPtr root =
+        title.empty() ? biggestDocument(registry) : documentNamed(registry, title);
+    if (root == nullptr) {
+        std::fprintf(stderr, "alus-cli: no web document%s%s%s is open\n",
+                     title.empty() ? "" : " named \"", title.c_str(), title.empty() ? "" : "\"");
+        return 1;
+    }
+    std::printf("document: %s \"%s\" (%s)\n", root->path().c_str(), root->name().c_str(),
+                root->appInfo().name.c_str());
+
+    // The speech layer, with a synthesizer that records instead of speaking.
+    Manager config{alus::config::Paths::fromEnvironment()};
+    alus::a11y::Service::registerDefaults(config);
+    alus::nav::Service::registerDefaults(config);
+    alus::text::SymbolRegistry symbols{Service::resolveDataDirectory() / "symbols"};
+    alus::speech::Dictionaries dictionaries;
+    alus::speech::NullSynth synth{true};
+    alus::speech::SpeechManager speechManager{loop};
+    speechManager.setSynth(&synth);
+    alus::speech::Presenter presenter{speechManager, symbols, dictionaries};
+    alus::speech::Presenter::Settings settings;
+    settings.language = "sr";
+    presenter.setSettings(settings);
+    alus::ui::initialize(&presenter);
+    alus::a11y::installSpeechPresentation(registry, presenter);
+    alus::nav::Service nav{loop, config, [&registry] { return &registry; }, nullptr,
+                           [&presenter] { return &presenter; }};
+    nav.initialize();
+
+    alus::nav::TreeInterceptorPtr interceptor = alus::nav::BrowseMode::chooseForDocument(root, nav);
+    auto* browse = dynamic_cast<alus::nav::BrowseMode*>(interceptor.get());
+    if (browse == nullptr) {
+        std::puts("browse mode: NOT CHOSEN for this document");
+        nav.terminate();
+        alus::ui::initialize(nullptr);
+        return 1;
+    }
+
+    const auto drain = [&loop, &speechManager] {
+        for (int cycle = 0; cycle < 2000; ++cycle) {
+            loop.iterateUntilIdle();
+            if (!speechManager.isSpeaking() && !speechManager.hasPendingSpeech() &&
+                loop.queue().empty()) {
+                return;
+            }
+        }
+    };
+    const auto run = [&](const char* script, int times) {
+        const alus::script::Script* found = browse->scriptByName(script);
+        for (int i = 0; i < times; ++i) {
+            synth.clear();
+            if (found == nullptr) {
+                std::printf("  %-22s (no such script on browse mode)\n", script);
+                return;
+            }
+            alus::input::KeyboardGesture::Init init;
+            alus::input::KeyboardGesture gesture{init};
+            found->function(gesture);
+            drain();
+            std::string said;
+            for (const std::string& piece : synth.spokenText()) {
+                said += (said.empty() ? "" : " | ") + piece;
+            }
+            // U+FFFC made visible: it is the defect this command was written
+            // to show, and printed raw it is an invisible box.
+            for (std::size_t at = said.find("\xEF\xBF\xBC"); at != std::string::npos;
+                 at = said.find("\xEF\xBF\xBC")) {
+                said.replace(at, 3, "<U+FFFC>");
+            }
+            std::printf("  %-22s %s\n", script, said.empty() ? "(silence)" : said.c_str());
+        }
+    };
+
+    std::puts("\n-- quick navigation --");
+    run("nextHeading", 5);
+    run("previousHeading", 2);
+    std::puts("\n-- by line, from the top --");
+    run("topOfDocument", 1);
+    run("moveByLine_forward", 8);
+    run("moveByLine_back", 3);
+    std::puts("\n-- by character --");
+    run("moveByCharacter_forward", 5);
+    run("moveByCharacter_back", 3);
+
+    interceptor.reset();
+    nav.terminate();
+    alus::ui::initialize(nullptr);
+    registry.stop();
+    return 0;
 }
 
 int commandBrowseInfo(Loop& loop) {
@@ -1553,7 +1709,7 @@ int main(int argc, char* argv[]) {
     }
     if (command == "process" || command == "input-info" || command == "gesture" ||
         command == "list-commands" || command == "a11y-info" || command == "a11y-tree" ||
-        command == "text-info" || command == "browse-info" ||
+        command == "text-info" || command == "browse-info" || command == "browse-walk" ||
         command == "braille-info" || command == "app-info" ||
         command == "settings" || command == "gui-info" || command == "autostart") {
         // No synthesizer and no audio device: these commands only print.
@@ -1619,6 +1775,8 @@ int main(int argc, char* argv[]) {
         status = commandA11yInfo(loop);
     } else if (command == "a11y-tree") {
         status = commandA11yTree(loop, text);
+    } else if (command == "browse-walk") {
+        status = commandBrowseWalk(loop, text);
     } else if (command == "text-info") {
         status = commandTextInfo(loop);
     } else if (command == "browse-info") {
