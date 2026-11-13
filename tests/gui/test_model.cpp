@@ -31,6 +31,8 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <string_view>
+#include <vector>
 
 namespace {
 
@@ -103,7 +105,12 @@ TEST_CASE("the pages are well formed", "[gui]") {
                 // The same key twice would give two switches that fight.
                 CHECK(keys.insert({row.section, row.key}).second);
                 if (row.kind == alus::gui::RowKind::Choice) {
-                    CHECK(row.choices.size() >= 2);
+                    // A choice needs something to choose between. A row whose
+                    // values come from the running system (`source`) holds
+                    // only its fixed first entry here -- "Default" -- and gets
+                    // the rest from resolveChoices(), which has tests of its
+                    // own at the end of this file.
+                    CHECK(row.choices.size() >= (row.source.empty() ? 2U : 1U));
                     std::set<std::string> values;
                     for (const alus::gui::Choice& choice : row.choices) {
                         CHECK(choice.label != nullptr);
@@ -255,4 +262,107 @@ TEST_CASE("the settings window writes nothing until something changes", "[gui]")
         CHECK(text.find("[presentation]") == std::string::npos);
     }
     std::filesystem::remove_all(dir);
+}
+
+// ---------------------------------------------------------------------------
+// The voice and the output module are CHOICES, filled from speech-dispatcher.
+//
+// They were free text, which meant typing the exact name of a voice -- the one
+// thing a user who cannot make out the synthesizer cannot find out -- and an
+// empty entry was written to alus.ini as `voice=\s` (FAZA10.md N107). What is
+// asserted here is the part with no GTK in it: which choices a row shows.
+// ---------------------------------------------------------------------------
+
+namespace {
+
+const alus::gui::Row& speechRow(std::string_view key) {
+    const alus::gui::Page* page = alus::gui::findPage("speech");
+    REQUIRE(page != nullptr);
+    for (const alus::gui::Group& group : page->groups) {
+        for (const alus::gui::Row& row : group.rows) {
+            if (row.key == key) {
+                return row;
+            }
+        }
+    }
+    FAIL("no speech row named " << key);
+    return page->groups.front().rows.front();  // not reached
+}
+
+alus::gui::SpeechChoices offered() {
+    alus::gui::SpeechChoices speech;
+    speech.reachable = true;
+    speech.modules = {"rhvoice", "espeak-ng"};
+    speech.voices = {{"Marija", "Marija", "hr"}, {"alan", "Alan", ""}};
+    return speech;
+}
+
+}  // namespace
+
+TEST_CASE("voice and output module are choices, never free text", "[gui][speech]") {
+    for (const char* const key : {"voice", "outputModule"}) {
+        const alus::gui::Row& row = speechRow(key);
+        INFO("speech." << key);
+        CHECK(row.kind == alus::gui::RowKind::Choice);
+        CHECK_FALSE(row.source.empty());
+        // The first entry is "Default", stored as the EMPTY value -- which is
+        // what the speech service reads as "let speech-dispatcher choose".
+        REQUIRE_FALSE(row.choices.empty());
+        CHECK(row.choices.front().value.empty());
+    }
+}
+
+TEST_CASE("the voice row offers the synthesizer's voices, by name and language",
+          "[gui][speech]") {
+    const std::vector<alus::gui::Choice> choices =
+        alus::gui::resolveChoices(speechRow("voice"), offered(), "Marija");
+    REQUIRE(choices.size() == 3);  // Default, Marija, Alan -- nothing extra
+    CHECK(choices[0].value.empty());
+    CHECK(choices[1].value == "Marija");
+    CHECK(choices[1].text == "Marija (hr)");
+    CHECK(choices[2].value == "alan");  // the ID is stored, the NAME is shown
+    CHECK(choices[2].text == "Alan");
+}
+
+TEST_CASE("the module row offers speech-dispatcher's modules", "[gui][speech]") {
+    const std::vector<alus::gui::Choice> choices =
+        alus::gui::resolveChoices(speechRow("outputModule"), offered(), "");
+    REQUIRE(choices.size() == 3);
+    CHECK(choices[1].value == "rhvoice");
+    CHECK(choices[2].value == "espeak-ng");
+}
+
+TEST_CASE("a configured voice the synthesizer does not offer stays visible",
+          "[gui][speech]") {
+    SECTION("an uninstalled voice is listed, and labelled as not offered") {
+        const std::vector<alus::gui::Choice> choices =
+            alus::gui::resolveChoices(speechRow("voice"), offered(), "Anna");
+        REQUIRE(choices.size() == 4);
+        CHECK(choices.back().value == "Anna");
+        CHECK(choices.back().text.find("Anna") != std::string::npos);
+        CHECK(choices.back().text.find("not offered") != std::string::npos);
+    }
+
+    SECTION("N107's `voice=\\s` -- one space -- is listed, not silently selected as Default") {
+        const std::vector<alus::gui::Choice> choices =
+            alus::gui::resolveChoices(speechRow("voice"), offered(), " ");
+        REQUIRE(choices.size() == 4);
+        CHECK(choices.back().value == " ");
+    }
+
+    SECTION("speech-dispatcher unreachable: the fixed entry and the configuration, nothing invented") {
+        const std::vector<alus::gui::Choice> choices =
+            alus::gui::resolveChoices(speechRow("voice"), alus::gui::SpeechChoices{}, "Marija");
+        REQUIRE(choices.size() == 2);
+        CHECK(choices[0].value.empty());
+        CHECK(choices[1].value == "Marija");
+    }
+
+    SECTION("a row without a source is passed through unchanged") {
+        const alus::gui::Page* page = alus::gui::findPage("speech");
+        REQUIRE(page != nullptr);
+        const alus::gui::Row& synth = page->groups.front().rows.front();
+        REQUIRE(synth.key == "synth");
+        CHECK(alus::gui::resolveChoices(synth, offered(), "ssip").size() == synth.choices.size());
+    }
 }

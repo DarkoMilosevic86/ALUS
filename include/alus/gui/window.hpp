@@ -29,6 +29,8 @@
 //     so opening it goes through the queue like every other script.
 #pragma once
 
+#include "alus/gui/model.hpp"
+
 #include <functional>
 #include <memory>
 #include <string>
@@ -64,6 +66,10 @@ struct Context {
     std::function<void(const std::string& section)> settingChanged;
     // Called when the user asks for a factory reset.
     std::function<void()> resetAll;
+    // What speech-dispatcher offers, for the voice and module rows. Filled
+    // by alus-settings when it starts; empty means "not asked", and the rows
+    // then offer only their fixed entries.
+    SpeechChoices speech;
 };
 
 // Whether a GUI can run in this session at all. Checks for a display and that

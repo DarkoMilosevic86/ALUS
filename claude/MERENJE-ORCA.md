@@ -126,6 +126,24 @@ preživeo. Orca je podignuta ručno sa `setsid orca`, i provereno je da drži
 
 ## 4. Sledeći prolaz
 
+**Pokretanje:** jedna komanda, umesto ručnog gašenja Orce kao prvi put:
+
+```bash
+tools/alus-switch.sh measure 300
+```
+
+ALUS dobija tastaturu na 300 s sa `--log-level debug`, dnevnik ide u
+`~/alus-measure-<datum>.log`, a odvojeni čuvar vraća drugi čitač **čim ALUS
+izađe** (`alus+q`, istek vremena, pad) i proverava da on stvarno **drži
+tastaturu**, ne samo da mu proces postoji; ako je ne drži, pokreće ga još
+jednom, a ako ni tada — to **izgovori**. Ceo krug je testiran sa zamenama (lažni
+čitač, lažni `gsettings`), bez diranja prave Orce. Ako bilo šta pođe naopako:
+`tools/alus-switch.sh other`.
+
+Pre prolaza: instalirati `libicu-dev` (zatvara T5.3) i otvoriti pregledač sa
+nekim člankom (zatvara T6.7 i meri `h` / `p`).
+
+
 1. Ponoviti prozor podešavanja: najave više ne smeju da sadrže *„недоступно"*
    osim za stvarno onemogućene kontrole.
 2. Prsten (`Insert+control+strelice`) i `Insert+control+c` — prvih pet redova

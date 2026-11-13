@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alus 0.1.0\n"
 "Report-Msgid-Bugs-To: daremc86@gmail.com\n"
-"POT-Creation-Date: 2026-11-13 12:12+0100\n"
+"POT-Creation-Date: 2026-11-13 12:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1286,17 +1286,17 @@ msgid "No row header"
 msgstr ""
 
 #. Translators: a braille cursor shape.
-#: src/braille/commands.cpp:32 src/gui/model.cpp:168 src/gui/model.cpp:173
+#: src/braille/commands.cpp:32 src/gui/model.cpp:176 src/gui/model.cpp:181
 msgid "dot 8"
 msgstr ""
 
 #. Translators: a braille cursor shape.
-#: src/braille/commands.cpp:35 src/gui/model.cpp:169 src/gui/model.cpp:174
+#: src/braille/commands.cpp:35 src/gui/model.cpp:177 src/gui/model.cpp:182
 msgid "all dots"
 msgstr ""
 
 #. Translators: a braille cursor shape.
-#: src/braille/commands.cpp:38 src/gui/model.cpp:167 src/gui/model.cpp:172
+#: src/braille/commands.cpp:38 src/gui/model.cpp:175 src/gui/model.cpp:180
 msgid "dots 7 and 8"
 msgstr ""
 
@@ -1804,38 +1804,38 @@ msgid "bkmk"
 msgstr ""
 
 #. Translators: what `alus+control+t` reports.
-#: src/braille/settings.cpp:72 src/gui/model.cpp:184
+#: src/braille/settings.cpp:72 src/gui/model.cpp:192
 msgid "to focus"
 msgstr ""
 
-#: src/braille/settings.cpp:75 src/gui/model.cpp:185
+#: src/braille/settings.cpp:75 src/gui/model.cpp:193
 msgid "to review"
 msgstr ""
 
 #: src/braille/settings.cpp:78 src/braille/settings.cpp:80
-#: src/gui/model.cpp:183
+#: src/gui/model.cpp:191
 msgid "automatically"
 msgstr ""
 
-#: src/braille/settings.cpp:170 src/gui/model.cpp:187
+#: src/braille/settings.cpp:170 src/gui/model.cpp:195
 msgid "follow cursors"
 msgstr ""
 
 #. Translators: what `alus+alt+t` reports.
-#: src/braille/settings.cpp:170 src/gui/model.cpp:188
+#: src/braille/settings.cpp:170 src/gui/model.cpp:196
 msgid "speech output"
 msgstr ""
 
 #: src/braille/settings.cpp:197 src/braille/settings.cpp:207
-#: src/gui/model.cpp:191
+#: src/gui/model.cpp:199
 msgid "never"
 msgstr ""
 
-#: src/braille/settings.cpp:201 src/gui/model.cpp:192
+#: src/braille/settings.cpp:201 src/gui/model.cpp:200
 msgid "always"
 msgstr ""
 
-#: src/braille/settings.cpp:205 src/gui/model.cpp:194
+#: src/braille/settings.cpp:205 src/gui/model.cpp:202
 msgid "only when automatically tethered"
 msgstr ""
 
@@ -2022,7 +2022,7 @@ msgid ""
 msgstr ""
 
 #. Translators: the title of the gesture dialog.
-#: src/gui/gesture_dialog.cpp:334 src/gui/model.cpp:544
+#: src/gui/gesture_dialog.cpp:334 src/gui/model.cpp:552
 msgid "Gestures"
 msgstr ""
 
@@ -2081,416 +2081,426 @@ msgstr ""
 msgid "built in"
 msgstr ""
 
-#: src/gui/model.cpp:23 src/gui/model.cpp:56 src/gui/model.cpp:219
-#: src/gui/model.cpp:457 src/gui/model.cpp:480 src/input/commands.cpp:39
+#: src/gui/model.cpp:26 src/gui/model.cpp:59 src/gui/model.cpp:227
+#: src/gui/model.cpp:465 src/gui/model.cpp:488 src/input/commands.cpp:39
 #: src/input/commands.cpp:48
 msgid "Off"
 msgstr ""
 
-#: src/gui/model.cpp:24 src/input/commands.cpp:43
+#: src/gui/model.cpp:27 src/input/commands.cpp:43
 msgid "Only in edit controls"
 msgstr ""
 
-#: src/gui/model.cpp:25 src/input/commands.cpp:46
+#: src/gui/model.cpp:28 src/input/commands.cpp:46
 msgid "Always"
 msgstr ""
 
-#: src/gui/model.cpp:36
+#: src/gui/model.cpp:39
 msgid "General"
 msgstr ""
 
-#: src/gui/model.cpp:38 src/gui/model.cpp:43
+#: src/gui/model.cpp:41 src/gui/model.cpp:46
 msgid "Language"
 msgstr ""
 
-#: src/gui/model.cpp:39
+#: src/gui/model.cpp:42
 msgid ""
 "The language ALUS speaks and shows. Independent of the desktop's language on "
 "purpose: a user may want an English desktop and a Serbian screen reader."
 msgstr ""
 
-#: src/gui/model.cpp:44
+#: src/gui/model.cpp:47
 msgid "Takes effect immediately; ALUS does not need to be restarted."
 msgstr ""
 
-#: src/gui/model.cpp:46
+#: src/gui/model.cpp:49
 msgid "Same as the session"
 msgstr ""
 
-#: src/gui/model.cpp:47
+#: src/gui/model.cpp:50
 msgid "English"
 msgstr ""
 
-#: src/gui/model.cpp:48
+#: src/gui/model.cpp:51
 msgid "Serbian (Cyrillic)"
 msgstr ""
 
-#: src/gui/model.cpp:49
+#: src/gui/model.cpp:52
 msgid "Serbian (Latin)"
 msgstr ""
 
-#: src/gui/model.cpp:51
+#: src/gui/model.cpp:54
 msgid "Logging"
 msgstr ""
 
-#: src/gui/model.cpp:53
+#: src/gui/model.cpp:56
 msgid "Log level"
 msgstr ""
 
-#: src/gui/model.cpp:54
+#: src/gui/model.cpp:57
 msgid ""
 "\"debug\" and \"io\" write a great deal and slow ALUS down; use them when "
 "reporting a problem."
 msgstr ""
 
-#: src/gui/model.cpp:57
+#: src/gui/model.cpp:60
 msgid "Errors only"
 msgstr ""
 
-#: src/gui/model.cpp:58
+#: src/gui/model.cpp:61
 msgid "Warnings"
 msgstr ""
 
-#: src/gui/model.cpp:59
+#: src/gui/model.cpp:62
 msgid "Information"
 msgstr ""
 
-#: src/gui/model.cpp:60
+#: src/gui/model.cpp:63
 msgid "Debug"
 msgstr ""
 
-#: src/gui/model.cpp:61
+#: src/gui/model.cpp:64
 msgid "Debug with input and output"
 msgstr ""
 
-#: src/gui/model.cpp:63 src/i18n/data_strings.cpp:30
+#: src/gui/model.cpp:66 src/i18n/data_strings.cpp:30
 msgid "Configuration"
 msgstr ""
 
-#: src/gui/model.cpp:65
+#: src/gui/model.cpp:68
 msgid "Open the configuration folder"
 msgstr ""
 
-#: src/gui/model.cpp:66
+#: src/gui/model.cpp:69
 msgid "Where alus.ini, gestures.ini and the profiles are."
 msgstr ""
 
-#: src/gui/model.cpp:68
+#: src/gui/model.cpp:71
 msgid "Reset every setting"
 msgstr ""
 
-#: src/gui/model.cpp:69
+#: src/gui/model.cpp:72
 msgid ""
 "Returns every setting to its factory value. The gesture map and the profiles "
 "are not touched."
 msgstr ""
 
-#: src/gui/model.cpp:79 src/i18n/data_strings.cpp:36
+#: src/gui/model.cpp:82 src/i18n/data_strings.cpp:36
 msgid "Speech"
 msgstr ""
 
-#: src/gui/model.cpp:81 src/gui/model.cpp:85
+#: src/gui/model.cpp:84 src/gui/model.cpp:88
 msgid "Synthesizer"
 msgstr ""
 
-#: src/gui/model.cpp:82
+#: src/gui/model.cpp:85
 msgid ""
 "ALUS speaks through speech-dispatcher, so every SSIP module already "
 "installed is available here."
 msgstr ""
 
-#: src/gui/model.cpp:87 src/gui/model.cpp:107
+#: src/gui/model.cpp:90 src/gui/model.cpp:115
 msgid "None"
 msgstr ""
 
-#: src/gui/model.cpp:87
+#: src/gui/model.cpp:90
 msgid "speech-dispatcher"
 msgstr ""
 
-#: src/gui/model.cpp:88
+#: src/gui/model.cpp:91
 msgid "Output module"
 msgstr ""
 
-#: src/gui/model.cpp:89
-msgid ""
-"The speech-dispatcher module, e.g. espeak-ng or rhvoice. Empty means the "
-"module speech-dispatcher itself defaults to."
-msgstr ""
-
 #: src/gui/model.cpp:92
-msgid "Voice"
+msgid ""
+"The speech-dispatcher module. Takes effect when ALUS restarts its speech, "
+"which happens on the next configuration reset."
 msgstr ""
 
-#: src/gui/model.cpp:94
-msgid "Voice settings"
+#: src/gui/model.cpp:95 src/gui/model.cpp:100
+msgid "Default"
 msgstr ""
 
 #: src/gui/model.cpp:96
-msgid "Rate"
+msgid "Voice"
 msgstr ""
 
 #: src/gui/model.cpp:97
-msgid "Pitch"
+msgid ""
+"The voices of the output module above. After changing the module, close and "
+"reopen this window to see its voices."
 msgstr ""
 
-#: src/gui/model.cpp:98
-msgid "Volume"
-msgstr ""
-
-#: src/gui/model.cpp:99
-msgid "Inflection"
-msgstr ""
-
-#: src/gui/model.cpp:101
-msgid "What is spoken"
+#: src/gui/model.cpp:102
+msgid "Voice settings"
 msgstr ""
 
 #: src/gui/model.cpp:104
-msgid "Punctuation and symbol level"
+msgid "Rate"
 msgstr ""
 
 #: src/gui/model.cpp:105
+msgid "Pitch"
+msgstr ""
+
+#: src/gui/model.cpp:106
+msgid "Volume"
+msgstr ""
+
+#: src/gui/model.cpp:107
+msgid "Inflection"
+msgstr ""
+
+#: src/gui/model.cpp:109
+msgid "What is spoken"
+msgstr ""
+
+#: src/gui/model.cpp:112
+msgid "Punctuation and symbol level"
+msgstr ""
+
+#: src/gui/model.cpp:113
 msgid ""
 "How much punctuation is spoken. `alus+p` cycles this without opening the "
 "settings."
 msgstr ""
 
-#: src/gui/model.cpp:108
+#: src/gui/model.cpp:116
 msgid "Some"
 msgstr ""
 
-#: src/gui/model.cpp:109
+#: src/gui/model.cpp:117
 msgid "Most"
 msgstr ""
 
-#: src/gui/model.cpp:110
+#: src/gui/model.cpp:118
 msgid "All"
 msgstr ""
 
-#: src/gui/model.cpp:111
+#: src/gui/model.cpp:119
 msgid "Character"
 msgstr ""
 
-#: src/gui/model.cpp:113
+#: src/gui/model.cpp:121
 msgid "Follow the language of the text"
 msgstr ""
 
-#: src/gui/model.cpp:114
+#: src/gui/model.cpp:122
 msgid ""
 "Switches the voice when a document says its text is in another language."
 msgstr ""
 
-#: src/gui/model.cpp:117
+#: src/gui/model.cpp:125
 msgid "Follow the dialect too"
 msgstr ""
 
-#: src/gui/model.cpp:118
+#: src/gui/model.cpp:126
 msgid ""
 "Switches between, for example, British and American English. Off by default."
 msgstr ""
 
-#: src/gui/model.cpp:121
+#: src/gui/model.cpp:129
 msgid "Normalize Unicode before speaking"
 msgstr ""
 
-#: src/gui/model.cpp:122
+#: src/gui/model.cpp:130
 msgid "Makes mathematical and styled letters readable: ℂ is spoken as C."
 msgstr ""
 
-#: src/gui/model.cpp:131 src/gui/model.cpp:527 src/i18n/data_strings.cpp:33
+#: src/gui/model.cpp:139 src/gui/model.cpp:535 src/i18n/data_strings.cpp:33
 msgid "Braille"
 msgstr ""
 
-#: src/gui/model.cpp:133 src/gui/model.cpp:137
+#: src/gui/model.cpp:141 src/gui/model.cpp:145
 msgid "Display"
 msgstr ""
 
-#: src/gui/model.cpp:134
+#: src/gui/model.cpp:142
 msgid ""
 "The display is driven through brltty's BrlAPI, so every display brltty "
 "supports works here."
 msgstr ""
 
-#: src/gui/model.cpp:139
+#: src/gui/model.cpp:147
 msgid "No display"
 msgstr ""
 
-#: src/gui/model.cpp:139
+#: src/gui/model.cpp:147
 msgid "brltty (BrlAPI)"
 msgstr ""
 
-#: src/gui/model.cpp:140
+#: src/gui/model.cpp:148
 msgid "BrlAPI host"
 msgstr ""
 
-#: src/gui/model.cpp:141
+#: src/gui/model.cpp:149
 msgid ""
 "Empty is the normal case: whatever $BRLAPI_HOST or brltty's own default says."
 msgstr ""
 
-#: src/gui/model.cpp:144
+#: src/gui/model.cpp:152
 msgid "Translation tables"
 msgstr ""
 
-#: src/gui/model.cpp:147
+#: src/gui/model.cpp:155
 msgid "Output table"
 msgstr ""
 
-#: src/gui/model.cpp:148
+#: src/gui/model.cpp:156
 msgid ""
 "A liblouis table file name, or \"auto\" for the table that matches the "
 "language."
 msgstr ""
 
-#: src/gui/model.cpp:150
+#: src/gui/model.cpp:158
 msgid "Input table"
 msgstr ""
 
-#: src/gui/model.cpp:153
+#: src/gui/model.cpp:161
 msgid "Show the word at the cursor uncontracted"
 msgstr ""
 
-#: src/gui/model.cpp:154
+#: src/gui/model.cpp:162
 msgid "So a contracted table does not hide the characters being edited."
 msgstr ""
 
-#: src/gui/model.cpp:157
+#: src/gui/model.cpp:165
 msgid "Normalize Unicode before translating"
 msgstr ""
 
-#: src/gui/model.cpp:159
+#: src/gui/model.cpp:167
 msgid "Cursor"
 msgstr ""
 
-#: src/gui/model.cpp:161
+#: src/gui/model.cpp:169
 msgid "Show the cursor"
 msgstr ""
 
-#: src/gui/model.cpp:162
+#: src/gui/model.cpp:170
 msgid "Blink the cursor"
 msgstr ""
 
-#: src/gui/model.cpp:164
+#: src/gui/model.cpp:172
 msgid "Blink rate, in milliseconds"
 msgstr ""
 
-#: src/gui/model.cpp:166
+#: src/gui/model.cpp:174
 msgid "Cursor shape when following the focus"
 msgstr ""
 
-#: src/gui/model.cpp:171
+#: src/gui/model.cpp:179
 msgid "Cursor shape when following review"
 msgstr ""
 
-#: src/gui/model.cpp:176
+#: src/gui/model.cpp:184
 msgid "Show the selection"
 msgstr ""
 
-#: src/gui/model.cpp:178
+#: src/gui/model.cpp:186
 msgid "What the display follows"
 msgstr ""
 
-#: src/gui/model.cpp:180
+#: src/gui/model.cpp:188
 msgid "Tethered to"
 msgstr ""
 
-#: src/gui/model.cpp:181
+#: src/gui/model.cpp:189
 msgid "`alus+control+t` changes this without opening the settings."
 msgstr ""
 
-#: src/gui/model.cpp:186
+#: src/gui/model.cpp:194
 msgid "Mode"
 msgstr ""
 
-#: src/gui/model.cpp:190
+#: src/gui/model.cpp:198
 msgid "A routing key also moves the caret"
 msgstr ""
 
-#: src/gui/model.cpp:196
+#: src/gui/model.cpp:204
 msgid "How much context is shown"
 msgstr ""
 
-#: src/gui/model.cpp:197
+#: src/gui/model.cpp:205
 msgid "changedContext"
 msgstr ""
 
-#: src/gui/model.cpp:198
+#: src/gui/model.cpp:206
 msgid "fill"
 msgstr ""
 
-#: src/gui/model.cpp:199
+#: src/gui/model.cpp:207
 msgid "scroll"
 msgstr ""
 
-#: src/gui/model.cpp:201
+#: src/gui/model.cpp:209
 msgid "Reading"
 msgstr ""
 
-#: src/gui/model.cpp:203
+#: src/gui/model.cpp:211
 msgid "Word wrap"
 msgstr ""
 
-#: src/gui/model.cpp:205
+#: src/gui/model.cpp:213
 msgid "Break words"
 msgstr ""
 
-#: src/gui/model.cpp:206
+#: src/gui/model.cpp:214
 msgid "Break words and mark the break"
 msgstr ""
 
-#: src/gui/model.cpp:207
+#: src/gui/model.cpp:215
 msgid "At word boundaries"
 msgstr ""
 
-#: src/gui/model.cpp:209
+#: src/gui/model.cpp:217
 msgid "At word or syllable boundaries"
 msgstr ""
 
-#: src/gui/model.cpp:211
+#: src/gui/model.cpp:219
 msgid "Read by paragraph"
 msgstr ""
 
-#: src/gui/model.cpp:212
+#: src/gui/model.cpp:220
 msgid "Off by default: a paragraph on a 40-cell display is a lot of scrolling."
 msgstr ""
 
-#: src/gui/model.cpp:215
+#: src/gui/model.cpp:223
 msgid "Automatic scroll rate, in cells per second"
 msgstr ""
 
-#: src/gui/model.cpp:217
+#: src/gui/model.cpp:225
 msgid "Show messages"
 msgstr ""
 
-#: src/gui/model.cpp:220
+#: src/gui/model.cpp:228
 msgid "For a while"
 msgstr ""
 
-#: src/gui/model.cpp:221
+#: src/gui/model.cpp:229
 msgid "Until dismissed"
 msgstr ""
 
-#: src/gui/model.cpp:223
+#: src/gui/model.cpp:231
 msgid "How long a message stays, in milliseconds"
 msgstr ""
 
-#: src/gui/model.cpp:226
+#: src/gui/model.cpp:234
 msgid "Speech alongside braille"
 msgstr ""
 
-#: src/gui/model.cpp:229
+#: src/gui/model.cpp:237
 msgid "Speak the character a routing key lands on"
 msgstr ""
 
-#: src/gui/model.cpp:231
+#: src/gui/model.cpp:239
 msgid "Speak the line when the display's own keys move"
 msgstr ""
 
-#: src/gui/model.cpp:233
+#: src/gui/model.cpp:241
 msgid "Braille keyboard"
 msgstr ""
 
-#: src/gui/model.cpp:234
+#: src/gui/model.cpp:242
 msgid ""
 "Off by default, and that is a platform decision rather than a preference: on "
 "Wayland ALUS cannot inject a keystroke, so brltty types and ALUS does not. "
@@ -2498,533 +2508,538 @@ msgid ""
 "braille keyboard can issue ALUS commands."
 msgstr ""
 
-#: src/gui/model.cpp:241
+#: src/gui/model.cpp:249
 msgid "ALUS handles braille typing"
 msgstr ""
 
-#: src/gui/model.cpp:249
+#: src/gui/model.cpp:257
 msgid "Keyboard"
 msgstr ""
 
-#: src/gui/model.cpp:251 src/gui/model.cpp:253
+#: src/gui/model.cpp:259 src/gui/model.cpp:261
 msgid "Layout"
 msgstr ""
 
-#: src/gui/model.cpp:254
+#: src/gui/model.cpp:262
 msgid ""
 "Two layouts with the same commands: a desktop has a numeric keypad to review "
 "with, a laptop does not."
 msgstr ""
 
-#: src/gui/model.cpp:256
+#: src/gui/model.cpp:264
 msgid "Desktop"
 msgstr ""
 
-#: src/gui/model.cpp:256
+#: src/gui/model.cpp:264
 msgid "Laptop"
 msgstr ""
 
-#: src/gui/model.cpp:258
+#: src/gui/model.cpp:266
 msgid "The ALUS key"
 msgstr ""
 
-#: src/gui/model.cpp:259
+#: src/gui/model.cpp:267
 msgid ""
 "Which keys act as the ALUS modifier. More than one may be chosen; pressing "
 "one twice in quick succession sends the real key to the application."
 msgstr ""
 
-#: src/gui/model.cpp:263
+#: src/gui/model.cpp:271
 msgid "Insert"
 msgstr ""
 
-#: src/gui/model.cpp:265
+#: src/gui/model.cpp:273
 msgid "Numeric keypad Insert"
 msgstr ""
 
-#: src/gui/model.cpp:267
+#: src/gui/model.cpp:275
 msgid "Caps Lock"
 msgstr ""
 
-#: src/gui/model.cpp:269
+#: src/gui/model.cpp:277
 msgid "How long a double press may take, in milliseconds"
 msgstr ""
 
-#: src/gui/model.cpp:272
+#: src/gui/model.cpp:280
 msgid "Typing echo"
 msgstr ""
 
-#: src/gui/model.cpp:275
+#: src/gui/model.cpp:283
 msgid "Speak typed characters"
 msgstr ""
 
-#: src/gui/model.cpp:277
+#: src/gui/model.cpp:285
 msgid "Speak typed words"
 msgstr ""
 
-#: src/gui/model.cpp:279
+#: src/gui/model.cpp:287
 msgid "Speak command keys"
 msgstr ""
 
-#: src/gui/model.cpp:280
+#: src/gui/model.cpp:288
 msgid ""
 "Says the name of every key that is not a character, which is what `alus+4` "
 "toggles."
 msgstr ""
 
-#: src/gui/model.cpp:283
+#: src/gui/model.cpp:291
 msgid "Interrupting speech"
 msgstr ""
 
-#: src/gui/model.cpp:286
+#: src/gui/model.cpp:294
 msgid "Typing a character stops speech"
 msgstr ""
 
-#: src/gui/model.cpp:288
+#: src/gui/model.cpp:296
 msgid "Enter stops speech"
 msgstr ""
 
-#: src/gui/model.cpp:290
+#: src/gui/model.cpp:298
 msgid "Movement keys skim during say all"
 msgstr ""
 
-#: src/gui/model.cpp:291
+#: src/gui/model.cpp:299
 msgid "Lets the arrow keys move within a say all instead of stopping it."
 msgstr ""
 
-#: src/gui/model.cpp:300
+#: src/gui/model.cpp:308
 msgid "Object presentation"
 msgstr ""
 
-#: src/gui/model.cpp:302
+#: src/gui/model.cpp:310
 msgid "What is announced about an object"
 msgstr ""
 
-#: src/gui/model.cpp:303
+#: src/gui/model.cpp:311
 msgid ""
 "The defaults are deliberately sparse: a screen reader that announces "
 "everything it can is unusable."
 msgstr ""
 
-#: src/gui/model.cpp:307
+#: src/gui/model.cpp:315
 msgid "Descriptions"
 msgstr ""
 
-#: src/gui/model.cpp:309
+#: src/gui/model.cpp:317
 msgid "Keyboard shortcuts"
 msgstr ""
 
-#: src/gui/model.cpp:312
+#: src/gui/model.cpp:320
 msgid "Position information"
 msgstr ""
 
-#: src/gui/model.cpp:313
+#: src/gui/model.cpp:321
 msgid "\"3 of 7\", and an item's level in a tree."
 msgstr ""
 
-#: src/gui/model.cpp:315
+#: src/gui/model.cpp:323
 msgid "Tooltips"
 msgstr ""
 
-#: src/gui/model.cpp:316
+#: src/gui/model.cpp:324
 msgid ""
 "Off by default: a tooltip under the pointer is not what a keyboard user is "
 "doing."
 msgstr ""
 
-#: src/gui/model.cpp:319
+#: src/gui/model.cpp:327
 msgid "Help balloons and notifications"
 msgstr ""
 
-#: src/gui/model.cpp:321
+#: src/gui/model.cpp:329
 msgid "Whether a list allows several selections"
 msgstr ""
 
-#: src/gui/model.cpp:324
+#: src/gui/model.cpp:332
 msgid "Text that changes by itself"
 msgstr ""
 
-#: src/gui/model.cpp:325
+#: src/gui/model.cpp:333
 msgid ""
 "A terminal, a chat window, a log. On by default: a terminal that says "
 "nothing when a command finishes is unusable."
 msgstr ""
 
-#: src/gui/model.cpp:329
+#: src/gui/model.cpp:337
 msgid "Progress bars"
 msgstr ""
 
-#: src/gui/model.cpp:332
+#: src/gui/model.cpp:340
 msgid "Report progress with"
 msgstr ""
 
-#: src/gui/model.cpp:333
+#: src/gui/model.cpp:341
 msgid "Nothing"
 msgstr ""
 
-#: src/gui/model.cpp:334
+#: src/gui/model.cpp:342
 msgid "A beep"
 msgstr ""
 
-#: src/gui/model.cpp:335 src/gui/model.cpp:458
+#: src/gui/model.cpp:343 src/gui/model.cpp:466
 msgid "Speech only"
 msgstr ""
 
-#: src/gui/model.cpp:336
+#: src/gui/model.cpp:344
 msgid "A beep and speech"
 msgstr ""
 
-#: src/gui/model.cpp:339
+#: src/gui/model.cpp:347
 msgid "Report progress bars in other windows"
 msgstr ""
 
-#: src/gui/model.cpp:342
+#: src/gui/model.cpp:350
 msgid "Beep every N percent"
 msgstr ""
 
-#: src/gui/model.cpp:345
+#: src/gui/model.cpp:353
 msgid "Speak every N percent"
 msgstr ""
 
-#: src/gui/model.cpp:347
+#: src/gui/model.cpp:355
 msgid "Annotations"
 msgstr ""
 
-#: src/gui/model.cpp:350
+#: src/gui/model.cpp:358
 msgid "That further details are available"
 msgstr ""
 
-#: src/gui/model.cpp:352
+#: src/gui/model.cpp:360
 msgid "An element's accessible description"
 msgstr ""
 
-#: src/gui/model.cpp:354 src/i18n/data_strings.cpp:41
+#: src/gui/model.cpp:362 src/i18n/data_strings.cpp:41
 msgid "Object navigation"
 msgstr ""
 
-#: src/gui/model.cpp:357
+#: src/gui/model.cpp:365
 msgid "Play a sound at the edge of the tree"
 msgstr ""
 
-#: src/gui/model.cpp:358
+#: src/gui/model.cpp:366
 msgid "An expected failure must be noticeable without being an error."
 msgstr ""
 
-#: src/gui/model.cpp:367
+#: src/gui/model.cpp:375
 msgid "Review cursor"
 msgstr ""
 
-#: src/gui/model.cpp:369
+#: src/gui/model.cpp:377
 msgid "What the review cursor follows"
 msgstr ""
 
-#: src/gui/model.cpp:372
+#: src/gui/model.cpp:380
 msgid "The keyboard focus"
 msgstr ""
 
-#: src/gui/model.cpp:373
+#: src/gui/model.cpp:381
 msgid ""
 "On by default, and the reason `alus+numpad5` says what was just focused."
 msgstr ""
 
-#: src/gui/model.cpp:376
+#: src/gui/model.cpp:384
 msgid "The caret"
 msgstr ""
 
-#: src/gui/model.cpp:378
+#: src/gui/model.cpp:386
 msgid "The mouse pointer"
 msgstr ""
 
-#: src/gui/model.cpp:380
+#: src/gui/model.cpp:388
 msgid "Simple review"
 msgstr ""
 
-#: src/gui/model.cpp:381
+#: src/gui/model.cpp:389
 msgid ""
 "Skips the containers a toolkit uses for layout and that carry no information "
 "of their own."
 msgstr ""
 
-#: src/gui/model.cpp:384
+#: src/gui/model.cpp:392
 msgid "Caret"
 msgstr ""
 
-#: src/gui/model.cpp:387
+#: src/gui/model.cpp:395
 msgid "How long to wait for an application to move its caret, in milliseconds"
 msgstr ""
 
-#: src/gui/model.cpp:389
+#: src/gui/model.cpp:397
 msgid ""
 "Every toolkit reports caret movement differently; this is the budget before "
 "ALUS reports what is there anyway."
 msgstr ""
 
-#: src/gui/model.cpp:394
+#: src/gui/model.cpp:402
 msgid "Document navigation"
 msgstr ""
 
-#: src/gui/model.cpp:397
+#: src/gui/model.cpp:405
 msgid "What ends a paragraph"
 msgstr ""
 
-#: src/gui/model.cpp:398
+#: src/gui/model.cpp:406
 msgid ""
 "No toolkit on Linux answers the accessibility API's own paragraph "
 "granularity, so these two styles are the only way paragraph movement exists "
 "at all."
 msgstr ""
 
-#: src/gui/model.cpp:401
+#: src/gui/model.cpp:409
 msgid "The application decides"
 msgstr ""
 
-#: src/gui/model.cpp:402
+#: src/gui/model.cpp:410
 msgid "A single line break"
 msgstr ""
 
-#: src/gui/model.cpp:403
+#: src/gui/model.cpp:411
 msgid "A blank line"
 msgstr ""
 
-#: src/gui/model.cpp:405
+#: src/gui/model.cpp:413
 msgid "Say all reads by"
 msgstr ""
 
-#: src/gui/model.cpp:406
+#: src/gui/model.cpp:414
 msgid "Line"
 msgstr ""
 
-#: src/gui/model.cpp:406
+#: src/gui/model.cpp:414
 msgid "Paragraph"
 msgstr ""
 
-#: src/gui/model.cpp:414 src/i18n/data_strings.cpp:44
+#: src/gui/model.cpp:422 src/i18n/data_strings.cpp:44
 msgid "Document formatting"
 msgstr ""
 
-#: src/gui/model.cpp:416
+#: src/gui/model.cpp:424
 msgid "Font"
 msgstr ""
 
-#: src/gui/model.cpp:419
+#: src/gui/model.cpp:427
 msgid "Font name"
 msgstr ""
 
-#: src/gui/model.cpp:421
+#: src/gui/model.cpp:429
 msgid "Font size"
 msgstr ""
 
-#: src/gui/model.cpp:423
+#: src/gui/model.cpp:431
 msgid "Bold, italic and underline"
 msgstr ""
 
-#: src/gui/model.cpp:426
+#: src/gui/model.cpp:434
 msgid "Superscripts and subscripts"
 msgstr ""
 
-#: src/gui/model.cpp:428
+#: src/gui/model.cpp:436
 msgid "Emphasis"
 msgstr ""
 
-#: src/gui/model.cpp:430
+#: src/gui/model.cpp:438
 msgid "Highlighted text"
 msgstr ""
 
-#: src/gui/model.cpp:432
+#: src/gui/model.cpp:440
 msgid "Style name"
 msgstr ""
 
-#: src/gui/model.cpp:434
+#: src/gui/model.cpp:442
 msgid "Colours"
 msgstr ""
 
-#: src/gui/model.cpp:436
+#: src/gui/model.cpp:444
 msgid "Document information"
 msgstr ""
 
-#: src/gui/model.cpp:439
+#: src/gui/model.cpp:447
 msgid "Comments"
 msgstr ""
 
-#: src/gui/model.cpp:441
+#: src/gui/model.cpp:449
 msgid "Bookmarks"
 msgstr ""
 
-#: src/gui/model.cpp:443
+#: src/gui/model.cpp:451
 msgid "Editor revisions"
 msgstr ""
 
-#: src/gui/model.cpp:445
+#: src/gui/model.cpp:453
 msgid "Spelling errors"
 msgstr ""
 
-#: src/gui/model.cpp:447
+#: src/gui/model.cpp:455
 msgid "Grammar errors"
 msgstr ""
 
-#: src/gui/model.cpp:449
+#: src/gui/model.cpp:457
 msgid "Pages and spacing"
 msgstr ""
 
-#: src/gui/model.cpp:452
+#: src/gui/model.cpp:460
 msgid "Page numbers"
 msgstr ""
 
-#: src/gui/model.cpp:454
+#: src/gui/model.cpp:462
 msgid "Line numbers"
 msgstr ""
 
-#: src/gui/model.cpp:456
+#: src/gui/model.cpp:464
 msgid "Line indentation"
 msgstr ""
 
-#: src/gui/model.cpp:459
+#: src/gui/model.cpp:467
 msgid "Tones"
 msgstr ""
 
-#: src/gui/model.cpp:460
+#: src/gui/model.cpp:468
 msgid "Speech and tones"
 msgstr ""
 
-#: src/gui/model.cpp:462
+#: src/gui/model.cpp:470
 msgid "How long an indentation tone lasts, in milliseconds"
 msgstr ""
 
-#: src/gui/model.cpp:466
+#: src/gui/model.cpp:474
 msgid "Ignore blank lines when reporting indentation"
 msgstr ""
 
-#: src/gui/model.cpp:468
+#: src/gui/model.cpp:476
 msgid "Line spacing"
 msgstr ""
 
-#: src/gui/model.cpp:470
+#: src/gui/model.cpp:478
 msgid "Alignment"
 msgstr ""
 
-#: src/gui/model.cpp:472 src/gui/model.cpp:475
+#: src/gui/model.cpp:480 src/gui/model.cpp:483
 msgid "Tables"
 msgstr ""
 
-#: src/gui/model.cpp:477
+#: src/gui/model.cpp:485
 msgid "Cell coordinates"
 msgstr ""
 
-#: src/gui/model.cpp:479
+#: src/gui/model.cpp:487
 msgid "Table headers"
 msgstr ""
 
-#: src/gui/model.cpp:481
+#: src/gui/model.cpp:489
 msgid "Rows and columns"
 msgstr ""
 
-#: src/gui/model.cpp:482
+#: src/gui/model.cpp:490
 msgid "Rows only"
 msgstr ""
 
-#: src/gui/model.cpp:483
+#: src/gui/model.cpp:491
 msgid "Columns only"
 msgstr ""
 
-#: src/gui/model.cpp:485
+#: src/gui/model.cpp:493
 msgid "Cell borders"
 msgstr ""
 
-#: src/gui/model.cpp:487
+#: src/gui/model.cpp:495
 msgid "Tables used only for layout"
 msgstr ""
 
-#: src/gui/model.cpp:488
+#: src/gui/model.cpp:496
 msgid ""
 "`alus+shift+f` reports the formatting at the caret; this decides whether a "
 "table that only arranges a page counts as a table at all."
 msgstr ""
 
-#: src/gui/model.cpp:492
+#: src/gui/model.cpp:500
 msgid "Elements"
 msgstr ""
 
-#: src/gui/model.cpp:495
+#: src/gui/model.cpp:503
 msgid "Headings"
 msgstr ""
 
-#: src/gui/model.cpp:497
+#: src/gui/model.cpp:505
 msgid "Links"
 msgstr ""
 
-#: src/gui/model.cpp:499
+#: src/gui/model.cpp:507
 msgid "Whether a link has been visited"
 msgstr ""
 
-#: src/gui/model.cpp:501
+#: src/gui/model.cpp:509
 msgid "Graphics"
 msgstr ""
 
-#: src/gui/model.cpp:503
+#: src/gui/model.cpp:511
 msgid "Lists"
 msgstr ""
 
-#: src/gui/model.cpp:505
+#: src/gui/model.cpp:513
 msgid "Block quotes"
 msgstr ""
 
-#: src/gui/model.cpp:507
+#: src/gui/model.cpp:515
 msgid "Groupings"
 msgstr ""
 
-#: src/gui/model.cpp:509
+#: src/gui/model.cpp:517
 msgid "Landmarks and regions"
 msgstr ""
 
-#: src/gui/model.cpp:511
+#: src/gui/model.cpp:519
 msgid "Articles"
 msgstr ""
 
-#: src/gui/model.cpp:513
+#: src/gui/model.cpp:521
 msgid "Frames"
 msgstr ""
 
-#: src/gui/model.cpp:515
+#: src/gui/model.cpp:523
 msgid "Figures and captions"
 msgstr ""
 
-#: src/gui/model.cpp:517
+#: src/gui/model.cpp:525
 msgid "Clickable elements"
 msgstr ""
 
-#: src/gui/model.cpp:519
+#: src/gui/model.cpp:527
 msgid "When formatting is reported"
 msgstr ""
 
-#: src/gui/model.cpp:523
+#: src/gui/model.cpp:531
 msgid "Report formatting changes after the cursor"
 msgstr ""
 
-#: src/gui/model.cpp:524
+#: src/gui/model.cpp:532
 msgid "Costs a call per line; off by default for that reason."
 msgstr ""
 
-#: src/gui/model.cpp:531
+#: src/gui/model.cpp:539
 msgid "Bold, italic and underline on the display"
 msgstr ""
 
-#: src/gui/model.cpp:534
+#: src/gui/model.cpp:542
 msgid "Spelling errors on the display"
 msgstr ""
 
-#: src/gui/model.cpp:546
+#: src/gui/model.cpp:554
 msgid "Commands and keys"
 msgstr ""
 
-#: src/gui/model.cpp:547
+#: src/gui/model.cpp:555
 msgid ""
 "Every command ALUS knows, with the keys bound to it. A command with no "
 "description is not shown, because a command that cannot be explained cannot "
 "be rebound sensibly."
 msgstr ""
 
-#: src/gui/model.cpp:551
+#: src/gui/model.cpp:559
 msgid "Edit gestures"
+msgstr ""
+
+#: src/gui/model.cpp:618
+#, c-format
+msgid "%s (not offered by the synthesizer)"
 msgstr ""
 
 #. Translators: spoken when a settings shortcut names a settings
@@ -3040,24 +3055,24 @@ msgstr ""
 
 #. Translators: the label of the button on a settings row that opens
 #. something else.
-#: src/gui/window.cpp:153
+#: src/gui/window.cpp:157
 msgid "Open"
 msgstr ""
 
 #. Translators: spoken when the file manager
 #. could not be started.
-#: src/gui/window.cpp:189
+#: src/gui/window.cpp:193
 msgid "Could not open the folder"
 msgstr ""
 
 #. Translators: spoken after a factory reset.
-#: src/gui/window.cpp:198
+#: src/gui/window.cpp:202
 msgid "Every setting has been reset"
 msgstr ""
 
 #. Translators: the title of ALUS's settings window. "ALUS" is the product
 #. name and is not translated.
-#: src/gui/window.cpp:326
+#: src/gui/window.cpp:340
 msgid "ALUS Settings"
 msgstr ""
 
@@ -4907,15 +4922,22 @@ msgstr ""
 msgid "speak command keys on"
 msgstr ""
 
+#. Translators: reported when the speaking of command keys is toggled
+#. off. (It was an untranslated string literal, the only one left
+#. after FAZA10.md's sweep.)
+#: src/input/commands.cpp:170
+msgid "speak command keys off"
+msgstr ""
+
 #. Translators: spoken when ALUS cannot stop itself, e.g. because the
 #. command was run from a diagnostic tool rather than the screen
 #. reader.
-#: src/input/commands.cpp:178
+#: src/input/commands.cpp:181
 msgid "cannot quit from here"
 msgstr ""
 
 #. Translators: spoken as ALUS shuts down, on the user's own command.
-#: src/input/commands.cpp:183
+#: src/input/commands.cpp:186
 msgid "exiting"
 msgstr ""
 

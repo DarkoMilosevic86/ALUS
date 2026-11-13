@@ -315,6 +315,11 @@ int main(int argc, char* argv[]) {
     guiContext.gestures = s->gestures.get();
     guiContext.keyNames = &alus::input::KeyNames::shared();
     guiContext.catalog = &s->catalog;
+    // Once, at start: the voice list is the configured MODULE's, and asking
+    // speech-dispatcher takes a round trip the window must not repeat on
+    // every row it draws.
+    guiContext.speech =
+        alus::gui::querySpeechChoices(s->config->getString("speech", "outputModule", ""));
     // There is no synthesizer here. A message the window wants spoken goes to
     // the RUNNING ALUS, which is the only thing that can speak -- and when
     // nothing is running, to stderr, where a developer will see it.

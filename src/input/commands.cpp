@@ -164,7 +164,10 @@ void InputCommands::toggleSpeakCommandKeys(Gesture& /*gesture*/) {
     say(config.speakCommandKeys
             // Translators: reported when the speaking of command keys is toggled.
             ? _("speak command keys on")
-            : "speak command keys off");
+            // Translators: reported when the speaking of command keys is toggled
+            // off. (It was an untranslated string literal, the only one left
+            // after FAZA10.md's sweep.)
+            : _("speak command keys off"));
 }
 
 void InputCommands::quit(Gesture& /*gesture*/) {

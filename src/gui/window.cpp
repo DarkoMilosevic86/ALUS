@@ -88,6 +88,10 @@ void check() {
 struct RowBinding {
     Context* context = nullptr;
     const Row* row = nullptr;
+    // The choices as SHOWN, which for a row with a `source` is not
+    // `row->choices`: the voices are asked of speech-dispatcher when the
+    // window opens. The index the combo row reports is an index into this.
+    std::vector<Choice> choices;
 };
 
 void destroyBinding(gpointer data) { delete static_cast<RowBinding*>(data); }
@@ -114,13 +118,13 @@ void onToggle(GObject* object, GParamSpec* /*spec*/, gpointer data) {
 void onChoice(GObject* object, GParamSpec* /*spec*/, gpointer data) {
     const auto* binding = static_cast<RowBinding*>(data);
     const guint selected = adw_combo_row_get_selected(ADW_COMBO_ROW(object));
-    if (selected >= binding->row->choices.size()) {
+    if (selected >= binding->choices.size()) {
         return;
     }
     // The CHOICE's value and never its label: the label is translated and the
     // configuration file must not be.
     binding->context->config->setString(binding->row->section, binding->row->key,
-                                        binding->row->choices[selected].value);
+                                        binding->choices[selected].value);
     noteChanged(*binding);
 }
 
@@ -221,27 +225,37 @@ GtkWidget* buildRow(Context& context, const Row& row, Window& window) {
         }
         case RowKind::Choice: {
             widget = adw_combo_row_new();
-            // GtkStringList of the TRANSLATED labels; the values stay in the
-            // model and are looked up by index when the user chooses.
+            const std::string current = context.config->getString(row.section, row.key);
+            std::vector<Choice> choices = resolveChoices(row, context.speech, current);
+            // GtkStringList of the labels as the user sees them: a msgid
+            // translated, or a runtime name (a voice) shown as it is. The
+            // values stay in the binding and are looked up by index.
+            std::vector<std::string> owned;
+            owned.reserve(choices.size());
+            for (const Choice& choice : choices) {
+                owned.push_back(!choice.text.empty() ? choice.text
+                                : choice.label != nullptr ? std::string{_(choice.label)}
+                                                          : choice.value);
+            }
             std::vector<const char*> labels;
-            labels.reserve(row.choices.size() + 1);
-            for (const Choice& choice : row.choices) {
-                labels.push_back(_(choice.label));
+            labels.reserve(owned.size() + 1);
+            for (const std::string& label : owned) {
+                labels.push_back(label.c_str());
             }
             labels.push_back(nullptr);
             GtkStringList* list = gtk_string_list_new(labels.data());
             adw_combo_row_set_model(ADW_COMBO_ROW(widget), G_LIST_MODEL(list));
 
-            const std::string current = context.config->getString(row.section, row.key);
             guint selected = 0;
-            for (guint i = 0; i < row.choices.size(); ++i) {
-                if (row.choices[i].value == current) {
+            for (guint i = 0; i < choices.size(); ++i) {
+                if (choices[i].value == current) {
                     selected = i;
                     break;
                 }
             }
             adw_combo_row_set_selected(ADW_COMBO_ROW(widget), selected);
             RowBinding* binding = bind(widget, context, row);
+            binding->choices = std::move(choices);
             g_signal_connect(widget, "notify::selected", G_CALLBACK(onChoice), binding);
             break;
         }

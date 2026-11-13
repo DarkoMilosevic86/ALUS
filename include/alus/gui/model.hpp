@@ -63,7 +63,13 @@ struct Choice {
     std::string value;
     // What the user sees. A msgid (the tables are built with N_()), translated
     // when the row is rendered.
-    const char* label;
+    const char* label = nullptr;
+    // A label that is NOT a msgid and is shown as it is: a voice's name, a
+    // speech-dispatcher module's name. Used instead of `label` when set.
+    // Those names come from the synthesizer at run time, and passing them
+    // through gettext would at best do nothing and at worst translate a voice
+    // that happens to share its name with a word in the catalogue.
+    std::string text;
 };
 
 struct Row {
@@ -85,6 +91,11 @@ struct Row {
     // RowKind::Action. One of the ids in `actions.hpp`-free form:
     // "gestures", "config-dir", "profiles", "reset".
     std::string action;
+    // RowKind::Choice whose values come from the running system rather than
+    // from this table: "speech-modules" or "speech-voices". `choices` then
+    // holds only the fixed entries that come first ("Default"); the rest is
+    // resolveChoices()'s job.
+    std::string source;
 };
 
 struct Group {
@@ -101,6 +112,41 @@ struct Page {
     const char* iconName = nullptr;  // a stock icon name, not translated
     std::vector<Group> groups;
 };
+
+// What speech-dispatcher offers, asked once when the window opens.
+//
+// WHY THESE TWO SETTINGS ARE CHOICES AND NOT TEXT ENTRIES. They used to be
+// free text, which meant typing the exact name of a voice -- the one thing a
+// user who cannot make out the synthesizer cannot find out -- and an empty
+// entry was written as `voice=\s` (FAZA10.md N107). A choice can only hold a
+// value the synthesizer actually has.
+struct SpeechChoices {
+    // False when speech-dispatcher could not be reached. The rows then offer
+    // the fixed entries and whatever the configuration already says, and
+    // nothing else: inventing names would be worse than offering none.
+    bool reachable = false;
+    std::vector<std::string> modules;
+    struct Voice {
+        std::string id;        // what the configuration stores
+        std::string name;      // what the user hears
+        std::string language;  // BCP 47, may be empty
+    };
+    std::vector<Voice> voices;
+};
+
+// Asks speech-dispatcher, through the same driver the screen reader uses.
+// `module` is the configured output module, because the voice list is the
+// MODULE's: rhvoice and espeak-ng offer different voices. Never throws; an
+// unreachable server is `reachable == false`.
+SpeechChoices querySpeechChoices(const std::string& module);
+
+// The choices a row shows: its fixed ones, then what `speech` offers for its
+// `source`, then -- if the configuration names something the system does not
+// offer -- that value too, labelled as not offered. The last one matters: a
+// stale `voice=` must be VISIBLE in the window, or the user cannot see what to
+// replace. Rows without a `source` get `row.choices` unchanged.
+std::vector<Choice> resolveChoices(const Row& row, const SpeechChoices& speech,
+                                   const std::string& current);
 
 // Every page, in the order the window shows them. Built once, const
 // thereafter.

@@ -20,14 +20,29 @@
 #   2. A failed start ROLLS BACK to the reader that was working. Better the
 #      one you had than neither.
 #
-#     tools/alus-switch.sh alus      # ALUS takes the keyboard
-#     tools/alus-switch.sh other     # give it back to the other reader
-#     tools/alus-switch.sh status    # who has it now
+#     tools/alus-switch.sh alus          # ALUS takes the keyboard
+#     tools/alus-switch.sh other         # give it back to the other reader
+#     tools/alus-switch.sh status        # who has it now
+#     tools/alus-switch.sh measure [S]   # ALUS for S seconds (default 300),
+#                                        # debug log, and the other reader
+#                                        # comes back by itself when ALUS exits
+#
+# `measure` is for the live comparison in claude/MERENJE-ORCA.md. The first
+# pass did the swap by hand and the way back failed: flipping the desktop
+# switch did not restart the other reader, the first restart did not survive,
+# and the user sat without a reader until it was started by hand. So the way
+# back is no longer a step anyone has to remember: a detached guard waits for
+# alus-daemon to exit -- `alus+q`, the time limit, a crash -- and runs
+# `other`, which now also checks that the reader really HOLDS the keyboard
+# and not merely that its process exists.
 set -uo pipefail
 
 SWITCH_SCHEMA=org.gnome.desktop.a11y.applications
 SWITCH_KEY=screen-reader-enabled
-OTHER_BIN=orca                       # the other reader's executable
+# The other reader's executable. Overridable ONLY so the swap logic can be
+# tested end to end against a stand-in, without taking the real keyboard away
+# from the person at the machine (see the test notes at `measure` below).
+OTHER_BIN="${ALUS_SWITCH_OTHER_BIN:-orca}"
 OTHER_NAME="the other screen reader" # what we SAY, never its product name
 # `--replace` and not a bare start, MEASURED: that reader runs as two
 # processes, so `pkill` clears the process name before both are really gone,
@@ -42,6 +57,7 @@ LOG="${ALUS_SWITCH_LOG:-$HOME/alus.log}"
 OTHER_LOG="${ALUS_SWITCH_OTHER_LOG:-$HOME/alus-switch-other.log}"
 WAIT_STOP=10                         # seconds to wait for a reader to exit
 WAIT_START=8                         # seconds to wait for one to come up
+DAEMON_ARGS=()                       # extra alus-daemon arguments (measure)
 
 here=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 
@@ -114,6 +130,19 @@ wait_keyboard_free() {
   return 1
 }
 
+# The other half of keyboard_free: has the OTHER reader taken the keyboard?
+# Only meaningful while ALUS is not running, which is the only time `other`
+# asks it.
+wait_keyboard_held() {
+  [ -n "$CLI" ] || return 0            # cannot ask; do not block on it
+  local waited=0
+  while [ "$waited" -lt "$WAIT_START" ]; do
+    keyboard_free || return 0
+    sleep 1; waited=$((waited + 1))
+  done
+  return 1
+}
+
 wait_alive() {  # a process that exits one second after starting never started
   local name=$1 waited=0
   while [ "$waited" -lt "$WAIT_START" ]; do
@@ -155,7 +184,7 @@ to_alus() {
   # case above). A second `alus-daemon` would refuse on the bus name anyway,
   # but refusing is not the same as being handled.
   if ! alus_running; then
-    setsid "$DAEMON" --log-file "$LOG" >/dev/null 2>&1 < /dev/null &
+    setsid "$DAEMON" "${DAEMON_ARGS[@]}" --log-file "$LOG" >/dev/null 2>&1 < /dev/null &
   fi
   if wait_alive alus-daemon; then
     say "ALUS is running"
@@ -191,8 +220,19 @@ to_other() {
     setsid "${OTHER_START[@]}" >"$OTHER_LOG" 2>&1 < /dev/null &
   fi
   if wait_alive "$OTHER_BIN"; then
-    say "$OTHER_NAME is running"
-    exit 0
+    # RUNNING IS NOT HOLDING THE KEYBOARD. A reader whose process is up but
+    # which has not registered with the accessibility manager hears no key,
+    # and to the user that is the same silent computer. One restart if it has
+    # not taken the keyboard, because the measured failure was exactly a
+    # first start that did not take.
+    if wait_keyboard_held || { stop_and_wait "$OTHER_BIN"
+                               setsid "${OTHER_START[@]}" >"$OTHER_LOG" 2>&1 < /dev/null &
+                               wait_alive "$OTHER_BIN" && wait_keyboard_held; }; then
+      say "$OTHER_NAME is running"
+      exit 0
+    fi
+    say "WARNING: $OTHER_NAME is running but does not hold the keyboard"
+    exit 1
   fi
 
   say "$OTHER_NAME failed to start; putting ALUS back"
@@ -225,9 +265,45 @@ status() {
   say "$who"
 }
 
+# Waits for alus-daemon to go away and gives the keyboard back. Detached from
+# whoever started it (setsid), so it survives the terminal, the shell and the
+# session that launched the measurement.
+guard() {
+  local limit=$1 waited=0
+  # ALUS may not be up yet; if it never comes up, to_alus already rolled back.
+  while ! alus_running && [ "$waited" -lt "$WAIT_START" ]; do
+    sleep 1; waited=$((waited + 1))
+  done
+  alus_running || { other_running && exit 0; to_other; }
+  waited=0
+  # The daemon's own --exit-after is the limit; the guard waits a little
+  # longer and then insists, because a daemon that ignored its own timer is
+  # exactly the case nobody can recover from without sight.
+  while alus_running && [ "$waited" -lt $((limit + 30)) ]; do
+    sleep 1; waited=$((waited + 1))
+  done
+  to_other
+}
+
+measure() {
+  local seconds=${1:-300}
+  case "$seconds" in ''|*[!0-9]*) die "measure needs a number of seconds" ;; esac
+  LOG="${ALUS_SWITCH_LOG:-$HOME/alus-measure-$(date +%Y%m%d-%H%M%S).log}"
+  # shellcheck disable=SC2206  # word splitting of the extra arguments is the point
+  DAEMON_ARGS=(--log-level debug --exit-after "$seconds" ${ALUS_MEASURE_EXTRA_ARGS:-})
+  printf 'log:   %s\n' "$LOG"
+  printf 'guard: gives the keyboard back when ALUS exits, at most %s s from now\n' \
+         "$((seconds + 30 + WAIT_START))"
+  ALUS_SWITCH_LOG="$LOG" setsid "$0" __guard "$seconds" \
+    >>"${ALUS_SWITCH_GUARD_LOG:-$HOME/alus-switch-guard.log}" 2>&1 < /dev/null &
+  to_alus
+}
+
 case "${1:-status}" in
   alus)         to_alus ;;
   other|orca)   to_other ;;
   status)       status ;;
-  *) printf 'usage: %s [alus|other|status]\n' "$(basename "$0")" >&2; exit 2 ;;
+  measure)      measure "${2:-300}" ;;
+  __guard)      guard "${2:-300}" ;;
+  *) printf 'usage: %s [alus|other|status|measure [seconds]]\n' "$(basename "$0")" >&2; exit 2 ;;
 esac

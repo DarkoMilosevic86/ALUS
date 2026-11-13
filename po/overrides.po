@@ -1291,3 +1291,21 @@ msgstr "Nema šta da se ponovi"
 # position"), koju upstream ima; ovu, za pregledni kursor, nema.
 msgid "Unable to determine the review cursor position"
 msgstr "Ne mogu da utvrdim poziciju preglednog kursora"
+
+# -- izbor glasa i modula u prozoru podešavanja --
+#
+# Ova dva reda su bila polja za slobodan tekst: trebalo je upisati tačno ime
+# glasa, a prazno polje se upisivalo kao `voice=\s` (FAZA10.md N107). Sada su
+# liste onoga što speech-dispatcher stvarno nudi.
+
+msgid "The speech-dispatcher module. Takes effect when ALUS restarts its speech, which happens on the next configuration reset."
+msgstr "Modul speech-dispatcher-a. Primenjuje se kad ALUS ponovo pokrene govor, što se dešava pri sledećem vraćanju podešavanja."
+
+msgid "The voices of the output module above. After changing the module, close and reopen this window to see its voices."
+msgstr "Glasovi izlaznog modula iznad. Posle promene modula zatvorite i ponovo otvorite ovaj prozor da biste videli njegove glasove."
+
+# Glas ili modul koji podešavanja navode, a sintetizator ga ne nudi -- u
+# međuvremenu deinstaliran, ili nikad ispravan. Mora da se VIDI u prozoru,
+# inače korisnik ne zna šta treba da zameni. %s je ime, pod navodnicima.
+msgid "%s (not offered by the synthesizer)"
+msgstr "%s (sintetizator ga ne nudi)"

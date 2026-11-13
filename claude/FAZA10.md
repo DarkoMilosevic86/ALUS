@@ -10,7 +10,7 @@ ništa od komandi ne radi"*.
 meson test -C build
 ```
 
-Rezultat: **21 test, 36.523 asertacije, zeleno** (1 očekivani pad:
+Rezultat: **21 test, 36.577 asertacija, zeleno** (1 očekivani pad:
 `settings-bad-page`).
 
 Faza je imala **tačno merljiv cilj**: `data/commands-status.ini` je u sekciji
@@ -346,15 +346,24 @@ treću sekciju (npr. `[explain]`) u kojoj vrednost **nije** komentar za čitaoca
 fajla nego **poruka koja se izgovara**. Posao je mali (`bindAnnouncements` već
 prima tekst), a razlika je između tastera koji laže i tastera koji objasni.
 
-### Ostali poznati, nedirani
+### Ostali poznati — zatvoreni posle merenja
 
-* `input::InputCommands::toggleSpeakCommandKeys()` — neprevedeni string literal
-  (vidi N110 „sitniji nalazi"). Jedna linija, ali menja ponašanje svite `gui`,
-  pa ide sa prvom izmenom u tom fajlu.
-* Prozor podešavanja: `voice` i `outputModule` su i dalje **tekstualna polja**
-  (`src/gui/model.cpp`). Pravu blokadu u tom prozoru je pravio N111, ne ova
-  polja — ali lista ponuđenih glasova (`alus-cli list-voices` je već ima) bila
-  bi očigledno bolja i mala je izmena u `gui::model`.
+* **Lista glasova u prozoru podešavanja.** `voice` i `outputModule` više nisu
+  tekstualna polja nego izbori, popunjeni od speech-dispatcher-a kad se prozor
+  otvori (`gui::querySpeechChoices`, `gui::resolveChoices`). Prvi izbor je
+  „Podrazumevano" (prazna vrednost); glas iz konfiguracije koji sintetizator ne
+  nudi ostaje **vidljiv**, sa oznakom da ga sintetizator ne nudi — `voice=\s`
+  iz N107 bi se tako video. Provereno na živom prozoru: red „Glas" pokazuje
+  *Marija (hr)*. Ograničenje: glasovi su glasovi modula koji je bio podešen kad
+  se prozor otvorio; posle promene modula prozor treba ponovo otvoriti, i to
+  piše u podnaslovu. Testovi: `tests/gui/test_model.cpp`, `[gui][speech]`.
+* **`toggleSpeakCommandKeys`** — neprevedeni literal zamenjen sa `_()`;
+  prevod je stigao iz upstream-ovog kataloga.
+* **Valgrind nad kodom ove faze:** svite `speech`, `commands`, `a11y`, `nav`,
+  `browsemode`, `core` pod `--setup=valgrind` — 9/9, **0 grešaka, 0 izgubljenih
+  bajtova**.
+
+Ostaje predlog za `refreshBuffer` (sekcija `[explain]`, gore).
 
 ---
 

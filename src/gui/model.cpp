@@ -9,7 +9,10 @@
 
 #include "alus/gui/model.hpp"
 
+#include "alus/core/log.hpp"
+#include "alus/i18n/gettext.hpp"
 #include "alus/i18n/i18n.hpp"
+#include "alus/speech/ssip_synth.hpp"
 
 #include <algorithm>
 
@@ -85,11 +88,16 @@ std::vector<Page> build() {
                       Row{RowKind::Choice, "speech", "synth", N_("Synthesizer"),
                           nullptr,
                           {{"ssip", N_("speech-dispatcher")}, {"none", N_("None")}}},
-                      Row{RowKind::Text, "speech", "outputModule", N_("Output module"),
-                          N_("The speech-dispatcher module, e.g. espeak-ng or "
-                             "rhvoice. Empty means the module speech-dispatcher "
-                             "itself defaults to.")},
-                      Row{RowKind::Text, "speech", "voice", N_("Voice"), nullptr},
+                      Row{RowKind::Choice, "speech", "outputModule", N_("Output module"),
+                          N_("The speech-dispatcher module. Takes effect when ALUS "
+                             "restarts its speech, which happens on the next "
+                             "configuration reset."),
+                          {{"", N_("Default")}}, 0, 100, 1, {}, "speech-modules"},
+                      Row{RowKind::Choice, "speech", "voice", N_("Voice"),
+                          N_("The voices of the output module above. After changing "
+                             "the module, close and reopen this window to see its "
+                             "voices."),
+                          {{"", N_("Default")}}, 0, 100, 1, {}, "speech-voices"},
                   }},
             Group{N_("Voice settings"), nullptr,
                   {
@@ -557,6 +565,61 @@ std::vector<Page> build() {
 }
 
 }  // namespace
+
+SpeechChoices querySpeechChoices(const std::string& module) {
+    SpeechChoices out;
+    speech::SsipSynth synth;
+    if (!module.empty()) {
+        synth.setPreferredOutputModule(module);
+    }
+    std::string error;
+    if (!synth.initialize(&error)) {
+        ALUS_WARNING("settings: speech-dispatcher could not be asked for its voices: {}", error);
+        return out;
+    }
+    out.reachable = true;
+    out.modules = synth.availableModules();
+    for (const speech::VoiceInfo& voice : synth.availableVoices()) {
+        out.voices.push_back({voice.id, voice.name.empty() ? voice.id : voice.name,
+                              voice.language});
+    }
+    synth.terminate();
+    return out;
+}
+
+std::vector<Choice> resolveChoices(const Row& row, const SpeechChoices& speech,
+                                   const std::string& current) {
+    std::vector<Choice> out = row.choices;
+    if (row.source == "speech-modules") {
+        for (const std::string& module : speech.modules) {
+            out.push_back(Choice{module, nullptr, module});
+        }
+    } else if (row.source == "speech-voices") {
+        for (const SpeechChoices::Voice& voice : speech.voices) {
+            // The language in the label, because two voices can share a name
+            // across languages, and because "Marija (hr)" tells a Serbian
+            // user something "Marija" does not.
+            out.push_back(Choice{voice.id, nullptr,
+                                 voice.language.empty()
+                                     ? voice.name
+                                     : voice.name + " (" + voice.language + ")"});
+        }
+    } else {
+        return out;
+    }
+    const bool offered = std::any_of(out.begin(), out.end(), [&current](const Choice& choice) {
+        return choice.value == current;
+    });
+    if (!offered) {
+        // Translators: a voice or speech module that the configuration names
+        // but the synthesizer does not offer -- uninstalled since, or never
+        // valid. %s is the configured name, in quotation marks.
+        out.push_back(Choice{current, nullptr,
+                             i18n::substitute(_("%s (not offered by the synthesizer)"),
+                                              "\u201c" + current + "\u201d")});
+    }
+    return out;
+}
 
 const std::vector<Page>& pages() {
     static const std::vector<Page> value = build();
