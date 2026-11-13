@@ -446,7 +446,7 @@ ObjectTextRange::formatFieldAndOffsets(int offset, const text::FormatReportSetti
     Offsets bounds{run.start, run.end};
     if (bounds.end <= bounds.start) {
         // A toolkit that answers with an empty run would make
-        // `getTextWithFields` step one byte at a time over the whole range.
+        // `getTextWithFields` step one character at a time over the whole range.
         // The line is the honest bound in that case.
         if (const std::optional<Offsets> line = lineOffsets(offset)) {
             bounds = *line;

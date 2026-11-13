@@ -95,6 +95,8 @@ public:
 
 protected:
     const void* bookmarkKind() const override;
+    // AT-SPI counts CODEPOINTS. Measured, not assumed: FAZA10.md N113.
+    OffsetUnit offsetUnit() const override { return OffsetUnit::Codepoints; }
 
     int storyLength() const override;
     std::string storyText() const override;

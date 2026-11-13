@@ -239,7 +239,8 @@ AncestorChainDiff::AncestorChainDiff(ObjectPtr root,
                                      const text::FormatReportSettings& settings)
     : root_(std::move(root)), synth_(settings) {}
 
-void AncestorChainDiff::enter(const ObjectPtr& leaf, text::TextWithFields& into) {
+void AncestorChainDiff::enter(const ObjectPtr& leaf, text::TextWithFields& into,
+                              std::string_view content) {
     const std::vector<ObjectPtr> chain = DocumentLeaves::ancestorChain(root_, leaf);
 
     // How much of the open stack this leaf still shares. Compared by OBJECT
@@ -299,7 +300,12 @@ void AncestorChainDiff::enter(const ObjectPtr& leaf, text::TextWithFields& into)
             }
         }
         field->set("_startOfNode", startOfNode);
-        if (embedded && !object->name().empty()) {
+        if (isTheLeaf && !content.empty()) {
+            // A link (or any object with text of its own) inside a paragraph:
+            // it occupies ONE U+FFFC in its parent's text, and this is what
+            // that character stands for. FAZA10.md N114.
+            field->set("content", std::string(content));
+        } else if (embedded && !object->name().empty()) {
             // N47 resolved: the U+FFFC placeholder becomes the object's name,
             // which is what the user came to hear. NVDA does the same thing at
             // the same place (`controlField["content"] = childObject.name`).
@@ -546,6 +552,88 @@ std::string DocumentTextRange::text() const {
     return out;
 }
 
+void DocumentTextRange::appendLeafSpan(const ObjectPtr& leaf, int start, int end,
+                                       AncestorChainDiff& diff, text::TextWithFields& out,
+                                       const text::FormatReportSettings& settings) const {
+    // The leaf's own format fields come from the range phase 5 built, so the
+    // font, the colour, the spelling errors and the language inside a document
+    // line are exactly what they are inside a text box.
+    const auto appendPlain = [&](int from, int to) {
+        if (to <= from) {
+            return;
+        }
+        diff.enter(leaf, out);
+        if (text::TextRangePtr inLeaf = rangeFor(leaf, from, to)) {
+            for (text::TextOrField& item : inLeaf->getTextWithFields(settings)) {
+                out.push_back(std::move(item));
+            }
+        } else {
+            out.push_back(text::TextOrField::ofText(leaf->textRange(from, to)));
+        }
+    };
+
+    // N114. A leaf whose text MIXES characters and U+FFFC -- a paragraph with
+    // a link in it, a navigation bar of links separated by spaces -- used to
+    // go into the stream as it was, placeholders and all, and the user heard
+    // "banner, Glavni meni, navigation, <U+FFFC> <U+FFFC> <U+FFFC>" where the
+    // page says "Početna Vesti Kontakt". DocumentLeaves deliberately makes such
+    // an object a leaf (its children are NOT visited as leaves of their own,
+    // or the text between them would belong to nobody), so this is the one
+    // place its links can be read: each placeholder is resolved through the
+    // hypertext to the object it stands for, and that object's field carries
+    // its text as `content`.
+    //
+    // THE PLACEHOLDER STAYS IN THE STREAM, one character for one offset, and
+    // that is not an oversight: braille maps display cells to range offsets
+    // from this stream, and replacing one character by seven would move the
+    // routing of everything after the link by six cells. Speech drops the
+    // character (a11y/text_speech.cpp) because the field already said it.
+    const std::string text = leaf->textRange(start, end);
+    if (text.find(kObjectReplacement) == std::string::npos) {
+        appendPlain(start, end);
+        return;
+    }
+    text::TextRangePtr hypertext = rangeFor(leaf, start, end);
+    auto* objectRange = dynamic_cast<a11y::ObjectTextRange*>(hypertext.get());
+
+    int runStart = start;
+    int offset = start;  // in the leaf's own unit: codepoints (N113)
+    for (std::size_t at = 0; at < text.size();) {
+        const auto lead = static_cast<unsigned char>(text[at]);
+        const std::size_t width = lead < 0x80U ? 1 : (lead >> 5U) == 0x6U ? 2
+                                                     : (lead >> 4U) == 0xEU ? 3 : 4;
+        if (text.compare(at, kObjectReplacement.size(), kObjectReplacement) == 0) {
+            appendPlain(runStart, offset);
+            ObjectPtr child = objectRange != nullptr ? objectRange->objectAtOffset(offset)
+                                                     : nullptr;
+            if (child != nullptr && !child->sameAs(*leaf)) {
+                std::string content;
+                if (hasText(*child) && child->characterCount() > 0) {
+                    content = child->textRange(0, -1);
+                    // One level of nesting is resolved by NAME rather than
+                    // recursively: a link whose own text holds another
+                    // placeholder is an image link, and its name is what it
+                    // is called.
+                    if (content.find(kObjectReplacement) != std::string::npos) {
+                        content = child->name();
+                    }
+                }
+                if (content.empty()) {
+                    content = child->name();
+                }
+                diff.enter(child, out, content);
+            } else {
+                diff.enter(leaf, out);
+            }
+            out.push_back(text::TextOrField::ofText(std::string(kObjectReplacement)));
+            runStart = offset + 1;
+        }
+        at += width;
+        ++offset;
+    }
+    appendPlain(runStart, offset);
+}
+
 text::TextWithFields DocumentTextRange::getTextWithFields(
     const text::FormatReportSettings& settings) const {
     // §9.3. The stream the whole of document reading rests on.
@@ -566,17 +654,7 @@ text::TextWithFields DocumentTextRange::getTextWithFields(
         if (span.end <= span.start) {
             continue;
         }
-        // The leaf's own format fields come from the range phase 5 built, so
-        // the font, the colour, the spelling errors and the language inside a
-        // document line are exactly what they are inside a text box.
-        if (text::TextRangePtr inLeaf = rangeFor(span.leaf, span.start, span.end)) {
-            for (text::TextOrField& item : inLeaf->getTextWithFields(settings)) {
-                out.push_back(std::move(item));
-            }
-        } else {
-            out.push_back(
-                text::TextOrField::ofText(span.leaf->textRange(span.start, span.end)));
-        }
+        appendLeafSpan(span.leaf, span.start, span.end, diff, out, settings);
     }
     diff.finish(out);
     return out;

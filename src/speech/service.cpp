@@ -139,7 +139,12 @@ void Service::applyConfiguration() {
 // Returns true when the voice actually changed, which is what tells the caller
 // to reload the voice dictionary.
 bool Service::applyVoiceFromConfiguration() {
-    if (synth_ == nullptr) {
+    // Not without a real synthesizer. `--no-speech`, and every alus-cli
+    // command that only prints, run on NullSynth, which offers one voice
+    // called "null" -- and checking the user's voice against THAT warned on
+    // every such command that "Marija" was not offered. The configured voice
+    // belongs to the synthesizer that is not running.
+    if (synth_ == nullptr || options_.noSpeech || synth_->name() == "null") {
         return false;
     }
     const std::string wanted = config_.getString("speech", "voice", "");

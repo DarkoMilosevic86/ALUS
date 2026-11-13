@@ -197,6 +197,60 @@ Testovi: `tests/a11y/test_mapping.cpp`, tri sekcije `N111` — GTK 4-ov odgovor
 nije onemogućen, kontejner bez `SENSITIVE` nije onemogućen, kontrola bez
 `SENSITIVE` **jeste** (onemogućeno dugme mora i dalje da se najavi).
 
+## Drugi živi prolaz: browse mode u Chrome-u (N112–N116)
+
+Korisnik je prošao YouTube stranicu: **Tab je radio, a `h` nije skakao po
+naslovima, strelice gore/dole nisu čitale red, strelice levo/desno nisu išle
+znak po znak.** Faza 6 je T6.7 ostavila „delimično" jer browse mode nikad nije
+susreo pravi pregledač — ovo je bio prvi susret.
+
+Sve je reprodukovano **bez tastature** novom komandom
+`alus-cli browse-walk [naslov]`: sastavlja browse mode nad živom stranicom,
+izvršava iste skripte koje izvršavaju tasteri, i ispisuje šta bi bilo
+izgovoreno (sintetizator na dnu beleži, ne govori), nad stalnom test
+stranicom `tests/fixtures/browse-mode.html`. Svaki nalaz ispod je proveren
+nezavisnom bibliotekom (Atspi/GI) pre nego što je kod promenjen, i svaki je
+imao isti uzrok sakrivanja: **mock je bio zgodniji od platforme**, pa su se
+mock i kod slagali u grešci.
+
+| Nalaz | Šta se čulo | Uzrok | Popravka |
+|---|---|---|---|
+| **N112** | `h` uvek isti naslov; strelica dole uvek isti red; gore „ivica dokumenta" | `AtspiBackend::path()` je vraćao **AccessibleId** (HTML `id`, većinom prazan), pa je bookmark kursora vraćao poziciju na prvi list sa praznom putanjom — vrh stranice. Mock je uvek vraćao jedinstvenu putanju. | `path()` = ime magistrale + putanja objekta (javna polja AtspiObject, bez D-Bus poziva) |
+| **N113** | strelica desno na „Treći": „ći", pa preskočeno „i" | AT-SPI offseti su **codepoint-i**; tekstualni sloj ih je tretirao kao UTF-8 bajtove (§7.3 plana). Mock je brojao bajtove. | `OffsetsTextRange::offsetUnit()`; `ObjectTextRange` = codepoint-i; mock broji kao platforma; odstupanje upisano u `01-ARHITEKTURA.md` §7.3 |
+| **N114** | „navigation, `<U+FFFC>` `<U+FFFC>` `<U+FFFC>`" umesto linkova | List sa mešovitim sadržajem (tekst + U+FFFC za decu) išao je u tok bez razrešavanja hypertexta | svaki U+FFFC dobija polje svog deteta sa `content` = tekst linka; znak ostaje u toku (brajeva mapa), govor ga ne izgovara |
+| **N115** | „lista" na svakom redu liste | Chrome ne postavlja READ_ONLY na `<ul>`, pa je lista bila „list box" (jednoredna kontrola). NVDA-ov virtuelni bafer dodaje READONLY svakom neuređivom čvoru. Mock lista je imala READONLY eksplicitno. | polje dokumenta dobija READONLY ako objekat nije ni uređiv ni fokusabilan |
+| **N116** | naslov bez „heading level N"; kod `h` tekst dvaput | objektni model daje `Heading1`–`Heading6`, a pravila za polja traže `Heading` + `level`; Chrome naslovu daje ime = tekst, bez `explicit-name` | polje dokumenta: `Heading` + `level`; ime jednako sopstvenom tekstu, bez `explicit-name`, se ne izgovara posebno |
+
+Rezultat na test-stranici, isti `browse-walk`, posle svih pet:
+
+```
+nextHeading         main landmark  Prvi naslov stranice  heading  level 1
+nextHeading         Drugi naslov  heading  level 2
+nextHeading         Treći naslov  heading  level 2
+nextHeading         Četvrti naslov, nivo tri  heading  level 3
+nextHeading         no next heading
+topOfDocument       banner landmark  Glavni meni  navigation landmark  link Početna  link Vesti  link Kontakt
+moveByLine_forward  main landmark  heading  level 1  Prvi naslov stranice
+moveByLine_forward  list  with 2 items  •  link  Prva veza u listi
+moveByLine_forward  •  link  Druga veza u listi
+moveByLine_forward  out of list  heading  level 2  Treći naslov
+moveByCharacter     r, e, ć, i, razmak   /   nazad: i, ć, e
+```
+
+Testovi: `[N113]` u `tests/nav/test_text_range.cpp` (latinica i ćirilica,
+znak i reč, oba smera), `[N114]`, `[N115]`, `[N116]` u
+`tests/nav/test_browse_mode.cpp` — svaki gradi stranicu onako kako je **Chrome**
+šalje, ne kako je raniji test pretpostavljao. Valgrind nad `browsemode`, `nav`,
+`a11y`, `gui`: 0 grešaka, 0 izgubljenih bajtova.
+
+Usput: N107-ova provera glasa je upozoravala na svakoj `alus-cli` komandi koja
+samo ispisuje (radi bez govora, na NullSynth-u, koji nudi samo glas „null").
+Provera se sada preskače bez pravog sintetizatora.
+
+**Šta `browse-walk` ne pokriva i ostaje za živi prolaz:** znak po znak preko
+linka **unutar** reda je jedan korak (link zauzima jedan offset u roditelju), a
+NVDA ulazi u tekst linka; i kašnjenje taster → govor.
+
 ### Sitniji nalazi
 
 * `nav::TextCommands::reportReviewCursorLocation()` je izgovarao **neprevedeni

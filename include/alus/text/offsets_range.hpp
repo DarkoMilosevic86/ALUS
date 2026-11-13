@@ -10,11 +10,22 @@
 // maps its hooks onto `AtspiText` one for one, and the subclass that does that
 // is `a11y::ObjectTextRange`.
 //
-// THE OFFSETS ARE UTF-8 BYTES. §7.3's decision, in one line of code:
-// `encoding` is UTF-8, so every hook takes and returns AT-SPI's own offsets
-// and NOTHING on the hot path converts anything. The conversion to character
-// indices happens only where a human-facing count or a per-character step
-// needs it, through `text::OffsetConverter` and `text::Segmenter`.
+// THE UNIT OF THE OFFSETS IS THE SUBCLASS'S, which is NVDA's `encoding`:
+// `offsetUnit()` says whether an offset counts UTF-8 bytes or Unicode
+// codepoints, and every hook takes and returns offsets in that unit. Nothing on
+// the hot path converts anything; the conversion happens only where a locally
+// held UTF-8 string is sliced or segmented -- the per-character and per-word
+// steps, the fallback line search, `find` -- through `text::OffsetConverter`.
+//
+// THIS WAS "THE OFFSETS ARE UTF-8 BYTES", §7.3's original decision, on the
+// belief that AT-SPI counts in bytes. It does not: AT-SPI text offsets are
+// CODEPOINTS (measured on Chrome / AT-SPI 2.56.2 with an independent binding:
+// "Prvi pasus je proza. Ima dve rečenice." reports 38 characters, is 39
+// bytes, and get_text(31, 32) is "č"). With bytes assumed, every letter
+// outside ASCII was a step of the wrong size: the right arrow on "Treći" read
+// "ći" and then skipped the "i", and for Cyrillic every letter is two bytes
+// (FAZA10.md N113). The mock backend counted in bytes too, so every test with
+// a Serbian letter in it agreed with the defect.
 //
 // WHAT A SUBCLASS MUST PROVIDE: `storyLength()`. Nothing else is mandatory.
 // Beyond that there are two ways to be useful, and NVDA's own words on the
@@ -104,8 +115,16 @@ protected:
     // detector concludes the caret did not move when it moved to another file.
     virtual const void* bookmarkKind() const = 0;
 
+    // ---- the unit ----
+    // NVDA: `encoding`. What one offset counts. The default is the one that
+    // needs no conversion for a string ALUS holds itself (the screen review's
+    // story); a range over a platform object answers what the PLATFORM counts
+    // -- codepoints, for AT-SPI.
+    enum class OffsetUnit { Utf8Bytes, Codepoints };
+    virtual OffsetUnit offsetUnit() const { return OffsetUnit::Utf8Bytes; }
+
     // ---- the mandatory hook ----
-    // NVDA: `_getStoryLength`. In bytes.
+    // NVDA: `_getStoryLength`. In `offsetUnit()`.
     virtual int storyLength() const = 0;
 
     // ---- text ----
@@ -173,6 +192,12 @@ protected:
     void copyOffsetsFrom(const OffsetsTextRange& other);
 
 private:
+    // A UTF-8 string held locally, and positions in it: `units` counted in
+    // `offsetUnit()` from the start of `text` <-> a byte index into `text`.
+    // Identity for Utf8Bytes; OffsetConverter for Codepoints.
+    std::size_t unitsToBytes(std::string_view text, int units) const;
+    int bytesToUnits(std::string_view text, std::size_t bytes) const;
+
     std::optional<Offsets> lineOffsetsResolved(int offset) const;
     std::optional<Offsets> characterOffsetsResolved(int offset) const;
     std::optional<Offsets> wordOffsetsResolved(int offset) const;

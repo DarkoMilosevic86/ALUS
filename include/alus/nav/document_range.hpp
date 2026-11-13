@@ -57,6 +57,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace alus::nav {
@@ -109,7 +110,12 @@ public:
     // Emits the commands for moving to this leaf, then nothing about the leaf
     // itself -- the caller appends the text. The first call emits the whole
     // initial chain, which is what `getTextWithFields` must start with.
-    void enter(const a11y::ObjectPtr& leaf, text::TextWithFields& into);
+    //
+    // `content` is what the innermost field shows IN PLACE of its one U+FFFC
+    // character: the text of a link inside a paragraph (NVDA's
+    // `controlField["content"]`). Empty for an ordinary leaf.
+    void enter(const a11y::ObjectPtr& leaf, text::TextWithFields& into,
+               std::string_view content = {});
     // Closes everything still open. Called once at the end; without it the
     // last line of a document never leaves its container.
     void finish(text::TextWithFields& into);
@@ -203,6 +209,12 @@ private:
     // this range. NVDA: `_getTextInfos`. The ONE place that knows how a
     // compound range decomposes, so the text, the fields and the rectangles
     // cannot disagree about it.
+    // The text of one non-embedded leaf span, with every U+FFFC in it
+    // resolved through the hypertext to the object it stands for.
+    void appendLeafSpan(const a11y::ObjectPtr& leaf, int start, int end,
+                        AncestorChainDiff& diff, text::TextWithFields& out,
+                        const text::FormatReportSettings& settings) const;
+
     struct LeafSpan {
         a11y::ObjectPtr leaf;
         int start = 0;

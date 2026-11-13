@@ -1192,6 +1192,16 @@ TextRangeSpeechResult getTextRangeSpeech(const text::TextRange& range,
     for (const text::TextOrField& item : fields) {
         if (item.isText()) {
             std::string piece = *item.text;
+            // U+FFFC is never spoken. It stands for an embedded object -- a
+            // link inside a paragraph, an image -- and the object's own field
+            // has already said what it is and what it says (`content`, set by
+            // nav::DocumentTextRange). Spoken, it was "<U+FFFC>" after every
+            // link in a navigation bar (FAZA10.md N114); it stays in the
+            // STREAM only so braille's cell-to-offset map stays one to one.
+            for (std::size_t at = piece.find("\xEF\xBF\xBC"); at != std::string::npos;
+                 at = piece.find("\xEF\xBF\xBC", at)) {
+                piece.erase(at, 3);
+            }
             if (reportIndentation && !indentationDone) {
                 const auto [indent, rest] = text::splitIndentation(piece);
                 allIndentation += std::string(indent);

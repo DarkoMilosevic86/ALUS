@@ -113,6 +113,83 @@ TEST_CASE("the character unit steps over a multi-byte character once",
     CHECK(range->text() == "j");
 }
 
+TEST_CASE("N113: the arrow keys step one letter at a time through Serbian text",
+          "[nav][text][N113]") {
+    // The second live pass, in Chrome: the right arrow on "Treći" read "ći"
+    // and then skipped the "i". AT-SPI offsets are CODEPOINTS and the text
+    // layer treated them as UTF-8 bytes; at the start of a line the two agree
+    // for long enough to hide it ("čaj" above passed throughout), and in the
+    // middle of one they do not. Cyrillic is the worst case: every letter is
+    // two bytes, so every step was wrong.
+    NavFixture fixture;
+    const std::string text = "Treći dan, Ђорђе.";
+    DocumentTree tree(fixture.backend, text);
+    const auto document = fixture.registry.objectFor(tree.document);
+    REQUIRE(document != nullptr);
+
+    SECTION("the platform's count is characters, and so is the range's") {
+        CHECK(document->characterCount() == 17);  // 21 bytes in UTF-8
+    }
+
+    SECTION("by character, forwards: every letter alone, none skipped") {
+        TextRangePtr range = document->makeTextRange(Position::First);
+        REQUIRE(range != nullptr);
+        std::vector<std::string> letters;
+        for (int step = 0; step < 17; ++step) {
+            REQUIRE(range->expand(TextUnit::Character));
+            letters.push_back(range->text());
+            range->collapse();
+            if (range->move(TextUnit::Character, 1) != 1) {
+                break;
+            }
+        }
+        const std::vector<std::string> expected{"T", "r", "e", "ć", "i", " ", "d", "a", "n",
+                                                ",", " ", "Ђ", "о", "р", "ђ", "е", "."};
+        CHECK(letters == expected);
+    }
+
+    SECTION("by character, backwards from the end") {
+        TextRangePtr range = document->makeTextRange(Position::Last);
+        REQUIRE(range != nullptr);
+        REQUIRE(range->expand(TextUnit::Character));
+        CHECK(range->text() == ".");
+        range->collapse();
+        REQUIRE(range->move(TextUnit::Character, -1) == -1);
+        REQUIRE(range->expand(TextUnit::Character));
+        CHECK(range->text() == "е");
+        range->collapse();
+        REQUIRE(range->move(TextUnit::Character, -1) == -1);
+        REQUIRE(range->expand(TextUnit::Character));
+        CHECK(range->text() == "ђ");
+    }
+
+    SECTION("by word: the Cyrillic word is one word, whole") {
+        TextRangePtr range = document->makeTextRange(Position::First);
+        REQUIRE(range != nullptr);
+        std::vector<std::string> words;
+        for (int step = 0; step < 8; ++step) {
+            REQUIRE(range->expand(TextUnit::Word));
+            words.push_back(range->text());
+            range->collapse();
+            if (range->move(TextUnit::Word, 1) != 1) {
+                break;
+            }
+        }
+        INFO("words: " << [&words] {
+            std::string all;
+            for (const std::string& word : words) {
+                all += "[" + word + "]";
+            }
+            return all;
+        }());
+        REQUIRE_FALSE(words.empty());
+        CHECK(words.front() == "Treći ");
+        // The Cyrillic word arrives WHOLE: with bytes for codepoints its
+        // boundaries fell in the middle of a letter.
+        CHECK(std::find(words.begin(), words.end(), "Ђорђе") != words.end());
+    }
+}
+
 TEST_CASE("the word unit includes the whitespace after the word", "[nav][text]") {
     NavFixture fixture;
     DocumentTree tree(fixture.backend, "one two three");

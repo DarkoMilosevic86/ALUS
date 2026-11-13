@@ -35,7 +35,7 @@
 
 namespace alus::testing {
 
-// U+FFFC, as the backend's byte offsets count it.
+// U+FFFC. One CHARACTER in AT-SPI offsets, three UTF-8 bytes in a std::string.
 inline constexpr const char* kPlaceholder = "\xEF\xBF\xBC";
 
 inline std::string placeholders(int count) {

@@ -11,6 +11,7 @@
 // the root the whole text would pass tests no browser can pass.
 #include "nav/browse_support.hpp"
 
+#include "alus/core/cached.hpp"
 #include "alus/nav/browse_mode.hpp"
 #include "alus/nav/control_field.hpp"
 #include "alus/nav/document_range.hpp"
@@ -78,12 +79,18 @@ TEST_CASE("T6.1 control fields are synthesised from objects", "[browsemode][T6.1
         const a11y::ObjectPtr heading = fixture.registry.objectFor(tree.heading);
         const std::optional<text::ControlField> field = synth.forObject(*heading);
         REQUIRE(field.has_value());
-        // §6.5's attribute refinement has already turned a heading with
-        // level=1 into its own role, which is what the presentation layer
-        // needs to say "heading level 1" rather than "heading".
-        CHECK(field->role == a11y::Role::Heading1);
+        // `Heading` WITH A LEVEL, as NVDA's virtual buffers give it -- not
+        // the object model's `Heading1`. This asserted `Heading1` and said it
+        // was what the presentation layer needed for "heading level 1"; the
+        // presentation rules for FIELDS test `Role::Heading` alone, so a
+        // `Heading1` field was Layout and silent, and in Chrome neither the
+        // down arrow nor `h` ever said "heading" (FAZA10.md N116).
+        CHECK(field->role == a11y::Role::Heading);
         CHECK(field->getInt("level") == 1);
         CHECK(field->isBlock);
+        // And the consequence that matters: it is SPOKEN on a line.
+        CHECK(field->getPresentationCategory({}, settings) ==
+              text::PresentationCategory::SingleLine);
     }
 
     SECTION("a list carries its item count, which is what 'with 3 items' needs") {
@@ -825,7 +832,10 @@ TEST_CASE("the document range crosses leaves", "[browsemode]") {
 
     SECTION("the root's own text is placeholders, which is why this is needed") {
         // N47, asserted: the fixture is honest about what a browser answers.
-        CHECK(root->characterCount() == 12);
+        // FOUR, one per child: AT-SPI counts characters, and each U+FFFC is
+        // one. This said 12 -- the placeholders' UTF-8 bytes -- while the mock
+        // counted bytes too, which is the agreement N113 was hiding in.
+        CHECK(root->characterCount() == 4);
         CHECK(root->textRange(0, -1).find("Interfaces") == std::string::npos);
     }
 
@@ -995,5 +1005,162 @@ TEST_CASE("the tree interceptor registry attaches and collects", "[browsemode]")
         text::TextRangePtr line = position->copy();
         REQUIRE(line->expand(text::TextUnit::Line));
         CHECK_FALSE(line->text().empty());
+    }
+}
+
+// ---------------------------------------------------------------------------
+// What the second live pass heard in Chrome, written down as tests. Each one
+// builds the page the way CHROME answers it -- not the way an earlier test
+// assumed a browser would -- because every one of these defects was hidden by
+// a mock that was more convenient than the platform (FAZA10.md N112-N116).
+// ---------------------------------------------------------------------------
+
+namespace {
+
+// <nav><a>Početna</a> <a>Vesti</a> <a>Kontakt</a></nav>, as Chrome exposes it:
+// the nav's own text is "U+FFFC U+FFFC U+FFFC" -- a placeholder per link with
+// real spaces between them, which makes it a LEAF (DocumentLeaves) -- and the
+// links are reached only through its hypertext.
+a11y::Ref addNavBar(MockBackend& backend, WebDocumentTree& tree,
+                    const std::vector<std::string>& labels) {
+    const a11y::Ref nav = backend.add(tree.document, PlatformRole::Landmark, "Glavni meni");
+    backend.node(nav).attributes["xml-roles"] = "navigation";
+    MockNode& navNode = backend.node(nav);
+    navNode.interfaces |= a11y::Interface::Text;
+    backend.addState(nav, PlatformState::Showing);
+    std::string text;
+    int offset = 0;
+    for (std::size_t index = 0; index < labels.size(); ++index) {
+        if (index > 0) {
+            text += " ";
+            ++offset;
+        }
+        const a11y::Ref link = addTextLeaf(backend, nav, PlatformRole::Link, labels[index],
+                                           labels[index]);
+        backend.node(link).actionNames.push_back("jump");
+        backend.addState(link, PlatformState::Focusable);
+        text += kPlaceholder;
+        backend.node(nav).links.push_back(a11y::LinkInfo{offset, offset + 1, link, "#"});
+        ++offset;
+    }
+    backend.node(nav).text = text;
+    makeContainer(backend, tree.document,
+                  static_cast<int>(backend.node(tree.document).children.size()));
+    return nav;
+}
+
+}  // namespace
+
+TEST_CASE("N114: the links inside a line are read by their text, never as U+FFFC",
+          "[browsemode][N114]") {
+    NavFixture fixture;
+    WebDocumentTree tree{fixture.backend};
+    const a11y::Ref navRef = addNavBar(fixture.backend, tree, {"Početna", "Vesti", "Kontakt"});
+    const a11y::ObjectPtr root = fixture.registry.objectFor(tree.document);
+    const a11y::ObjectPtr nav = fixture.registry.objectFor(navRef);
+    REQUIRE(nav != nullptr);
+    REQUIRE(nav::DocumentLeaves::isLeaf(*nav));
+
+    const text::FormatReportSettings settings;
+    text::TextRangePtr line = nav::DocumentTextRange::makeAt(
+        root, settings, nav::DocumentPosition{nav, 0}, nav::DocumentPosition{nav, 0});
+    REQUIRE(line != nullptr);
+    REQUIRE(line->expand(text::TextUnit::Line));
+
+    SECTION("the stream: one placeholder per link, each inside the link's own field") {
+        std::vector<std::string> contents;
+        int placeholdersSeen = 0;
+        for (const text::TextOrField& item : line->getTextWithFields(settings)) {
+            if (item.isText() && *item.text == kPlaceholder) {
+                ++placeholdersSeen;
+            }
+            if (item.isCommand() &&
+                item.command->kind() == text::FieldCommand::Kind::ControlStart &&
+                item.command->control()->role == a11y::Role::Link) {
+                contents.emplace_back(item.command->control()->get("content"));
+            }
+        }
+        // The placeholder STAYS -- braille's cell-to-offset map needs one
+        // character per offset -- and the field says what it stands for.
+        CHECK(placeholdersSeen == 3);
+        CHECK(contents == std::vector<std::string>{"Početna", "Vesti", "Kontakt"});
+    }
+
+    SECTION("what is SPOKEN: the link texts, and no placeholder character") {
+        nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(root, fixture.nav());
+        auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+        REQUIRE(browse != nullptr);
+        fixture.clearSpeech();
+        REQUIRE(browse->moveTo(nav, a11y::OutputReason::Caret));
+        fixture.drainSpeech();
+        const std::string said = fixture.spokenJoined();
+        INFO("said: " << said);
+        CHECK(said.find("Početna") != std::string::npos);
+        CHECK(said.find("Vesti") != std::string::npos);
+        CHECK(said.find("Kontakt") != std::string::npos);
+        CHECK(said.find(kPlaceholder) == std::string::npos);
+    }
+}
+
+TEST_CASE("N115: a list the browser does NOT mark read-only is still a container",
+          "[browsemode][N115]") {
+    // The fixture's list carries READONLY, which is what NVDA's virtual
+    // buffers would give it and what Chrome does not. Without READONLY a list
+    // is a list BOX (a single-line control) and "list" was spoken on every
+    // line inside it.
+    NavFixture fixture;
+    WebDocumentTree tree{fixture.backend};
+    const a11y::Ref plain = fixture.backend.add(tree.document, PlatformRole::List);
+    addTextLeaf(fixture.backend, plain, PlatformRole::ListItem, "Prva");
+    addTextLeaf(fixture.backend, plain, PlatformRole::ListItem, "Druga");
+    makeContainer(fixture.backend, plain, 2);
+    makeContainer(fixture.backend, tree.document,
+                  static_cast<int>(fixture.backend.node(tree.document).children.size()));
+
+    const text::FormatReportSettings settings;
+    const nav::ControlFieldSynth synth{settings};
+    const std::optional<text::ControlField> field =
+        synth.forObject(*fixture.registry.objectFor(plain));
+    REQUIRE(field.has_value());
+    CHECK(field->states.has(a11y::State::ReadOnly));
+    CHECK(field->getPresentationCategory({}, settings) == text::PresentationCategory::Container);
+
+    SECTION("a list box in a form -- focusable -- stays a control") {
+        const a11y::Ref box = fixture.backend.add(tree.document, PlatformRole::List, "Izbor");
+        fixture.backend.addState(box, PlatformState::Focusable);
+        const std::optional<text::ControlField> boxField =
+            synth.forObject(*fixture.registry.objectFor(box));
+        REQUIRE(boxField.has_value());
+        CHECK_FALSE(boxField->states.has(a11y::State::ReadOnly));
+        CHECK(boxField->getPresentationCategory({}, settings) ==
+              text::PresentationCategory::SingleLine);
+    }
+}
+
+TEST_CASE("N116: a heading's text is not said twice when its name is its content",
+          "[browsemode][N116]") {
+    // Chrome names a heading after its text and sets `explicit-name` only on
+    // names an author wrote.
+    NavFixture fixture;
+    WebDocumentTree tree{fixture.backend};
+    fixture.backend.node(tree.heading).name = "Interfaces";  // = its text, not explicit
+    const text::FormatReportSettings settings;
+    const nav::ControlFieldSynth synth{settings};
+
+    const std::optional<text::ControlField> field =
+        synth.forObject(*fixture.registry.objectFor(tree.heading));
+    REQUIRE(field.has_value());
+    CHECK(field->getBool("labelledByContent").value_or(false));
+
+    SECTION("an explicit name the author wrote is kept") {
+        fixture.backend.node(tree.heading).attributes["explicit-name"] = "true";
+        const nav::ControlFieldSynth fresh{settings};
+        // The cache lives for one pump cycle; end it, so the attribute is
+        // read again.
+        core::invalidateAllCaches();
+        const std::optional<text::ControlField> named =
+            fresh.forObject(*fixture.registry.objectFor(tree.heading));
+        REQUIRE(named.has_value());
+        CHECK_FALSE(named->getBool("labelledByContent").value_or(false));
     }
 }

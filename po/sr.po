@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alus 0.1.0\n"
 "Report-Msgid-Bugs-To: daremc86@gmail.com\n"
-"POT-Creation-Date: 2026-11-13 11:45+0000\n"
-"PO-Revision-Date: 2026-11-13 11:45+0000\n"
+"POT-Creation-Date: 2026-11-13 12:42+0000\n"
+"PO-Revision-Date: 2026-11-13 12:42+0000\n"
 "Last-Translator: tools/import-nvda-po.py\n"
 "Language-Team: Serbian (Cyrillic)\n"
 "Language: sr_RS\n"
@@ -1171,14 +1171,14 @@ msgstr "ван %s"
 #. Translators: spoken when a paragraph is blank.
 #. Translators: spoken when a line or a field is empty.
 #. Translators: spoken when the review cursor reaches an empty line.
-#: src/a11y/text_speech.cpp:1367 src/nav/browse_mode.cpp:796 src/nav/paragraph_nav.cpp:231
+#: src/a11y/text_speech.cpp:1377 src/nav/browse_mode.cpp:796 src/nav/paragraph_nav.cpp:231
 #: src/speech/presenter.cpp:291 src/speech/spelling.cpp:149 src/speech/spelling.cpp:157
 msgid "blank"
 msgstr "празно"
 
 #. Translators: a large selection is reported by its size; %s is the
 #. number of characters.
-#: src/a11y/text_speech.cpp:1441
+#: src/a11y/text_speech.cpp:1451
 msgid "%s character"
 msgid_plural "%s characters"
 msgstr[0] "%s знак"
@@ -1188,28 +1188,28 @@ msgstr[2] "%s знакова"
 #. Translators: text that was ALREADY selected when the control got the
 #. focus. "selected" comes FIRST on purpose: the user may be about to
 #. overwrite it.
-#: src/a11y/text_speech.cpp:1482
+#: src/a11y/text_speech.cpp:1492
 msgid "selected %s"
 msgstr "изабрано %s"
 
 #. Translators: what has just been selected: "hello world selected".
 #. Translators: what is selected, e.g. "hello world selected".
-#: src/a11y/text_speech.cpp:1558 src/nav/text_commands.cpp:614
+#: src/a11y/text_speech.cpp:1568 src/nav/text_commands.cpp:614
 msgid "%s selected"
 msgstr "%s изабрано"
 
 #. Translators: what has just been unselected.
-#: src/a11y/text_speech.cpp:1568
+#: src/a11y/text_speech.cpp:1578
 msgid "%s unselected"
 msgstr "%s неизабрано"
 
 #. Translators: the previous selection was replaced by a new one.
-#: src/a11y/text_speech.cpp:1573
+#: src/a11y/text_speech.cpp:1583
 msgid "%s selected instead"
 msgstr "%s изабрано уместо"
 
 #. Translators: the selection was removed.
-#: src/a11y/text_speech.cpp:1576
+#: src/a11y/text_speech.cpp:1586
 msgid "selection removed"
 msgstr "избор уклоњен"
 
@@ -4744,7 +4744,7 @@ msgstr "нема претходног пасуса текста"
 #. line number and the second the number of lines. ONE pattern rather than
 #. three concatenated pieces, because the word order is not English's in
 #. every language.
-#: src/nav/document_range.cpp:980
+#: src/nav/document_range.cpp:1058
 msgid "line %s of %s"
 msgstr "линија %s од %s"
 

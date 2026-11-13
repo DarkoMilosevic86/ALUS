@@ -28,6 +28,7 @@
 #pragma once
 
 #include "alus/a11y/backend.hpp"
+#include "alus/text/offsets.hpp"
 
 #include <algorithm>
 #include <iterator>
@@ -382,9 +383,28 @@ public:
         return node(ref).value;
     }
 
+    // EVERY OFFSET IN AND OUT OF THIS MOCK IS A CODEPOINT, as it is in
+    // AT-SPI -- measured on Chrome / AT-SPI 2.56.2 (FAZA10.md N113). The text
+    // is stored as UTF-8 and converted at the edge.
+    //
+    // It counted BYTES until N113, and that is how the defect survived: the
+    // text layer also counted bytes, so every test with a Serbian letter in it
+    // was a byte-counting mock agreeing with byte-counting code, while the
+    // real platform answered in characters.
+    static int codepoints(const std::string& text) {
+        return static_cast<int>(text::OffsetConverter(text).codepointLength());
+    }
+    static std::size_t toByte(const std::string& text, int codepoint) {
+        return text::OffsetConverter(text).toByte(
+            static_cast<std::size_t>(std::max(0, codepoint)));
+    }
+    static int toCodepoint(const std::string& text, std::size_t byte) {
+        return static_cast<int>(text::OffsetConverter(text).toCodepoint(byte));
+    }
+
     int characterCount(Ref ref) override {
         note("characterCount", ref);
-        return valid(ref) ? static_cast<int>(node(ref).text.size()) : 0;
+        return valid(ref) ? codepoints(node(ref).text) : 0;
     }
 
     std::string text(Ref ref, int start, int end) override {
@@ -393,12 +413,11 @@ public:
             return {};
         }
         const std::string& whole = node(ref).text;
-        if (start < 0 || static_cast<std::size_t>(start) > whole.size()) {
+        if (start < 0 || start > codepoints(whole)) {
             return {};
         }
-        const std::size_t from = static_cast<std::size_t>(start);
-        const std::size_t to =
-            end < 0 ? whole.size() : std::min(whole.size(), static_cast<std::size_t>(end));
+        const std::size_t from = toByte(whole, start);
+        const std::size_t to = end < 0 ? whole.size() : toByte(whole, end);
         return to > from ? whole.substr(from, to - from) : std::string{};
     }
 
@@ -413,7 +432,7 @@ public:
             return false;
         }
         MockNode& target = node(ref);
-        if (offset < 0 || static_cast<std::size_t>(offset) > target.text.size()) {
+        if (offset < 0 || offset > codepoints(target.text)) {
             return false;
         }
         target.caret = offset;
@@ -441,13 +460,13 @@ public:
             return std::nullopt;
         }
         const std::string& whole = target.text;
-        if (offset < 0 || static_cast<std::size_t>(offset) > whole.size()) {
+        if (offset < 0 || offset > codepoints(whole)) {
             return std::nullopt;
         }
         // Lines and paragraphs break on \n; words on whitespace; sentences on
         // ". ". Deliberately simple, and deliberately DIFFERENT from what the
         // text layer would compute, so a test can tell which answer was used.
-        std::size_t position = static_cast<std::size_t>(offset);
+        std::size_t position = toByte(whole, offset);
         if (position >= whole.size() && !whole.empty()) {
             position = whole.size() - 1;
         }
@@ -473,8 +492,8 @@ public:
             end = next == std::string::npos ? whole.size() : next + 2;
         }
         TextSegment segment;
-        segment.start = static_cast<int>(start);
-        segment.end = static_cast<int>(end);
+        segment.start = toCodepoint(whole, start);
+        segment.end = toCodepoint(whole, end);
         segment.text = whole.substr(start, end - start);
         return segment;
     }
@@ -501,9 +520,9 @@ public:
         TextSegment segment;
         segment.start = target.selectionStart;
         segment.end = target.selectionEnd;
-        segment.text = target.text.substr(
-            static_cast<std::size_t>(segment.start),
-            static_cast<std::size_t>(segment.end - segment.start));
+        const std::size_t from = toByte(target.text, segment.start);
+        const std::size_t to = toByte(target.text, segment.end);
+        segment.text = target.text.substr(from, to > from ? to - from : 0);
         return segment;
     }
 
@@ -526,7 +545,7 @@ public:
         }
         const MockNode& target = node(ref);
         run.start = 0;
-        run.end = static_cast<int>(target.text.size());
+        run.end = codepoints(target.text);
         if (includeDefaults) {
             run.attributes = target.defaultTextAttributes;
         }
@@ -568,8 +587,8 @@ public:
             }
             lineStart = static_cast<int>(next) + 1;
         }
-        const int offset = lineStart + column;
-        return static_cast<std::size_t>(offset) <= target.text.size() ? offset : -1;
+        const int offset = toCodepoint(target.text, static_cast<std::size_t>(lineStart)) + column;
+        return offset <= codepoints(target.text) ? offset : -1;
     }
 
     Rect characterExtents(Ref ref, int offset) override {
@@ -578,13 +597,18 @@ public:
             return Rect{};
         }
         const MockNode& target = node(ref);
-        if (offset < 0 || static_cast<std::size_t>(offset) > target.text.size()) {
+        if (offset < 0 || offset > codepoints(target.text)) {
             return Rect{};
         }
         int line = 0;
         int column = 0;
-        for (int index = 0; index < offset; ++index) {
-            if (target.text[static_cast<std::size_t>(index)] == '\n') {
+        const std::size_t limit = toByte(target.text, offset);
+        for (std::size_t index = 0; index < limit; ++index) {
+            const auto byte = static_cast<unsigned char>(target.text[index]);
+            if ((byte & 0xC0U) == 0x80U) {
+                continue;  // a continuation byte: not a character of its own
+            }
+            if (byte == '\n') {
                 ++line;
                 column = 0;
             } else {

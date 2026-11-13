@@ -93,6 +93,10 @@ void setIntIfPositive(text::ControlField& field, const char* key, int value) {
 
 }  // namespace
 
+bool hasText(const a11y::Object& object) {
+    return object.hasInterface(a11y::Interface::Text) && object.characterCount() > 0;
+}
+
 bool isObjectEditableText(const a11y::Object& object) {
     const Role role = object.role();
     return role == Role::Paragraph || role == Role::EditableText;
@@ -227,12 +231,59 @@ std::optional<text::ControlField> ControlFieldSynth::forObject(const a11y::Objec
     field.role = object.role();
     field.roleText = object.roleText();
     field.name = object.name();
+    // A NAME THAT IS ONLY THE OBJECT'S OWN TEXT IS NOT SAID TWICE. Chrome
+    // names a heading or a link after its content and marks a name the AUTHOR
+    // wrote with `explicit-name=true` (measured: toolbar buttons have it, the
+    // page's headings and links do not). Said as a name and then again as the
+    // text, `h` read "Prvi naslov stranice, Prvi naslov stranice, heading
+    // level 1" (FAZA10.md N116). NVDA keys the same decision on the same
+    // attribute; the text comparison is there for a toolkit that does not send
+    // it, so that a real label is never dropped on a guess.
+    if (!field.name.empty() && hasText(object)) {
+        const auto& attributes = object.attributes();
+        const auto explicitName = attributes.find("explicit-name");
+        if (explicitName == attributes.end() || explicitName->second != "true") {
+            const auto trimmed = [](std::string_view value) {
+                const std::size_t first = value.find_first_not_of(" \t\n\r");
+                if (first == std::string_view::npos) {
+                    return std::string_view{};
+                }
+                const std::size_t last = value.find_last_not_of(" \t\n\r");
+                return value.substr(first, last - first + 1);
+            };
+            const std::string own = object.textRange(0, -1);
+            if (trimmed(own) == trimmed(field.name)) {
+                field.set("labelledByContent", true);
+            }
+        }
+    }
     field.landmark = object.landmark();
     field.uniqueId = uniqueIdFor(object);
 
     a11y::StateSet states = object.states();
     for (const State state : kDiscardedStates) {
         states.remove(state);
+    }
+    // DOCUMENT CONTENT IS READ-ONLY UNLESS IT IS EDITABLE, which is what
+    // NVDA's virtual buffers make it: their backends add READONLY to every
+    // node that is not editable, and the presentation rules are written
+    // against that. ALUS reads the live tree, where Chrome and Firefox set no
+    // READ_ONLY on a <ul> -- so a list in a page fell into the "list box"
+    // branch of text::getPresentationCategory (a list without READONLY is a
+    // single-line control) and "list" was spoken on EVERY line inside it
+    // instead of once on entry. The same state is what the "report lists"
+    // setting is tested against, so that switch did nothing on the web either.
+    // FAZA10.md N115.
+    //
+    // An editable object keeps its states untouched: a list box in a form is
+    // focusable, not editable, so the FOCUSABLE test is what keeps it a
+    // control, and that is the distinction the category rule draws.
+    //
+    // Asked of the OBJECT's states, not of `states`: FOCUSABLE is one of the
+    // discarded states above (no screen reader says "focusable"), so testing
+    // the filtered set made every list box read-only too.
+    if (!object.states().has(State::Editable) && !object.states().has(State::Focusable)) {
+        states.add(State::ReadOnly);
     }
     field.states = states;
 
@@ -270,6 +321,21 @@ std::optional<text::ControlField> ControlFieldSynth::forObject(const a11y::Objec
 
     const int level = object.positionInfo().level;
     setIntIfPositive(field, "level", level);
+
+    // A HEADING IS `Heading` WITH A LEVEL in a document field, as it is in
+    // NVDA's virtual buffers -- not `Heading1`..`Heading6`, which is how the
+    // object model names it (AT-SPI's heading plus its `level` attribute, the
+    // way NVDA presents a heading OBJECT). The presentation rules for fields
+    // test `Role::Heading` alone: a `Heading2` field matched no category,
+    // fell through to Layout and was silent, so neither the down arrow nor `h`
+    // ever said "heading level 2" -- only the heading's text (FAZA10.md N116).
+    if (field.role >= Role::Heading1 && field.role <= Role::Heading6) {
+        const int fromRole = static_cast<int>(field.role) - static_cast<int>(Role::Heading1) + 1;
+        field.role = Role::Heading;
+        if (!field.contains("level")) {
+            field.set("level", fromRole);
+        }
+    }
 
     // Whether the control is its own block. The presentation layer needs it
     // for a roleText field and say-all needs it to break an utterance, and the

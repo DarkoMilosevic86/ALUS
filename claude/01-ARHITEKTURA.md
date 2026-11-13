@@ -814,12 +814,25 @@ print([g for g in dir(Atspi.TextGranularity) if g.isupper()])"
 
 ### 7.3 Kodiranje offseta — **najverovatniji izvor tihih bugova**
 
+> **ODSTUPANJE, IZMERENO (FAZA10.md N113).** Prva tačka ispod je bila
+> pogrešna, a na njoj je stajao ceo tekstualni sloj: **AT-SPI2 offseti su
+> codepoint-i, ne UTF-8 bajtovi.** Izmereno na Chrome / AT-SPI 2.56.2
+> nezavisnom bibliotekom (Atspi preko GObject introspection): „Prvi pasus je
+> proza. Ima dve rečenice." javlja 38 znakova, ima 39 bajtova, i
+> `get_text(31, 32)` je „č". Sa bajtovima pretpostavljenim, strelica desno na
+> „Treći" je čitala „ći" i preskakala „i", a ćirilica je bila pogrešna u
+> svakom slovu. `OffsetsTextRange` sada ima `offsetUnit()` (NVDA-in
+> `encoding`): `ObjectTextRange` broji codepoint-e, pregled ekrana nad
+> sopstvenim stringom ostaje na bajtovima, a konverzija se radi samo gde se
+> lokalni UTF-8 string seče ili segmentira. Mock backend je brojao bajtove,
+> pa se slagao sa greškom; sada broji codepoint-e kao platforma.
+
 Tri sistema u igri:
-- **AT-SPI2**: offseti su **UTF-8 bajtovi**,
+- **AT-SPI2**: offseti su ~~UTF-8 bajtovi~~ **codepoint-i** (vidi odstupanje gore),
 - **NVDA**: pretpostavlja **UTF-16 jedinice** (`WCHAR_ENCODING`),
 - **interna reprezentacija**: codepoint-i / grafemi.
 
-NVDA ovo rešava slojem `OffsetConverter` (`textUtils/__init__.py`) i — ključno — **`UTF8OffsetConverter` već postoji** (`textUtils/__init__.py:320`). ALUS postavlja `OffsetsTextRange::encoding = "utf_8"` i registruje taj konverter. Onda svaki `_get*Offsets` hook prima AT-SPI bajt-offsete direktno, a ostatak steka radi u logičkim indeksima.
+NVDA ovo rešava slojem `OffsetConverter` (`textUtils/__init__.py`) i — ključno — **`UTF8OffsetConverter` već postoji** (`textUtils/__init__.py:320`). ~~ALUS postavlja `OffsetsTextRange::encoding = "utf_8"` i registruje taj konverter.~~ ALUS-ov `ObjectTextRange` odgovara `offsetUnit() == Codepoints`, jer to AT-SPI zaista broji. Onda svaki `_get*Offsets` hook prima AT-SPI bajt-offsete direktno, a ostatak steka radi u logičkim indeksima.
 
 **Ako se ovo pogreši, svaki emoji, CJK string i kombinujući dijakritik je tiho pokvaren**, i to se vidi samo u bug prijavama. Uraditi jednom, u Fazi 5, sa testovima.
 

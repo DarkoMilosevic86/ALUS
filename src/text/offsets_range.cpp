@@ -68,6 +68,26 @@ std::string caseFold(std::string_view text) {
 OffsetsTextRange::~OffsetsTextRange() = default;
 
 // ---------------------------------------------------------------------------
+// The unit
+// ---------------------------------------------------------------------------
+
+std::size_t OffsetsTextRange::unitsToBytes(std::string_view text, int units) const {
+    const std::size_t clamped = static_cast<std::size_t>(std::max(0, units));
+    if (offsetUnit() == OffsetUnit::Utf8Bytes) {
+        return std::min(clamped, text.size());
+    }
+    return OffsetConverter(text).toByte(clamped);
+}
+
+int OffsetsTextRange::bytesToUnits(std::string_view text, std::size_t bytes) const {
+    const std::size_t clamped = std::min(bytes, text.size());
+    if (offsetUnit() == OffsetUnit::Utf8Bytes) {
+        return static_cast<int>(clamped);
+    }
+    return static_cast<int>(OffsetConverter(text).toCodepoint(clamped));
+}
+
+// ---------------------------------------------------------------------------
 // The hooks' default implementations
 // ---------------------------------------------------------------------------
 
@@ -77,14 +97,12 @@ std::string OffsetsTextRange::storyText() const {
 
 std::string OffsetsTextRange::textRange(int start, int end) const {
     const std::string story = storyText();
-    const int length = static_cast<int>(story.size());
-    start = clampOffset(start, length);
-    end = clampOffset(end, length);
-    if (end <= start) {
+    const std::size_t from = unitsToBytes(story, start);
+    const std::size_t to = unitsToBytes(story, end);
+    if (to <= from) {
         return {};
     }
-    return story.substr(static_cast<std::size_t>(start),
-                        static_cast<std::size_t>(end - start));
+    return story.substr(from, to - from);
 }
 
 std::optional<int> OffsetsTextRange::caretOffset() const {
@@ -219,11 +237,10 @@ std::optional<OffsetsTextRange::Offsets> OffsetsTextRange::lineOffsetsResolved(
     if (story.empty()) {
         return Offsets{0, 0};
     }
-    const std::size_t position = static_cast<std::size_t>(
-        clampOffset(offset, static_cast<int>(story.size())));
+    const std::size_t position = unitsToBytes(story, offset);
     const std::size_t start = findStartOfLine(story, position);
     const std::size_t end = findEndOfLine(story, position);
-    return Offsets{static_cast<int>(start), static_cast<int>(end)};
+    return Offsets{bytesToUnits(story, start), bytesToUnits(story, end)};
 }
 
 std::optional<OffsetsTextRange::Offsets> OffsetsTextRange::characterOffsetsResolved(
@@ -243,10 +260,13 @@ std::optional<OffsetsTextRange::Offsets> OffsetsTextRange::characterOffsetsResol
     if (lineText.empty()) {
         return Offsets{offset, offset + 1};
     }
-    const std::size_t relative = static_cast<std::size_t>(std::max(0, offset - line->start));
+    // The line is a UTF-8 string and the segmenter answers in its bytes; the
+    // offset and the answer are in the range's own unit. Converting at both
+    // ends is the whole of N113's fix for the arrow keys.
+    const std::size_t relative = unitsToBytes(lineText, offset - line->start);
     const Segment segment = Segmenter(lineText).characterAt(relative);
-    return Offsets{line->start + static_cast<int>(segment.start),
-                   line->start + static_cast<int>(segment.end)};
+    return Offsets{line->start + bytesToUnits(lineText, segment.start),
+                   line->start + bytesToUnits(lineText, segment.end)};
 }
 
 std::optional<OffsetsTextRange::Offsets> OffsetsTextRange::wordOffsetsResolved(
@@ -258,14 +278,19 @@ std::optional<OffsetsTextRange::Offsets> OffsetsTextRange::wordOffsetsResolved(
     if (!line.has_value()) {
         return std::nullopt;
     }
-    const std::string lineText = normaliseForWordBreaking(textRange(line->start, line->end));
+    const std::string original = textRange(line->start, line->end);
+    // Normalised for SEGMENTING only. It keeps every byte where it was (NBSP,
+    // two bytes, becomes two spaces) but not every codepoint, so the offsets
+    // are converted against the ORIGINAL text and only the segmenter sees the
+    // normalised one.
+    const std::string lineText = normaliseForWordBreaking(original);
     if (lineText.empty()) {
         return Offsets{offset, offset + 1};
     }
-    const std::size_t relative = static_cast<std::size_t>(std::max(0, offset - line->start));
+    const std::size_t relative = unitsToBytes(original, offset - line->start);
     const Segment segment = Segmenter(lineText).wordAt(relative);
-    return Offsets{line->start + static_cast<int>(segment.start),
-                   line->start + static_cast<int>(segment.end)};
+    return Offsets{line->start + bytesToUnits(original, segment.start),
+                   line->start + bytesToUnits(original, segment.end)};
 }
 
 std::optional<OffsetsTextRange::Offsets> OffsetsTextRange::paragraphOffsetsResolved(
@@ -295,11 +320,10 @@ std::optional<OffsetsTextRange::Offsets> OffsetsTextRange::sentenceOffsetsResolv
     if (paragraphText.empty()) {
         return Offsets{offset, offset + 1};
     }
-    const std::size_t relative =
-        static_cast<std::size_t>(std::max(0, offset - paragraph->start));
+    const std::size_t relative = unitsToBytes(paragraphText, offset - paragraph->start);
     const Segment segment = Segmenter(paragraphText).sentenceAt(relative);
-    return Offsets{paragraph->start + static_cast<int>(segment.start),
-                   paragraph->start + static_cast<int>(segment.end)};
+    return Offsets{paragraph->start + bytesToUnits(paragraphText, segment.start),
+                   paragraph->start + bytesToUnits(paragraphText, segment.end)};
 }
 
 std::optional<OffsetsTextRange::Offsets> OffsetsTextRange::unitOffsets(TextUnit unit,
@@ -590,7 +614,11 @@ bool OffsetsTextRange::find(std::string_view needle, bool caseSensitive, bool re
         if (position == std::string::npos) {
             return false;
         }
-        startOffset_ = endOffset_ = static_cast<int>(position);
+        // A byte position in the haystack, which is the text in this range's
+        // unit only when the unit is bytes. (When case folding changes a
+        // letter's length -- German ß, a handful of others -- the position
+        // is approximate either way; Serbian folds one to one.)
+        startOffset_ = endOffset_ = bytesToUnits(haystack, position);
         return true;
     }
     // One past the start, so the current match is not found again.
@@ -601,7 +629,7 @@ bool OffsetsTextRange::find(std::string_view needle, bool caseSensitive, bool re
     if (position == std::string::npos) {
         return false;
     }
-    startOffset_ = endOffset_ = from + static_cast<int>(position);
+    startOffset_ = endOffset_ = from + bytesToUnits(haystack, position);
     return true;
 }
 
