@@ -24,7 +24,7 @@ Izveštaji o izvršenim fazama:
 | [`FAZA7.md`](FAZA7.md) | 7 | brajev red: status T7.1–T7.8 **svih osam prošlo**, devet odstupanja, nalazi N62–N65, **ručni test nije izvršen** (nema `brltty`) |
 | [`FAZA8.md`](FAZA8.md) | 8 | app moduli i ekstenzibilnost: status T8.1–T8.7 **svih sedam prošlo**, petnaest odstupanja, nalazi N66–N74, **sva četiri modula prepisana posle živog merenja** |
 | [`FAZA9.md`](FAZA9.md) | 9 | GUI i lokalizacija: status T9.1–T9.5 **svih pet prošlo**, petnaest odstupanja, nalazi N75–N87, **prozor je sopstveni proces** (N79) |
-| [`FAZA10.md`](FAZA10.md) | 10 | komande koje su se najavljivale a nisu bile napisane: **29 napisano** (`[announce]` 47 → 18), osam odstupanja, nalazi N107–N110, **prsten podešavanja sinteze** (N108) |
+| [`FAZA10.md`](FAZA10.md) | 10 | komande koje su se najavljivale a nisu bile napisane: **29 napisano** (`[announce]` 47 → 18), osam odstupanja, nalazi N107–N111, **GTK 4 se čitao kao onemogućen** (N111, nađeno merenjem prema Orci) |
 
 ## Kako je plan nastao
 

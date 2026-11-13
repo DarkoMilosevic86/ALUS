@@ -94,6 +94,62 @@ bool hasBit(std::uint64_t bits, PlatformState state) {
     return (bits & platformStateBit(state)) != 0;
 }
 
+// Whether "disabled" means anything for this role.
+//
+// The roles a toolkit can grey out: everything the user can operate, plus the
+// few containers whose own sensitivity is meaningful (a menu, a page tab, a
+// split pane). Everything else -- frames, dialogs, panels, groupings, labels,
+// documents, sections -- is furniture: it is never greyed out, and some
+// toolkits (gnome-shell's St) do not report SENSITIVE on it at all.
+//
+// Kept in one place rather than spread over the presentation, because the
+// STATE is what is wrong when this list is wrong: `alus-cli a11y-tree` and
+// the braille display read the same state set as speech does.
+bool roleReportsSensitivity(PlatformRole role) {
+    switch (role) {
+        case PlatformRole::Button:
+        case PlatformRole::PushButtonMenu:
+        case PlatformRole::ToggleButton:
+        case PlatformRole::CheckBox:
+        case PlatformRole::CheckMenuItem:
+        case PlatformRole::RadioButton:
+        case PlatformRole::RadioMenuItem:
+        case PlatformRole::MenuItem:
+        case PlatformRole::TearoffMenuItem:
+        case PlatformRole::Menu:
+        case PlatformRole::ComboBox:
+        case PlatformRole::Entry:
+        case PlatformRole::Text:
+        case PlatformRole::PasswordText:
+        case PlatformRole::Editbar:
+        case PlatformRole::Slider:
+        case PlatformRole::SpinButton:
+        case PlatformRole::Dial:
+        case PlatformRole::ScrollBar:
+        case PlatformRole::PageTab:
+        case PlatformRole::TableCell:
+        case PlatformRole::ListItem:
+        case PlatformRole::TreeItem:
+        case PlatformRole::Link:
+        case PlatformRole::Switch:
+        case PlatformRole::Separator:
+        case PlatformRole::SplitPane:
+        case PlatformRole::LayeredPane:
+        case PlatformRole::LevelBar:
+        case PlatformRole::Embedded:
+        case PlatformRole::Calendar:
+        case PlatformRole::ColorChooser:
+        case PlatformRole::DateEditor:
+        case PlatformRole::FileChooser:
+        case PlatformRole::FontChooser:
+        case PlatformRole::Autocomplete:
+        case PlatformRole::Rating:
+            return true;
+        default:
+            return false;
+    }
+}
+
 }  // namespace
 
 StateSet statesFromPlatform(std::uint64_t bits, PlatformRole platform) {
@@ -119,10 +175,32 @@ StateSet statesFromPlatform(std::uint64_t bits, PlatformRole platform) {
     // Without this guard the whole desktop is announced as unavailable,
     // invisible and off-screen -- which is how this was found.
     if (bits != 0) {
-        // A control is unavailable when the toolkit says it is neither enabled
-        // nor sensitive. Both exist because ATK distinguishes "logically
-        // disabled" from "cannot take input"; for the user there is one word.
-        if (!hasBit(bits, PlatformState::Enabled) || !hasBit(bits, PlatformState::Sensitive)) {
+        // A control is unavailable when the toolkit says it is not SENSITIVE.
+        // SENSITIVE ALONE, which is finding N111 and Orca's rule
+        // (ax_utilities_state.py: `is_sensitive` is a test of SENSITIVE and
+        // nothing else).
+        //
+        // This was `!ENABLED || !SENSITIVE`, on the reasoning that ATK
+        // distinguishes "logically disabled" from "cannot take input". GTK 4
+        // does not: its AT-SPI bridge reports SENSITIVE on every widget and
+        // ENABLED on NONE of them -- measured on GTK 4 / libadwaita 1 /
+        // AT-SPI 2.56.2 with an independent binding (Atspi through GObject
+        // introspection), where even the Close button of a dialog answers
+        // `enabled=False sensitive=True`. So every GTK 4 object was
+        // "unavailable", and ALUS's own settings window -- a GTK 4 program --
+        // was announced as disabled from the title to the last button: 161 of
+        // the 207 things said while a user walked it contained the word. The
+        // user concluded, correctly from what they heard, that nothing in it
+        // could be changed.
+        //
+        // AND ONLY FOR A ROLE THAT CAN BE DISABLED, which is the second half
+        // of the same rule in Orca: its `_generate_state_sensitive` is called
+        // from the generators for buttons, check boxes, menu items, sliders
+        // and the rest, and from no container's. It matters for toolkits that
+        // leave SENSITIVE off their containers -- gnome-shell's own panels
+        // read as "unavailable" without it. The list is in
+        // roleReportsSensitivity().
+        if (roleReportsSensitivity(platform) && !hasBit(bits, PlatformState::Sensitive)) {
             states.add(State::Unavailable);
         }
         if (!hasBit(bits, PlatformState::Visible)) {

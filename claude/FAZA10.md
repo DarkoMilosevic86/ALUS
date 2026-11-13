@@ -10,7 +10,7 @@ ništa od komandi ne radi"*.
 meson test -C build
 ```
 
-Rezultat: **21 test, 36.474 asertacije, zeleno** (1 očekivani pad:
+Rezultat: **21 test, 36.523 asertacije, zeleno** (1 očekivani pad:
 `settings-bad-page`).
 
 Faza je imala **tačno merljiv cilj**: `data/commands-status.ini` je u sekciji
@@ -36,7 +36,7 @@ navodi 238/64, što je ista stvar izmerena kroz živo traženje skripta u sviti
 
 ---
 
-## Zašto je faza postojala: dva nalaza, ne jedan
+## Zašto je faza postojala: tri nalaza, ne jedan
 
 ### N107 — `voice=\s`: ime glasa koje drajver nije prihvatio ostajalo je u drajveru
 
@@ -142,6 +142,60 @@ komandu (`tests/nav/test_paragraphs.cpp`, 19 asertacija), što je i razlog zašt
 izraz stoji u **javnom** zaglavlju (`kTextParagraphPattern`) a ne skriven u
 `browse_mode.cpp`: ono što taster znači korisniku je u celosti svojstvo tog
 izraza.
+
+### N111 — ceo GTK 4 je bio „onemogućen", i ALUS-ov prozor podešavanja sa njim
+
+**Nađeno živim merenjem prema Orci** (`MERENJE-ORCA.md`), i to je pravi uzrok
+rečenice od koje je faza počela. Korisnik je, sa ALUS-om na tastaturi, otvorio
+prozor podešavanja (`alus+control+s`) i prošao ga tabom i strelicama. Od **207**
+stvari koje je ALUS za to vreme izgovorio, **161** je sadržalo reč
+*„недоступно"* — naslov, dijalog, svaka lista, svaki izborni okvir, svako
+dugme. Zaključak *„ne mogu da podesim sintezu, glas"* bio je tačan na osnovu
+onoga što se čulo.
+
+Pravilo u `src/a11y/state_map.cpp` je bilo:
+
+```cpp
+if (!hasBit(bits, Enabled) || !hasBit(bits, Sensitive)) states.add(Unavailable);
+```
+
+Nezavisnom bibliotekom — Atspi preko GObject introspection, **mimo ALUS-ovog
+koda** — izmereno na GTK 4 / libadwaita 1 / AT-SPI 2.56.2:
+
+```
+button     enabled=False sensitive=True  'Врати сва подешавања'
+page tab   enabled=False sensitive=True  'Говор'
+combo box  enabled=False sensitive=True  'Језик'
+button     enabled=False sensitive=True  'Затвори'
+```
+
+**GTK 4 postavlja `SENSITIVE` na svaki objekat, a `ENABLED` ni na jedan.** Uz
+staro pravilo, svaki GTK 4 program je bio onemogućen od naslova do poslednjeg
+dugmeta. Orca proverava **samo** `SENSITIVE` (`ax_utilities_state.py:303`), pa
+kod nje radi.
+
+Prva dijagnoza je bila pogrešna i vredi je zapisati: posle prvog upita činilo
+se da GTK 4 ne prijavljuje bitove na **kontejnerima**, pa je prva popravka bila
+lista rola. Kontejneri su se očistili, ali je `alus-cli a11y-tree 30
+alus-settings` i dalje pokazivao 18 kontrola kao `[unavailable]` — i tek je
+nezavisna biblioteka pokazala da je problem `ENABLED`, ne rola. Lista rola je
+ostala, jer je i ona Orcino pravilo (njen `_generate_state_sensitive` se poziva
+iz generatora za dugmad, polja i stavke menija, a ni iz jednog kontejnerskog)
+i jer bez nje gnome-shell-ovi paneli ostaju „onemogućeni".
+
+| `[unavailable]` u `alus-settings` | |
+|---|---|
+| pre | svi objekti |
+| posle liste rola | 18 od 199 (sve kontrole) |
+| **posle `SENSITIVE`-only** | **0 od 199** |
+
+U gnome-shell-u ostaje 10 polja za tekst sa `[unavailable]` — i ta su, po istoj
+nezavisnoj biblioteci, `sensitive=False` (skrivena polja ljuske, npr. pretraga
+pregleda koja nije otvorena). Tu ALUS i Orca sada kažu isto.
+
+Testovi: `tests/a11y/test_mapping.cpp`, tri sekcije `N111` — GTK 4-ov odgovor
+nije onemogućen, kontejner bez `SENSITIVE` nije onemogućen, kontrola bez
+`SENSITIVE` **jeste** (onemogućeno dugme mora i dalje da se najavi).
 
 ### Sitniji nalazi
 
@@ -298,9 +352,9 @@ prima tekst), a razlika je između tastera koji laže i tastera koji objasni.
   (vidi N110 „sitniji nalazi"). Jedna linija, ali menja ponašanje svite `gui`,
   pa ide sa prvom izmenom u tom fajlu.
 * Prozor podešavanja: `voice` i `outputModule` su i dalje **tekstualna polja**
-  (`src/gui/model.cpp`). Sa prstenom podešavanja put s tastature postoji, pa
-  ovo više nije blokada — ali lista ponuđenih glasova (`alus-cli list-voices`
-  je već ima) bila bi očigledno bolja i mala je izmena u `gui::model`.
+  (`src/gui/model.cpp`). Pravu blokadu u tom prozoru je pravio N111, ne ova
+  polja — ali lista ponuđenih glasova (`alus-cli list-voices` je već ima) bila
+  bi očigledno bolja i mala je izmena u `gui::model`.
 
 ---
 
@@ -319,6 +373,10 @@ meson test -C build --suite commands      # 2 testa: coverage + ponašanje koman
 # da li konfiguracija ima ispravan glas (N107)
 ./build/src/alus-cli list-voices
 grep -A2 '^\[speech\]' ~/.config/alus/alus.ini
+
+# N111: da li se ijedan GTK 4 objekat čita kao onemogućen
+./build/src/alus-settings &
+./build/src/alus-cli a11y-tree 30 alus-settings | grep -c unavailable   # mora 0
 
 # šta još nije napisano, i zašto
 sed -n '/^\[announce\]/,$p' data/commands-status.ini

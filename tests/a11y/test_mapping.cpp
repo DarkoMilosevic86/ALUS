@@ -135,6 +135,62 @@ TEST_CASE("the four state inversions", "[a11y][mapping]") {
         CHECK(statesFromPlatform(bits, PlatformRole::Button).has(State::Unavailable));
     }
 
+    SECTION("N111: GTK 4's answer -- sensitive, never enabled -- is NOT unavailable") {
+        // Measured on GTK 4 / libadwaita 1 / AT-SPI 2.56.2 with an independent
+        // binding: every widget reports SENSITIVE and none reports ENABLED.
+        // The old rule (`!ENABLED || !SENSITIVE`) made all of them
+        // unavailable, ALUS's own settings window included.
+        const std::uint64_t gtk4Bits = platformStateBit(PlatformState::Sensitive) |
+                                       platformStateBit(PlatformState::Focusable) |
+                                       platformStateBit(PlatformState::Visible) |
+                                       platformStateBit(PlatformState::Showing);
+        for (const PlatformRole role :
+             {PlatformRole::Button, PlatformRole::ComboBox, PlatformRole::ListItem,
+              PlatformRole::PageTab, PlatformRole::CheckBox, PlatformRole::Entry,
+              PlatformRole::Switch, PlatformRole::Frame, PlatformRole::Dialog}) {
+            INFO("platform role " << platformRoleName(role)
+                                  << " is sensitive and was announced as unavailable because "
+                                     "GTK 4 never reports ENABLED");
+            CHECK_FALSE(statesFromPlatform(gtk4Bits, role).has(State::Unavailable));
+        }
+    }
+
+    SECTION("N111: a container without SENSITIVE is NOT unavailable") {
+        // gnome-shell's panels report a non-empty state set without
+        // SENSITIVE. A container is never greyed out, so the role decides --
+        // Orca's rule.
+        const std::uint64_t containerBits = platformStateBit(PlatformState::Visible) |
+                                            platformStateBit(PlatformState::Showing);
+        for (const PlatformRole role :
+             {PlatformRole::Frame, PlatformRole::Dialog, PlatformRole::Panel,
+              PlatformRole::Grouping, PlatformRole::Filler, PlatformRole::Label,
+              PlatformRole::Section, PlatformRole::DocumentFrame, PlatformRole::Window,
+              PlatformRole::Application, PlatformRole::ScrollPane, PlatformRole::Viewport}) {
+            INFO("platform role " << platformRoleName(role)
+                                  << " is a container and cannot be greyed out");
+            CHECK_FALSE(statesFromPlatform(containerBits, role).has(State::Unavailable));
+            CHECK_FALSE(statesFromPlatform(containerBits, role).has(State::Invisible));
+        }
+    }
+
+    SECTION("N111: a control without SENSITIVE still IS unavailable") {
+        // The reason this is not a deletion: a greyed-out button must still
+        // be announced as greyed out.
+        const std::uint64_t greyed = platformStateBit(PlatformState::Visible) |
+                                     platformStateBit(PlatformState::Showing);
+        for (const PlatformRole role :
+             {PlatformRole::Button, PlatformRole::ToggleButton, PlatformRole::CheckBox,
+              PlatformRole::RadioButton, PlatformRole::MenuItem, PlatformRole::ComboBox,
+              PlatformRole::Entry, PlatformRole::Text, PlatformRole::Slider,
+              PlatformRole::SpinButton, PlatformRole::PageTab, PlatformRole::Link,
+              PlatformRole::Switch, PlatformRole::ListItem, PlatformRole::TreeItem,
+              PlatformRole::TableCell}) {
+            INFO("platform role " << platformRoleName(role)
+                                  << " is a control and a disabled one must say so");
+            CHECK(statesFromPlatform(greyed, role).has(State::Unavailable));
+        }
+    }
+
     SECTION("expandable and not expanded is collapsed") {
         const std::uint64_t bits =
             platformStateBit(PlatformState::Expandable) | platformStateBit(PlatformState::Enabled) |

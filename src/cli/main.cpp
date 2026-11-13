@@ -111,7 +111,8 @@ void usage() {
         "  gesture <id>        which command a gesture runs, e.g. kb:alus+1\n"
         "  list-commands [cat] the command table (data/scripts.csv)\n"
         "  a11y-info           whether the object model works, and what it sees\n"
-        "  a11y-tree [depth]   the accessible tree, as ALUS reads it (default 3)\n"
+        "  a11y-tree [depth] [app]  the accessible tree, as ALUS reads it (default\n"
+        "                      depth 3; app limits it to one application)\n"
         "  text-info           what the text layer sees: units, formatting, screen review\n"
         "  browse-info         whether browse mode works here, and what quick nav costs\n"
         "  braille-info        whether braille works here: liblouis, the tables, brltty\n"
@@ -1093,11 +1094,36 @@ int commandA11yTree(Loop& loop, const std::string& argument) {
         std::fprintf(stderr, "alus-cli: %s\n", error.c_str());
         return 1;
     }
-    const int depth = argument.empty() ? 3 : std::max(1, std::atoi(argument.c_str()));
+    // `a11y-tree [depth] [application]`. The application filter exists
+    // because the walk is depth first from the desktop and bounded, and
+    // gnome-shell alone spends the whole budget: asking about one window --
+    // ALUS's own settings window, which is how N111 was chased -- printed
+    // 2000 shell panels and never reached it.
+    std::string depthText = argument;
+    std::string application;
+    if (const std::size_t space = argument.find(' '); space != std::string::npos) {
+        depthText = argument.substr(0, space);
+        application = argument.substr(space + 1);
+    }
+    const int depth = depthText.empty() ? 3 : std::max(1, std::atoi(depthText.c_str()));
     // Bounded, because a web page has more objects than a terminal has lines.
     std::size_t budget = 2000;
     if (const alus::a11y::ObjectPtr desktop = registry.desktop()) {
-        printTree(*desktop, depth, 0, budget);
+        if (application.empty()) {
+            printTree(*desktop, depth, 0, budget);
+        } else {
+            bool found = false;
+            for (const alus::a11y::ObjectPtr& app : desktop->children()) {
+                if (app != nullptr && app->name() == application) {
+                    printTree(*app, depth, 0, budget);
+                    found = true;
+                }
+            }
+            if (!found) {
+                std::fprintf(stderr, "alus-cli: no application named '%s' on the desktop\n",
+                             application.c_str());
+            }
+        }
     }
     std::printf("%zu object(s) printed, %llu AT-SPI calls\n", 2000 - budget,
                 static_cast<unsigned long long>(backend.callCount()));

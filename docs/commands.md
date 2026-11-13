@@ -425,4 +425,4 @@ ništa novo (Z1).
 Opisi se prevode preko gettext-a; na srpskom ih prikazuje
 `alus-cli --language sr list-commands`.
 
-Generisano 2026-11-09.
+Generisano 2026-11-13.
