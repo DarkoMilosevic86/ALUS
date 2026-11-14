@@ -22,6 +22,15 @@
 #include <vector>
 
 namespace alus::commands {
+
+namespace {
+// The repeat count of the script running now, 0 when there is no dispatcher.
+int repeatsOf(const std::function<const script::Dispatcher*()>& dispatcher) {
+    const script::Dispatcher* current = dispatcher ? dispatcher() : nullptr;
+    return current != nullptr ? current->lastScriptRepeatCount() : 0;
+}
+}  // namespace
+
 namespace {
 
 constexpr const char* kPowerSupplyRoot = "/sys/class/power_supply";
@@ -72,6 +81,8 @@ std::string formatWith(const char* pattern, std::time_t when) {
     return std::string{buffer.data(), written};
 }
 
+}  // namespace
+
 // The locale's time format with the seconds taken out.
 //
 // Upstream asks Windows whether the taskbar clock shows seconds and matches
@@ -79,9 +90,20 @@ std::string formatWith(const char* pattern, std::time_t when) {
 // seconds is noise in every case a user presses this key -- so the seconds go
 // and the LOCALE's own arrangement stays, which is the part that matters
 // (12-hour versus 24-hour, and where the am/pm goes).
-std::string timePatternWithoutSeconds() {
-    const char* localeTime = nl_langinfo(T_FMT);
-    std::string pattern = localeTime != nullptr ? localeTime : "";
+std::string timePatternWithoutSeconds(std::string pattern) {
+    // The shorthands first: `%T` is `%H:%M:%S` and `%r` is `%I:%M:%S %p`, and
+    // `%X` is the locale's own time format, which glibc spells as one of them.
+    // Without this the search below finds no `%S` and the seconds stay --
+    // which is what sr_RS did ("12:17:46").
+    const auto expand = [&pattern](std::string_view from, std::string_view to) {
+        for (std::size_t at = pattern.find(from); at != std::string::npos;
+             at = pattern.find(from, at + to.size())) {
+            pattern.replace(at, from.size(), to);
+        }
+    };
+    expand("%T", "%H:%M:%S");
+    expand("%r", "%I:%M:%S %p");
+    expand("%X", "%H:%M:%S");
     if (pattern.empty()) {
         return "%H:%M";
     }
@@ -97,10 +119,10 @@ std::string timePatternWithoutSeconds() {
     return pattern.empty() ? "%H:%M" : pattern;
 }
 
-}  // namespace
-
 std::string formatTime(std::time_t when) {
-    return formatWith(timePatternWithoutSeconds().c_str(), when);
+    const char* localeTime = nl_langinfo(T_FMT);
+    return formatWith(timePatternWithoutSeconds(localeTime != nullptr ? localeTime : "").c_str(),
+                      when);
 }
 
 std::string formatDate(std::time_t when) {
@@ -327,7 +349,7 @@ void SystemCommands::say(const std::string& text) const {
 }
 
 int SystemCommands::repeatCount() const {
-    return context_.dispatcher != nullptr ? context_.dispatcher->lastScriptRepeatCount() : 0;
+    return repeatsOf(context_.dispatcher);
 }
 
 std::time_t SystemCommands::clock() const {

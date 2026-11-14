@@ -584,3 +584,22 @@ koristi: **koliko se komanda može izvršiti s tastature bez otvaranja prozora.*
 **Pre merenja** treba `alus-cli autostart --disable` i proveriti da samo jedan
 čitač drži tastaturu (N8): dva čitača na istoj sesiji znače da jedan od njih ne
 dobija ništa, i rezultat ne meri ni jednog.
+
+**Potvrda N121 (korisnik, uživo):** rezultat pretrage u pregledu se izgovara.
+
+**N122 — `alus+f12` dvaput ne kaže datum; vreme se izgovara sa sekundama.**
+
+Dnevnik (12:17:46): numpad Insert držan, F12 dvaput u razmaku od 200 ms, prag
+je 500 ms — oba puta „12:17:46". Ulazni put je ispravan (novi test u
+`tests/input/test_manager.cpp` sa istim tasterima daje brojeve ponavljanja 0 pa
+1). Greška je u povezivanju daemona: `src/daemon/main.cpp` je komandama
+govora, podešavanja i sistema davao `input.dispatcher()` **pre**
+`subsystems.initializeAll()`, a dispečer nastaje tek kad se ulaz pokrene. Taj
+pokazivač je bio prazan za ceo život daemona, pa je svaki drugi pritisak bio
+prvi — i za `alus+f12`, i za `alus+x` (srikanje), i za trostruki
+`alus+control+r` (fabrička podešavanja). Konteksti sada traže dispečer pri
+svakom pritisku (`std::function`), što preživljava i restart ulaza.
+
+Sekunde: `sr_RS` (i većina glibc locale-a) za vreme kaže `%T`, skraćenicu za
+`%H:%M:%S`; kod je tražio samo `:%S`. Skraćenice `%T`, `%r`, `%X` se sada
+razvijaju pre uklanjanja sekundi. Testovi u `tests/commands/test_system_commands.cpp`.

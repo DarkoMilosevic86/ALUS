@@ -19,6 +19,15 @@
 #include <utility>
 
 namespace alus::speech {
+
+namespace {
+// The repeat count of the script running now, 0 when there is no dispatcher.
+int repeatsOf(const std::function<const script::Dispatcher*()>& dispatcher) {
+    const script::Dispatcher* current = dispatcher ? dispatcher() : nullptr;
+    return current != nullptr ? current->lastScriptRepeatCount() : 0;
+}
+}  // namespace
+
 namespace {
 
 // NVDA: SpeechMode.displayString. The SPOKEN name of a mode; speechModeName()
@@ -195,7 +204,7 @@ void GlobalCommands::repeatLastSpokenInformation(input::Gesture& /*gesture*/) {
     }
 
     const int repeats =
-        context_.dispatcher != nullptr ? context_.dispatcher->lastScriptRepeatCount() : 0;
+        repeatsOf(context_.dispatcher);
     if (repeats == 0) {
         // Through the pipeline again, at the level it was spoken at, which is
         // upstream's `speech.speak(lastSpeechSeq, symbolLevel=symbolLevel)`.

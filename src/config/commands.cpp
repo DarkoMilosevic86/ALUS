@@ -14,6 +14,15 @@
 
 namespace alus::config {
 
+namespace {
+// The repeat count of the script running now, 0 when there is no dispatcher.
+int repeatsOf(const std::function<const script::Dispatcher*()>& dispatcher) {
+    const script::Dispatcher* current = dispatcher ? dispatcher() : nullptr;
+    return current != nullptr ? current->lastScriptRepeatCount() : 0;
+}
+}  // namespace
+
+
 Commands::Commands(Context context, const script::Catalog* catalog)
     // One class name, NVDA's: it is what the generated gesture map addresses.
     : script::ScriptableObject({"globalCommands.GlobalCommands"}, catalog),
@@ -31,7 +40,7 @@ void Commands::say(const std::string& text) const {
 }
 
 int Commands::repeatCount() const {
-    return context_.dispatcher != nullptr ? context_.dispatcher->lastScriptRepeatCount() : 0;
+    return repeatsOf(context_.dispatcher);
 }
 
 void Commands::saveConfiguration(input::Gesture& /*gesture*/) {

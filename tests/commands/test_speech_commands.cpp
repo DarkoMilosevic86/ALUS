@@ -404,7 +404,7 @@ TEST_CASE("alus+control+r reverts once, and resets on the third press",
     config::CommandsContext context;
     context.manager = &manager;
     context.message = said.sink();
-    context.dispatcher = &runner.dispatcher();
+    context.dispatcher = [&runner] { return &runner.dispatcher(); };
     context.reset = [&resets](bool factoryDefaults) { resets.push_back(factoryDefaults); };
     config::Commands commands{std::move(context), nullptr};
     runner.use(&commands);

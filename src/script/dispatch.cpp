@@ -289,6 +289,8 @@ void Dispatcher::executeScript(const Script& script, input::Gesture& gesture) {
     }
     lastScriptIdentity_ = identity;
     lastScriptTime_ = now;
+    ALUS_DEBUG("script {} ({}), repeat {}", script.info->name, script.info->location,
+               lastScriptCount_);
 
     scriptRunning_ = true;
     currentScript_ = &script;

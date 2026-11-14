@@ -261,7 +261,7 @@ TEST_CASE("alus+f12 says the time, then the date", "[commands][system]") {
                  {{"type", "Battery"}, {"capacity", "55"}, {"status", "Discharging"}});
 
     commands::SystemCommands::Context context;
-    context.dispatcher = &dispatcher;
+    context.dispatcher = [&dispatcher] { return &dispatcher; };
     context.message = said.sink();
     context.powerSupplyRoot = power.path();
     context.now = [] { return kFixedTime; };
@@ -293,4 +293,56 @@ TEST_CASE("alus+f12 says the time, then the date", "[commands][system]") {
         press('b');
         CHECK(said.last() == "55 percent Unplugged");
     }
+}
+
+TEST_CASE("the seconds come out of every way a locale spells them", "[commands][system]") {
+    // FAZA10.md N122: sr_RS says `%T`, and "12:17:46" was spoken.
+    CHECK(commands::timePatternWithoutSeconds("%T") == "%H:%M");
+    CHECK(commands::timePatternWithoutSeconds("%r") == "%I:%M %p");
+    CHECK(commands::timePatternWithoutSeconds("%X") == "%H:%M");
+    CHECK(commands::timePatternWithoutSeconds("%H:%M:%S") == "%H:%M");
+    CHECK(commands::timePatternWithoutSeconds("%H.%M.%S") == "%H.%M");
+    CHECK(commands::timePatternWithoutSeconds("%l:%M:%S %p") == "%l:%M %p");
+    CHECK(commands::timePatternWithoutSeconds("") == "%H:%M");
+}
+
+TEST_CASE("alus+f12 counts repeats with a dispatcher that did not exist yet",
+          "[commands][system]") {
+    // FAZA10.md N122: the daemon builds the command contexts BEFORE the input
+    // service starts and creates its dispatcher. A pointer taken then was
+    // null forever, and the second press said the time again.
+    testing::QuietLog quiet;
+    testing::LoopFixture fixture;
+    Said said;
+    std::unique_ptr<script::Dispatcher> dispatcher;
+
+    commands::SystemCommands::Context context;
+    context.dispatcher = [&dispatcher] { return dispatcher.get(); };
+    context.message = said.sink();
+    context.now = [] { return kFixedTime; };
+    commands::SystemCommands system{std::move(context), nullptr};
+
+    // Created after the commands, as input::Service::initialize does.
+    dispatcher = std::make_unique<script::Dispatcher>(&fixture.loop());
+    dispatcher->setMultiPressTimeout(2s);
+    input::GestureMap builtin{"built-in"};
+    builtin.add("kb:alus+f12", "globalCommands.GlobalCommands", "dateTime");
+    dispatcher->setBuiltinMap(&builtin);
+    dispatcher->setContextProvider(
+        [&system](script::DispatchContext& ctx) { ctx.globalCommands = {&system}; });
+
+    const auto press = [&] {
+        input::KeyboardGesture::Init init;
+        init.event = testing::keyDown(0xffc9);
+        init.modifiers = static_cast<input::Modifiers>(input::Modifier::Alus);
+        init.config.layout = input::Layout::Desktop;
+        const auto gesture = std::make_shared<input::KeyboardGesture>(std::move(init));
+        const std::optional<script::Script> found = dispatcher->findScript(*gesture);
+        REQUIRE(found.has_value());
+        dispatcher->executeScript(*found, *gesture);
+    };
+    press();
+    CHECK(said.last() == commands::formatTime(kFixedTime));
+    press();
+    CHECK(said.last() == commands::formatDate(kFixedTime));
 }

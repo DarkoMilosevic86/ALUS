@@ -147,11 +147,11 @@ public:
             speech::GlobalCommandsContext{}, &input_->catalog());
         config::CommandsContext configCommandContext;
         configCommandContext.manager = &config_;
-        configCommandContext.dispatcher = input_->dispatcher();
+        configCommandContext.dispatcher = [this] { return input_->dispatcher(); };
         configCommands_ = std::make_unique<config::Commands>(std::move(configCommandContext),
                                                              &input_->catalog());
         commands::SystemCommands::Context systemCommandContext;
-        systemCommandContext.dispatcher = input_->dispatcher();
+        systemCommandContext.dispatcher = [this] { return input_->dispatcher(); };
         systemCommands_ = std::make_unique<commands::SystemCommands>(
             std::move(systemCommandContext), &input_->catalog());
         input_->addContextContributor([this](script::DispatchContext& context) {

@@ -59,7 +59,11 @@ struct GlobalCommandsContext {
     std::function<void(const std::string&)> message;
     // Repeat counting: the second press of `alus+x` spells instead of
     // repeating (see the comment on the script).
-    const script::Dispatcher* dispatcher = nullptr;
+    // Asked for on every press, not held: the input service creates its
+    // dispatcher when it starts -- AFTER the daemon builds this context -- and
+    // again on every restart. A held pointer was null for the whole life of
+    // the daemon, so every second press counted as a first (FAZA10.md N122).
+    std::function<const script::Dispatcher*()> dispatcher;
 };
 
 class GlobalCommands final : public script::ScriptableObject {

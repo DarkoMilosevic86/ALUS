@@ -69,7 +69,11 @@ class SystemCommands final : public script::ScriptableObject {
 public:
     struct Context {
         // Repeat counting (the second press of alus+f12 says the date).
-        const script::Dispatcher* dispatcher = nullptr;
+        // Asked for on every press, not held: the input service creates its
+        // dispatcher when it starts -- AFTER the daemon builds this context -- and
+        // again on every restart. A held pointer was null for the whole life of
+        // the daemon, so every second press counted as a first (FAZA10.md N122).
+        std::function<const script::Dispatcher*()> dispatcher;
         // ui::message by default; injected so the tests can read what was said.
         std::function<void(const std::string&)> message;
         // The /sys directory to read the battery from. Empty means the real
@@ -96,6 +100,10 @@ private:
 // The locale's time without seconds, and its long date. Public because the
 // tests pin them to a fixed timestamp.
 std::string formatTime(std::time_t when);
+// The locale's time pattern (nl_langinfo(T_FMT)) with the seconds taken out.
+// Public for the tests: sr_RS, en_US and most glibc locales say `%T` or `%r`,
+// shorthands that HAVE seconds without a `%S` in sight (FAZA10.md N122).
+std::string timePatternWithoutSeconds(std::string pattern);
 std::string formatDate(std::time_t when);
 
 }  // namespace alus::commands

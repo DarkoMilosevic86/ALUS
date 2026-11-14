@@ -659,20 +659,20 @@ int main(int argc, char* argv[]) {
     speechCommandContext.presenter = [&speech] { return speech.presenter(); };
     speechCommandContext.ring = [&speech] { return speech.settingsRing(); };
     speechCommandContext.config = &manager;
-    speechCommandContext.dispatcher = input.dispatcher();
+    speechCommandContext.dispatcher = [&input] { return input.dispatcher(); };
     alus::speech::GlobalCommands speechCommands{std::move(speechCommandContext),
                                                 &input.catalog()};
 
     alus::config::CommandsContext configCommandContext;
     configCommandContext.manager = &manager;
-    configCommandContext.dispatcher = input.dispatcher();
+    configCommandContext.dispatcher = [&input] { return input.dispatcher(); };
     configCommandContext.reset = [&manager, &subsystems](bool factoryDefaults) {
         alus::config::resetConfiguration(manager, subsystems, factoryDefaults);
     };
     alus::config::Commands configCommands{std::move(configCommandContext), &input.catalog()};
 
     alus::commands::SystemCommands::Context systemCommandContext;
-    systemCommandContext.dispatcher = input.dispatcher();
+    systemCommandContext.dispatcher = [&input] { return input.dispatcher(); };
     alus::commands::SystemCommands systemCommands{std::move(systemCommandContext),
                                                   &input.catalog()};
 

@@ -524,3 +524,41 @@ TEST_CASE("N34 the compositor passes a double-pressed ALUS key on itself") {
         CHECK(harness.manager->stats().alusKeyPassThroughDelivered == 0);
     }
 }
+
+namespace {
+// Records the repeat count each time it runs, as `alus+f12` reads it.
+class RepeatProbe final : public alus::script::ScriptableObject {
+public:
+    explicit RepeatProbe(const Dispatcher& dispatcher)
+        : ScriptableObject({"globalCommands.GlobalCommands"}, nullptr) {
+        bindScript("dateTime", [this, &dispatcher](alus::input::Gesture&) {
+            counts.push_back(dispatcher.lastScriptRepeatCount());
+        });
+    }
+    std::vector<int> counts;
+};
+}  // namespace
+
+TEST_CASE("a double press with the ALUS key held counts as a repeat") {
+    // Measured (FAZA10.md N122): numpad Insert held, F12 twice 200 ms apart;
+    // the second press said the time again instead of the date.
+    Harness harness;
+    RepeatProbe probe{harness.dispatcher};
+    harness.builtin.add("kb:alus+f12", "globalCommands.GlobalCommands", "dateTime");
+    harness.dispatcher.setContextProvider(
+        [&probe](DispatchContext& context) { context.globalCommands = {&probe}; });
+    harness.manager->refreshMaps();
+
+    const std::uint32_t alusKeycode = 90;
+    const std::uint32_t f12Keycode = 96;
+    const std::uint32_t f12 = 0xffc9;
+    harness.press(keyDown(keysym::kKpInsert, 0, alusKeycode));
+    harness.press(keyDown(f12, 0x10000, f12Keycode));
+    harness.press(keyUp(f12, 0x10000, f12Keycode));
+    harness.fixture.drain();
+    harness.press(keyDown(f12, 0x10000, f12Keycode));
+    harness.press(keyUp(f12, 0x10000, f12Keycode));
+    harness.fixture.drain();
+    harness.press(keyUp(keysym::kKpInsert, 0, alusKeycode));
+    CHECK(probe.counts == std::vector<int>{0, 1});
+}

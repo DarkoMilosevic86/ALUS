@@ -45,7 +45,11 @@ struct CommandsContext {
     std::function<void(bool factoryDefaults)> reset;
     // Repeat counting (`alus+control+r` three times). Null outside the daemon,
     // and then every press is a first press.
-    const script::Dispatcher* dispatcher = nullptr;
+    // Asked for on every press, not held: the input service creates its
+    // dispatcher when it starts -- AFTER the daemon builds this context -- and
+    // again on every restart. A held pointer was null for the whole life of
+    // the daemon, so every second press counted as a first (FAZA10.md N122).
+    std::function<const script::Dispatcher*()> dispatcher;
     // ui::message by default; injected so the tests can read what was said.
     std::function<void(const std::string&)> message;
 };
