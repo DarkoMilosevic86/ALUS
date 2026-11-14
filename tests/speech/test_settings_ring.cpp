@@ -28,6 +28,7 @@
 
 #include <algorithm>
 #include <filesystem>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -92,6 +93,32 @@ public:
     int inflection() const override { return inflection_; }
     void setInflection(int value) override { inflection_ = value; }
 
+    // speech-dispatcher's modules: each with its own voices (N126).
+    std::vector<std::string> availableModules() const override {
+        std::vector<std::string> out;
+        for (const auto& [module, voices] : modules_) {
+            out.push_back(module);
+        }
+        return out;
+    }
+    std::string outputModule() const override { return module_; }
+    bool setOutputModule(const std::string& module) override {
+        const auto it = modules_.find(module);
+        if (it == modules_.end()) {
+            return false;
+        }
+        module_ = module;
+        voices_ = it->second;
+        return true;
+    }
+    void addModule(const std::string& module, std::vector<speech::VoiceInfo> voices) {
+        modules_[module] = std::move(voices);
+        if (module_.empty()) {
+            setOutputModule(module);
+            voice_ = voices_.empty() ? std::string{} : voices_.front().id;
+        }
+    }
+
     void doesNotSupport(speech::SynthFeature feature) { unsupported_.push_back(feature); }
     std::size_t refusals() const { return refusals_; }
     // What a stale `voice=` in alus.ini leaves behind: a name no voice has.
@@ -99,6 +126,8 @@ public:
 
 private:
     std::vector<speech::VoiceInfo> voices_;
+    std::map<std::string, std::vector<speech::VoiceInfo>> modules_;
+    std::string module_;
     std::vector<speech::SynthFeature> unsupported_;
     std::string voice_;
     std::size_t refusals_ = 0;
@@ -377,5 +406,140 @@ TEST_CASE("changing the driver keeps the selected setting", "[speech][ring]") {
         ring.setSynth(nullptr);
         CHECK(ring.empty());
         CHECK_FALSE(ring.increase().has_value());
+    }
+}
+
+namespace {
+
+// eSpeak as speech-dispatcher reports it, cut down: languages with no
+// variant, and every language again with every variant (measured: 140 x 105).
+std::vector<speech::VoiceInfo> espeakVoices() {
+    std::vector<speech::VoiceInfo> out;
+    for (const auto& [name, language] :
+         std::vector<std::pair<std::string, std::string>>{
+             {"Afrikaans", "af"}, {"Croatian", "hr"}, {"Serbian", "sr"}}) {
+        out.push_back({name, name, language, "none"});
+        for (const std::string variant : {"Adam", "Alex", "Zac"}) {
+            out.push_back({name + "+" + variant, name + "+" + variant, language, variant});
+        }
+    }
+    return out;
+}
+
+// The ring's entries in ring order, from its first entry whatever is selected.
+std::vector<std::string> ringNames(speech::SettingsRing& ring) {
+    std::vector<speech::SettingsRing::Setting> settings;
+    for (std::size_t i = 0; i < ring.size(); ++i) {
+        settings.push_back(*ring.current());
+        ring.next();
+    }
+    std::rotate(settings.begin(), std::min_element(settings.begin(), settings.end()),
+                settings.end());
+    std::vector<std::string> out;
+    for (const auto setting : settings) {
+        out.push_back(speech::SettingsRing::settingKey(setting));
+    }
+    return out;
+}
+
+void goTo(speech::SettingsRing& ring, speech::SettingsRing::Setting setting) {
+    for (std::size_t i = 0; i < ring.size() && ring.current() != setting; ++i) {
+        ring.next();
+    }
+    REQUIRE(ring.current() == setting);
+}
+
+}  // namespace
+
+TEST_CASE("the voice catalog splits languages from variants by the data",
+          "[speech][ring][catalog]") {
+    const speech::VoiceCatalog catalog = speech::VoiceCatalog::build(espeakVoices(), "sr_RS.UTF-8");
+    REQUIRE(catalog.hasVariants());
+    REQUIRE(catalog.voices().size() == 3);
+    // The interface language first, then by name.
+    CHECK(catalog.voices()[0].id == "Serbian");
+    CHECK(catalog.voices()[1].id == "Afrikaans");
+    CHECK(catalog.variants() == std::vector<std::string>{"Adam", "Alex", "Zac"});
+    CHECK(catalog.split("Serbian+Alex") == std::pair<std::string, std::string>{"Serbian", "Alex"});
+    CHECK(catalog.split("Serbian") == std::pair<std::string, std::string>{"Serbian", ""});
+    CHECK(catalog.join("Croatian", "Zac") == "Croatian+Zac");
+    CHECK(catalog.join("Croatian", "") == "Croatian");
+
+    SECTION("a module without variants keeps one flat list") {
+        const speech::VoiceCatalog flat =
+            speech::VoiceCatalog::build({{"Marija", "Marija", "hr", "none"},
+                                         {"Anna", "Anna", "ru", "none"}});
+        CHECK_FALSE(flat.hasVariants());
+        CHECK(flat.voices().size() == 2);
+    }
+
+    SECTION("a plus in a name is not a variant unless the data says so") {
+        const speech::VoiceCatalog odd =
+            speech::VoiceCatalog::build({{"C++ voice", "C++ voice", "en", ""},
+                                         {"rhvoice+Marija", "rhvoice+Marija", "hr", "Marija"}});
+        CHECK_FALSE(odd.hasVariants());
+        CHECK(odd.voices().size() == 2);
+    }
+}
+
+TEST_CASE("eSpeak in the ring: Voice walks the languages, Variant the variants",
+          "[speech][ring]") {
+    FakeSynth synth;
+    synth.addModule("espeak-ng", espeakVoices());
+    synth.setVoice("Croatian+Alex");
+    config::Manager config = scratchConfig();
+    speech::SettingsRing ring{&synth, &config};
+    CHECK(ringNames(ring) == std::vector<std::string>{"voice", "variant", "rate", "pitch",
+                                                       "inflection", "volume"});
+
+    goTo(ring, speech::SettingsRing::Setting::Voice);
+    // Not 12 entries: 3 languages, and the variant stays as it was.
+    REQUIRE(ring.increase().has_value());
+    CHECK(synth.voice() != "Croatian+Alex");
+    CHECK(synth.voice().ends_with("+Alex"));
+    CHECK(config.getString("speech", "voice") == synth.voice());
+
+    goTo(ring, speech::SettingsRing::Setting::Variant);
+    CHECK(ring.currentValue() == "Alex");
+    ring.first();
+    CHECK(synth.voice().find('+') == std::string::npos);
+    ring.last();
+    CHECK(synth.voice().ends_with("+Zac"));
+    CHECK(config.getString("speech", "voice") == synth.voice());
+    CHECK(synth.refusals() == 0);
+}
+
+TEST_CASE("the output module is in the ring, and changing it keeps the language",
+          "[speech][ring]") {
+    // The user's case: mbrola_ng with one Croatian voice had nothing in the
+    // ring but numbers.
+    FakeSynth synth;
+    synth.addModule("mbrola_ng", {{"cr1", "cr1", "hr", "none"}});
+    synth.addModule("espeak-ng", espeakVoices());
+    config::Manager config = scratchConfig();
+    speech::SettingsRing ring{&synth, &config};
+    CHECK(ringNames(ring) ==
+          std::vector<std::string>{"outputModule", "rate", "pitch", "inflection", "volume"});
+
+    goTo(ring, speech::SettingsRing::Setting::Module);
+    CHECK(ring.currentValue() == "mbrola_ng");
+    // std::map orders the fake's modules: espeak-ng, mbrola_ng.
+    REQUIRE(ring.decrease() == std::optional<std::string>{"espeak-ng"});
+    CHECK(synth.outputModule() == "espeak-ng");
+    // Croatian before, Croatian after -- not the first language in the list.
+    CHECK(synth.voice() == "Croatian");
+    CHECK(config.getString("speech", "outputModule") == "espeak-ng");
+    CHECK(config.getString("speech", "voice") == "Croatian");
+    // The ring now has what eSpeak has, and is still on the module.
+    CHECK(ring.current() == speech::SettingsRing::Setting::Module);
+    CHECK(ringNames(ring) == std::vector<std::string>{"outputModule", "voice", "variant", "rate",
+                                                       "pitch", "inflection", "volume"});
+
+    SECTION("and back: the one voice, and Voice leaves the ring again") {
+        ring.increase();
+        CHECK(synth.outputModule() == "mbrola_ng");
+        CHECK(synth.voice() == "cr1");
+        CHECK(ringNames(ring) ==
+              std::vector<std::string>{"outputModule", "rate", "pitch", "inflection", "volume"});
     }
 }

@@ -54,6 +54,7 @@ alus_speech_sources = files(
   'speech/spelling.cpp',
   'speech/service.cpp',
   'speech/settings_ring.cpp',
+  'speech/voice_catalog.cpp',
   'speech/ssip_synth.cpp',
   'speech/synth.cpp',
   'text/char_descriptions.cpp',

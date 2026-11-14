@@ -366,3 +366,43 @@ TEST_CASE("a configured voice the synthesizer does not offer stays visible",
         CHECK(alus::gui::resolveChoices(synth, offered(), "ssip").size() == synth.choices.size());
     }
 }
+
+TEST_CASE("eSpeak's voices: languages in one row, variants in the other",
+          "[gui][speech]") {
+    // N126: espeak-ng reports every language once with no variant and again
+    // with every variant (measured: 140 x 105 = 14805 entries).
+    alus::gui::SpeechChoices speech;
+    speech.reachable = true;
+    speech.modules = {"espeak-ng"};
+    for (const char* const language : {"Croatian", "English"}) {
+        const std::string code = std::string{language} == "Croatian" ? "hr" : "en";
+        speech.voices.push_back({language, language, code, "none"});
+        for (const char* const variant : {"Adam", "Zac"}) {
+            const std::string id = std::string{language} + "+" + variant;
+            speech.voices.push_back({id, id, code, variant});
+        }
+    }
+    const alus::gui::Row& voiceRow = speechRow("voice");
+    const alus::gui::Row& variantRow = speechRow("voiceVariant");
+
+    const std::vector<alus::gui::Choice> voices =
+        alus::gui::resolveChoices(voiceRow, speech, "Croatian+Zac");
+    // Default and the two languages: not six entries.
+    REQUIRE(voices.size() == 3);
+    CHECK(alus::gui::choiceValueFor(voiceRow, speech, "Croatian+Zac") == "Croatian");
+
+    const std::vector<alus::gui::Choice> variants =
+        alus::gui::resolveChoices(variantRow, speech, "Croatian+Zac");
+    REQUIRE(variants.size() == 3);  // No variant, Adam, Zac
+    CHECK(variants[0].value.empty());
+    CHECK(variants[2].value == "Zac");
+    CHECK(alus::gui::choiceValueFor(variantRow, speech, "Croatian+Zac") == "Zac");
+    CHECK(alus::gui::choiceValueFor(variantRow, speech, "Croatian").empty());
+
+    SECTION("a module without variants: the voice row is the flat list") {
+        const std::vector<alus::gui::Choice> flat =
+            alus::gui::resolveChoices(voiceRow, offered(), "Marija");
+        CHECK(flat.size() == 3);
+        CHECK(alus::gui::voiceCatalog(offered()).hasVariants() == false);
+    }
+}

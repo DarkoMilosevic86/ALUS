@@ -6,6 +6,7 @@
 
 #include "alus/config/config.hpp"
 #include "alus/core/log.hpp"
+#include "alus/i18n/gettext.hpp"
 #include "alus/i18n/i18n.hpp"
 
 #include <algorithm>
@@ -17,14 +18,22 @@ namespace {
 
 // The ring in order. Which of them actually appear is asked of the driver:
 // SynthFeature is ISynth's own answer to `availableInSettingsRing`.
-constexpr std::array<SettingsRing::Setting, 5> kRingOrder{
-    SettingsRing::Setting::Voice, SettingsRing::Setting::Rate,
-    SettingsRing::Setting::Pitch, SettingsRing::Setting::Inflection,
+constexpr std::array<SettingsRing::Setting, 7> kRingOrder{
+    SettingsRing::Setting::Module,     SettingsRing::Setting::Voice,
+    SettingsRing::Setting::Variant,    SettingsRing::Setting::Rate,
+    SettingsRing::Setting::Pitch,      SettingsRing::Setting::Inflection,
     SettingsRing::Setting::Volume};
+
+// The primary language subtag: "sr-RS" -> "sr".
+std::string primaryOf(const std::string& language) {
+    return language.substr(0, language.find_first_of("-_.@"));
+}
 
 SynthFeature featureFor(SettingsRing::Setting setting) {
     switch (setting) {
+        case SettingsRing::Setting::Module:
         case SettingsRing::Setting::Voice:
+        case SettingsRing::Setting::Variant:
             return SynthFeature::Voice;
         case SettingsRing::Setting::Rate:
             return SynthFeature::Rate;
@@ -47,9 +56,18 @@ int clampTo(int value, int minimum, int maximum) {
 std::string SettingsRing::settingName(Setting setting) {
     switch (setting) {
         // Translators: a setting in the synthesizer settings ring
+        // (alus+control+arrows): which speech-dispatcher module speaks
+        // (espeak-ng, rhvoice, ...).
+        case Setting::Module:
+            return C_("synth setting", "Output module");
+        // Translators: a setting in the synthesizer settings ring
         // (alus+control+arrows): which voice speaks.
         case Setting::Voice:
             return C_("synth setting", "Voice");
+        // Translators: a setting in the synthesizer settings ring: the
+        // variant of the voice (eSpeak's Adam, Alex, ...).
+        case Setting::Variant:
+            return C_("synth setting", "Variant");
         // Translators: a setting in the synthesizer settings ring: how fast
         // the synthesizer speaks.
         case Setting::Rate:
@@ -72,8 +90,12 @@ std::string SettingsRing::settingName(Setting setting) {
 
 const char* SettingsRing::settingKey(Setting setting) {
     switch (setting) {
+        case Setting::Module:
+            return "outputModule";
         case Setting::Voice:
             return "voice";
+        case Setting::Variant:
+            return "variant";
         case Setting::Rate:
             return "rate";
         case Setting::Pitch:
@@ -98,28 +120,46 @@ void SettingsRing::setSynth(ISynth* synth) {
 
 void SettingsRing::rebuild(std::optional<Setting> keep) {
     settings_.clear();
-    voices_.clear();
+    modules_.clear();
+    catalog_ = VoiceCatalog{};
     index_ = 0;
     if (synth_ == nullptr) {
         return;
     }
+    if (synth_->supports(SynthFeature::Voice)) {
+        readVoices();
+    }
     for (const Setting setting : kRingOrder) {
-        if (!synth_->supports(featureFor(setting))) {
-            continue;
-        }
-        // A driver that reports a voice setting and offers fewer than two
-        // voices is not a ring entry: there is nothing to step to, and an
-        // entry that cannot change is worse than no entry -- the user presses
-        // the arrow, hears the same voice name back, and has no way to tell
-        // that from a key that did not arrive.
-        if (setting == Setting::Voice) {
-            voices_ = synth_->availableVoices();
-            if (voices_.size() < 2) {
-                ALUS_DEBUG(
-                    "settings ring: the driver offers {} voice(s), so Voice is not in the ring",
-                    voices_.size());
-                continue;
-            }
+        switch (setting) {
+            case Setting::Module:
+                modules_ = synth_->availableModules();
+                if (modules_.size() < 2) {
+                    continue;
+                }
+                break;
+            case Setting::Voice:
+                // A driver that offers fewer than two voices is not a ring
+                // entry: there is nothing to step to, and an entry that cannot
+                // change is worse than no entry -- the user presses the arrow,
+                // hears the same voice name back, and has no way to tell that
+                // from a key that did not arrive.
+                if (!synth_->supports(SynthFeature::Voice) || catalog_.voices().size() < 2) {
+                    ALUS_DEBUG("settings ring: {} voice(s) to choose from, so Voice is not in "
+                               "the ring",
+                               catalog_.voices().size());
+                    continue;
+                }
+                break;
+            case Setting::Variant:
+                if (!synth_->supports(SynthFeature::Voice) || !catalog_.hasVariants()) {
+                    continue;
+                }
+                break;
+            default:
+                if (!synth_->supports(featureFor(setting))) {
+                    continue;
+                }
+                break;
         }
         settings_.push_back(setting);
     }
@@ -149,21 +189,62 @@ std::optional<SettingsRing::Setting> SettingsRing::current() const noexcept {
     return settings_[index_];
 }
 
-bool SettingsRing::isVoice(Setting setting) const { return setting == Setting::Voice; }
+bool SettingsRing::isList(Setting setting) {
+    return setting == Setting::Module || setting == Setting::Voice || setting == Setting::Variant;
+}
+
+void SettingsRing::readVoices() {
+    catalog_ = VoiceCatalog::build(synth_->availableVoices(), i18n::currentLanguage());
+}
+
+std::string SettingsRing::currentBase() const {
+    return synth_ != nullptr ? catalog_.split(synth_->voice()).first : std::string{};
+}
+
+std::string SettingsRing::currentVariant() const {
+    return synth_ != nullptr ? catalog_.split(synth_->voice()).second : std::string{};
+}
+
+void SettingsRing::chooseVoiceForNewModule(const std::string& previousLanguage) {
+    const std::vector<VoiceInfo>& voices = catalog_.voices();
+    if (voices.empty()) {
+        return;
+    }
+    const std::string wanted = primaryOf(previousLanguage);
+    auto chosen = voices.begin();
+    if (!wanted.empty()) {
+        const auto same = std::find_if(voices.begin(), voices.end(), [&wanted](const VoiceInfo& v) {
+            return primaryOf(v.language) == wanted;
+        });
+        if (same != voices.end()) {
+            chosen = same;
+        }
+    }
+    if (!synth_->setVoice(chosen->id)) {
+        ALUS_WARNING("settings ring: the new module refused the voice '{}'", chosen->id);
+    }
+}
 
 int SettingsRing::valueOf(Setting setting) const {
     if (synth_ == nullptr) {
         return 0;
     }
     switch (setting) {
+        case Setting::Module: {
+            const auto it = std::find(modules_.begin(), modules_.end(), synth_->outputModule());
+            return it == modules_.end() ? 0 : static_cast<int>(it - modules_.begin());
+        }
         case Setting::Voice: {
-            const std::string id = synth_->voice();
-            const auto it = std::find_if(voices_.begin(), voices_.end(),
-                                         [&id](const VoiceInfo& v) { return v.id == id; });
             // A voice the list does not have (the configuration names one the
             // driver dropped) reads as the first one, so the arrows still work
             // instead of refusing to move.
-            return it == voices_.end() ? 0 : static_cast<int>(it - voices_.begin());
+            const int at = catalog_.indexOfVoice(currentBase());
+            return at < 0 ? 0 : at;
+        }
+        case Setting::Variant: {
+            // 0 is "no variant"; the variants follow it.
+            const std::string variant = currentVariant();
+            return variant.empty() ? 0 : catalog_.indexOfVariant(variant) + 1;
         }
         case Setting::Rate:
             return synth_->rate();
@@ -178,29 +259,75 @@ int SettingsRing::valueOf(Setting setting) const {
 }
 
 int SettingsRing::stepOf(Setting setting) const {
-    return isVoice(setting) ? kVoiceStep : kNormalStep;
+    return isList(setting) ? kVoiceStep : kNormalStep;
 }
 
 int SettingsRing::maximumOf(Setting setting) const {
-    if (isVoice(setting)) {
-        return voices_.empty() ? 0 : static_cast<int>(voices_.size()) - 1;
+    switch (setting) {
+        case Setting::Module:
+            return modules_.empty() ? 0 : static_cast<int>(modules_.size()) - 1;
+        case Setting::Voice:
+            return catalog_.voices().empty() ? 0 : static_cast<int>(catalog_.voices().size()) - 1;
+        case Setting::Variant:
+            return static_cast<int>(catalog_.variants().size());
+        default:
+            return kMaximum;
     }
-    return kMaximum;
 }
 
 void SettingsRing::applyValue(Setting setting, int value) {
     if (synth_ == nullptr) {
         return;
     }
+    const std::size_t at = static_cast<std::size_t>(std::max(0, value));
     switch (setting) {
-        case Setting::Voice: {
-            const std::size_t at = static_cast<std::size_t>(value);
-            if (at >= voices_.size()) {
+        case Setting::Module: {
+            if (at >= modules_.size() || modules_[at] == synth_->outputModule()) {
                 return;
             }
-            if (!synth_->setVoice(voices_[at].id)) {
-                ALUS_WARNING("settings ring: the driver refused the voice '{}'",
-                             voices_[at].id);
+            // The language of the voice being left, so that going from
+            // mbrola_ng's Croatian `cr1` to espeak-ng lands on Croatian and not
+            // on Afrikaans.
+            std::string language;
+            if (const int voice = catalog_.indexOfVoice(currentBase()); voice >= 0) {
+                language = catalog_.voices()[static_cast<std::size_t>(voice)].language;
+            }
+            if (!synth_->setOutputModule(modules_[at])) {
+                ALUS_WARNING("settings ring: the driver refused the module '{}'", modules_[at]);
+                return;
+            }
+            readVoices();
+            chooseVoiceForNewModule(language);
+            remember(Setting::Module);
+            remember(Setting::Voice);
+            // The new module may have variants where the old had none, or
+            // the other way round; the ring stays on Module.
+            rebuild(Setting::Module);
+            return;
+        }
+        case Setting::Voice: {
+            if (at >= catalog_.voices().size()) {
+                return;
+            }
+            const std::string& base = catalog_.voices()[at].id;
+            const std::string variant = currentVariant();
+            if (!synth_->setVoice(catalog_.join(base, variant)) &&
+                (variant.empty() || !synth_->setVoice(base))) {
+                ALUS_WARNING("settings ring: the driver refused the voice '{}'", base);
+                return;
+            }
+            break;
+        }
+        case Setting::Variant: {
+            const std::string variant = at == 0 || at > catalog_.variants().size()
+                                            ? std::string{}
+                                            : catalog_.variants()[at - 1];
+            std::string base = currentBase();
+            if (catalog_.indexOfVoice(base) < 0 && !catalog_.voices().empty()) {
+                base = catalog_.voices().front().id;
+            }
+            if (!synth_->setVoice(catalog_.join(base, variant))) {
+                ALUS_WARNING("settings ring: the driver refused the variant '{}'", variant);
                 return;
             }
             break;
@@ -230,7 +357,12 @@ void SettingsRing::remember(Setting setting) {
     // trying out a voice must be able to get the old one back with
     // `alus+control+r` -- which is what makes `alus+control+c` (save) a
     // separate command, upstream and here.
-    if (isVoice(setting)) {
+    if (setting == Setting::Module) {
+        config_->setString("speech", "outputModule", synth_->outputModule());
+        return;
+    }
+    if (isList(setting)) {
+        // Voice and variant are one key: the full id, as the driver takes it.
         config_->setString("speech", "voice", synth_->voice());
         return;
     }
@@ -238,16 +370,29 @@ void SettingsRing::remember(Setting setting) {
 }
 
 std::string SettingsRing::reportValue(Setting setting) const {
-    if (isVoice(setting)) {
-        const std::size_t at = static_cast<std::size_t>(valueOf(setting));
-        if (at >= voices_.size()) {
-            return {};
+    const std::size_t at = static_cast<std::size_t>(std::max(0, valueOf(setting)));
+    switch (setting) {
+        case Setting::Module:
+            return at < modules_.size() ? modules_[at] : std::string{};
+        case Setting::Voice: {
+            if (at >= catalog_.voices().size()) {
+                return {};
+            }
+            const VoiceInfo& voice = catalog_.voices()[at];
+            // The name, not the id: the id is what the driver takes and can be
+            // anything (`rhvoice+Marija`, a file name); the name is what the
+            // user was told the voice is called.
+            return voice.name.empty() ? voice.id : voice.name;
         }
-        const VoiceInfo& voice = voices_[at];
-        // The name, not the id: the id is what the driver takes and can be
-        // anything (`rhvoice+Marija`, a file name); the name is what the user
-        // was told the voice is called.
-        return voice.name.empty() ? voice.id : voice.name;
+        case Setting::Variant:
+            if (at == 0 || at > catalog_.variants().size()) {
+                // Translators: the value of the Variant setting in the
+                // synthesizer settings ring when the voice has none.
+                return C_("synth setting", "no variant");
+            }
+            return catalog_.variants()[at - 1];
+        default:
+            break;
     }
     return std::format("{}", valueOf(setting));
 }

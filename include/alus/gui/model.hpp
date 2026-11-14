@@ -30,6 +30,8 @@
 // does nothing -- the sort of defect that survives a long time.
 #pragma once
 
+#include "alus/speech/voice_catalog.hpp"
+
 #include <string>
 #include <string_view>
 #include <vector>
@@ -130,6 +132,7 @@ struct SpeechChoices {
         std::string id;        // what the configuration stores
         std::string name;      // what the user hears
         std::string language;  // BCP 47, may be empty
+        std::string variant;   // speech-dispatcher's, "none" for none
     };
     std::vector<Voice> voices;
 };
@@ -145,8 +148,20 @@ SpeechChoices querySpeechChoices(const std::string& module);
 // offer -- that value too, labelled as not offered. The last one matters: a
 // stale `voice=` must be VISIBLE in the window, or the user cannot see what to
 // replace. Rows without a `source` get `row.choices` unchanged.
+//
+// For the voice and variant rows `current` is the configured `voice` -- the
+// FULL id, "Serbian+Adam" -- and each row shows its half of it (N126).
 std::vector<Choice> resolveChoices(const Row& row, const SpeechChoices& speech,
                                    const std::string& current);
+
+// Which of a row's choices `current` (as above) selects: the value itself,
+// or for the voice and variant rows the base voice or the variant.
+std::string choiceValueFor(const Row& row, const SpeechChoices& speech,
+                           const std::string& current);
+
+// The module's voices as a catalog: languages and variants apart when the
+// module has variants (espeak-ng's 14805 "voices" are 140 x 105).
+speech::VoiceCatalog voiceCatalog(const SpeechChoices& speech);
 
 // Every page, in the order the window shows them. Built once, const
 // thereafter.

@@ -96,6 +96,16 @@ std::vector<Page> build() {
                           N_("The voices of the output module above. The new voice "
                              "is heard when you press OK."),
                           {{"", N_("Default")}}, 0, 100, 1, {}, "speech-voices"},
+                      // Shown only for a module whose voices have variants
+                      // (espeak-ng). Not a key of its own: it and the row
+                      // above write ONE key, `voice`, as "Serbian+Adam" (N126).
+                      Row{RowKind::Choice, "speech", "voiceVariant", N_("Variant"),
+                          N_("The variant of the voice above."),
+                          {{"", N_("No variant")}}, 0, 100, 1, {}, "speech-variants"},
+                      Row{RowKind::Action, {}, {}, N_("Try the voice"),
+                          N_("Says a sentence with the module, voice and variant above, "
+                             "without changing the screen reader's voice."),
+                          {}, 0, 100, 1, "preview-voice"},
                   }},
             Group{N_("Voice settings"), nullptr,
                   {
@@ -579,28 +589,54 @@ SpeechChoices querySpeechChoices(const std::string& module) {
     out.modules = synth.availableModules();
     for (const speech::VoiceInfo& voice : synth.availableVoices()) {
         out.voices.push_back({voice.id, voice.name.empty() ? voice.id : voice.name,
-                              voice.language});
+                              voice.language, voice.variant});
     }
     synth.terminate();
     return out;
 }
 
+speech::VoiceCatalog voiceCatalog(const SpeechChoices& speech) {
+    std::vector<speech::VoiceInfo> voices;
+    voices.reserve(speech.voices.size());
+    for (const SpeechChoices::Voice& voice : speech.voices) {
+        voices.push_back({voice.id, voice.name, voice.language, voice.variant});
+    }
+    return speech::VoiceCatalog::build(voices, i18n::currentLanguage());
+}
+
+std::string choiceValueFor(const Row& row, const SpeechChoices& speech,
+                           const std::string& current) {
+    if (row.source == "speech-voices") {
+        const speech::VoiceCatalog catalog = voiceCatalog(speech);
+        return catalog.hasVariants() ? catalog.split(current).first : current;
+    }
+    if (row.source == "speech-variants") {
+        return voiceCatalog(speech).split(current).second;
+    }
+    return current;
+}
+
 std::vector<Choice> resolveChoices(const Row& row, const SpeechChoices& speech,
-                                   const std::string& current) {
+                                   const std::string& configured) {
     std::vector<Choice> out = row.choices;
+    const std::string current = choiceValueFor(row, speech, configured);
     if (row.source == "speech-modules") {
         for (const std::string& module : speech.modules) {
             out.push_back(Choice{module, nullptr, module});
         }
     } else if (row.source == "speech-voices") {
-        for (const SpeechChoices::Voice& voice : speech.voices) {
-            // The language in the label, because two voices can share a name
-            // across languages, and because "Marija (hr)" tells a Serbian
-            // user something "Marija" does not.
-            out.push_back(Choice{voice.id, nullptr,
-                                 voice.language.empty()
-                                     ? voice.name
-                                     : voice.name + " (" + voice.language + ")"});
+        // The language in the label, because two voices can share a name
+        // across languages, and because "Marija (hr)" tells a Serbian user
+        // something "Marija" does not. With variants, these are the base
+        // voices only -- 140, not 14805 -- the interface language first.
+        const speech::VoiceCatalog catalog = voiceCatalog(speech);
+        for (const speech::VoiceInfo& voice : catalog.voices()) {
+            out.push_back(Choice{voice.id, nullptr, speech::VoiceCatalog::label(voice)});
+        }
+    } else if (row.source == "speech-variants") {
+        const speech::VoiceCatalog catalog = voiceCatalog(speech);
+        for (const std::string& variant : catalog.variants()) {
+            out.push_back(Choice{variant, nullptr, variant});
         }
     } else {
         return out;
@@ -636,7 +672,9 @@ std::vector<std::pair<std::string, std::string>> allSettingKeys() {
     for (const Page& page : pages()) {
         for (const Group& group : page.groups) {
             for (const Row& row : group.rows) {
-                if (row.kind != RowKind::Action) {
+                // The variant row writes `voice`, which the voice row
+                // already names.
+                if (row.kind != RowKind::Action && row.source != "speech-variants") {
                     keys.emplace_back(row.section, row.key);
                 }
             }

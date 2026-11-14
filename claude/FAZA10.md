@@ -679,3 +679,36 @@ po listi i dalje ne govore.**
    vrednost fokusirane padajuće liste (bez Value/Selection) sa poslednjom
    viđenom i izgovori je ako se promenila (`announceShownChoice`). Test je
    prepravljen po izmerenom obrascu i proveren je obrnuto (bez provere pada).
+
+**Potvrda N125 (korisnik, uživo):** strelice po listama govore, a Escape ne
+primenjuje izmene.
+
+**N126 — eSpeak: jezik i varijanta odvojeno; modul, glas i varijanta u
+prstenu; dugme „Probaj".**
+
+Izmereno: speech-dispatcher-ov `espeak-ng` prijavljuje **14805** glasova — 140
+jezika × 105 varijanti, svaki kao „Serbian+Adam" sa jezikom „sr" i varijantom
+„Adam"; `rhvoice` i `mbrola_ng` po jedan glas. Prsten (`alus+control+strelice`)
+je stavku Glas imao samo uz bar dva glasa, pa korisnik na `mbrola_ng` u prstenu
+nije imao ništa osim brojeva; na eSpeak-u bi ih bilo 14805.
+
+* `speech::VoiceCatalog` deli listu **po podacima**, ne po imenu modula: glas
+  čiji je id id drugog glasa + „+" + sopstvena varijanta je taj glas sa
+  varijantom. Jezik interfejsa ide na vrh, ostalo po imenu. U konfiguraciji
+  ostaje jedan ključ `voice` sa punim id-jem.
+* Prsten: **Izlazni modul, Glas, Varijanta**, Brzina, Visina, Modulacija,
+  Jačina — svaka stavka samo kad ima bar dve vrednosti. Promena modula bira
+  glas istog jezika (sa `mbrola_ng` `cr1` (hr) na eSpeak → Croatian) i
+  preuređuje prsten ostajući na modulu. `alus+control+c` čuva sve to kao i
+  brzinu. `ISynth` je dobio `availableModules`/`outputModule`/`setOutputModule`
+  sa podrazumevanim „nema modula".
+* Prozor: red **Varijanta** ispod Glasa, vidljiv samo kad modul ima varijante;
+  oba reda upisuju `voice`. Promena modula u prozoru takođe bira glas istog
+  jezika. Dugme **Probaj** izgovara rečenicu izabranim modulom, glasom i
+  varijantom (i neprimenjenom brzinom, visinom, jačinom) preko sopstvene veze
+  `alus-settings`-a, pa se glas čitača ne menja.
+
+Živo (privremena konfiguracija, `alus-cli a11y-tree`): `COMBOBOX "Глас" =
+Croatian (hr)`, `COMBOBOX "Варијанта" = Adam`, `BUTTON "Пробај глас"`. Testovi:
+`tests/speech/test_settings_ring.cpp` (katalog, eSpeak u prstenu, modul u
+prstenu), `tests/gui/test_model.cpp`.

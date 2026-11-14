@@ -70,6 +70,10 @@ struct Context {
     // the window any other way -- Cancel, Escape, the header's close button
     // -- discards them, as a Windows dialog does (FAZA10.md N125).
     std::function<void()> accept;
+    // The "Try" button: says a sentence with the module, voice and variant
+    // the window shows now -- through the settings process's own connection,
+    // so the screen reader's voice does not change (N126).
+    std::function<void()> previewVoice;
     // What speech-dispatcher offers, for the voice and module rows. Filled
     // by alus-settings when it starts; empty means "not asked", and the rows
     // then offer only their fixed entries.

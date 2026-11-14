@@ -229,36 +229,77 @@ GtkWidget* findSiblingRow(GtkWidget* row, std::string_view key) {
     return nullptr;
 }
 
+RowBinding* bindingOf(GtkWidget* row) {
+    return row != nullptr ? static_cast<RowBinding*>(g_object_get_data(G_OBJECT(row), "alus-binding"))
+                          : nullptr;
+}
+
+// What a row's choices are filled from: the configured value, or for the voice
+// and variant rows the full configured voice they each show half of (N126).
+std::string configuredFor(const Context& context, const Row& row) {
+    if (row.source == "speech-voices" || row.source == "speech-variants") {
+        return context.config->getString("speech", "voice");
+    }
+    return context.config->getString(row.section, row.key);
+}
+
+// Refills the voice and variant rows beside `anyRow` from context.speech, and
+// shows the variant row only for a module that has variants.
+void refillVoiceRows(GtkWidget* anyRow, Context& context) {
+    const std::string configured = context.config->getString("speech", "voice");
+    for (const char* key : {"voice", "voiceVariant"}) {
+        GtkWidget* row = findSiblingRow(anyRow, key);
+        RowBinding* binding = bindingOf(row);
+        if (binding == nullptr) {
+            continue;
+        }
+        fillChoices(row, binding, resolveChoices(*binding->row, context.speech, configured),
+                    choiceValueFor(*binding->row, context.speech, configured));
+        if (binding->row->source == "speech-variants") {
+            gtk_widget_set_visible(row, voiceCatalog(context.speech).hasVariants() ? TRUE : FALSE);
+        }
+    }
+}
+
 // The output module changed: the voices are that module's now.
 void refreshVoicesFor(GtkWidget* moduleRow, RowBinding& moduleBinding, const std::string& module) {
     Context& context = *moduleBinding.context;
     if (!context.requerySpeech) {
         return;
     }
-    GtkWidget* voiceRow = findSiblingRow(moduleRow, "voice");
-    if (voiceRow == nullptr) {
-        return;
-    }
-    auto* voiceBinding =
-        static_cast<RowBinding*>(g_object_get_data(G_OBJECT(voiceRow), "alus-binding"));
+    RowBinding* voiceBinding = bindingOf(findSiblingRow(moduleRow, "voice"));
     if (voiceBinding == nullptr) {
         return;
     }
+    // The language of the voice being left, so that going from mbrola_ng's
+    // Croatian `cr1` to espeak-ng lands on Croatian -- the same rule as the
+    // settings ring.
+    const std::string current = context.config->getString("speech", "voice");
+    std::string language;
+    {
+        const speech::VoiceCatalog old = voiceCatalog(context.speech);
+        if (const int at = old.indexOfVoice(old.split(current).first); at >= 0) {
+            language = old.voices()[static_cast<std::size_t>(at)].language;
+        }
+    }
     context.speech = context.requerySpeech(module);
-    std::string current = context.config->getString("speech", "voice");
-    // A voice of the OLD module means nothing to the new one: the voice
-    // becomes Default rather than a name the new module would refuse (which
-    // is how `voice=` went stale in N107).
-    const std::vector<Choice> offered = resolveChoices(*voiceBinding->row, context.speech, "");
-    const bool stillOffered = std::any_of(offered.begin(), offered.end(),
-                                          [&current](const Choice& c) { return c.value == current; });
-    if (!stillOffered && !current.empty()) {
-        current.clear();
-        context.config->setString("speech", "voice", "");
+    const speech::VoiceCatalog fresh = voiceCatalog(context.speech);
+    // A voice of the OLD module means nothing to the new one: a voice of the
+    // same language, else Default -- never a name the new module would refuse
+    // (which is how `voice=` went stale in N107).
+    if (fresh.indexOfVoice(fresh.split(current).first) < 0) {
+        std::string replacement;
+        const std::string wanted = language.substr(0, language.find_first_of("-_"));
+        for (const speech::VoiceInfo& voice : fresh.voices()) {
+            if (!wanted.empty() && voice.language.substr(0, voice.language.find_first_of("-_")) == wanted) {
+                replacement = voice.id;
+                break;
+            }
+        }
+        context.config->setString("speech", "voice", replacement);
         noteChanged(*voiceBinding);
     }
-    fillChoices(voiceRow, voiceBinding, resolveChoices(*voiceBinding->row, context.speech, current),
-                current);
+    refillVoiceRows(moduleRow, context);
 }
 
 void onChoice(GObject* object, GParamSpec* /*spec*/, gpointer data) {
@@ -270,6 +311,32 @@ void onChoice(GObject* object, GParamSpec* /*spec*/, gpointer data) {
     // The CHOICE's value and never its label: the label is translated and the
     // configuration file must not be.
     const std::string value = binding->choices[selected].value;
+    const std::string& source = binding->row->source;
+    if (source == "speech-voices" || source == "speech-variants") {
+        // The two rows write ONE key: base voice plus variant, as the module
+        // names it ("Serbian+Adam").
+        Context& context = *binding->context;
+        const speech::VoiceCatalog catalog = voiceCatalog(context.speech);
+        const auto selectedOf = [](GtkWidget* row) -> std::string {
+            const RowBinding* b = bindingOf(row);
+            if (b == nullptr) {
+                return {};
+            }
+            const guint at = adw_combo_row_get_selected(ADW_COMBO_ROW(row));
+            return at < b->choices.size() ? b->choices[at].value : std::string{};
+        };
+        std::string base = selectedOf(findSiblingRow(GTK_WIDGET(object), "voice"));
+        std::string variant = catalog.hasVariants()
+                                  ? selectedOf(findSiblingRow(GTK_WIDGET(object), "voiceVariant"))
+                                  : std::string{};
+        if (base.empty() && !variant.empty() && !catalog.voices().empty()) {
+            // A variant needs a voice to be a variant OF; Default has none.
+            base = catalog.voices().front().id;
+        }
+        context.config->setString("speech", "voice", catalog.join(base, variant));
+        noteChanged(*binding);
+        return;
+    }
     binding->context->config->setString(binding->row->section, binding->row->key, value);
     noteChanged(*binding);
     if (binding->row->source == "speech-modules") {
@@ -303,7 +370,12 @@ GtkWidget* buildActionRow(Context& context, const Row& row, Window& window) {
     }
     // Translators: the label of the button on a settings row that opens
     // something else.
-    GtkWidget* button = gtk_button_new_with_label(_("Open"));
+    const char* label = _("Open");
+    if (row.action == "preview-voice") {
+        // Translators: the button that says a sentence with the chosen voice.
+        label = _("Try");
+    }
+    GtkWidget* button = gtk_button_new_with_label(label);
     gtk_widget_set_valign(button, GTK_ALIGN_CENTER);
     adw_action_row_add_suffix(ADW_ACTION_ROW(widget), button);
     adw_action_row_set_activatable_widget(ADW_ACTION_ROW(widget), button);
@@ -342,6 +414,10 @@ GtkWidget* buildActionRow(Context& context, const Row& row, Window& window) {
                                      d->context->message(_("Could not open the folder"));
                                  }
                              }
+                         } else if (d->action == "preview-voice") {
+                             if (d->context->previewVoice) {
+                                 d->context->previewVoice();
+                             }
                          } else if (d->action == "reset") {
                              if (d->context->resetAll) {
                                  d->context->resetAll();
@@ -374,12 +450,19 @@ GtkWidget* buildRow(Context& context, const Row& row, Window& window) {
         }
         case RowKind::Choice: {
             widget = adw_combo_row_new();
-            const std::string current = context.config->getString(row.section, row.key);
+            const std::string configured = configuredFor(context, row);
             RowBinding* binding = bind(widget, context, row);
             // Labels as the user sees them: a msgid translated, or a runtime
             // name (a voice) shown as it is. The values stay in the binding
             // and are looked up by index.
-            fillChoices(widget, binding, resolveChoices(row, context.speech, current), current);
+            fillChoices(widget, binding, resolveChoices(row, context.speech, configured),
+                        choiceValueFor(row, context.speech, configured));
+            if (row.source == "speech-variants") {
+                // A module without variants (rhvoice, mbrola_ng) has no row
+                // for them, rather than one that offers only "No variant".
+                gtk_widget_set_visible(widget,
+                                       voiceCatalog(context.speech).hasVariants() ? TRUE : FALSE);
+            }
             g_signal_connect(widget, "notify::selected", G_CALLBACK(onChoice), binding);
             GtkEventController* keys = gtk_event_controller_key_new();
             gtk_event_controller_set_propagation_phase(keys, GTK_PHASE_CAPTURE);

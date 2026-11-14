@@ -1335,3 +1335,33 @@ msgstr "Primenjuje izmenjena podešavanja i zatvara prozor"
 
 msgid "Closes the window without changing anything"
 msgstr "Zatvara prozor bez ikakvih izmena"
+
+# N126: glas i varijanta odvojeno, izlazni modul u prstenu, dugme Probaj.
+msgid "This is how this voice sounds."
+msgstr "Ovako zvuči ovaj glas."
+
+msgid "Variant"
+msgstr "Varijanta"
+
+msgid "The variant of the voice above."
+msgstr "Varijanta glasa iznad."
+
+msgid "No variant"
+msgstr "Bez varijante"
+
+msgid "Try the voice"
+msgstr "Probaj glas"
+
+msgid "Says a sentence with the module, voice and variant above, without changing the screen reader's voice."
+msgstr "Izgovara rečenicu modulom, glasom i varijantom iznad, a da se glas čitača ekrana ne promeni."
+
+msgid "Try"
+msgstr "Probaj"
+
+msgctxt "synth setting"
+msgid "Output module"
+msgstr "Izlazni modul"
+
+msgctxt "synth setting"
+msgid "no variant"
+msgstr "bez varijante"

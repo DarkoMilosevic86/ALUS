@@ -65,6 +65,7 @@
 #include "alus/script/catalog.hpp"
 #include "alus/script/dispatch.hpp"
 #include "alus/speech/service.hpp"
+#include "alus/speech/ssip_synth.hpp"
 
 #include <gio/gio.h>
 #include <glib.h>
@@ -113,6 +114,9 @@ struct Session {
     bool pending = false;
     // OK was pressed. Without it nothing is written (N125).
     bool accepted = false;
+    // The "Try" button's own speech-dispatcher connection, kept until the
+    // next try or the end, because speaking is asynchronous (N126).
+    std::unique_ptr<alus::speech::SsipSynth> preview;
 };
 
 Session* session() {
@@ -363,6 +367,39 @@ int main(int argc, char* argv[]) {
     };
 
     guiContext.accept = [s] { s->accepted = true; };
+    // "Try": the module, voice and variant the window shows -- including
+    // changes not yet confirmed with OK -- at the window's rate, pitch and
+    // volume. A connection of its own, so the screen reader keeps its voice:
+    // trying a voice must not be choosing it (the Escape of N125).
+    guiContext.previewVoice = [s] {
+        if (s->preview != nullptr) {
+            s->preview->cancel();
+            s->preview->terminate();
+            s->preview.reset();
+        }
+        auto synth = std::make_unique<alus::speech::SsipSynth>();
+        const std::string module = s->config->getString("speech", "outputModule");
+        if (!module.empty()) {
+            synth->setPreferredOutputModule(module);
+        }
+        std::string why;
+        if (!synth->initialize(&why)) {
+            ALUS_WARNING("settings: the voice could not be tried: {}", why);
+            return;
+        }
+        const std::string voice = s->config->getString("speech", "voice");
+        if (!voice.empty()) {
+            synth->setVoice(voice);
+        }
+        synth->setRate(static_cast<int>(s->config->getInt("speech", "rate")));
+        synth->setPitch(static_cast<int>(s->config->getInt("speech", "pitch")));
+        synth->setVolume(static_cast<int>(s->config->getInt("speech", "volume")));
+        synth->setInflection(static_cast<int>(s->config->getInt("speech", "inflection")));
+        // Translators: what the Try button of the settings window says, in
+        // the voice being tried.
+        synth->speak(alus::speech::SpeechSequence{std::string{_("This is how this voice sounds.")}});
+        s->preview = std::move(synth);
+    };
 
     s->window = std::make_unique<alus::gui::Window>(std::move(guiContext));
 
@@ -420,6 +457,10 @@ int main(int argc, char* argv[]) {
             g_dbus_connection_unregister_object(bus, registration);
         }
         g_object_unref(bus);
+    }
+    if (s->preview != nullptr) {
+        s->preview->terminate();
+        s->preview.reset();
     }
     s->window.reset();
     return 0;

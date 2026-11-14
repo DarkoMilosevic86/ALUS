@@ -34,6 +34,7 @@
 #pragma once
 
 #include "alus/speech/synth.hpp"
+#include "alus/speech/voice_catalog.hpp"
 
 #include <cstddef>
 #include <optional>
@@ -51,8 +52,16 @@ public:
     // Which setting the ring is on. The order of the enumerators is the order
     // of the ring, and it is upstream's driver order: voice first, then the
     // numbers, because the voice is what a user reaches for first.
+    //
+    // Module and Variant are ALUS's (FAZA10.md N126): speech-dispatcher fronts
+    // several engines, and a user on a module with one voice (mbrola_ng) had
+    // nothing in the ring to change it with; eSpeak's 14805 "voices" are 140
+    // languages times 105 variants, which NVDA's eSpeak driver also offers as
+    // Voice and Variant. Each is in the ring only when it has two values.
     enum class Setting {
+        Module,
         Voice,
+        Variant,
         Rate,
         Pitch,
         Inflection,
@@ -117,9 +126,17 @@ public:
     static constexpr int kVoiceStep = 1;
 
 private:
-    // A voice is chosen by its position in the driver's list, so the ring can
-    // step through voices with the same arithmetic as a number.
-    bool isVoice(Setting setting) const;
+    // Module, voice and variant are chosen by their position in a list, so
+    // the ring steps through them with the same arithmetic as a number.
+    static bool isList(Setting setting);
+    // Re-reads the module's voices into catalog_.
+    void readVoices();
+    // After a module change: a voice of the same language as before if the
+    // new module has one, else the first (the interface language's come
+    // first in the catalog).
+    void chooseVoiceForNewModule(const std::string& previousLanguage);
+    std::string currentBase() const;
+    std::string currentVariant() const;
     int valueOf(Setting setting) const;
     int maximumOf(Setting setting) const;
     int stepOf(Setting setting) const;
@@ -134,10 +151,12 @@ private:
     config::Manager* config_ = nullptr;
     std::vector<Setting> settings_;
     std::size_t index_ = 0;
-    // The driver's voices, read when the ring is built: stepping through them
-    // must not re-ask the driver on every key press (speech-dispatcher answers
-    // over a socket), and the list cannot change without a driver change.
-    std::vector<VoiceInfo> voices_;
+    // The driver's modules and voices, read when the ring is built: stepping
+    // through them must not re-ask the driver on every key press (speech-
+    // dispatcher answers over a socket). Re-read when the ring changes the
+    // module, which is the one thing that changes the voice list.
+    std::vector<std::string> modules_;
+    VoiceCatalog catalog_;
 };
 
 }  // namespace alus::speech

@@ -93,6 +93,17 @@ public:
     virtual std::string voice() const = 0;
     virtual bool setVoice(const std::string& id) = 0;
 
+    // Output modules, for a driver that fronts several engines (speech-
+    // dispatcher). The defaults say "none": a driver with one engine has no
+    // module to choose. Changing the module changes availableVoices(); the
+    // caller picks a voice afterwards (FAZA10.md N126).
+    virtual std::vector<std::string> availableModules() const { return {}; }
+    virtual std::string outputModule() const { return {}; }
+    virtual bool setOutputModule(const std::string& module) {
+        (void)module;
+        return false;
+    }
+
     // 0–100 at the ALUS level, mapped by the driver onto whatever the backend
     // uses. A driver that does not support a parameter keeps the value anyway,
     // so the setting survives a driver change.

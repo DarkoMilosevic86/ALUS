@@ -109,15 +109,15 @@ public:
 
     bool timingIsGuaranteed() const override;
     // The speech-dispatcher output module in use ("espeak-ng", "rhvoice", ...).
-    const std::string& outputModule() const noexcept { return outputModule_; }
+    std::string outputModule() const override { return outputModule_; }
     // Applied by initialize(), BEFORE it judges whether the timing budgets
     // hold: the user's configured module is the one to report on, not whatever
     // the server happened to default to.
     void setPreferredOutputModule(std::string module) {
         preferredModule_ = std::move(module);
     }
-    bool setOutputModule(const std::string& module);
-    std::vector<std::string> availableModules() const;
+    bool setOutputModule(const std::string& module) override;
+    std::vector<std::string> availableModules() const override;
 
     // Exposed for tests: the SSML messages an utterance turns into, without a
     // connection. This is where measure 3 above lives, so it is tested
