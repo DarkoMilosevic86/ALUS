@@ -152,6 +152,67 @@ void fillChoices(GtkWidget* widget, RowBinding* binding, std::vector<Choice> cho
     binding->choices = std::move(choices);
 }
 
+// Up/Down, Home/End and Page Up/Down change a combo row's choice in place,
+// the way a closed combo box does on Windows and in GTK 3 -- what a screen
+// reader user expects from "Synthesizer: combo box" (FAZA10.md N124). Out of
+// the box AdwComboRow only opens a popover on Space or Enter, and the arrows
+// move to the next ROW, so choosing a voice took Space, arrows, Enter and a
+// search for where the focus had gone. Space and Enter still open the list.
+// Installed in the capture phase, so the row's list box does not see the
+// arrows first; the open popover is a window of its own and is not affected.
+gboolean onComboKey(GtkEventControllerKey* controller, guint keyval, guint /*keycode*/,
+                    GdkModifierType state, gpointer /*data*/) {
+    if ((state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_ALT_MASK | GDK_SUPER_MASK)) != 0) {
+        return FALSE;
+    }
+    GtkWidget* widget = gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(controller));
+    AdwComboRow* row = ADW_COMBO_ROW(widget);
+    GListModel* model = adw_combo_row_get_model(row);
+    const guint count = model != nullptr ? g_list_model_get_n_items(model) : 0;
+    if (count == 0) {
+        return FALSE;
+    }
+    const guint current = adw_combo_row_get_selected(row);
+    const guint last = count - 1;
+    const guint position = current == GTK_INVALID_LIST_POSITION ? 0 : current;
+    constexpr guint kPage = 5;
+    guint next = position;
+    switch (keyval) {
+        case GDK_KEY_Up:
+        case GDK_KEY_KP_Up:
+            next = position > 0 ? position - 1 : 0;
+            break;
+        case GDK_KEY_Down:
+        case GDK_KEY_KP_Down:
+            next = position < last ? position + 1 : last;
+            break;
+        case GDK_KEY_Home:
+        case GDK_KEY_KP_Home:
+            next = 0;
+            break;
+        case GDK_KEY_End:
+        case GDK_KEY_KP_End:
+            next = last;
+            break;
+        case GDK_KEY_Page_Up:
+        case GDK_KEY_KP_Page_Up:
+            next = position > kPage ? position - kPage : 0;
+            break;
+        case GDK_KEY_Page_Down:
+        case GDK_KEY_KP_Page_Down:
+            next = position + kPage < last ? position + kPage : last;
+            break;
+        default:
+            return FALSE;
+    }
+    // At either end the key is still consumed: an arrow that left the row
+    // instead would be the old behaviour by surprise.
+    if (next != current) {
+        adw_combo_row_set_selected(row, next);
+    }
+    return TRUE;
+}
+
 // The voice row beside a module row: a sibling in the same preferences group,
 // found by its binding rather than by position so that a reordered page does
 // not refill the wrong row.
@@ -320,6 +381,10 @@ GtkWidget* buildRow(Context& context, const Row& row, Window& window) {
             // and are looked up by index.
             fillChoices(widget, binding, resolveChoices(row, context.speech, current), current);
             g_signal_connect(widget, "notify::selected", G_CALLBACK(onChoice), binding);
+            GtkEventController* keys = gtk_event_controller_key_new();
+            gtk_event_controller_set_propagation_phase(keys, GTK_PHASE_CAPTURE);
+            g_signal_connect(keys, "key-pressed", G_CALLBACK(onComboKey), nullptr);
+            gtk_widget_add_controller(widget, keys);
             break;
         }
         case RowKind::Integer: {
@@ -432,6 +497,34 @@ void Window::Impl::build() {
             }
             adw_preferences_page_add(ADW_PREFERENCES_PAGE(gtkPage),
                                      ADW_PREFERENCES_GROUP(gtkGroup));
+        }
+        // A Close button at the end of every page, where Tab arrives after
+        // the last setting. The header bar has one too, but as an icon in a
+        // corner a keyboard user has to know to look for; this one is in the
+        // tab order where the page ends (N124). Closing is what applies the
+        // settings, so it says so.
+        {
+            GtkWidget* closeGroup = adw_preferences_group_new();
+            GtkWidget* closeRow = adw_button_row_new();
+            // Translators: the button at the end of every settings page that
+            // closes the window; the changed settings apply when it closes.
+            adw_preferences_row_set_title(ADW_PREFERENCES_ROW(closeRow), _("Close"));
+            gtk_accessible_update_property(
+                GTK_ACCESSIBLE(closeRow), GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
+                // Translators: the description of the Close button of the
+                // settings window.
+                _("Closes the window and applies the changed settings"), -1);
+            g_signal_connect(closeRow, "activated",
+                             G_CALLBACK(+[](AdwButtonRow*, gpointer data) {
+                                 auto* impl = static_cast<Impl*>(data);
+                                 if (impl->dialog != nullptr) {
+                                     adw_dialog_close(impl->dialog);
+                                 }
+                             }),
+                             this);
+            adw_preferences_group_add(ADW_PREFERENCES_GROUP(closeGroup), closeRow);
+            adw_preferences_page_add(ADW_PREFERENCES_PAGE(gtkPage),
+                                     ADW_PREFERENCES_GROUP(closeGroup));
         }
         adw_preferences_dialog_add(ADW_PREFERENCES_DIALOG(dialog),
                                    ADW_PREFERENCES_PAGE(gtkPage));

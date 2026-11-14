@@ -1325,3 +1325,10 @@ msgstr "Modul speech-dispatcher-a. Izbor modula odmah prikazuje njegove glasove 
 
 msgid "The voices of the output module above. The new voice is heard when this window closes."
 msgstr "Glasovi izlaznog modula iznad. Novi glas se čuje kad se ovaj prozor zatvori."
+
+# N124: dugme na dnu svake stranice prozora podešavanja.
+msgid "Close"
+msgstr "Zatvori"
+
+msgid "Closes the window and applies the changed settings"
+msgstr "Zatvara prozor i primenjuje izmenjena podešavanja"

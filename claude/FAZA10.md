@@ -632,3 +632,31 @@ Popravka: `cancelSpeech` sada, ako je govor pauziran, **prvo** javi sintezi
 nastavak pa tek onda prekida. Usput: pauza od Shift-a se zakazuje kao hitna,
 kao i prekid, da bi se izvršavale redom kojim su tasteri stigli. Testovi u
 `tests/speech/test_presenter.cpp` (bez popravke padaju dva).
+
+**Potvrda N123 (korisnik, uživo):** Shift+Tab u prozoru podešavanja govori.
+
+**N124 — u prozoru podešavanja izbor samo razmakom, bez vrednosti i bez
+vidljivog dugmeta za zatvaranje.**
+
+Tri stvari, izmerene na `alus-settings` (GTK 4.18.6, libadwaita 1.7.6):
+
+1. **Vrednost se nije čula.** `AdwComboRow` ne daje ni `Value` ni `Selection`;
+   izabrana stavka je labela u jedinoj stavci liste:
+   `combo box > panel > panel > list > list item > panel > label "cr1 (hr)"`.
+   ALUS je izgovarao „Глас, изборни оквир" bez glasa. Sada je vrednost
+   padajuće liste bez Value/Selection tekst te stavke (`shownChoiceText`), a
+   promena imena unutar fokusirane padajuće liste izgovara se kao promena
+   njene vrednosti — strelice preimenuju baš tu labelu, a za samu listu ne
+   stiže nijedan događaj. Važi za svaki GTK 4 program (i `GtkDropDown`).
+   Provereno na živom prozoru preko `alus-cli a11y-tree`:
+   `COMBOBOX "Глас" = cr1 (hr)`.
+2. **Strelice nisu menjale izbor.** `AdwComboRow` otvara listu samo na
+   razmak/Enter, a strelice prelaze na sledeći red. Sada strelice gore/dole,
+   Home/End i Page Up/Down menjaju izbor na mestu, kao zatvorena padajuća lista
+   u Windows-u i GTK 3; razmak i Enter i dalje otvaraju listu.
+3. **Zatvaranje.** Dugme „Затвори" postojalo je samo kao ikonica u zaglavlju.
+   Sada je na dnu svake stranice, gde Tab stigne posle poslednjeg podešavanja,
+   sa opisom da zatvaranje primenjuje izmene.
+
+Testovi: `tests/a11y/test_events.cpp` (vrednost i najava). Strelice u samom
+prozoru nisu pokrivene testom (traže ekran); živa provera ostaje korisniku.

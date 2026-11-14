@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alus 0.1.0\n"
 "Report-Msgid-Bugs-To: daremc86@gmail.com\n"
-"POT-Creation-Date: 2026-11-13 14:52+0100\n"
+"POT-Creation-Date: 2026-11-14 13:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1840,18 +1840,18 @@ msgid "only when automatically tethered"
 msgstr ""
 
 #. Translators: spoken when the battery status cannot be read at all.
-#: src/commands/system.cpp:244
+#: src/commands/system.cpp:266
 msgid "Unknown power status"
 msgstr ""
 
 #. Translators: spoken on a machine with no battery -- a desktop, or a
 #. laptop with the battery taken out.
-#: src/commands/system.cpp:249
+#: src/commands/system.cpp:271
 msgid "No system battery"
 msgstr ""
 
 #. Translators: the current battery charge. %d is the percentage.
-#: src/commands/system.cpp:254
+#: src/commands/system.cpp:276
 #, c-format
 msgid "%d percent"
 msgid_plural "%d percent"
@@ -1859,54 +1859,54 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. Translators: spoken when less than a minute of battery is left.
-#: src/commands/system.cpp:263
+#: src/commands/system.cpp:285
 msgid "Less than 1 minute remaining"
 msgstr ""
 
-#: src/commands/system.cpp:268
+#: src/commands/system.cpp:290
 msgid "{hours:d} hour"
 msgid_plural "{hours:d} hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/commands/system.cpp:276
+#: src/commands/system.cpp:298
 msgid "{minutes:d} minute"
 msgid_plural "{minutes:d} minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/commands/system.cpp:282
+#: src/commands/system.cpp:304
 msgid "{hourText} and {minuteText} remaining"
 msgstr ""
 
-#: src/commands/system.cpp:288
+#: src/commands/system.cpp:310
 msgid "{hourText} remaining"
 msgstr ""
 
-#: src/commands/system.cpp:292
+#: src/commands/system.cpp:314
 msgid "{minuteText} remaining"
 msgstr ""
 
 #. Translators: spoken when the machine is on mains power.
-#: src/commands/system.cpp:299
+#: src/commands/system.cpp:321
 msgid "Plugged in"
 msgstr ""
 
 #. Translators: spoken when the machine is on battery.
-#: src/commands/system.cpp:301
+#: src/commands/system.cpp:323
 msgid "Unplugged"
 msgstr ""
 
 #. Translators: spoken when the clock cannot be read at all, which
 #. takes a locale with no time format. Never silence: a key that says
 #. nothing is indistinguishable from a key that did not arrive.
-#: src/commands/system.cpp:348
+#: src/commands/system.cpp:370
 msgid "cannot read the clock"
 msgstr ""
 
 #. Translators: spoken when the configuration cannot be saved because
 #. the command was run somewhere that has none, e.g. a diagnostic tool.
-#: src/config/commands.cpp:41
+#: src/config/commands.cpp:50
 msgid "cannot save the configuration from here"
 msgstr ""
 
@@ -1914,30 +1914,30 @@ msgstr ""
 #. a read-only home directory, a full disk. NOT silent: a user who
 #. believes a setting was kept and finds it gone after a restart has
 #. no way to know which of the two went wrong.
-#: src/config/commands.cpp:51
+#: src/config/commands.cpp:60
 msgid "Could not save configuration"
 msgstr ""
 
 #. Translators: spoken when the configuration has been written to disk.
-#: src/config/commands.cpp:56
+#: src/config/commands.cpp:65
 msgid "Configuration saved"
 msgstr ""
 
 #. Translators: spoken when the configuration cannot be reloaded
 #. because the command was run outside the screen reader.
-#: src/config/commands.cpp:63
+#: src/config/commands.cpp:72
 msgid "cannot revert the configuration from here"
 msgstr ""
 
 #. Translators: spoken when the configuration has been reloaded from
 #. disk, undoing every change made since it was last saved.
-#: src/config/commands.cpp:76
+#: src/config/commands.cpp:85
 msgid "Configuration applied"
 msgstr ""
 
 #. Translators: spoken when every setting has been returned to its
 #. factory value.
-#: src/config/commands.cpp:84
+#: src/config/commands.cpp:93
 msgid "Configuration restored to factory defaults"
 msgstr ""
 
@@ -3056,25 +3056,37 @@ msgstr ""
 
 #. Translators: the label of the button on a settings row that opens
 #. something else.
-#: src/gui/window.cpp:245
+#: src/gui/window.cpp:306
 msgid "Open"
 msgstr ""
 
 #. Translators: spoken when the file manager
 #. could not be started.
-#: src/gui/window.cpp:281
+#: src/gui/window.cpp:342
 msgid "Could not open the folder"
 msgstr ""
 
 #. Translators: spoken after a factory reset.
-#: src/gui/window.cpp:290
+#: src/gui/window.cpp:351
 msgid "Every setting has been reset"
 msgstr ""
 
 #. Translators: the title of ALUS's settings window. "ALUS" is the product
 #. name and is not translated.
-#: src/gui/window.cpp:403
+#: src/gui/window.cpp:468
 msgid "ALUS Settings"
+msgstr ""
+
+#. Translators: the button at the end of every settings page that
+#. closes the window; the changed settings apply when it closes.
+#: src/gui/window.cpp:511
+msgid "Close"
+msgstr ""
+
+#. Translators: the description of the Close button of the
+#. settings window.
+#: src/gui/window.cpp:516
+msgid "Closes the window and applies the changed settings"
 msgstr ""
 
 #: src/i18n/data_strings.cpp:28 src/nav/tree_interceptor.cpp:58
@@ -5276,47 +5288,47 @@ msgstr ""
 msgid "Emulates pressing %s on the system keyboard"
 msgstr ""
 
-#: src/speech/global_commands.cpp:35
+#: src/speech/global_commands.cpp:44
 msgctxt "speechModes"
 msgid "off"
 msgstr ""
 
-#: src/speech/global_commands.cpp:39
+#: src/speech/global_commands.cpp:48
 msgctxt "speechModes"
 msgid "beeps"
 msgstr ""
 
-#: src/speech/global_commands.cpp:42
+#: src/speech/global_commands.cpp:51
 msgctxt "speechModes"
 msgid "talk"
 msgstr ""
 
-#: src/speech/global_commands.cpp:46
+#: src/speech/global_commands.cpp:55
 msgctxt "speechModes"
 msgid "on-demand"
 msgstr ""
 
-#: src/speech/global_commands.cpp:61
+#: src/speech/global_commands.cpp:70
 msgctxt "symbolLevel"
 msgid "none"
 msgstr ""
 
-#: src/speech/global_commands.cpp:64
+#: src/speech/global_commands.cpp:73
 msgctxt "symbolLevel"
 msgid "some"
 msgstr ""
 
-#: src/speech/global_commands.cpp:67
+#: src/speech/global_commands.cpp:76
 msgctxt "symbolLevel"
 msgid "most"
 msgstr ""
 
-#: src/speech/global_commands.cpp:71
+#: src/speech/global_commands.cpp:80
 msgctxt "symbolLevel"
 msgid "all"
 msgstr ""
 
-#: src/speech/global_commands.cpp:75
+#: src/speech/global_commands.cpp:84
 msgctxt "symbolLevel"
 msgid "character"
 msgstr ""
@@ -5324,14 +5336,14 @@ msgstr ""
 #. Translators: spoken when the synthesizer settings ring
 #. (alus+control+arrows) has nothing in it, because the synthesizer
 #. reports no setting that can be stepped.
-#: src/speech/global_commands.cpp:129
+#: src/speech/global_commands.cpp:138
 msgid "No settings"
 msgstr ""
 
 #. Translators: spoken when a command that needs the speech pipeline is
 #. run where there is none, e.g. under `alus-daemon --no-speech`.
-#: src/speech/global_commands.cpp:137 src/speech/global_commands.cpp:164
-#: src/speech/global_commands.cpp:182
+#: src/speech/global_commands.cpp:146 src/speech/global_commands.cpp:173
+#: src/speech/global_commands.cpp:191
 msgid "speech is not available"
 msgstr ""
 
@@ -5341,20 +5353,20 @@ msgstr ""
 #. The brace is upstream's, and it is copied exactly: the msgid is the key
 #. into upstream's Serbian catalogue, so a pattern rewritten to "%s" would
 #. be an untranslated string (i18n::substituteNamed says more).
-#: src/speech/global_commands.cpp:153
+#: src/speech/global_commands.cpp:162
 msgid "Speech mode {mode}"
 msgstr ""
 
 #. Translators: reported when the punctuation and symbol level is cycled;
 #. %s is the new level ("none", "some", "most", "all").
-#: src/speech/global_commands.cpp:176
+#: src/speech/global_commands.cpp:185
 #, c-format
 msgid "Symbol level %s"
 msgstr ""
 
 #. Translators: reported when `alus+x` is pressed before ALUS has said
 #. anything there is to repeat.
-#: src/speech/global_commands.cpp:193
+#: src/speech/global_commands.cpp:202
 msgid "Nothing to repeat"
 msgstr ""
 

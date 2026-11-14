@@ -18,6 +18,55 @@
 namespace alus::a11y {
 namespace {
 
+// The text of the first `list item` below `object`, searched breadth first and
+// not deeper than a toolkit's few wrapper panels: its own name, or its labels
+// joined when it has none (GTK 4 leaves the item unnamed).
+std::string shownChoiceText(const Object& object) {
+    constexpr int kMaxDepth = 5;
+    constexpr std::size_t kMaxVisited = 64;
+    std::vector<std::pair<ObjectPtr, int>> queue;
+    for (const ObjectPtr& child : object.children()) {
+        if (child != nullptr) {
+            queue.emplace_back(child, 1);
+        }
+    }
+    for (std::size_t at = 0; at < queue.size() && at < kMaxVisited; ++at) {
+        const auto [node, depth] = queue[at];
+        if (node->role() == Role::ListItem) {
+            if (!node->name().empty()) {
+                return node->name();
+            }
+            std::string text;
+            std::vector<ObjectPtr> stack{node};
+            while (!stack.empty() && stack.size() < kMaxVisited) {
+                const ObjectPtr current = stack.back();
+                stack.pop_back();
+                const auto& kids = current->children();
+                for (auto it = kids.rbegin(); it != kids.rend(); ++it) {
+                    if (*it != nullptr) {
+                        stack.push_back(*it);
+                    }
+                }
+                if (current->role() == Role::Label && !current->name().empty()) {
+                    if (!text.empty()) {
+                        text += " ";
+                    }
+                    text += current->name();
+                }
+            }
+            return text;
+        }
+        if (depth < kMaxDepth) {
+            for (const ObjectPtr& child : node->children()) {
+                if (child != nullptr) {
+                    queue.emplace_back(child, depth + 1);
+                }
+            }
+        }
+    }
+    return {};
+}
+
 // The focusable-descendant search is bounded. An unbounded walk of a web
 // document is thousands of D-Bus round trips, which is a freeze, not a search.
 constexpr int kFocusableSearchBudget = 256;
@@ -225,6 +274,14 @@ Object::Object(Registry& registry, Ref ref)
                              return selected->name();
                          }
                      }
+                 }
+                 if (currentRole == Role::ComboBox) {
+                     // GTK 4 (AdwComboRow, GtkDropDown) implements neither
+                     // Value nor Selection: the shown choice is the one
+                     // `list item` inside it, measured as
+                     //     combo box > panel > panel > list > list item > panel > label
+                     // Orca reads it from there too (FAZA10.md N124).
+                     return shownChoiceText(*this);
                  }
                  return std::string{};
              }),
@@ -533,6 +590,17 @@ IsCurrent Object::isCurrent() const { return refined().current; }
 const std::string& Object::placeholder() const { return refined().placeholder; }
 
 const PositionInfo& Object::positionInfo() const { return positionInfo_.get(); }
+
+bool Object::isDescendantOf(const Object& ancestor, int maxLevels) const {
+    ObjectPtr current = parent();
+    for (int level = 0; level < maxLevels && current != nullptr; ++level) {
+        if (current->sameAs(ancestor)) {
+            return true;
+        }
+        current = current->parent();
+    }
+    return false;
+}
 
 bool Object::isFocusable() const {
     if (auto override = askBehaviors<bool>(
@@ -879,7 +947,22 @@ void Object::handleEvent(const core::Event& event) {
     }
     if (event.name == events::kNameChange || event.name == events::kValueChange ||
         event.name == events::kDescriptionChange) {
-        if (!isFocus || !hooks.speakPropertyChange) {
+        if (!hooks.speakPropertyChange) {
+            return;
+        }
+        if (!isFocus) {
+            // A GTK 4 combo box shows its choice in a label several levels
+            // down (see shownChoiceText), and choosing another one with the
+            // arrow keys renames THAT label: no event on the combo box at all.
+            // So a name change inside the focused combo box is the combo
+            // box's value changing (FAZA10.md N124).
+            if (event.name != events::kNameChange || focus == nullptr ||
+                focus->role() != Role::ComboBox || !isDescendantOf(*focus, 8)) {
+                return;
+            }
+            PropertyChange change;
+            change.value = true;
+            hooks.speakPropertyChange(*focus, change, OutputReason::Change);
             return;
         }
         PropertyChange change;

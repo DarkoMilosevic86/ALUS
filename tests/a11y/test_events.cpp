@@ -414,3 +414,53 @@ TEST_CASE("a live region announcement is spoken as a message", "[a11y][events]")
     REQUIRE(fixture.messages.size() == 1);
     CHECK(fixture.messages.front() == "Your message was sent");
 }
+
+TEST_CASE("a GTK 4 combo box: the shown item is its value, and a new one is said",
+          "[a11y][events]") {
+    // FAZA10.md N124, the measured shape of AdwComboRow (GTK 4.18): no Value,
+    // no Selection; the choice is a label in the one list item, and the arrow
+    // keys rename that label.
+    A11yFixture fixture;
+    MockBackend& backend = fixture.backend;
+    const Ref application = backend.addApplication("alus-settings");
+    const Ref window = backend.add(application, PlatformRole::Frame, "Settings");
+    backend.addState(window, PlatformState::Active);
+    const Ref combo = backend.add(window, PlatformRole::ComboBox, "Voice");
+    backend.addState(combo, PlatformState::Focusable);
+    const Ref outer = backend.add(combo, PlatformRole::Panel, "");
+    const Ref titles = backend.add(outer, PlatformRole::Panel, "");
+    backend.add(titles, PlatformRole::Label, "Voice");
+    backend.add(titles, PlatformRole::Label, "The voices of the output module above.");
+    const Ref box = backend.add(outer, PlatformRole::Panel, "");
+    const Ref list = backend.add(box, PlatformRole::List, "");
+    const Ref item = backend.add(list, PlatformRole::ListItem, "");
+    const Ref itemPanel = backend.add(item, PlatformRole::Panel, "");
+    const Ref shown = backend.add(itemPanel, PlatformRole::Label, "Marija (hr)");
+
+    const ObjectPtr object = fixture.registry.objectFor(combo);
+    REQUIRE(object != nullptr);
+    // Not the title or the subtitle label: the list item's.
+    CHECK(object->value() == "Marija (hr)");
+
+    backend.emit("object:state-changed:focused", combo, 1);
+    fixture.pumpOnce();
+    REQUIRE_FALSE(fixture.spoken.empty());
+    CHECK(fixture.lastSpoken().find("Marija (hr)") != std::string::npos);
+
+    fixture.clearRecords();
+    backend.node(shown).name = "Ana (sr)";
+    backend.emit("object:property-change:accessible-name", shown);
+    fixture.pumpOnce();
+    REQUIRE(fixture.changes.size() == 1);
+    CHECK(fixture.changes.front().ref == combo);
+    CHECK(fixture.changes.front().text.find("Ana (sr)") != std::string::npos);
+
+    SECTION("a label renamed outside the focused combo box is not its value") {
+        const Ref elsewhere = backend.add(window, PlatformRole::Label, "Status");
+        fixture.clearRecords();
+        backend.node(elsewhere).name = "Ready";
+        backend.emit("object:property-change:accessible-name", elsewhere);
+        fixture.pumpOnce();
+        CHECK(fixture.changes.empty());
+    }
+}
