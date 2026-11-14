@@ -336,15 +336,21 @@ std::size_t Registry::pumpEvents() {
                 std::chrono::steady_clock::time_point started = std::chrono::steady_clock::now();
                 const core::RawEvent& raw;
                 const ObjectPtr& object;
+                const Backend& backend;
+                std::uint64_t callsBefore;
                 ~SlowEventTrace() {
                     const auto took = std::chrono::duration_cast<std::chrono::milliseconds>(
                         std::chrono::steady_clock::now() - started);
                     if (took.count() >= 50) {
-                        ALUS_DEBUG("slow event: {} for {} ({}) took {} ms", raw.name,
-                                   object->path(), roleName(object->role()), took.count());
+                        // The call count tells many cheap calls from one
+                        // expensive one (N128).
+                        ALUS_DEBUG("slow event: {} for {} ({}) took {} ms, {} AT-SPI calls",
+                                   raw.name, object->path(), roleName(object->role()),
+                                   took.count(), backend.callCount() - callsBefore);
                     }
                 }
-            } slowEventTrace{std::chrono::steady_clock::now(), raw, object};
+            } slowEventTrace{std::chrono::steady_clock::now(), raw, object, backend_,
+                             backend_.callCount()};
 
             if (raw.name == events::kGainFocus) {
                 if (!object->isAlive()) {
@@ -455,13 +461,37 @@ bool Registry::selectionFollowsFocus(const ObjectPtr& object) const {
         !object->states().has(State::Selected)) {
         return false;
     }
-    if (isItem(focus->role())) {
+    const bool focusGone = !focus->isAlive();
+    if (focusGone || isItem(focus->role())) {
         if (focus->states().has(State::Selected)) {
             return false;
         }
         const ObjectPtr parent = object->parent();
-        const ObjectPtr focusParent = focus->parent();
-        return parent != nullptr && focusParent != nullptr && parent->sameAs(*focusParent);
+        const ObjectPtr focusParent = focusGone ? nullptr : focus->parent();
+        if (parent != nullptr && focusParent != nullptr && parent->sameAs(*focusParent)) {
+            return true;
+        }
+        // Entering a folder in Nautilus REPLACES the rows: the focused row is
+        // removed, GTK sends no focus event (the list already had it), and
+        // the first arrow selects a row of the new folder -- a dead focus
+        // answers no parent (log 16:13:43, N128: the first file was never
+        // said). The chain remembered when the focus was set still names the
+        // list and the view around it; a row up to two levels below either
+        // is in that list. The sidebar is further away than that.
+        const std::vector<ObjectPtr>& chain = api_.focusAncestors();
+        constexpr std::size_t kNearAncestors = 2;
+        constexpr int kLevels = 2;
+        ObjectPtr above = object->parent();
+        for (int level = 0; level < kLevels && above != nullptr; ++level) {
+            for (std::size_t back = 1; back <= kNearAncestors && back <= chain.size(); ++back) {
+                const ObjectPtr& near = chain[chain.size() - back];
+                if (near != nullptr && near->sameAs(*above)) {
+                    return true;
+                }
+            }
+            above = above->parent();
+        }
+        return false;
     }
     constexpr int kMaxLevels = 4;
     ObjectPtr ancestor = object->parent();

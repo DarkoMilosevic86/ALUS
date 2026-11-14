@@ -119,6 +119,9 @@ bool SayAll::readObjects(const a11y::ObjectPtr& root) {
 }
 
 void SayAll::stop() {
+    // Before the early return: after finish() the reader is gone, and the
+    // final stop() still has to forget which focus changes were say-all's.
+    caretObjects_.clear();
     if (!isRunning()) {
         return;
     }
@@ -131,6 +134,33 @@ void SayAll::stop() {
     bufferedLines_ = 0;
     buffer_->reset();
     ALUS_DEBUG("say all stopped after {} lines", linesRead_);
+}
+
+void SayAll::rememberCaretObject(const a11y::ObjectPtr& object) {
+    if (!caretObjects_.empty() && caretObjects_.back()->sameAs(*object)) {
+        return;
+    }
+    caretObjects_.push_back(object);
+    if (caretObjects_.size() > kRememberedCaretObjects) {
+        caretObjects_.erase(caretObjects_.begin());
+    }
+}
+
+bool SayAll::ownsFocusChangeTo(const a11y::Object& object) const {
+    if (cursor_ != SayAllCursor::Caret) {
+        return false;
+    }
+    // Not isRunning(): finish() drops the reader before the last line has
+    // been spoken, and that line's focus event is still on its way.
+    if (readerObject_ != nullptr && isRunning() && readerObject_->sameAs(object)) {
+        return true;
+    }
+    for (const a11y::ObjectPtr& remembered : caretObjects_) {
+        if (remembered->sameAs(object)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool SayAll::willResume(script::SayAllCursor mode) const {
@@ -337,6 +367,7 @@ void SayAll::moveCursorTo(const a11y::ObjectPtr& object, const text::Bookmark& b
         return;
     }
     if (cursor_ == SayAllCursor::Caret) {
+        rememberCaretObject(object);
         position->updateCaret();
         if (Review* review = service_.review()) {
             review->handleCaretMove(*position, object);

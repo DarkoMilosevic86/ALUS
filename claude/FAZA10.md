@@ -743,3 +743,43 @@ Writer-u čita jedan red.**
 Testovi: `tests/a11y/test_events.cpp` (izbor u listi: otvaranje, skok slovom,
 Ctrl+A, druga lista), `tests/nav/test_say_all.cpp` (četiri pasusa sa praznim,
 karet završava u poslednjem; bez popravke pada).
+
+**N128 — Writer: „Yes/No" na `ALUS+strelica dole`, „čitaj sve" ponavlja i
+govori „pasus"; Nautilus i dalje ćuti na prvoj strelici u fascikli.**
+(Dnevnik `alus-measure-20261114-161004.log`.)
+
+1. **Yes/No je LibreOffice-ov „Confirm overwrite mode"** (16:14:44): numerički
+   Insert (ALUS taster) stigao je do Writer-a, a Writer ga čita kao prelazak u
+   režim prepisivanja. Uzrok nije Writer: pri svakom zastoju jezgra (≥500 ms,
+   ovde dok se Writer otvarao, 16:14:38 i 16:14:39) čuvar (N19) pusti sve
+   tastere (`emergencyRelease`), ali ih posle oporavka niko ne vrati —
+   `GestureManager::pushGrabs` vidi isti skup kao pre i ne šalje ništa. Taster
+   je bio slobodan do prve promene skupa (izlazak iz Writer-a, 16:16:48). Sada
+   čuvar, posle puštanja, stavlja u red glavne petlje
+   `GestureManager::reinstallGrabs()`; izvršava se čim petlja ponovo radi
+   („key grabs reinstalled after the core recovered").
+2. **Ponavljanje i „pasus" pri čitanju**: Writer pomera FOKUS zajedno sa
+   karetom iz pasusa u pasus, pa je svaki pasus u koji je „čitaj sve" uveo
+   karet bio najavljen kao fokus — „пасус, вишелинијско, измењиво" i tekst
+   pasusa ponovo, usred čitanja. Sada `SayAll::ownsFocusChangeTo` pamti
+   poslednjih osam objekata u koje je pomerio karet (do `stop()`), a
+   `PresentationHooks::isFocusAnnouncementSuppressed` gasi tu najavu; fokus se
+   i dalje pomera.
+3. **„Pasus" na strelicama**: pasus koji dobije fokus izgovara samo tekst, bez
+   uloge i stanja (višelinijsko, izmenjivo). Stil pasusa ide u podešavanja
+   formatiranja dokumenta, kasnije (korisnik).
+4. **Nautilus, ulazak u fasciklu** (16:13:41–43): redovi se zamene, fokusirani
+   red umre, GTK ne šalje fokus (lista ga već ima), a prva strelica daje
+   `selected` za red čiji roditelj mrtvi fokus više ne zna. Sada se pita lanac
+   predaka zapamćen kad je fokus postavljen: red do dva nivoa ispod roditelja
+   ili dede starog fokusa je u istoj listi. Bočna traka je dalje od toga.
+5. **Sporost**: „slow event" sada kaže i koliko AT-SPI poziva je događaj
+   koštao, a svaki pojedinačni poziv od 20 ms ili duže beleži se imenom
+   („slow AT-SPI call: … took N ms"). Merenje 161004: događaji za red u
+   Nautilusu 177–225 ms, za listu do 245 ms.
+
+Testovi: `tests/nav/test_say_all.cpp` (fokus prati karet kroz pasuse, glas
+sporiji od događaja; bez popravke pada: tekst dva puta i „paragraph"),
+`tests/a11y/test_events.cpp` (mrtav fokus posle ulaska u fasciklu; bez
+popravke pada), `tests/input/test_manager.cpp` (tasteri se vraćaju posle
+puštanja).

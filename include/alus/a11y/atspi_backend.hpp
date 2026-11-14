@@ -139,7 +139,7 @@ public:
     // failed. The cache-miss meter of §3.5 counts getter calls; this counts
     // what actually reached the bus, which is the number that matters for
     // T4.2 and for the latency budget.
-    std::uint64_t callCount() const noexcept { return calls_; }
+    std::uint64_t callCount() const noexcept override { return calls_; }
     std::uint64_t errorCount() const noexcept { return errors_; }
     void resetCounters() noexcept;
 
@@ -153,6 +153,17 @@ private:
     void deliver(void* event);
 
     void noteCall() noexcept { ++calls_; }
+    // Counts the call and, when it took 20 ms or more, logs which one: the
+    // ~200 ms from an arrow to speech in Nautilus is synchronous calls into
+    // the application, and "slow event" alone did not say which (N128).
+    struct CallTimer {
+        CallTimer(AtspiBackend& backend, const char* name) noexcept;
+        ~CallTimer();
+        CallTimer(const CallTimer&) = delete;
+        CallTimer& operator=(const CallTimer&) = delete;
+        const char* name;
+        std::int64_t startedNs;
+    };
     void noteError(const char* what, const char* detail);
 
     Options options_;

@@ -516,6 +516,21 @@ TEST_CASE("a selection in the focused list is where the user is", "[a11y][events
         CHECK(fixture.registry.api().focus()->ref() == first);
     }
 
+    SECTION("N128 entering a folder replaces the rows; the first arrow is said") {
+        // Log 16:13:43: the focused row was removed with the old folder, GTK
+        // sent no focus event, and the first arrow selected a row of the new
+        // folder, whose parent the dead focus no longer shares.
+        const Ref newList = backend.add(view, PlatformRole::List, "");
+        const Ref newFirst = backend.add(newList, PlatformRole::TableRow, "Contacts");
+        backend.kill(first);
+        fixture.clearRecords();
+        backend.addState(newFirst, PlatformState::Selected);
+        backend.emit("object:state-changed:selected", newFirst, 1);
+        fixture.pumpOnce();
+        REQUIRE(fixture.registry.api().focus()->ref() == newFirst);
+        CHECK(fixture.lastSpoken().find("Contacts") != std::string::npos);
+    }
+
     SECTION("a selection in a list that does not have the focus moves nothing") {
         const Ref sidebar = backend.add(window, PlatformRole::List, "Places");
         const Ref place = backend.add(sidebar, PlatformRole::ListItem, "Trash");

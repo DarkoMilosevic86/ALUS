@@ -914,6 +914,9 @@ void Object::handleEvent(const core::Event& event) {
 
     if (event.name == events::kGainFocus) {
         // NVDA: NVDAObject.reportFocus().
+        if (hooks.isFocusAnnouncementSuppressed && hooks.isFocusAnnouncementSuppressed(*this)) {
+            return;
+        }
         if (hooks.speakObject) {
             hooks.speakObject(*this, OutputReason::Focus);
         }

@@ -722,8 +722,19 @@ speech::SpeechSequence getObjectSpeech(Object& object, OutputReason reason,
     // to read it with, and the value is spoken as in phase 4.
     const bool reportTextContent =
         presenter != nullptr && shouldReportTextContent(object, reason);
-    const PropertySelection selection =
+    PropertySelection selection =
         allowedProperties(reason, reportTextContent, object.role(), settings);
+    if (object.role() == Role::Paragraph &&
+        (reason == OutputReason::Focus || reason == OutputReason::FocusEntered)) {
+        // A paragraph that takes the focus says only its text. In Writer every
+        // paragraph is an object that takes the focus, so arrowing from one
+        // to the next said "paragraph, multi line, editable" before every
+        // line; the user asked for it gone (N128). Reporting the paragraph
+        // style belongs to document formatting, a setting to come.
+        selection.role = false;
+        selection.roleText = false;
+        selection.states = false;
+    }
 
     // FocusEntered is spoken LIKE focus, with fewer properties -- the
     // properties were already dropped above.

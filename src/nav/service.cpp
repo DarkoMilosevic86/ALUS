@@ -139,6 +139,11 @@ void Service::initialize() {
     interceptors_ = std::make_unique<TreeInterceptorRegistry>(*this);
     interceptors_->addChooser(&BrowseMode::chooseForDocument);
 
+    // Say-all's own focus changes are not announced (N128).
+    registry_->presentation().isFocusAnnouncementSuppressed = [this](const a11y::Object& object) {
+        return sayAll_ != nullptr && sayAll_->ownsFocusChangeTo(object);
+    };
+
     installBehaviors();
     installEventHandlers();
     installInterceptorHandlers();
@@ -156,6 +161,9 @@ void Service::terminate() {
         contextContributor_ = 0;
     }
     keyHandler_ = {};
+    if (registry_ != nullptr) {
+        registry_->presentation().isFocusAnnouncementSuppressed = nullptr;
+    }
     if (sayAll_ != nullptr) {
         sayAll_->stop();
     }

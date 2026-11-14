@@ -74,6 +74,11 @@ struct PresentationHooks {
     std::function<void(double percentage, bool beep, bool speak)> reportProgress;
     // NVDA: speech.cancelSpeech.
     std::function<void()> cancelSpeech;
+    // True when a focus change is not to be announced because ALUS caused it
+    // itself: say-all moving the caret through Writer's paragraphs, each of
+    // which takes the focus (N128). The focus still moves; only the
+    // announcement goes.
+    std::function<bool(const Object&)> isFocusAnnouncementSuppressed;
 };
 
 // At namespace scope for the usual reason: default member initializers in a

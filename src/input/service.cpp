@@ -301,6 +301,17 @@ void Service::attachWatchdog(core::Watchdog* watchdog) {
             if (backend_ != nullptr) {
                 backend_->emergencyRelease();
             }
+            // And they come BACK as soon as the main loop runs again: the
+            // queued function waits behind the freeze by construction. Without
+            // it the keyboard stayed ungrabbed after every recovery (N128).
+            loop_.queueFunction(
+                [this]() {
+                    if (manager_ != nullptr && backend_ != nullptr) {
+                        manager_->reinstallGrabs();
+                        ALUS_INFO("key grabs reinstalled after the core recovered");
+                    }
+                },
+                false, "input.reinstallGrabs");
         })
         .release();
 }

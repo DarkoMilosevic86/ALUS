@@ -44,6 +44,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <vector>
 
 namespace alus::speech {
 class SentenceBuffer;
@@ -99,6 +100,14 @@ public:
     void resumeIfRequested(script::SayAllCursor mode);
 
     SayAllCursor cursor() const noexcept { return cursor_; }
+
+    // True when `object` gaining the focus is say-all's own doing: the caret
+    // was moved into it by the reader. Writer moves the FOCUS with the caret
+    // from paragraph to paragraph, and announcing that focus read every
+    // paragraph twice and said "paragraph" before each one (N128). The focus
+    // event arrives after the move, by which time the reader may be a few
+    // paragraphs further on, so the last few are remembered, until stop().
+    bool ownsFocusChangeTo(const a11y::Object& object) const;
     // How many lines were read, for the measurement in
     // tools/phase5-text-check.sh and for T5.7.
     std::size_t linesRead() const noexcept { return linesRead_; }
@@ -114,6 +123,7 @@ private:
                      a11y::TextRangeSpeechState state);
     void finish();
     void moveCursorTo(const a11y::ObjectPtr& object, const text::Bookmark& bookmark);
+    void rememberCaretObject(const a11y::ObjectPtr& object);
     bool shouldReadInitialPosition() const;
     text::TextRangePtr initialRange(SayAllCursor cursor) const;
 
@@ -140,6 +150,10 @@ private:
     a11y::ObjectPtr objectsRoot_;
     a11y::ObjectPtr objectsCurrent_;
     a11y::ObjectPtr objectsPrevious_;
+
+    // The objects the caret was moved into, newest last (ownsFocusChangeTo).
+    static constexpr std::size_t kRememberedCaretObjects = 8;
+    std::vector<a11y::ObjectPtr> caretObjects_;
 };
 
 }  // namespace alus::nav

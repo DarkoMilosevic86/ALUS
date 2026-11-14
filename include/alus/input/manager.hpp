@@ -187,6 +187,16 @@ public:
     bool grabsInstalled_ = false;
     // Recomputes and pushes the grab set. Cheap: a few hundred map lookups.
     void refreshGrabs() { pushGrabs(); }
+    // Sends the grab set again even if it did not change. The watchdog's
+    // emergency release (N19) drops every grab in the compositor behind this
+    // manager's back; without this, `lastGrabs_` still matched and the grabs
+    // stayed gone until the set happened to change, so the ALUS key went to
+    // the application (log 16:14:44: numpad Insert opened LibreOffice's
+    // "Confirm overwrite mode" dialog). N128.
+    void reinstallGrabs() {
+        grabsInstalled_ = false;
+        pushGrabs();
+    }
 
     // Every configured ALUS key as a virtual modifier mask, OR-ed together:
     // the test "is the ALUS key held" is "is ANY of these bits set". A MASK,

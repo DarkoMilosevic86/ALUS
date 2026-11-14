@@ -313,3 +313,102 @@ TEST_CASE("say all goes on into the next paragraph object, and the caret with it
     REQUIRE_FALSE(fixture.backend.caretsSet.empty());
     CHECK(fixture.backend.caretsSet.back().ref == paragraphs.back());
 }
+
+TEST_CASE("the focus say-all moves through paragraphs is not announced", "[nav][sayall]") {
+    // FAZA10.md N128, LibreOffice Writer: the focus follows the caret into
+    // every paragraph, and announcing it read each paragraph twice, with
+    // "paragraph, multi line, editable" before it.
+    NavFixture fixture;
+    auto& backend = fixture.backend;
+    const alus::a11y::Ref application = backend.addApplication("soffice", "VCL");
+    const alus::a11y::Ref window =
+        backend.add(application, alus::a11y::PlatformRole::Frame, "Book - Writer");
+    backend.addState(window, alus::a11y::PlatformState::Active);
+    const alus::a11y::Ref page =
+        backend.add(window, alus::a11y::PlatformRole::DocumentText, "Book");
+    // Writer's document is editable, so browse mode stays out of it, as
+    // measured (log 16:11:10, "is editable; not intercepting").
+    backend.addState(page, alus::a11y::PlatformState::Editable);
+    std::vector<alus::a11y::Ref> paragraphs;
+    for (const char* const text : {"Alpha one.", "Bravo two.", "Charlie three."}) {
+        const alus::a11y::Ref paragraph =
+            backend.add(page, alus::a11y::PlatformRole::Paragraph, {});
+        alus::testing::MockNode& node = backend.node(paragraph);
+        node.text = text;
+        node.caret = 0;
+        node.interfaces |= alus::a11y::Interface::Text;
+        node.interfaces |= alus::a11y::Interface::EditableText;
+        backend.addState(paragraph, alus::a11y::PlatformState::Editable);
+        backend.addState(paragraph, alus::a11y::PlatformState::Focusable);
+        backend.addState(paragraph, alus::a11y::PlatformState::MultiLine);
+        paragraphs.push_back(paragraph);
+    }
+    for (std::size_t i = 0; i + 1 < paragraphs.size(); ++i) {
+        backend.node(paragraphs[i]).relations[alus::a11y::PlatformRelation::FlowsTo] = {
+            paragraphs[i + 1]};
+    }
+    REQUIRE(fixture.registry.api().setFocusObject(
+        fixture.registry.objectFor(paragraphs.front())));
+    fixture.clearSpeech();
+    backend.caretsSet.clear();
+
+    // The voice takes its time, as a real one does: each index is reached
+    // only when the test says so, so the focus events arrive WHILE say-all is
+    // reading, which is when Writer sends them.
+    fixture.synth().setAutoComplete(false);
+    REQUIRE(fixture.sayAll().readText(SayAllCursor::Caret));
+    std::size_t focusMovedTo = 0;
+    for (int cycle = 0; cycle < 200; ++cycle) {
+        fixture.loop().iterateUntilIdle();
+        // Writer: the paragraph the caret entered takes the focus.
+        if (!backend.caretsSet.empty() && focusMovedTo + 1 < paragraphs.size() &&
+            backend.caretsSet.back().ref == paragraphs[focusMovedTo + 1]) {
+            ++focusMovedTo;
+            backend.addState(paragraphs[focusMovedTo], alus::a11y::PlatformState::Focused);
+            backend.emit("object:state-changed:focused", paragraphs[focusMovedTo], 1);
+            fixture.loop().iterateUntilIdle();
+        }
+        const std::vector<int> pending = fixture.synth().pendingIndexes();
+        if (pending.empty()) {
+            if (!fixture.sayAll().isRunning()) {
+                break;
+            }
+            continue;
+        }
+        fixture.synth().completeIndex(pending.front(), pending.size() == 1);
+    }
+    fixture.synth().setAutoComplete(true);
+    fixture.drainSpeech();
+
+    REQUIRE(focusMovedTo == 2);
+    // The focus did move: stopping leaves the user in the paragraph.
+    CHECK(fixture.registry.api().focus()->ref() == paragraphs.back());
+    const std::string spoken = fixture.spokenJoined();
+    const auto count = [&spoken](const std::string& needle) {
+        std::size_t found = 0;
+        for (std::size_t at = spoken.find(needle); at != std::string::npos;
+             at = spoken.find(needle, at + 1)) {
+            ++found;
+        }
+        return found;
+    };
+    INFO(spoken);
+    CHECK(count("Bravo two") == 1);
+    CHECK(count("Charlie three") == 1);
+    CHECK(spoken.find("paragraph") == std::string::npos);
+
+    SECTION("after say-all, the focus moving into a paragraph is said again") {
+        fixture.clearSpeech();
+        backend.addState(paragraphs[0], alus::a11y::PlatformState::Focused);
+        backend.emit("object:state-changed:focused", paragraphs[0], 1);
+        fixture.loop().iterateUntilIdle();
+        fixture.drainSpeech();
+        const std::string again = fixture.spokenJoined();
+        INFO(again);
+        CHECK(again.find("Alpha one") != std::string::npos);
+        // Only the text: no role, no states (N128).
+        CHECK(again.find("paragraph") == std::string::npos);
+        CHECK(again.find("multi") == std::string::npos);
+        CHECK(again.find("editable") == std::string::npos);
+    }
+}

@@ -262,6 +262,24 @@ bool AtspiBackend::initialize(std::string* error) {
     return true;
 }
 
+AtspiBackend::CallTimer::CallTimer(AtspiBackend& backend, const char* callName) noexcept
+    : name(callName),
+      startedNs(std::chrono::duration_cast<std::chrono::nanoseconds>(
+                    std::chrono::steady_clock::now().time_since_epoch())
+                    .count()) {
+    backend.noteCall();
+}
+
+AtspiBackend::CallTimer::~CallTimer() {
+    const std::int64_t nowNs = std::chrono::duration_cast<std::chrono::nanoseconds>(
+                                   std::chrono::steady_clock::now().time_since_epoch())
+                                   .count();
+    const std::int64_t tookMs = (nowNs - startedNs) / 1000000;
+    if (tookMs >= 20) {
+        ALUS_DEBUG("slow AT-SPI call: {} took {} ms", name, tookMs);
+    }
+}
+
 void AtspiBackend::noteError(const char* what, const char* detail) {
     ++errors_;
     // §3.8: an application that went away is an EXPECTED error. It must not
@@ -292,7 +310,7 @@ bool AtspiBackend::alive(Ref ref) {
     if (ref == 0) {
         return false;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     AtspiStateSet* set = atspi_accessible_get_state_set(toAccessible(ref));
     if (set == nullptr) {
         return false;
@@ -338,7 +356,7 @@ Ref AtspiBackend::parent(Ref ref) {
     if (ref == 0) {
         return 0;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     AtspiAccessible* parentObject = atspi_accessible_get_parent(toAccessible(ref), &scope.error);
     if (scope.failed()) {
@@ -352,7 +370,7 @@ Ref AtspiBackend::childAt(Ref ref, int index) {
     if (ref == 0 || index < 0) {
         return 0;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     AtspiAccessible* child =
         atspi_accessible_get_child_at_index(toAccessible(ref), index, &scope.error);
@@ -367,7 +385,7 @@ int AtspiBackend::childCount(Ref ref) {
     if (ref == 0) {
         return 0;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const gint count = atspi_accessible_get_child_count(toAccessible(ref), &scope.error);
     if (scope.failed()) {
@@ -381,7 +399,7 @@ int AtspiBackend::indexInParent(Ref ref) {
     if (ref == 0) {
         return -1;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const gint index = atspi_accessible_get_index_in_parent(toAccessible(ref), &scope.error);
     if (scope.failed()) {
@@ -395,7 +413,7 @@ std::string AtspiBackend::name(Ref ref) {
     if (ref == 0) {
         return {};
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const CharPtr value{atspi_accessible_get_name(toAccessible(ref), &scope.error)};
     if (scope.failed()) {
@@ -409,7 +427,7 @@ std::string AtspiBackend::description(Ref ref) {
     if (ref == 0) {
         return {};
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const CharPtr value{atspi_accessible_get_description(toAccessible(ref), &scope.error)};
     if (scope.failed()) {
@@ -423,7 +441,7 @@ PlatformRole AtspiBackend::role(Ref ref) {
     if (ref == 0) {
         return PlatformRole::Invalid;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const AtspiRole value = atspi_accessible_get_role(toAccessible(ref), &scope.error);
     if (scope.failed()) {
@@ -437,7 +455,7 @@ std::uint64_t AtspiBackend::states(Ref ref) {
     if (ref == 0) {
         return 0;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     AtspiStateSet* set = atspi_accessible_get_state_set(toAccessible(ref));
     if (set == nullptr) {
         return 0;
@@ -464,7 +482,7 @@ Attributes AtspiBackend::attributes(Ref ref) {
     if (ref == 0) {
         return result;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     GHashTable* table = atspi_accessible_get_attributes(toAccessible(ref), &scope.error);
     if (table == nullptr) {
@@ -526,7 +544,7 @@ Rect AtspiBackend::extents(Ref ref) {
     if (!component) {
         return result;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     AtspiRect* rect = atspi_component_get_extents(component.value, ATSPI_COORD_TYPE_SCREEN,
                                                   &scope.error);
@@ -549,7 +567,7 @@ std::vector<Ref> AtspiBackend::relation(Ref ref, PlatformRelation wanted) {
     if (ref == 0) {
         return result;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     GArray* relations = atspi_accessible_get_relation_set(toAccessible(ref), &scope.error);
     if (relations == nullptr) {
@@ -589,7 +607,7 @@ std::optional<ValueInfo> AtspiBackend::value(Ref ref) {
     }
     ValueInfo info;
     GErrorScope scope;
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     info.current = atspi_value_get_current_value(iface.value, &scope.error);
     if (scope.failed()) {
         noteError("get_current_value", scope.message());
@@ -615,7 +633,7 @@ int AtspiBackend::characterCount(Ref ref) {
     if (!iface) {
         return 0;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const gint count = atspi_text_get_character_count(iface.value, &scope.error);
     if (scope.failed()) {
@@ -633,7 +651,7 @@ std::string AtspiBackend::text(Ref ref, int start, int end) {
     if (!iface) {
         return {};
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const CharPtr value{atspi_text_get_text(iface.value, start, end, &scope.error)};
     if (scope.failed()) {
@@ -651,7 +669,7 @@ int AtspiBackend::caretOffset(Ref ref) {
     if (!iface) {
         return -1;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const gint offset = atspi_text_get_caret_offset(iface.value, &scope.error);
     if (scope.failed()) {
@@ -677,7 +695,7 @@ bool AtspiBackend::setCaretOffset(Ref ref, int offset) {
     if (!iface) {
         return false;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const gboolean ok = atspi_text_set_caret_offset(iface.value, offset, &scope.error);
     if (scope.failed()) {
@@ -714,7 +732,7 @@ std::optional<TextSegment> AtspiBackend::stringAtOffset(Ref ref, int offset,
             platform = ATSPI_TEXT_GRANULARITY_PARAGRAPH;
             break;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     AtspiTextRange* range =
         atspi_text_get_string_at_offset(iface.value, offset, platform, &scope.error);
@@ -754,7 +772,7 @@ int AtspiBackend::selectionCount(Ref ref) {
     if (!iface) {
         return 0;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const gint count = atspi_text_get_n_selections(iface.value, &scope.error);
     if (scope.failed()) {
@@ -772,7 +790,7 @@ std::optional<TextSegment> AtspiBackend::selection(Ref ref, int index) {
     if (!iface) {
         return std::nullopt;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     AtspiRange* range = atspi_text_get_selection(iface.value, index, &scope.error);
     if (range == nullptr) {
@@ -807,7 +825,7 @@ bool AtspiBackend::setSelection(Ref ref, int start, int end) {
     // and the other call is tried when the first fails -- which is the only
     // way the selection commands work in both GTK and Qt.
     GErrorScope scope;
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     const gint count = atspi_text_get_n_selections(iface.value, nullptr);
     if (count > 0) {
         noteCall();
@@ -838,7 +856,7 @@ AttributeRun AtspiBackend::attributeRun(Ref ref, int offset, bool includeDefault
     if (!iface) {
         return run;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     gint start = 0;
     gint end = 0;
@@ -875,7 +893,7 @@ int AtspiBackend::offsetAtPoint(Ref ref, int x, int y) {
     if (!iface) {
         return -1;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const gint offset =
         atspi_text_get_offset_at_point(iface.value, x, y, ATSPI_COORD_TYPE_SCREEN,
@@ -896,7 +914,7 @@ Rect AtspiBackend::characterExtents(Ref ref, int offset) {
     if (!iface) {
         return result;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     AtspiRect* rect = atspi_text_get_character_extents(iface.value, offset,
                                                        ATSPI_COORD_TYPE_SCREEN, &scope.error);
@@ -923,7 +941,7 @@ Rect AtspiBackend::rangeExtents(Ref ref, int start, int end) {
     if (!iface) {
         return result;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     AtspiRect* rect = atspi_text_get_range_extents(iface.value, start, end,
                                                    ATSPI_COORD_TYPE_SCREEN, &scope.error);
@@ -950,7 +968,7 @@ int AtspiBackend::hyperlinkCount(Ref ref) {
     if (!iface) {
         return 0;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const gint count = atspi_hypertext_get_n_links(iface.value, &scope.error);
     if (scope.failed()) {
@@ -969,7 +987,7 @@ int AtspiBackend::linkIndexAtOffset(Ref ref, int offset) {
     if (!iface) {
         return -1;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const gint index = atspi_hypertext_get_link_index(iface.value, offset, &scope.error);
     if (scope.failed()) {
@@ -988,7 +1006,7 @@ std::optional<LinkInfo> AtspiBackend::hyperlink(Ref ref, int index) {
     if (!iface) {
         return std::nullopt;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const ObjectPtrScope<AtspiHyperlink> link{
         atspi_hypertext_get_link(iface.value, index, &scope.error)};
@@ -1022,7 +1040,7 @@ int AtspiBackend::actionCount(Ref ref) {
     if (!iface) {
         return 0;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const gint count = atspi_action_get_n_actions(iface.value, &scope.error);
     if (scope.failed()) {
@@ -1041,7 +1059,7 @@ std::string AtspiBackend::actionName(Ref ref, int index) {
     if (!iface) {
         return {};
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     // The localized name is what the user hears ("pritisni" rather than
     // "press"), and the toolkit is the one that knows it.
@@ -1062,7 +1080,7 @@ std::string AtspiBackend::actionKeyBinding(Ref ref, int index) {
     if (!iface) {
         return {};
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const CharPtr value{atspi_action_get_key_binding(iface.value, index, &scope.error)};
     if (scope.failed()) {
@@ -1081,7 +1099,7 @@ bool AtspiBackend::doAction(Ref ref, int index) {
     if (!iface) {
         return false;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const gboolean done = atspi_action_do_action(iface.value, index, &scope.error);
     if (scope.failed()) {
@@ -1100,7 +1118,7 @@ bool AtspiBackend::grabFocus(Ref ref) {
     if (!component) {
         return false;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const gboolean done = atspi_component_grab_focus(component.value, &scope.error);
     if (scope.failed()) {
@@ -1119,7 +1137,7 @@ bool AtspiBackend::scrollTo(Ref ref) {
     if (!component) {
         return false;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const gboolean done =
         atspi_component_scroll_to(component.value, ATSPI_SCROLL_ANYWHERE, &scope.error);
@@ -1139,7 +1157,7 @@ Ref AtspiBackend::accessibleAtPoint(Ref ref, int x, int y) {
     if (!component) {
         return 0;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     AtspiAccessible* found = atspi_component_get_accessible_at_point(
         component.value, x, y, ATSPI_COORD_TYPE_SCREEN, &scope.error);
@@ -1159,7 +1177,7 @@ int AtspiBackend::selectedChildCount(Ref ref) {
     if (!iface) {
         return 0;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const gint count = atspi_selection_get_n_selected_children(iface.value, &scope.error);
     if (scope.failed()) {
@@ -1178,7 +1196,7 @@ Ref AtspiBackend::selectedChildAt(Ref ref, int index) {
     if (!iface) {
         return 0;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     AtspiAccessible* child =
         atspi_selection_get_selected_child(iface.value, index, &scope.error);
@@ -1198,7 +1216,7 @@ TableInfo AtspiBackend::tableInfo(Ref ref) {
     if (!iface) {
         return info;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     info.rowCount = atspi_table_get_n_rows(iface.value, &scope.error);
     if (scope.failed()) {
@@ -1227,7 +1245,7 @@ CellInfo AtspiBackend::cellInfo(Ref ref) {
     // One call for all four numbers: AT-SPI's row_column_span gives the
     // position and both spans together, where asking separately is four round
     // trips for one cell.
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     gint row = -1;
     gint column = -1;
     gint rowSpan = 1;
@@ -1250,7 +1268,7 @@ Ref AtspiBackend::tableOf(Ref ref) {
     if (!iface) {
         return 0;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     AtspiAccessible* table = atspi_table_cell_get_table(iface.value, &scope.error);
     if (scope.failed()) {
@@ -1297,7 +1315,7 @@ std::string AtspiBackend::rowHeaderText(Ref ref) {
     if (!iface) {
         return {};
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     return headerText(atspi_table_cell_get_row_header_cells(iface.value, nullptr));
 }
 
@@ -1310,7 +1328,7 @@ std::string AtspiBackend::columnHeaderText(Ref ref) {
     if (!iface) {
         return {};
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     return headerText(atspi_table_cell_get_column_header_cells(iface.value, nullptr));
 }
 
@@ -1485,7 +1503,7 @@ std::vector<Ref> AtspiBackend::matchesFrom(Ref root, Ref from, const MatchRule& 
         ALUS_DEBUG("collection: root has no Collection interface");
         return {};
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const MatchRuleScope matchRule{rule};
     GArray* array = nullptr;
@@ -1528,7 +1546,7 @@ std::vector<Ref> AtspiBackend::matches(Ref root, const MatchRule& rule, SortOrde
         ALUS_DEBUG("collection: root has no Collection interface");
         return {};
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     const MatchRuleScope matchRule{rule};
     // `traverse` TRUE: the elements list is the whole document, not the
@@ -1576,7 +1594,7 @@ Ref AtspiBackend::application(Ref ref) {
     if (ref == 0) {
         return 0;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     GErrorScope scope;
     AtspiAccessible* app = atspi_accessible_get_application(toAccessible(ref), &scope.error);
     if (scope.failed()) {
@@ -1596,7 +1614,7 @@ AppInfo AtspiBackend::appInfo(Ref ref) {
         return info;
     }
     AtspiAccessible* app = toAccessible(appRef);
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     const CharPtr name{atspi_accessible_get_name(app, nullptr)};
     info.name = name.str();
     noteCall();
@@ -1621,7 +1639,7 @@ Ref AtspiBackend::desktop() {
     if (!initialized_) {
         return 0;
     }
-    noteCall();
+    const CallTimer callTimer{*this, __func__};
     // Index 0: AT-SPI has exactly one desktop, and has had since 2.0.
     return toRef(atspi_get_desktop(0));
 }

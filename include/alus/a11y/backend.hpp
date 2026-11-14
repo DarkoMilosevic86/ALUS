@@ -279,6 +279,10 @@ public:
     Backend(const Backend&) = delete;
     Backend& operator=(const Backend&) = delete;
 
+    // How many platform calls were made so far; 0 where nobody counts. The
+    // registry's "slow event" line reports the calls one event cost.
+    virtual std::uint64_t callCount() const noexcept { return 0; }
+
     // A name for the log: "atspi" or "mock".
     virtual const char* backendName() const = 0;
 

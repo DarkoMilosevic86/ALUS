@@ -397,6 +397,20 @@ TEST_CASE("the emergency release drops every grab") {
     harness.backend.emergencyRelease();
     CHECK(harness.backend.grabs().empty());
     CHECK_FALSE(harness.backend.keyboardGrabbed());
+
+    SECTION("N128 and they come back once the core has recovered") {
+        // Log 16:14:44: after a freeze while LibreOffice opened, the grab set
+        // had not changed, so refreshing it sent nothing, and numpad Insert
+        // reached Writer ("Confirm overwrite mode").
+        harness.manager->refreshGrabs();
+        CHECK(harness.backend.grabs().empty());
+        harness.manager->reinstallGrabs();
+        CHECK(harness.backend.grabs() == harness.manager->computeGrabs());
+        const auto& grabs = harness.backend.grabs();
+        CHECK(std::any_of(grabs.begin(), grabs.end(), [](const KeyDefinition& grab) {
+            return grab.keysym == keysym::kKpInsert;
+        }));
+    }
 }
 
 // ---------------------------------------------------------------------------
