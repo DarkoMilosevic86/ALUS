@@ -16,12 +16,14 @@
 #include "alus/i18n/i18n.hpp"
 #include "alus/input/gesture.hpp"
 #include "alus/nav/document_range.hpp"
+#include "alus/nav/elements_dialog.hpp"
 #include "alus/nav/paragraph_nav.hpp"
 #include "alus/nav/service.hpp"
 #include "alus/script/command_status.hpp"
 
 #include <algorithm>
 #include <array>
+#include <unordered_set>
 #include <utility>
 
 namespace alus::nav {
@@ -318,6 +320,9 @@ bool BrowseMode::setPassThrough(bool value, bool announce) {
 }
 
 void BrowseMode::onGainFocus(const a11y::ObjectPtr& object) {
+    if (performPendingElement()) {
+        return;
+    }
     if (!isReady()) {
         ALUS_DEBUG("browse mode: document not ready; nothing announced yet");
         return;
@@ -348,6 +353,9 @@ void BrowseMode::onGainFocus(const a11y::ObjectPtr& object) {
 
 void BrowseMode::onInnerFocus(const a11y::ObjectPtr& object) {
     if (object == nullptr) {
+        return;
+    }
+    if (performPendingElement()) {
         return;
     }
     lastFocusable_ = object;
@@ -517,6 +525,20 @@ bool BrowseMode::moveTo(const a11y::ObjectPtr& object, OutputReason reason) {
     return true;
 }
 
+bool BrowseMode::isNestedIn(const a11y::Object& inner, const a11y::Object& outer) const {
+    a11y::ObjectPtr ancestor = inner.parent();
+    for (int depth = 0; depth < kNestingDepth && ancestor != nullptr; ++depth) {
+        if (ancestor->sameAs(outer)) {
+            return true;
+        }
+        if (ancestor->sameAs(*root_)) {
+            return false;
+        }
+        ancestor = ancestor->parent();
+    }
+    return false;
+}
+
 bool BrowseMode::moveToElement(ElementType type, bool forwards) {
     const a11y::ObjectPtr from = objectAtCaret();
     const a11y::ObjectPtr start = from != nullptr ? from : DocumentLeaves::first(root_);
@@ -524,8 +546,19 @@ bool BrowseMode::moveToElement(ElementType type, bool forwards) {
         reportNoNext(type, forwards);
         return false;
     }
-    const a11y::ObjectPtr found =
-        quickNav_.find(type, start, forwards, includeLayoutTables_);
+    a11y::ObjectPtr found = quickNav_.find(type, start, forwards, includeLayoutTables_);
+    // N134: an element nested in the one the caret is on (YouTube's menu: a
+    // link inside a link, same name) is the same place, and stopping on it
+    // reads the same link twice. Forwards that is a descendant of `start`,
+    // backwards an ancestor of it.
+    for (int skipped = 0;
+         found != nullptr && nestingIsSamePlace(type) && skipped < kMaxNestedSkips; ++skipped) {
+        const bool samePlace = forwards ? isNestedIn(*found, *start) : isNestedIn(*start, *found);
+        if (!samePlace) {
+            break;
+        }
+        found = quickNav_.find(type, found, forwards, includeLayoutTables_);
+    }
     if (found == nullptr) {
         reportNoNext(type, forwards);
         return false;
@@ -536,22 +569,194 @@ bool BrowseMode::moveToElement(ElementType type, bool forwards) {
     return moveTo(found, OutputReason::QuickNav);
 }
 
+// ---------------------------------------------------------------------------
+// The elements list (alus+f7)
+// ---------------------------------------------------------------------------
+
+namespace {
+
+struct ElementKind {
+    const char* id;
+    ElementType type;
+};
+
+// The dialog's types, in NVDA's order.
+constexpr std::array<ElementKind, 5> kElementKinds{{
+    {"link", ElementType::Link},
+    {"heading", ElementType::Heading},
+    {"formField", ElementType::FormField},
+    {"button", ElementType::Button},
+    {"landmark", ElementType::Landmark},
+}};
+
+}  // namespace
+
+void BrowseMode::showElementsList() {
+    std::vector<ElementsDialogEntry> entries;
+    elementObjects_.clear();
+    for (const ElementKind& kind : kElementKinds) {
+        std::vector<a11y::ObjectPtr>& objects = elementObjects_[kind.id];
+        for (ElementListItem& item : elementsList(kind.type, 0)) {
+            std::string label = std::move(item.label);
+            if (kind.type == ElementType::FormField || kind.type == ElementType::Button ||
+                kind.type == ElementType::Landmark) {
+                // NVDA lists a field as its name and its type, so a row of
+                // unnamed fields still says what each one is.
+                const char* role = a11y::roleLabel(item.object->role());
+                if (role != nullptr && *role != '\0') {
+                    label = label.empty() ? std::string{role} : label + " " + role;
+                }
+            }
+            entries.push_back(ElementsDialogEntry{kind.id, item.level, std::move(label)});
+            objects.push_back(std::move(item.object));
+        }
+    }
+    const std::weak_ptr<int> alive = lifetime_;
+    const bool opened = openElementsDialog(
+        entries, lastElementKind_, [this, alive](const ElementsDialogChoice& choice) {
+            if (alive.expired()) {
+                return;
+            }
+            chooseElement(choice);
+        });
+    if (!opened) {
+        // Translators: spoken when alus+f7 cannot show the elements list
+        // (alus-elements is not installed, or there is no display).
+        service_.message(_("the elements list is not available"));
+    }
+}
+
+void BrowseMode::chooseElement(const ElementsDialogChoice& choice) {
+    const auto found = elementObjects_.find(choice.kind);
+    if (found == elementObjects_.end() || choice.index < 0 ||
+        choice.index >= static_cast<int>(found->second.size())) {
+        return;
+    }
+    lastElementKind_ = choice.kind;
+    pendingElement_ = PendingElement{found->second[static_cast<std::size_t>(choice.index)],
+                                     choice.action == "activate"};
+    elementObjects_.clear();
+    // Done when the focus comes back to the document, which is when the
+    // browser is listening again and when a focus event can no longer move
+    // the caret off the element; or a moment later if no focus event comes.
+    const std::weak_ptr<int> alive = lifetime_;
+    service_.loop().callLater(
+        kPendingElementWait,
+        [this, alive] {
+            if (!alive.expired()) {
+                performPendingElement();
+            }
+        },
+        "elementsListChoice");
+}
+
+bool BrowseMode::performPendingElement() {
+    if (!pendingElement_) {
+        return false;
+    }
+    const PendingElement pending = std::move(*pendingElement_);
+    pendingElement_.reset();
+    if (pending.object == nullptr || !pending.object->isAlive()) {
+        return false;
+    }
+    if (!pending.activate) {
+        // Move to: the caret goes there and the element is read, as a jump.
+        moveTo(pending.object, OutputReason::QuickNav);
+        return true;
+    }
+    // Activate: on the element first, so activatePosition acts on it and the
+    // user is there afterwards.
+    if (const a11y::ObjectPtr leaf = DocumentLeaves::leafFor(root_, pending.object)) {
+        if (text::TextRangePtr at = DocumentTextRange::makeAt(
+                root_, settings_, DocumentPosition{leaf, 0}, DocumentPosition{leaf, 0})) {
+            cursor_.setCaret(*at);
+        }
+    }
+    if (pending.object->actionCount() > 0) {
+        if (!pending.object->doAction(0)) {
+            ALUS_DEBUG("browse mode: action refused on {}", pending.object->path());
+        }
+    } else {
+        pending.object->setFocus();
+    }
+    if (shouldPassThroughFor(*pending.object)) {
+        passThroughWasAutomatic_ = true;
+        setPassThrough(true);
+    }
+    return true;
+}
+
 std::vector<ElementListItem> BrowseMode::elementsList(ElementType type, int limit) const {
     std::vector<ElementListItem> out;
+    // N134: an element inside one already listed (YouTube nests a link in a
+    // link) is the same entry; listing it made every menu item appear twice.
+    // Document order puts the outer one first, so the inner is checked
+    // against what is already in the list.
+    std::unordered_set<std::string> listed;
+    const bool checkNesting = nestingIsSamePlace(type);
     for (const a11y::ObjectPtr& object :
          quickNav_.all(type, limit, includeLayoutTables_)) {
-        ElementListItem item;
-        item.object = object;
-        item.label = object->name();
-        if (item.label.empty()) {
-            // A link with no accessible name is its text, which for a leaf is
-            // the text itself -- a list of blank rows is useless.
-            item.label = object->textRange(0, -1);
+        if (!checkNesting) {
+            out.push_back(makeElementListItem(object));
+            continue;
         }
-        item.level = object->positionInfo().level;
-        out.push_back(std::move(item));
+        bool nested = false;
+        a11y::ObjectPtr ancestor = object->parent();
+        for (int depth = 0; depth < kNestingDepth && ancestor != nullptr; ++depth) {
+            if (ancestor->sameAs(*root_)) {
+                break;
+            }
+            if (listed.count(ancestor->path()) != 0) {
+                nested = true;
+                break;
+            }
+            ancestor = ancestor->parent();
+        }
+        listed.insert(object->path());
+        if (nested) {
+            continue;
+        }
+        out.push_back(makeElementListItem(object));
     }
     return out;
+}
+
+ElementListItem BrowseMode::makeElementListItem(const a11y::ObjectPtr& object) {
+    ElementListItem item;
+    item.object = object;
+    item.label = object->name();
+    if (item.label.empty()) {
+        // A link with no accessible name is its text, which for a leaf is
+        // the text itself -- a list of blank rows is useless.
+        item.label = object->textRange(0, -1);
+    }
+    item.level = object->positionInfo().level;
+    return item;
+}
+
+bool BrowseMode::nestingIsSamePlace(ElementType type) {
+    // A list in a list, a table in a table, a landmark in a landmark are two
+    // things; a link in a link or a heading in a heading is one.
+    switch (type) {
+        case ElementType::Link:
+        case ElementType::VisitedLink:
+        case ElementType::UnvisitedLink:
+        case ElementType::Button:
+        case ElementType::Clickable:
+        case ElementType::Heading:
+        case ElementType::Heading1:
+        case ElementType::Heading2:
+        case ElementType::Heading3:
+        case ElementType::Heading4:
+        case ElementType::Heading5:
+        case ElementType::Heading6:
+        case ElementType::Heading7:
+        case ElementType::Heading8:
+        case ElementType::Heading9:
+            return true;
+        default:
+            return false;
+    }
 }
 
 bool BrowseMode::activatePosition() {
@@ -692,15 +897,7 @@ void BrowseMode::bindDocumentScripts() {
         setPassThrough(false);
     });
     bindScript("activatePosition", [this](input::Gesture&) { activatePosition(); });
-    bindScript("elementsList", [this](input::Gesture&) {
-        // The dialog is phase 9; the LIST is what phase 6 owes, and it is
-        // reported so the manual test can confirm the content is right.
-        const std::vector<ElementListItem> links = elementsList(ElementType::Link, 0);
-        const std::vector<ElementListItem> headings =
-            elementsList(ElementType::Heading, 0);
-        service_.message(std::to_string(headings.size()) + " headings, " +
-                         std::to_string(links.size()) + " links");
-    });
+    bindScript("elementsList", [this](input::Gesture&) { showElementsList(); });
     bindScript("moveToStartOfContainer", [this](input::Gesture&) {
         const a11y::ObjectPtr at = objectAtCaret();
         if (at == nullptr) {

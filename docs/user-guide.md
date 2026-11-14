@@ -200,8 +200,14 @@ is read like text, with the arrow keys, and single letters jump through it:
 | G | graphic | D | landmark |
 | Q | block quote | S | separator |
 
-Shift with the letter goes to the previous one. **ALUS+F7** lists the links,
-headings, form fields and landmarks of the page.
+Shift with the letter goes to the previous one.
+
+**ALUS+F7** opens the elements list: the page's links, headings, form fields,
+buttons or landmarks, chosen with the **Type** radio buttons, and narrowed by
+typing in **Filter by**. **Activate** (or Enter on an element) follows the link
+or presses the button; **Move to** closes the list and puts the browse mode
+caret on the element; **Cancel** or Escape closes it without doing anything.
+The list opens on the type you used last.
 
 In an edit field ALUS switches to **focus mode** automatically, so typing
 goes to the application; **ALUS+Space** switches between the two modes by

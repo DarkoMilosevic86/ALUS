@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alus 0.1.0\n"
 "Report-Msgid-Bugs-To: daremc86@gmail.com\n"
-"POT-Creation-Date: 2026-11-14 13:42+0100\n"
+"POT-Creation-Date: 2026-11-14 22:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -283,7 +283,7 @@ msgstr ""
 msgid "level %s"
 msgstr ""
 
-#: src/a11y/object_speech.cpp:848
+#: src/a11y/object_speech.cpp:859
 #, c-format
 msgid "%s percent"
 msgstr ""
@@ -1183,7 +1183,7 @@ msgstr ""
 #. Translators: spoken when a paragraph is blank.
 #. Translators: spoken when a line or a field is empty.
 #. Translators: spoken when the review cursor reaches an empty line.
-#: src/a11y/text_speech.cpp:1377 src/nav/browse_mode.cpp:796
+#: src/a11y/text_speech.cpp:1377 src/nav/browse_mode.cpp:987
 #: src/nav/paragraph_nav.cpp:231 src/speech/presenter.cpp:291
 #: src/speech/spelling.cpp:149 src/speech/spelling.cpp:157
 msgid "blank"
@@ -1955,6 +1955,65 @@ msgstr ""
 #: src/daemon/main.cpp:749
 #, c-format
 msgid "Keyboard input is not available: %s"
+msgstr ""
+
+#. Translators: an element type in the elements list (alus+f7).
+#: src/gui/elements_main.cpp:64
+msgid "Lin_ks"
+msgstr ""
+
+#. Translators: an element type in the elements list (alus+f7).
+#: src/gui/elements_main.cpp:66
+msgid "_Headings"
+msgstr ""
+
+#. Translators: an element type in the elements list (alus+f7).
+#: src/gui/elements_main.cpp:68
+msgid "_Form fields"
+msgstr ""
+
+#. Translators: an element type in the elements list (alus+f7).
+#: src/gui/elements_main.cpp:70
+msgid "_Buttons"
+msgstr ""
+
+#. Translators: an element type in the elements list (alus+f7).
+#: src/gui/elements_main.cpp:72
+msgid "Lan_dmarks"
+msgstr ""
+
+#. Translators: the title of the browse mode elements list (alus+f7).
+#: src/gui/elements_main.cpp:190
+msgid "Elements List"
+msgstr ""
+
+#. Translators: the label of the element type radio buttons in the
+#. elements list.
+#: src/gui/elements_main.cpp:203 src/gui/elements_main.cpp:208
+msgid "Type:"
+msgstr ""
+
+#. Translators: the label of the filter field in the elements list.
+#: src/gui/elements_main.cpp:251
+msgid "Filter b_y:"
+msgstr ""
+
+#. Translators: a button in the elements list: activates the element (a
+#. link is followed, a button pressed). Enter does the same.
+#: src/gui/elements_main.cpp:272
+msgid "_Activate"
+msgstr ""
+
+#. Translators: a button in the elements list: moves the browse mode caret
+#. to the element and closes the list.
+#: src/gui/elements_main.cpp:275
+msgid "_Move to"
+msgstr ""
+
+#. Translators: a button in the elements list: closes it; Escape does the
+#. same.
+#: src/gui/elements_main.cpp:278
+msgid "_Cancel"
 msgstr ""
 
 #. Translators: the title of the prompt that asks for a key to bind.
@@ -4975,7 +5034,7 @@ msgstr ""
 
 #. Translators: reported when the speaking of command keys is toggled
 #. off. (It was an untranslated string literal, the only one left
-#. after FAZA10.md's sweep.)
+#. after phase-10.md's sweep.)
 #: src/input/commands.cpp:170
 msgid "speak command keys off"
 msgstr ""
@@ -4994,90 +5053,96 @@ msgstr ""
 
 #. Translators: spoken when a movement command reaches the edge of the
 #. document.
-#: src/nav/browse_mode.cpp:382 src/nav/browse_mode.cpp:655
+#: src/nav/browse_mode.cpp:464 src/nav/browse_mode.cpp:846
 msgid "edge of document"
 msgstr ""
 
-#: src/nav/browse_mode.cpp:402
+#: src/nav/browse_mode.cpp:484
 #, c-format
 msgid "no next %s"
 msgstr ""
 
-#: src/nav/browse_mode.cpp:402
+#: src/nav/browse_mode.cpp:484
 #, c-format
 msgid "no previous %s"
 msgstr ""
 
+#. Translators: spoken when alus+f7 cannot show the elements list
+#. (alus-elements is not installed, or there is no display).
+#: src/nav/browse_mode.cpp:599
+msgid "the elements list is not available"
+msgstr ""
+
 #. Translators: spoken when the whole document is selected.
-#: src/nav/browse_mode.cpp:562
+#: src/nav/browse_mode.cpp:761
 msgid "selected all"
 msgstr ""
 
 #. Translators: spoken when there is nothing selected to copy.
-#: src/nav/browse_mode.cpp:569
+#: src/nav/browse_mode.cpp:768
 msgid "no selection"
 msgstr ""
 
-#: src/nav/browse_mode.cpp:575
+#: src/nav/browse_mode.cpp:774
 msgid "copied"
 msgstr ""
 
 #. Translators: spoken when a search finds nothing.
-#: src/nav/browse_mode.cpp:582 src/nav/browse_mode.cpp:591
+#: src/nav/browse_mode.cpp:781 src/nav/browse_mode.cpp:790
 msgid "text not found"
 msgstr ""
 
 #. Translators: spoken when a feature is not available yet.
-#: src/nav/browse_mode.cpp:603
+#: src/nav/browse_mode.cpp:802
 msgid "find dialog not available yet"
 msgstr ""
 
 #. Translators: spoken when the caret is not inside a container.
-#: src/nav/browse_mode.cpp:637 src/nav/browse_mode.cpp:649
+#: src/nav/browse_mode.cpp:828 src/nav/browse_mode.cpp:840
 msgid "not in a container"
 msgstr ""
 
 #. Translators: spoken when a table command is used outside a table.
-#: src/nav/browse_mode.cpp:696 src/nav/browse_mode.cpp:701
-#: src/nav/browse_mode.cpp:754
+#: src/nav/browse_mode.cpp:887 src/nav/browse_mode.cpp:892
+#: src/nav/browse_mode.cpp:945
 msgid "not in a table"
 msgstr ""
 
 #. Translators: spoken when a table movement reaches the table's edge.
-#: src/nav/browse_mode.cpp:725 src/nav/browse_mode.cpp:737
+#: src/nav/browse_mode.cpp:916 src/nav/browse_mode.cpp:928
 msgid "edge of table"
 msgstr ""
 
 #. Translators: spoken when layout table reporting is turned on or off.
-#: src/nav/browse_mode.cpp:819
+#: src/nav/browse_mode.cpp:1010
 msgid "layout tables on"
 msgstr ""
 
-#: src/nav/browse_mode.cpp:820
+#: src/nav/browse_mode.cpp:1011
 msgid "layout tables off"
 msgstr ""
 
 #. Translators: reported when the single letters of
 #. browse mode jump between elements again.
-#: src/nav/browse_mode.cpp:849
+#: src/nav/browse_mode.cpp:1040
 msgid "Single letter navigation on"
 msgstr ""
 
 #. Translators: reported when the single letters of
 #. browse mode are handed to the application instead.
-#: src/nav/browse_mode.cpp:852
+#: src/nav/browse_mode.cpp:1043
 msgid "Single letter navigation off"
 msgstr ""
 
 #. Translators: reported when there is no next text
 #. paragraph in the document (`p`).
-#: src/nav/browse_mode.cpp:945
+#: src/nav/browse_mode.cpp:1136
 msgid "no next text paragraph"
 msgstr ""
 
 #. Translators: reported when there is no previous
 #. text paragraph in the document (`shift+p`).
-#: src/nav/browse_mode.cpp:948
+#: src/nav/browse_mode.cpp:1139
 msgid "no previous text paragraph"
 msgstr ""
 
@@ -5085,7 +5150,7 @@ msgstr ""
 #. line number and the second the number of lines. ONE pattern rather than
 #. three concatenated pieces, because the word order is not English's in
 #. every language.
-#: src/nav/document_range.cpp:1273
+#: src/nav/document_range.cpp:1421
 #, c-format
 msgid "line %s of %s"
 msgstr ""

@@ -215,6 +215,7 @@ alus_a11y_dep = declare_dependency(
 # and tests/nav free of the platform (phase-plan.md, the rule for every phase).
 alus_nav_sources = files(
   'nav/browse_mode.cpp',
+  'nav/elements_dialog.cpp',
   'nav/control_field.cpp',
   'nav/document_range.cpp',
   'nav/quick_nav.cpp',
@@ -422,6 +423,16 @@ if have_gui
     cpp_args: ['-DALUS_VERSION="' + meson.project_version() + '"'],
     dependencies: [alus_core_dep, alus_speech_dep, alus_input_dep, alus_a11y_dep,
                    alus_nav_dep, alus_braille_dep, alus_gui_widgets_dep],
+    install: true)
+endif
+
+# `alus-elements`: the browse mode elements list (alus+f7), in its own process
+# for the same reason as `alus-settings`. It only needs the labels, which the
+# daemon hands it in a file; the objects stay in the daemon.
+if have_gui
+  alus_elements = executable('alus-elements',
+    files('gui/elements_main.cpp'),
+    dependencies: [alus_core_dep, gtk_dep],
     install: true)
 endif
 

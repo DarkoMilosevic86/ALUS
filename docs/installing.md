@@ -21,7 +21,7 @@ find /tmp/alus-stage -type f
 
 | Path (under the prefix) | What |
 |---|---|
-| `bin/alus-daemon`, `bin/alus-cli`, `bin/alus-settings` | the programs |
+| `bin/alus-daemon`, `bin/alus-cli`, `bin/alus-settings`, `bin/alus-elements` | the programs |
 | `share/alus/` | the command table (`scripts.csv`), the built-in gesture map, key labels, the command status list, symbol and character dictionaries, per-language data in `locale/` |
 | `share/locale/*/LC_MESSAGES/alus.mo` | translations |
 | `share/applications/alus.desktop` | the autostart entry (**not enabled** by installing) |

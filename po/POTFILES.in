@@ -22,6 +22,7 @@ src/braille/settings.cpp
 src/commands/system.cpp
 src/config/commands.cpp
 src/daemon/main.cpp
+src/gui/elements_main.cpp
 src/gui/gesture_dialog.cpp
 src/gui/gesture_model.cpp
 src/gui/main.cpp

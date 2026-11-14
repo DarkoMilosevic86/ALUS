@@ -1365,3 +1365,41 @@ msgstr "Izlazni modul"
 msgctxt "synth setting"
 msgid "no variant"
 msgstr "bez varijante"
+
+#. The elements list (alus+f7). NVDA's wording, with GTK's mnemonic; the
+#. button the user named "Pomeri se".
+msgid "Elements List"
+msgstr "Lista elemenata"
+
+msgid "Type:"
+msgstr "Vrsta:"
+
+msgid "Lin_ks"
+msgstr "Lin_kovi"
+
+msgid "_Headings"
+msgstr "_Naslovi"
+
+msgid "_Form fields"
+msgstr "Polja za _unos"
+
+msgid "_Buttons"
+msgstr "_Dugmad"
+
+msgid "Lan_dmarks"
+msgstr "_Orijentiri"
+
+msgid "Filter b_y:"
+msgstr "_Izdvoji po:"
+
+msgid "_Activate"
+msgstr "_Aktiviraj"
+
+msgid "_Move to"
+msgstr "_Pomeri se"
+
+msgid "_Cancel"
+msgstr "_Otkaži"
+
+msgid "the elements list is not available"
+msgstr "lista elemenata nije dostupna"

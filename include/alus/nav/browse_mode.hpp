@@ -47,11 +47,14 @@
 #include "alus/a11y/object.hpp"
 #include "alus/a11y/output_reason.hpp"
 #include "alus/nav/cursor_manager.hpp"
+#include "alus/nav/elements_dialog.hpp"
 #include "alus/nav/quick_nav.hpp"
 #include "alus/nav/tree_interceptor.hpp"
 #include "alus/text/fields.hpp"
 #include "alus/text/unit.hpp"
 
+#include <chrono>
+#include <map>
 #include <memory>
 #include <optional>
 #include <string>
@@ -109,6 +112,15 @@ public:
     // NVDA: `script_elementsList`'s data. Returned rather than shown: the
     // dialog is phase 9, and the list is the part that can be measured now.
     std::vector<ElementListItem> elementsList(ElementType type, int limit = 0) const;
+    // What the elements list dialog answered. The choice is kept until the
+    // focus comes back to the document (or a moment passes) and only then
+    // performed: the browser's own focus event on returning would otherwise
+    // move the caret off the element. Public for the dialog's callback and
+    // the tests; `setElementObjectsForTest` stands in for the dialog's lists.
+    void chooseElement(const ElementsDialogChoice& choice);
+    void setElementObjectsForTest(std::map<std::string, std::vector<a11y::ObjectPtr>> objects) {
+        elementObjects_ = std::move(objects);
+    }
 
     // A quick-nav move, exposed so the elements list and the tests make the
     // same move a key makes. False when there is no next element of the type,
@@ -156,6 +168,19 @@ private:
     // The object the caret is on, through the hypertext path -- a link inside
     // a paragraph, not the paragraph.
     a11y::ObjectPtr objectAtCaret() const;
+
+    // N134: whether `inner` sits inside `outer`, a few levels at most -- an
+    // element nested in another of its kind is the same place to the user.
+    static constexpr int kNestingDepth = 4;
+    static constexpr int kMaxNestedSkips = 3;
+    bool isNestedIn(const a11y::Object& inner, const a11y::Object& outer) const;
+    static bool nestingIsSamePlace(ElementType type);
+    static ElementListItem makeElementListItem(const a11y::ObjectPtr& object);
+
+    // ---- the elements list (alus+f7) ----
+    void showElementsList();
+    // Runs the choice that is waiting, if one is. True when it did.
+    bool performPendingElement();
     // Whether the focus landing on `object` leaves the caret where it is: the
     // document itself, the object the caret is on, or a container around it.
     bool focusContainsCaret(const a11y::ObjectPtr& object) const;
@@ -179,6 +204,21 @@ private:
     // undoes ALUS's own choice, so escape inside a form the user deliberately
     // entered does not throw them out of it.
     bool passThroughWasAutomatic_ = false;
+    // The elements list. The objects behind the labels the dialog shows, by
+    // kind; the choice waiting for the focus to come back; the kind shown
+    // first next time (NVDA remembers it).
+    struct PendingElement {
+        a11y::ObjectPtr object;
+        bool activate = false;
+    };
+    static constexpr std::chrono::milliseconds kPendingElementWait{600};
+    std::map<std::string, std::vector<a11y::ObjectPtr>> elementObjects_;
+    std::optional<PendingElement> pendingElement_;
+    // Shared by every document, as NVDA remembers it across pages.
+    static inline std::string lastElementKind_ = "link";
+    // Expires with this object: what a callback from the dialog or a timer
+    // checks before touching it.
+    std::shared_ptr<int> lifetime_ = std::make_shared<int>(0);
     // documentBase: whether layout tables are offered to table navigation.
     bool includeLayoutTables_ = false;
     // NVDA: `singleLetterNavEnabled`, on by default as it is upstream.

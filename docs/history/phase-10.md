@@ -944,3 +944,44 @@ Tests: `tests/nav/test_browse_mode.cpp` ("N132 a focused grid row is focus
 mode; the focus around the caret leaves it alone", whose five checks each fail
 without their fix), and `tests/a11y/test_events.cpp` ("N132 a new Chrome
 window's focus is its address bar, not the page").
+
+**N133 — the elements list (ALUS+F7) is a dialog.** Until now the command only
+said how many headings and links the page had (phase 6 owed the list; the
+dialog was left for later). It is now NVDA's dialog: the element type as radio
+buttons (links, headings, form fields, buttons, landmarks), the list, a
+filter, and **Activate** (the default; Enter on an element too), **Move to**
+and **Cancel** (Escape).
+
+It is a separate program, `alus-elements` (`src/gui/elements_main.cpp`), for
+the reason `alus-settings` is (phase-9.md N79): ALUS cannot read a window in
+its own process. The daemon writes the labels to a temporary file, spawns the
+child without waiting (`src/nav/elements_dialog.cpp`), and reads one line back
+on a pipe watched by the main loop: `activate|move <kind> <index>`, or nothing
+on Cancel. The objects never leave the daemon. The choice is held until the
+focus comes back to the document, or for 600 ms if no focus event arrives,
+because the browser's own focus event on returning would otherwise move the
+caret off the element (`BrowseMode::chooseElement`,
+`performPendingElement`). The type shown first is the one used last.
+
+Test: `tests/nav/test_browse_mode.cpp` ("alus+f7: the elements list's choice
+is performed when the focus comes back"): the protocol, Move to, Activate, the
+timer path, and an index that is not in the list.
+
+First live test: every row was read as just "list", and Tab stayed in the
+list. GTK names neither a `GtkListBoxRow` from the label inside it nor a
+mnemonic check button without its underscore ("Lin_ks"), so both are now
+named explicitly. `gtk_list_box_set_tab_behavior(GTK_LIST_TAB_ITEM)` makes Tab
+leave the list; the default walks Tab through every row.
+
+**N134 — on YouTube every menu link was listed twice.** (Log
+`alus-measure-20261114-224906.log`, 22:49:20: "Home 2 of 121", "Home 3 of
+121", "Shorts 4", "Shorts 5"…) YouTube's guide entry is `<a role=link
+title="Home">` holding a `<tp-yt-paper-item role=link>`, and the collection
+returns both. For links, buttons, clickables and headings, an element inside
+another of the same kind (four levels at most) is now the same place: the
+elements list leaves it out, and quick navigation (`k`, `shift+k`) steps past
+it instead of reading the same link twice. Lists, tables and landmarks nest
+for real and are not affected (`BrowseMode::nestingIsSamePlace`).
+
+Test: `tests/nav/test_browse_mode.cpp` ("N134 a link nested in a link is one
+entry, in the list and for k").

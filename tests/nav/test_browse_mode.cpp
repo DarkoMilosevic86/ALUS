@@ -1492,3 +1492,131 @@ TEST_CASE("N132 a focused grid row is focus mode; the focus around the caret lea
         CHECK(caretLine() == "Under the ad");
     }
 }
+
+TEST_CASE("alus+f7: the elements list's choice is performed when the focus comes back",
+          "[browsemode][elements]") {
+    // The dialog is another process (alus-elements); what comes back is one
+    // line, and the choice waits for the browser to have the focus again.
+    SECTION("the protocol") {
+        const std::vector<nav::ElementsDialogEntry> entries{
+            {"link", 0, "Home\tpage"}, {"heading", 2, "News\nToday"}};
+        CHECK(nav::formatElementsDialogEntries(entries) ==
+              "link\t0\tHome page\nheading\t2\tNews Today\n");
+        const nav::ElementsDialogChoice move = nav::parseElementsDialogChoice("move\tlink\t3");
+        CHECK(move.action == "move");
+        CHECK(move.kind == "link");
+        CHECK(move.index == 3);
+        CHECK(nav::parseElementsDialogChoice("activate\theading\t0").action == "activate");
+        CHECK(nav::parseElementsDialogChoice("").action.empty());
+        CHECK(nav::parseElementsDialogChoice("delete\tlink\t1").action.empty());
+        CHECK(nav::parseElementsDialogChoice("move\tlink\tx").action.empty());
+    }
+
+    NavFixture fixture;
+    const Ref application = fixture.backend.addApplication("Browser", "Chromium");
+    const Ref window = fixture.backend.add(application, PlatformRole::Frame, "Page");
+    fixture.backend.addState(window, PlatformState::Active);
+    const Ref document = fixture.backend.add(window, PlatformRole::DocumentWeb, "Page");
+    addTextLeaf(fixture.backend, document, PlatformRole::Paragraph, "Top of the page");
+    addTextLeaf(fixture.backend, document, PlatformRole::Paragraph, "Some text");
+    const Ref link = addTextLeaf(fixture.backend, document, PlatformRole::Link, "Contact us");
+    fixture.backend.node(link).actionNames = {"jump"};
+    makeContainer(fixture.backend, document, 3);
+
+    const a11y::ObjectPtr root = fixture.registry.objectFor(document);
+    nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(root, fixture.nav());
+    auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+    REQUIRE(browse != nullptr);
+    browse->setElementObjectsForTest({{"link", {fixture.registry.objectFor(link)}}});
+    const auto caretLine = [&] {
+        text::TextRangePtr caret = browse->makeTextRange(text::Position::Caret);
+        REQUIRE(caret != nullptr);
+        REQUIRE(caret->expand(text::TextUnit::Line));
+        return caret->text();
+    };
+
+    SECTION("Move to: nothing until the focus returns, then the caret is on the link") {
+        browse->chooseElement(nav::parseElementsDialogChoice("move\tlink\t0"));
+        CHECK(caretLine() == "Top of the page");
+        fixture.clearSpeech();
+        browse->onGainFocus(root);
+        CHECK(caretLine() == "Contact us");
+        fixture.drainSpeech();
+        CHECK(fixture.spokenJoined().find("Contact us") != std::string::npos);
+        CHECK(fixture.backend.performed.empty());
+    }
+
+    SECTION("Activate: the link is activated, and the caret is on it") {
+        browse->chooseElement(nav::parseElementsDialogChoice("activate\tlink\t0"));
+        browse->onInnerFocus(root);
+        REQUIRE(fixture.backend.performed.size() == 1);
+        CHECK(fixture.backend.performed.front().ref == link);
+        CHECK(caretLine() == "Contact us");
+    }
+
+    SECTION("with no focus event, a moment later") {
+        browse->chooseElement(nav::parseElementsDialogChoice("move\tlink\t0"));
+        CHECK(fixture.pumpUntil([&] { return caretLine() == "Contact us"; },
+                                std::chrono::milliseconds{2000}));
+    }
+
+    SECTION("an index the lists do not have does nothing") {
+        browse->chooseElement(nav::parseElementsDialogChoice("move\tlink\t5"));
+        browse->onGainFocus(root);
+        CHECK(caretLine() == "Top of the page");
+    }
+}
+
+TEST_CASE("N134 a link nested in a link is one entry, in the list and for k",
+          "[browsemode][elements]") {
+    // Log 22:49: YouTube's menu is <a role=link title="Home"> holding a
+    // <tp-yt-paper-item role=link>, so alus+f7 listed "Home" twice, "Shorts"
+    // twice, and so on.
+    NavFixture fixture;
+    const Ref application = fixture.backend.addApplication("Browser", "Chromium");
+    const Ref window = fixture.backend.add(application, PlatformRole::Frame, "Video");
+    fixture.backend.addState(window, PlatformState::Active);
+    const Ref document = fixture.backend.add(window, PlatformRole::DocumentWeb, "Video");
+    fixture.backend.addInterface(document, a11y::Interface::Collection);
+    const Ref home = fixture.backend.add(document, PlatformRole::Link, "Home");
+    const Ref homeItem = addTextLeaf(fixture.backend, home, PlatformRole::Link, "Home", "Home");
+    makeContainer(fixture.backend, home, 1);
+    const Ref shorts = fixture.backend.add(document, PlatformRole::Link, "Shorts");
+    addTextLeaf(fixture.backend, shorts, PlatformRole::Link, "Shorts", "Shorts");
+    makeContainer(fixture.backend, shorts, 1);
+    // A list inside a list item stays two lists.
+    const Ref outer = fixture.backend.add(document, PlatformRole::List, "");
+    const Ref item = fixture.backend.add(outer, PlatformRole::ListItem, "");
+    const Ref inner = fixture.backend.add(item, PlatformRole::List, "");
+    addTextLeaf(fixture.backend, inner, PlatformRole::ListItem, "Nested");
+    makeContainer(fixture.backend, inner, 1);
+    makeContainer(fixture.backend, item, 1);
+    makeContainer(fixture.backend, outer, 1);
+    makeContainer(fixture.backend, document, 3);
+    (void)homeItem;
+
+    const a11y::ObjectPtr root = fixture.registry.objectFor(document);
+    nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(root, fixture.nav());
+    auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+    REQUIRE(browse != nullptr);
+
+    const std::vector<nav::ElementListItem> links = browse->elementsList(nav::ElementType::Link);
+    REQUIRE(links.size() == 2);
+    CHECK(links[0].label == "Home");
+    CHECK(links[1].label == "Shorts");
+    CHECK(browse->elementsList(nav::ElementType::List).size() == 2);
+
+    // k from Home goes to Shorts, not to the Home inside Home.
+    REQUIRE(browse->moveTo(fixture.registry.objectFor(home), a11y::OutputReason::QuickNav));
+    fixture.clearSpeech();
+    REQUIRE(browse->moveToElement(nav::ElementType::Link, true));
+    fixture.drainSpeech();
+    CHECK(fixture.spokenJoined().find("Shorts") != std::string::npos);
+    // And shift+k back lands on Home once, not on its outer half first.
+    fixture.clearSpeech();
+    REQUIRE(browse->moveToElement(nav::ElementType::Link, false));
+    fixture.drainSpeech();
+    CHECK(fixture.spokenJoined().find("Home") != std::string::npos);
+    fixture.clearSpeech();
+    CHECK_FALSE(browse->moveToElement(nav::ElementType::Link, false));
+}

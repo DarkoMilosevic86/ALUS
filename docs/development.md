@@ -13,7 +13,7 @@ include/alus/alus-plugin.h  the add-on ABI, the only installed header
 src/<subsystem>/            the implementation
 src/daemon/                 alus-daemon: wires the subsystems together
 src/cli/                    alus-cli: diagnostics and one-shot tools
-src/gui/                    alus-settings: the settings window (its own process)
+src/gui/                    alus-settings: the settings window; alus-elements: the elements list (each its own process)
 data/                       the command table, gesture maps, dictionaries, desktop files
 po/                         gettext catalogues (sr, sr@latin) and the template
 tests/<subsystem>/          Catch2 tests, one executable per subsystem
