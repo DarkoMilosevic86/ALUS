@@ -905,3 +905,42 @@ buttons say "button, graphic" instead of their names.**
 Test: `tests/nav/test_browse_mode.cpp` ("N131 empty layout containers are not
 lines, and an icon button says its name"; without the fix the arrow lands on
 a blank and the button's content is empty).
+
+**N132 — Gmail's message list stays in browse mode, a new Chrome window types
+into nothing, and "skip ad" throws the reader to the top of the page.**
+(Logs `alus-measure-20261114-214520.log`, `alus-measure-20261114-214734.log`.)
+
+1. **Gmail**: the message list is an ARIA grid whose rows take the focus.
+   `shouldPassThroughFor` knew no table roles, so the arrows read the page
+   instead of moving between messages, and `x` (select a message) was the
+   checkbox quick-nav key. Following NVDA (#5118, #13221), a table row, cell
+   or header that is focusable or focused, and a focused list item inside a
+   focusable list, now switch to focus mode. A plain table's cells never take
+   the focus, so reading tables is unchanged. `onGainFocus` now receives the
+   object, so arriving in a document *on* such a control (Gmail opens with
+   the focus in the list) starts in focus mode too.
+2. **Chrome start** (21:45:29): the N130 scan found the New Tab page's
+   document FOCUSED and took it, but the real focus was the address bar, so
+   ctrl+l sent no focus event. Browse mode kept the letters, and typing an
+   address hit quick-nav keys (`o`: "no next embedded object"). Two fixes:
+   `findFocusedIn` searches the window's own controls before any document,
+   and a focused document is the answer only when nothing outside a document
+   has the focus; and a caret event in an editable object that reports
+   FOCUSED, while ALUS's focus is elsewhere, now becomes a focus event
+   (`Registry::caretMovesTheFocus`). The second fix also recovers from any
+   other focus event that was missed.
+3. **"Skip ad"** (21:47–21:49): pressing the button removes it, and the page
+   puts the focus back on its document. `onInnerFocus` moved the caret to the
+   first leaf of whatever got the focus, which for the document is the top of
+   the page. Following NVDA ("the caret isn't within the focused node"), a
+   focus on the document itself, on the object under the caret, or on a
+   container around the caret no longer moves the caret
+   (`BrowseMode::focusContainsCaret`). The caret's own leaf was gone too, and
+   a bookmark that does not resolve fell back to the top. A bookmark now also
+   carries the path of the leaf before it (after ASCII GS), and restores to
+   whatever follows that leaf now.
+
+Tests: `tests/nav/test_browse_mode.cpp` ("N132 a focused grid row is focus
+mode; the focus around the caret leaves it alone", whose five checks each fail
+without their fix), and `tests/a11y/test_events.cpp` ("N132 a new Chrome
+window's focus is its address bar, not the page").

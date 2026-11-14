@@ -329,7 +329,7 @@ void Service::handleInterceptorEvent(const core::Event& event) {
             // Service::refreshGrabs): the document's scripts did not exist
             // yet. They do now.
             refreshGrabs();
-            after->onGainFocus();
+            after->onGainFocus(object);
         } else {
             after->onInnerFocus(object);
         }

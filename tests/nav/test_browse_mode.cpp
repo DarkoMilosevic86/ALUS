@@ -1402,3 +1402,93 @@ TEST_CASE("N131 empty layout containers are not lines, and an icon button says i
         CHECK(spoken.find("graphic") == std::string::npos);
     }
 }
+
+TEST_CASE("N132 a focused grid row is focus mode; the focus around the caret leaves it alone",
+          "[browsemode]") {
+    // Gmail: the message list is an ARIA grid whose rows take the focus. The
+    // arrows had to move from message to message and x had to tick one, but
+    // browse mode kept both. YouTube: "skip ad" removes itself when pressed
+    // and the page puts the focus back on itself -- and the reader landed at
+    // the top of the page.
+    NavFixture fixture;
+    const Ref application = fixture.backend.addApplication("Browser", "Chromium");
+    const Ref window = fixture.backend.add(application, PlatformRole::Frame, "Mail");
+    fixture.backend.addState(window, PlatformState::Active);
+    const Ref document = fixture.backend.add(window, PlatformRole::DocumentWeb, "Inbox");
+    addTextLeaf(fixture.backend, document, PlatformRole::Paragraph, "First line");
+    addTextLeaf(fixture.backend, document, PlatformRole::Paragraph, "Second line");
+    const Ref skip =
+        addTextLeaf(fixture.backend, document, PlatformRole::Button, "Skip ad", "Skip ad");
+    addTextLeaf(fixture.backend, document, PlatformRole::Paragraph, "Under the ad");
+    const Ref grid = fixture.backend.add(document, PlatformRole::Table, "Messages");
+    const Ref row = fixture.backend.add(grid, PlatformRole::TableRow, "");
+    fixture.backend.addState(row, PlatformState::Focusable);
+    const Ref cell = addTextLeaf(fixture.backend, row, PlatformRole::TableCell, "Hello from a friend");
+    makeContainer(fixture.backend, row, 1);
+    makeContainer(fixture.backend, grid, 1);
+    const Ref plainTable = fixture.backend.add(document, PlatformRole::Table, "");
+    const Ref plainRow = fixture.backend.add(plainTable, PlatformRole::TableRow, "");
+    const Ref plainCell = addTextLeaf(fixture.backend, plainRow, PlatformRole::TableCell, "Price");
+    makeContainer(fixture.backend, plainRow, 1);
+    makeContainer(fixture.backend, plainTable, 1);
+    const Ref listBox = fixture.backend.add(document, PlatformRole::List, "Conversations");
+    fixture.backend.addState(listBox, PlatformState::Focusable);
+    const Ref item = addTextLeaf(fixture.backend, listBox, PlatformRole::ListItem, "A thread");
+    makeContainer(fixture.backend, listBox, 1);
+    makeContainer(fixture.backend, document, 7);
+    (void)cell;
+
+    SECTION("a row or cell that takes the focus is a widget; a plain table's is content") {
+        CHECK(nav::BrowseMode::shouldPassThroughFor(*fixture.registry.objectFor(row)));
+        CHECK_FALSE(nav::BrowseMode::shouldPassThroughFor(*fixture.registry.objectFor(plainRow)));
+        CHECK_FALSE(nav::BrowseMode::shouldPassThroughFor(*fixture.registry.objectFor(plainCell)));
+        // A list item only when it has the focus inside a focusable list.
+        CHECK_FALSE(nav::BrowseMode::shouldPassThroughFor(*fixture.registry.objectFor(item)));
+        fixture.backend.addState(item, PlatformState::Focused);
+        fixture.pumpOnce();
+        CHECK(nav::BrowseMode::shouldPassThroughFor(*fixture.registry.objectFor(item)));
+    }
+
+    const a11y::ObjectPtr root = fixture.registry.objectFor(document);
+    nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(root, fixture.nav());
+    auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+    REQUIRE(browse != nullptr);
+
+    SECTION("arriving in the document on a focused row starts in focus mode") {
+        fixture.backend.addState(row, PlatformState::Focused);
+        fixture.pumpOnce();
+        browse->onGainFocus(fixture.registry.objectFor(row));
+        CHECK(browse->passThrough());
+    }
+
+    SECTION("moving onto the row from inside the document switches too") {
+        browse->onInnerFocus(fixture.registry.objectFor(row));
+        CHECK(browse->passThrough());
+    }
+
+    const auto caretLine = [&] {
+        text::TextRangePtr caret = browse->makeTextRange(text::Position::Caret);
+        REQUIRE(caret != nullptr);
+        REQUIRE(caret->expand(text::TextUnit::Line));
+        return caret->text();
+    };
+
+    SECTION("the focus on the document itself does not move the caret") {
+        REQUIRE(browse->moveTo(fixture.registry.objectFor(skip), a11y::OutputReason::Caret));
+        REQUIRE(caretLine().find("Skip ad") != std::string::npos);
+        browse->onInnerFocus(root);
+        CHECK(caretLine().find("Skip ad") != std::string::npos);
+    }
+
+    SECTION("a vanished leaf leaves the caret where it was, not at the top") {
+        REQUIRE(browse->moveTo(fixture.registry.objectFor(skip), a11y::OutputReason::Caret));
+        // The button removes itself.
+        MockNode& parent = fixture.backend.node(document);
+        parent.children.erase(std::find(parent.children.begin(), parent.children.end(), skip));
+        fixture.backend.kill(skip);
+        makeContainer(fixture.backend, document, 6);
+        fixture.pumpOnce();
+        browse->onInnerFocus(fixture.registry.objectFor(document));
+        CHECK(caretLine() == "Under the ad");
+    }
+}

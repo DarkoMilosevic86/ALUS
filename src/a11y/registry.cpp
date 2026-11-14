@@ -451,6 +451,23 @@ std::size_t Registry::pumpEvents() {
                         }
                     }
                 }
+            } else if (raw.name == events::kCaret && caretMovesTheFocus(object)) {
+                // N132: the caret moved in an editable control that has the
+                // focus while ALUS believed the focus was elsewhere -- an
+                // address bar that was focused before ALUS could see it, so
+                // ctrl+l sends no focus event. The user is typing there, and
+                // the field is where they are.
+                ALUS_DEBUG("caret moved in focused {} ({}); it is the focus",
+                           object->path(), roleName(object->role()));
+                if (handleGainFocus(object)) {
+                    core::Event event;
+                    event.name = std::string{events::kGainFocus};
+                    event.object = object->id();
+                    dispatcher_.executeEvent(event);
+                    eventDispatched_.notify(event, object);
+                    ++dispatched_;
+                    return true;
+                }
             } else if (raw.name == events::kStateChange && payload != nullptr &&
                        payload->detail1 != 0 &&
                        payload->atspiType == "object:state-changed:selected" &&
@@ -684,29 +701,93 @@ ObjectPtr Registry::findFocusedIn(const ObjectPtr& window) {
     // BREADTH first, with a budget: a web page has more objects than this is
     // worth, and the focused control (a document, an address bar) sits a few
     // levels down, while depth first spent the budget inside the page.
+    //
+    // DOCUMENTS LAST (N132): Chrome keeps FOCUSED on the page's document while
+    // the address bar has the real focus, which is where a new window puts
+    // it. Taking the document made ALUS browse a page the keys were not going
+    // to: ctrl+l moved nothing (the address bar already had the focus), so no
+    // event ever corrected it, and the letters typed into the address bar
+    // were eaten as quick-nav keys. So the window's own controls are searched
+    // first, and a document -- with everything inside it -- only after them.
     int budget = kInitialFocusBudget;
     std::deque<ObjectPtr> queue;
+    std::deque<ObjectPtr> documents;
     for (const ObjectPtr& child : window->children()) {
         queue.push_back(child);
     }
-    while (!queue.empty() && budget-- > 0) {
+    ObjectPtr focusedDocument;
+    while (budget-- > 0) {
+        if (queue.empty()) {
+            if (documents.empty()) {
+                break;
+            }
+            // Outside the documents nothing has the focus. A focused document
+            // is the answer; otherwise the focus is somewhere inside one.
+            if (focusedDocument != nullptr) {
+                return focusedDocument;
+            }
+            for (const ObjectPtr& child : documents.front()->children()) {
+                queue.push_back(child);
+            }
+            documents.pop_front();
+            continue;
+        }
         ObjectPtr current = std::move(queue.front());
         queue.pop_front();
         if (current == nullptr) {
             continue;
         }
+        const bool isDocument = current->role() == Role::Document;
         if (current->states().has(State::Focused)) {
-            return current;
+            if (!isDocument) {
+                return current;
+            }
+            if (focusedDocument == nullptr) {
+                focusedDocument = current;
+            }
+        }
+        if (isDocument) {
+            documents.push_back(std::move(current));
+            continue;
         }
         for (const ObjectPtr& child : current->children()) {
             queue.push_back(child);
         }
+    }
+    if (focusedDocument != nullptr) {
+        return focusedDocument;
     }
     if (budget <= 0) {
         ALUS_DEBUG("focus scan of {} gave up after {} objects", window->name(),
                    kInitialFocusBudget);
     }
     return nullptr;
+}
+
+bool Registry::caretMovesTheFocus(const ObjectPtr& object) const {
+    if (object == nullptr || !object->isAlive()) {
+        return false;
+    }
+    const StateSet& states = object->states();
+    if (!states.has(State::Focused) || !states.has(State::Editable)) {
+        return false;
+    }
+    const ObjectPtr& focus = api_.focus();
+    if (focus == nullptr) {
+        return true;
+    }
+    if (focus->sameAs(*object)) {
+        return false;
+    }
+    // The focus inside this field (a combo box's entry reporting for it) or
+    // this field inside the focus is the same place.
+    for (const ObjectPtr& ancestor : api_.focusAncestors()) {
+        if (ancestor != nullptr && ancestor->sameAs(*object)) {
+            return false;
+        }
+    }
+    const ObjectPtr parent = object->parent();
+    return parent == nullptr || !parent->sameAs(*focus);
 }
 
 bool Registry::focusIsInside(const Object& window) const {

@@ -587,3 +587,62 @@ TEST_CASE("N130 a window that comes up without a focus event gets its focus foun
         CHECK(fixture.spoken.empty());
     }
 }
+
+TEST_CASE("N132 a new Chrome window's focus is its address bar, not the page",
+          "[a11y][events][focus]") {
+    // Log 21:45:29: a new Chrome window had the focus in the address bar, but
+    // the page's document reported FOCUSED too and the scan took it. ctrl+l
+    // then moved nothing (no focus event), browse mode kept the letters, and
+    // typing an address navigated the page.
+    A11yFixture fixture;
+    MockBackend& backend = fixture.backend;
+    const ButtonTree editor{backend};
+    backend.addState(editor.button, PlatformState::Focused);
+    backend.emit("object:state-changed:focused", editor.button, 1);
+    fixture.pumpOnce();
+    REQUIRE(fixture.registry.api().focus()->ref() == editor.button);
+
+    const Ref browser = backend.addApplication("Google Chrome", "Chromium");
+    const Ref window = backend.add(browser, PlatformRole::Frame, "New Tab - Google Chrome");
+    // The page comes first among the window's children and is shallower than
+    // the address bar, which is where breadth first found it.
+    const Ref document = backend.add(window, PlatformRole::DocumentWeb, "New Tab");
+    backend.addState(document, PlatformState::Focused);
+    const Ref views = backend.add(window, PlatformRole::Panel, "");
+    const Ref toolbar = backend.add(views, PlatformRole::ToolBar, "");
+    const Ref group = backend.add(toolbar, PlatformRole::Panel, "");
+    const Ref address = backend.add(group, PlatformRole::Entry, "Address and search bar");
+    backend.addState(address, PlatformState::Editable);
+
+    SECTION("the address bar wins over the focused document") {
+        backend.addState(address, PlatformState::Focused);
+        backend.emit("window:activate", window);
+        REQUIRE(fixture.pumpUntil(
+            [&] { return fixture.registry.api().focus()->ref() == address; }));
+    }
+
+    SECTION("the document is still the answer when nothing else has the focus") {
+        backend.emit("window:activate", window);
+        REQUIRE(fixture.pumpUntil(
+            [&] { return fixture.registry.api().focus()->ref() == document; }));
+    }
+
+    SECTION("typing in a focused field ALUS did not know about makes it the focus") {
+        backend.emit("window:activate", window);
+        REQUIRE(fixture.pumpUntil(
+            [&] { return fixture.registry.api().focus()->ref() == document; }));
+        backend.addState(address, PlatformState::Focused);
+        backend.emit("object:text-caret-moved", address, 1);
+        REQUIRE(fixture.pumpUntil(
+            [&] { return fixture.registry.api().focus()->ref() == address; }));
+    }
+
+    SECTION("a caret in a field without the focus does not take it") {
+        backend.emit("window:activate", window);
+        REQUIRE(fixture.pumpUntil(
+            [&] { return fixture.registry.api().focus()->ref() == document; }));
+        backend.emit("object:text-caret-moved", address, 1);
+        fixture.pumpUntil([] { return false; }, std::chrono::milliseconds{100});
+        CHECK(fixture.registry.api().focus()->ref() == document);
+    }
+}

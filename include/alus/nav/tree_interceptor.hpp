@@ -99,7 +99,7 @@ public:
 
     // NVDA: `event_treeInterceptor_gainFocus`. What is announced when the
     // user arrives in the document.
-    virtual void onGainFocus() {}
+    virtual void onGainFocus(const a11y::ObjectPtr& object) { (void)object; }
     // Called when the focus moves inside the intercepted content; the
     // interceptor decides whether that means focus mode.
     virtual void onInnerFocus(const a11y::ObjectPtr& object) { (void)object; }

@@ -1211,6 +1211,7 @@ text::Bookmark DocumentTextRange::bookmark() const {
         mark.start = start_.offset;
         mark.end = end_.offset;
         mark.data = start_.leaf->path() + "\x1e" + parent->path();
+        appendNeighbour(mark, parent);
         return mark;
     }
     const DocumentPosition first = toParent(start_);
@@ -1224,13 +1225,53 @@ text::Bookmark DocumentTextRange::bookmark() const {
     if (!last.leaf->sameAs(*first.leaf)) {
         mark.data += "\x1f" + last.leaf->path();
     }
+    appendNeighbour(mark, first.leaf);
     return mark;
+}
+
+void DocumentTextRange::appendNeighbour(text::Bookmark& mark, const ObjectPtr& leaf) const {
+    // THE LINE BEFORE (N132), after ASCII GS: the leaf a bookmark names can
+    // vanish while the caret is on it -- the "skip ad" button removes itself
+    // when pressed -- and without a neighbour the restore had nothing to go
+    // on but the top of the page.
+    if (const ObjectPtr before = DocumentLeaves::previous(root_, leaf)) {
+        mark.data += "\x1d" + before->path();
+    }
 }
 
 bool DocumentTextRange::moveToBookmark(const text::Bookmark& mark) {
     if (!mark.valid() || mark.data.empty()) {
         return false;
     }
+    const std::size_t gs = mark.data.find('\x1d');
+    text::Bookmark exact = mark;
+    if (gs != std::string::npos) {
+        exact.data = mark.data.substr(0, gs);
+    }
+    if (moveToExactBookmark(exact)) {
+        return true;
+    }
+    if (gs == std::string::npos) {
+        return false;
+    }
+    // The leaf is gone: the caret goes to what now follows the line before
+    // it, which is where the vanished leaf was.
+    const std::string beforePath = mark.data.substr(gs + 1);
+    ObjectPtr leaf = DocumentLeaves::first(root_);
+    for (int step = 0; step < kMaxWalk && leaf != nullptr; ++step) {
+        if (leaf->path() == beforePath) {
+            const ObjectPtr after = DocumentLeaves::next(root_, leaf);
+            start_ = end_ = DocumentPosition{after != nullptr ? after : leaf, 0};
+            normalise(start_);
+            normalise(end_);
+            return true;
+        }
+        leaf = DocumentLeaves::next(root_, leaf);
+    }
+    return false;
+}
+
+bool DocumentTextRange::moveToExactBookmark(const text::Bookmark& mark) {
     if (const std::size_t rs = mark.data.find('\x1e'); rs != std::string::npos) {
         const std::string childPath = mark.data.substr(0, rs);
         const std::string parentPath = mark.data.substr(rs + 1);

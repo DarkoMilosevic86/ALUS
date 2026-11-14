@@ -99,7 +99,7 @@ public:
     // ---- TreeInterceptor ----
     text::TextRangePtr makeTextRange(text::Position position) const override;
     bool setPassThrough(bool value, bool announce = true) override;
-    void onGainFocus() override;
+    void onGainFocus(const a11y::ObjectPtr& object) override;
     void onInnerFocus(const a11y::ObjectPtr& object) override;
     void onCaretMove(const a11y::ObjectPtr& object) override;
 
@@ -156,6 +156,9 @@ private:
     // The object the caret is on, through the hypertext path -- a link inside
     // a paragraph, not the paragraph.
     a11y::ObjectPtr objectAtCaret() const;
+    // Whether the focus landing on `object` leaves the caret where it is: the
+    // document itself, the object the caret is on, or a container around it.
+    bool focusContainsCaret(const a11y::ObjectPtr& object) const;
 
     // ---- table navigation (documentBase.DocumentWithTableNavigation) ----
     // The cell the caret is in, and its table. Null when the caret is not in

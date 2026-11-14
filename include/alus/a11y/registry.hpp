@@ -197,6 +197,9 @@ public:
     // foreground window when the chain changed at the top, and a focusEntered
     // for every new ancestor. Returns false when the object turned out to be
     // unusable, which makes the limiter fall back to an older focus event.
+    // N132: a caret event in an editable control that reports FOCUSED while
+    // the focus ALUS knows is somewhere else entirely.
+    bool caretMovesTheFocus(const ObjectPtr& object) const;
     bool handleGainFocus(const ObjectPtr& object);
     // A best-effort scan for the object that has the focus right now. AT-SPI
     // has no "who has the focus" call -- focus arrives as an event -- so at

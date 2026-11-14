@@ -261,6 +261,25 @@ bool BrowseMode::shouldPassThroughFor(const a11y::Object& object) {
             // A FOCUSABLE list is a listbox the user operates; a plain <ul> is
             // not focusable and is content to read.
             return states.has(State::Focusable);
+        case Role::TableRow:
+        case Role::TableCell:
+        case Role::TableRowHeader:
+        case Role::TableColumnHeader:
+            // N132, NVDA #5118: a row or cell that takes the focus belongs to
+            // an ARIA grid the page operates itself -- Gmail's message list,
+            // where the arrows go from message to message and x ticks one.
+            // A plain table's cells never take the focus.
+            return states.has(State::Focusable) || states.has(State::Focused);
+        case Role::ListItem: {
+            // The same for an item of a focusable list (a message list built
+            // from a listbox, NVDA #13221).
+            if (!states.has(State::Focused)) {
+                return false;
+            }
+            const a11y::ObjectPtr parent = object.parent();
+            return parent != nullptr && parent->role() == Role::List &&
+                   parent->states().has(State::Focusable);
+        }
         default:
             break;
     }
@@ -298,9 +317,18 @@ bool BrowseMode::setPassThrough(bool value, bool announce) {
     return true;
 }
 
-void BrowseMode::onGainFocus() {
+void BrowseMode::onGainFocus(const a11y::ObjectPtr& object) {
     if (!isReady()) {
         ALUS_DEBUG("browse mode: document not ready; nothing announced yet");
+        return;
+    }
+    // Arriving in the document ON a control that owns its keys (N132: Gmail
+    // opens with the focus on the message list) starts in focus mode, as
+    // moving onto it from inside the document would.
+    if (object != nullptr && !object->sameAs(*root_) && shouldPassThroughFor(*object)) {
+        lastFocusable_ = object;
+        passThroughWasAutomatic_ = true;
+        setPassThrough(true);
         return;
     }
     // The caret the browser already has, or the start of the document.
@@ -337,6 +365,13 @@ void BrowseMode::onInnerFocus(const a11y::ObjectPtr& object) {
         return;
     }
     if (!passThrough()) {
+        // THE FOCUS AROUND THE CARET DOES NOT MOVE IT (N132, NVDA: "the caret
+        // isn't within the focused node"). A page that puts the focus back on
+        // itself or on a container -- YouTube after "skip ad" -- would
+        // otherwise throw the reader to the top of the page or of the player.
+        if (focusContainsCaret(object)) {
+            return;
+        }
         // Still reading: the caret follows the focus, so tab lands the review
         // and the caret in the same place.
         if (text::TextRangePtr at = DocumentTextRange::makeAt(
@@ -346,6 +381,37 @@ void BrowseMode::onInnerFocus(const a11y::ObjectPtr& object) {
             cursor_.setCaret(*at);
         }
     }
+}
+
+bool BrowseMode::focusContainsCaret(const a11y::ObjectPtr& object) const {
+    if (object->sameAs(*root_)) {
+        // The document itself holds every position, a vanished one included:
+        // the caret is restored from its bookmark next time it is used.
+        return true;
+    }
+    const text::TextRangePtr caret = cursor_.caretRange();
+    const auto* range = dynamic_cast<const DocumentTextRange*>(caret.get());
+    if (range == nullptr || !range->start().valid()) {
+        return false;
+    }
+    if (range->start().leaf->sameAs(*object)) {
+        // The caret is already on it: tab back onto the same link says it
+        // again (the focus announcement) without moving anything.
+        return true;
+    }
+    if (const a11y::ObjectPtr at = objectAtCaret(); at != nullptr && at->sameAs(*object)) {
+        return true;
+    }
+    if (DocumentLeaves::isLeaf(*object)) {
+        return false;
+    }
+    for (const a11y::ObjectPtr& ancestor :
+         DocumentLeaves::ancestorChain(root_, range->start().leaf)) {
+        if (ancestor != nullptr && ancestor->sameAs(*object)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void BrowseMode::onCaretMove(const a11y::ObjectPtr& object) {

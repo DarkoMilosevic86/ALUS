@@ -242,6 +242,10 @@ private:
     int leafLength(const a11y::ObjectPtr& leaf) const;
     // Document order: -1, 0, 1. Compares two positions, which is what every
     // endpoint comparison and every move boundary test reduces to.
+    // Bookmarks (N132): the exact restore, and the neighbour that stands in
+    // for a leaf that vanished.
+    bool moveToExactBookmark(const text::Bookmark& mark);
+    void appendNeighbour(text::Bookmark& mark, const a11y::ObjectPtr& leaf) const;
     int comparePositions(const DocumentPosition& a, const DocumentPosition& b) const;
     // Walks `count` leaves and lands at the near edge. The crossing logic, in
     // one place.
