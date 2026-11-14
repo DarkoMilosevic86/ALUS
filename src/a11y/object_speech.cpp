@@ -716,7 +716,7 @@ bool shouldReportTextContent(const Object& object, OutputReason reason) {
 speech::SpeechSequence getObjectSpeech(Object& object, OutputReason reason,
                                        const speech::Presenter* presenter) {
     const Settings& settings = object.registry().settings();
-    // Phase 5's text layer closed claude/FAZA4.md O10: an object whose text is
+    // Phase 5's text layer closed docs/history/phase-4.md O10: an object whose text is
     // navigable reads its TEXT, and the value is dropped from the properties so
     // the two are not both spoken. Without a presenter there is no text layer
     // to read it with, and the value is spoken as in phase 4.
@@ -824,7 +824,7 @@ void installSpeechPresentation(Registry& registry, speech::Presenter& presenter)
 
     hooks.message = [](const std::string& text) { ui::message(text); };
 
-    // Phase 5 replaced the stand-in here with the real path (FAZA4.md O11):
+    // Phase 5 replaced the stand-in here with the real path (phase-4.md O11):
     // `speakSpelling` names the punctuation, raises the pitch for a capital,
     // and -- on the THIRD press, where `useCharacterDescriptions` is true --
     // describes each character instead of merely naming it.

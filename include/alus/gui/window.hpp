@@ -68,7 +68,7 @@ struct Context {
     std::function<void()> resetAll;
     // Called when the user presses OK: the changes are to be KEPT. Closing
     // the window any other way -- Cancel, Escape, the header's close button
-    // -- discards them, as a Windows dialog does (FAZA10.md N125).
+    // -- discards them, as a Windows dialog does (phase-10.md N125).
     std::function<void()> accept;
     // The "Try" button: says a sentence with the module, voice and variant
     // the window shows now -- through the settings process's own connection,

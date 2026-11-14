@@ -28,7 +28,7 @@ grešaka, 0 izgubljenih bajtova.
 | T6.10 — table nav: `control+alt+strelice`, zaglavlja jednom | **prošao** | `[T6.10]`, 4 sekcije |
 
 Pored toga, zatvorene su **sve sedam obaveza** koje je Faza 5 ostavila
-(`FAZA5.md`, „Predaja Fazi 6"):
+(`phase-5.md`, „Predaja Fazi 6"):
 
 | Obaveza Faze 5 | Gde je zatvorena |
 |---|---|
@@ -523,7 +523,7 @@ LibreOffice Writer je bio treći i odgovor je isti, pa je uslov ispunjen i
 poziv**. Rezerva u `AtspiBackend::matches` ostaje za svakog pozivaoca koji još
 traži FLOW — i živi test je izvršava, jer bi inače bila mrtav kod — pa je
 vraćanje na FLOW izmena jedne reči ako WebKitGTK ili Qt pokažu da ga imaju.
-`01-ARHITEKTURA.md` §9.1 tačka 2 i §9.2 sada to i kažu.
+`architecture.md` §9.1 tačka 2 i §9.2 sada to i kažu.
 
 Pritisak tastera ovo ne plaća: `GetMatchesFrom` poštuje FLOW, pa tamo ostaje
 jedan poziv — što je invarijanta koju hermetični `[T6.7]` i meri.

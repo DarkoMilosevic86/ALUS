@@ -6,7 +6,7 @@
 // Property cache with a lifetime of exactly one pump cycle.
 //
 // Port of NVDA's `AutoPropertyObject` (`baseObject.py:121-178`) plus the cache
-// flush at the end of each cycle (`core.py:1035`). See 01-ARHITEKTURA.md §3.5:
+// flush at the end of each cycle (`core.py:1035`). See architecture.md §3.5:
 // this is the whole performance model. Speech, braille and review all ask the
 // same object for `name`, `role`, `states` within one cycle — the platform is
 // hit once.

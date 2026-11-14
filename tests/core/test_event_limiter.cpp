@@ -3,7 +3,7 @@
 //
 // This file is part of ALUS (Access Linux Using Speech).
 //
-// The event limiter rules from 01-ARHITEKTURA.md §3.4.
+// The event limiter rules from architecture.md §3.4.
 #include "alus/core/event_limiter.hpp"
 
 #include "alus/core/event_dispatcher.hpp"

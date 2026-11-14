@@ -5,7 +5,7 @@
 //
 // Translation: one process-wide gettext domain, bound once at start-up.
 //
-// 00-VIZIJA.md Z8 makes localization a hard requirement and names Serbian, and
+// vision.md H8 makes localization a hard requirement and names Serbian, and
 // §6 of the same document says why the STRINGS and not only the code are
 // derived from NVDA: the command descriptions, the role and state labels and
 // the symbol dictionaries are user-visible text that must read the same in
@@ -22,7 +22,7 @@
 //     must NOT change LC_NUMERIC: ALUS writes floating-point values into
 //     GKeyFile (speech rate, pitch) and a locale that prints "1,5" produces a
 //     configuration file that cannot be read back. So LC_NUMERIC is pinned to
-//     "C" after the fact, deliberately (FAZA9.md O1).
+//     "C" after the fact, deliberately (phase-9.md O1).
 //  2. The catalogue must be bound to UTF-8 explicitly. Without
 //     `bind_textdomain_codeset`, gettext converts the catalogue to the
 //     locale's charset, and a user whose locale is `sr_RS` (ISO-8859-5, no

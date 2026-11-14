@@ -4,7 +4,7 @@
 // This file is part of ALUS (Access Linux Using Speech).
 //
 // The gesture map file: NVDA's `gestures.ini`, parsed, queried and written.
-// The hard requirement being tested is Z3 — a user's own NVDA map loads
+// The hard requirement being tested is H3 — a user's own NVDA map loads
 // unchanged, including the `None =` unbind entry and the `kb:` emulation form.
 #include "alus/input/gesture_map.hpp"
 
@@ -17,7 +17,7 @@ using alus::input::GestureMap;
 using alus::input::normalizeGestureIdentifier;
 
 TEST_CASE("an imported gesture map loads unchanged") {
-    // 00-VIZIJA.md Z3: a user arrives with their own map, written for the
+    // vision.md H3: a user arrives with their own map, written for the
     // upstream screen reader, and it has to work WITHOUT EDITS — including its
     // spelling of the modifier key, which ALUS canonicalises to `alus` on the
     // way in and never writes back.

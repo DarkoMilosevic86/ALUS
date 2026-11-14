@@ -6,7 +6,7 @@
 // Configuration: files, profiles, triggers, and restart in place.
 //
 // Port of NVDA's `config/` (`ConfigManager`, `ProfileTrigger`) and
-// `core.resetConfiguration` (`core.py:315-419`). See 01-ARHITEKTURA.md §3.9.
+// `core.resetConfiguration` (`core.py:315-419`). See architecture.md §3.9.
 //
 // The storage is GKeyFile (ini), the same shape as NVDA's configobj files, so
 // `gestures.ini` files are directly compatible. Paths follow the XDG spec:

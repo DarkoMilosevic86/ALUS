@@ -5,7 +5,7 @@
 //
 // `TextRange`: a range of text, and everything that can be asked of it.
 //
-// Port of NVDA's `textInfos.TextInfo` in full (01-ARHITEKTURA.md §7.1). This
+// Port of NVDA's `textInfos.TextInfo` in full (architecture.md §7.1). This
 // is the interface the whole of phases 5 and 6 is built on: review, say-all,
 // the caret, braille (phase 7) and browse mode all speak to text through it,
 // and the two implementations behind it are `OffsetsTextRange` (over

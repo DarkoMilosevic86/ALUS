@@ -6,7 +6,7 @@
 // Input help: every key says what it does, and does nothing.
 //
 // Port of NVDA's `inputCore.manager._inputHelpCaptor` and `_handleInputHelp`
-// (01-ARHITEKTURA.md §5.2). It is how a user learns the command set, so the
+// (architecture.md §5.2). It is how a user learns the command set, so the
 // details are the feature:
 //
 //   * the key's display name is spoken with FULL punctuation symbol level, so

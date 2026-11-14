@@ -128,7 +128,7 @@ bool Catalog::loadScriptsFromString(std::string_view csv, std::string* error) {
             continue;
         }
         if (field(fields, "scope") == "deferred") {
-            // A v1.0 non-goal (00-VIZIJA.md §5). Deliberately not registered:
+            // A v1.0 non-goal (vision.md §5). Deliberately not registered:
             // a gesture bound to a command that does not exist would show up
             // in the gesture dialog as a command ALUS cannot run.
             ++deferred_;
@@ -189,7 +189,7 @@ bool Catalog::loadFromDataDirectory(const std::filesystem::path& dataDir) {
     error.clear();
     // Not fatal, and the failure mode is worth naming: with no status file
     // every unimplemented command goes back to being SILENT, which is the
-    // defect this file exists to prevent (claude/FAZA9.md N99).
+    // defect this file exists to prevent (docs/history/phase-9.md N99).
     if (!loadStatus(dataDir / "commands-status.ini", &error)) {
         ALUS_WARNING("command status: {} — unimplemented commands will be silent", error);
         complete = false;

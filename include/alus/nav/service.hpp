@@ -19,7 +19,7 @@
 //   * input           -- the review commands as another step-10 command group,
 //                        and the say-all stop-on-key-press hook, which is the
 //                        last empty hook phase 3 left behind
-//                        (`isSayAllRunning`, FAZA4.md handover point 5);
+//                        (`isSayAllRunning`, phase-4.md handover point 5);
 //   * core            -- the task registry, where the caret wait and say-all
 //                        live, one step per pump cycle.
 //
@@ -175,7 +175,7 @@ public:
     // and must not call resetConfiguration for it -- changing the speech rate
     // would otherwise take the braille display and every app module down and
     // bring them back, which the user hears as the screen reader stuttering.
-    // Rule 3 of 02-FAZE.md read narrowly: restartable in place, and the
+    // Rule 3 of phase-plan.md read narrowly: restartable in place, and the
     // smallest place that will do.
     void applyConfiguration();
 

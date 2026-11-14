@@ -5,7 +5,7 @@
 //
 // A script: one command, its metadata and its implementation.
 //
-// Port of NVDA's `@script` decorator and `scriptHandler` (01-ARHITEKTURA.md
+// Port of NVDA's `@script` decorator and `scriptHandler` (architecture.md
 // §5.3). The attributes carried here are not decoration — each one changes
 // dispatch:
 //

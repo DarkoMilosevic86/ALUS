@@ -166,7 +166,7 @@ void InputCommands::toggleSpeakCommandKeys(Gesture& /*gesture*/) {
             ? _("speak command keys on")
             // Translators: reported when the speaking of command keys is toggled
             // off. (It was an untranslated string literal, the only one left
-            // after FAZA10.md's sweep.)
+            // after phase-10.md's sweep.)
             : _("speak command keys off"));
 }
 
@@ -174,7 +174,7 @@ void InputCommands::quit(Gesture& /*gesture*/) {
     if (!context_.quit) {
         // Not silent. The one command whose absence a user cannot work
         // around without finding a terminal must say that it is absent
-        // (claude/FAZA9.md N99, and §3.8's rule for an expected failure).
+        // (docs/history/phase-9.md N99, and §3.8's rule for an expected failure).
         // Translators: spoken when ALUS cannot stop itself, e.g. because the
         // command was run from a diagnostic tool rather than the screen
         // reader.

@@ -40,7 +40,7 @@ using a11y::State;
 // instead -- which is the right owner -- and the consequence is that the
 // interceptor must also answer to the section name, or step 6 of the lookup
 // rejects the map entry on the location and `alus+space` does nothing at all.
-// It did nothing at all until this line was added (claude/FAZA9.md N100).
+// It did nothing at all until this line was added (docs/history/phase-9.md N100).
 //
 // It shadows nothing: step 6 only accepts a map entry whose script THIS
 // object owns, and `toggleVirtualBufferPassThrough` is the only name in the
@@ -397,7 +397,7 @@ void BrowseMode::reportNoNext(ElementType type, bool forwards) {
     //
     // Two patterns and not a prefix plus a label: Serbian inflects the noun
     // after "next", so a translator who is handed "no next " and "heading"
-    // separately cannot produce a correct sentence (FAZA9.md N76).
+    // separately cannot produce a correct sentence (phase-9.md N76).
     service_.message(i18n::substitute(
         forwards ? _("no next %s") : _("no previous %s"), label));
 }

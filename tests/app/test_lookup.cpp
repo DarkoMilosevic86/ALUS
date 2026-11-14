@@ -193,8 +193,8 @@ TEST_CASE("the built-in rules are the applications phase 8 promises",
           "[app][lookup][modules]") {
     Registry registry{Services{}};
     const std::size_t added = registerBuiltinModules(registry);
-    // The phase 8 table of 02-FAZE.md: LibreOffice, three terminals, Electron,
-    // Nautilus -- and gnome-shell, added in phase 10 (FAZA10.md N121). The
+    // The phase 8 table of phase-plan.md: LibreOffice, three terminals, Electron,
+    // Nautilus -- and gnome-shell, added in phase 10 (phase-10.md N121). The
     // browsers are deliberately absent (§9.4).
     CHECK(added == 7);
     CHECK(registry.ruleCount() == 7);

@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 # Copyright (C) 2026 Darko Milošević <daremc86@gmail.com>
 #
-# Format (01-ARHITEKTURA.md §11.1, the upstream symbols.dic format):
+# Format (architecture.md §11.1, the upstream symbols.dic format):
 #   identifier<TAB>replacement[<TAB>level][<TAB>preserve][<TAB># display name]
 # level    = the lowest verbosity at which the REPLACEMENT is spoken
 #            (none < some < most < all < char); default: all

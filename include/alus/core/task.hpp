@@ -7,7 +7,7 @@
 //
 // Port of NVDA's registered generator objects (`queueHandler.py:80-102`), the
 // cooperative multitasking behind say-all and buffer loading. See
-// 01-ARHITEKTURA.md §3.2: these become C++20 coroutines, resumed exactly once
+// architecture.md §3.2: these become C++20 coroutines, resumed exactly once
 // per cycle, so no single task can monopolise the core.
 //
 // A task yields with `co_yield nextCycle;` (or `co_await nextCycle;`), which

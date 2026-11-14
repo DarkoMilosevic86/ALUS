@@ -86,7 +86,7 @@ prozora ne zamrzava jezgro — što je nalaz zbog kog ta provera postoji.
 
 Srpski prevod nije pisan od nule. **738 od 1102 msgid-a je uzeto iz NVDA-inog
 sopstvenog srpskog kataloga po msgid-u** (`tools/import-nvda-po.py`), jer
-`00-VIZIJA.md` §7 to i zahteva: korisnik čija dokumentacija kaže „режим
+`vision.md` §7 to i zahteva: korisnik čija dokumentacija kaže „режим
 прегледа" mora da čuje „режим прегледа". Preostalih **364** je napisano rukom u
 `po/overrides.po`. Oba kataloga su **100% prevedena**.
 
@@ -151,7 +151,7 @@ Zato je isto proveravano **i u C++-u**, nad istim fajlovima
 ### O7 — prozor podešavanja je **sopstveni proces**, ne deo demona
 
 Najveće odstupanje faze, i jedino izmereno a ne izabrano. Vidi **N79** i
-`src/gui/main.cpp`. Plan to ne propisuje eksplicitno, ali `01-ARHITEKTURA.md`
+`src/gui/main.cpp`. Plan to ne propisuje eksplicitno, ali `architecture.md`
 §2 mapira `gui/` (wxPython) na `alus::gui`, a NVDA svoj GUI drži u procesu —
 pa je ovo odstupanje od obrasca koji ceo projekat prenosi.
 
@@ -172,7 +172,7 @@ zastarelim podešavanjem.
 `applyConfiguration()`. Sada je javan, i `speech::Service` ga je dobio (nije ga
 imao). Razlog je bio prozor u procesu; posle O7 koristi ga samo
 `resetConfiguration` posredno, ali ostaje javan jer je to tačan ugovor „ponovo
-pročitaj svoju sekciju" i jer je `02-FAZE.md` pravilo 3 pročitano usko:
+pročitaj svoju sekciju" i jer je `phase-plan.md` pravilo 3 pročitano usko:
 restartabilno u mestu, i to u najmanjem mestu koje će poslužiti.
 
 ### O9 — libadwaita 1.6 je deprecirala oblike koje plan pretpostavlja
@@ -221,7 +221,7 @@ smeju da pokrenu prozor, a `openPage` fork-uje proces.
 
 ### O14 — `alus-cli autostart` **ne** onemogućava drugu čitačku tiho
 
-`03-RIZICI.md` R12 je eksplicitan da se to **ponudi**, ne uradi. `--enable`
+`risks.md` R12 je eksplicitan da se to **ponudi**, ne uradi. `--enable`
 ispiše šta treba pokrenuti i šta će to uraditi, i ne radi to sam. `meson
 install` ne uključuje autostart uopšte: `.desktop` ide u
 `$datadir/applications`, a ne u korisnikov `~/.config/autostart`.
@@ -361,7 +361,7 @@ konvencija (`gi18n-lib.h` postoji odvojeno od `glib.h` iz istog razloga). Pravil
 
 ### N85 — stringovi u generisanim podacima ne stižu do prevodioca
 
-`xgettext` čita izvorne fajlove, a `02-FAZE.md` §5.4 drži tabelu komandi u
+`xgettext` čita izvorne fajlove, a `phase-plan.md` §5.4 drži tabelu komandi u
 `data/scripts.csv` **upravo zato** da ne bude ručno pisan kod. Posledica: 316
 opisa komandi, 17 kategorija i 78 labela tastera bili su stringovi koje nijedan
 prevodilac ne vidi, bez ikakve greške igde — build prolazi, `msgfmt` je
@@ -440,7 +440,7 @@ i potvrdi, jer „ime je nestalo" nije isto što i „proces je otišao".
 **I defekt u samoj skripti, koji je ovaj nalaz odložio:** izlaz druge čitačke
 je išao u `/dev/null`, pa je razlog pada bio nedostupan i tražio je `bash -x`.
 Sada ide u `~/alus-switch-other.log` i ispisuje se na padu. Pravilo je isto kao
-N91 u `FAZA6.md`: alat koji meri ne sme da baca dokaz.
+N91 u `phase-6.md`: alat koji meri ne sme da baca dokaz.
 
 Dva pravila po kojima je skripta napisana, jer ovde greška ima posebnu cenu:
 
@@ -524,7 +524,7 @@ i upravo tada ne radi.
 **Zašto nijedan test to nije uhvatio, i to je treći put u istom obliku.** T9.5
 proverava da se `docs/commands.md` **poklapa sa** `data/scripts.csv`. Poklapa se
 savršeno — jer je iz njega **generisan**. Nijedan test ne proverava da komanda
-iz tabele ima implementaciju ili vezivanje. Ista greška kao N91 (`FAZA6.md`) i
+iz tabele ima implementaciju ili vezivanje. Ista greška kao N91 (`phase-6.md`) i
 kao N97: **provera deli izvor sa onim što proverava.**
 
 Odatle sledi kriterijum koji ovoj fazi nedostaje, i koji vredi više od same
@@ -924,7 +924,7 @@ po/sr.po: 1102/1102 translated (100%) — 738 from upstream,
 
 ## Predaja
 
-Faza 9 je poslednja u `02-FAZE.md`. Šta ostaje otvoreno nije njena nedovršenost
+Faza 9 je poslednja u `phase-plan.md`. Šta ostaje otvoreno nije njena nedovršenost
 nego lista za v1.0, i deli se na tri vrste.
 
 **1. Traži okruženje, ne kod** — tri kriterijuma iz ranijih faza i dalje:

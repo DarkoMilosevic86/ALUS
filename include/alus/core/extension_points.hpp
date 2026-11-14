@@ -6,7 +6,7 @@
 // Extension points: the five shapes of pluggable behaviour.
 //
 // Port of NVDA's `extensionPoints/` (`__init__.py`, `util.py`). See
-// 01-ARHITEKTURA.md §3.6. Five kinds, all built on one registrar:
+// architecture.md §3.6. Five kinds, all built on one registrar:
 //
 //   Action               notify(args...)         call all; log and continue on error
 //   Filter<T>            apply(value, args...)   a chain: one's output is the next one's input

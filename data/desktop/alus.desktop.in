@@ -18,7 +18,7 @@
 # N18). So installing this file is NOT enough: Orca's entry has to be masked,
 # which is a per-user decision and is therefore NOT done by `meson install`.
 # `alus-cli autostart --status` reports the situation and `--enable` makes the
-# change, after saying what it is about to do (03-RIZICI.md R12: offer it,
+# change, after saying what it is about to do (risks.md R12: offer it,
 # never do it silently).
 [Desktop Entry]
 Type=Application

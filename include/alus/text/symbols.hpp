@@ -6,7 +6,7 @@
 // Symbol pronunciation.
 //
 // Port of NVDA's `characterProcessing.py` (the symbol half: SpeechSymbol,
-// SpeechSymbols, SpeechSymbolProcessor). See 01-ARHITEKTURA.md §11.1. The file
+// SpeechSymbols, SpeechSymbolProcessor). See architecture.md §11.1. The file
 // format is NVDA's `symbols.dic`, unchanged, because the locale data IS NVDA's
 // locale data and ALUS must be able to read it as it stands.
 //

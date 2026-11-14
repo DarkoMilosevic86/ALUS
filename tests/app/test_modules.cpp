@@ -13,7 +13,7 @@
 // that returns the row it was meant to skip).
 //
 // Whether the shape is the shape the application really has is a question for
-// the manual test and for `alus-cli app-info`, and claude/FAZA8.md records
+// the manual test and for `alus-cli app-info`, and docs/history/phase-8.md records
 // which of the four were measured on a running application and which were not.
 #include "alus/app/commands.hpp"
 #include "alus/app/modules.hpp"
@@ -350,7 +350,7 @@ TEST_CASE("the status line command reports, spells and says when there is none",
 
 TEST_CASE("the gnome-shell module speaks the selected search result",
           "[app][modules]") {
-    // FAZA10.md N121, the measured shape: typing into the overview's search
+    // phase-10.md N121, the measured shape: typing into the overview's search
     // leaves the keyboard focus in the entry and marks the first result with
     // SELECTED; the next letters only rename it. No focus event comes.
     AppFixture fixture{true};

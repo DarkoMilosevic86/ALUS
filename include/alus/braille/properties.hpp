@@ -19,7 +19,7 @@
 //
 // It is also where the second handover promise of phase 6 is kept: the
 // `ControlField` stream phase 6 built has a second consumer now, and the
-// fields really were canonical (FAZA6.md O7). Nothing here normalises
+// fields really were canonical (phase-6.md O7). Nothing here normalises
 // anything; it reads the keys the document layer already agreed on.
 //
 // PURE FUNCTIONS, like the speech side: no object, no platform call, no

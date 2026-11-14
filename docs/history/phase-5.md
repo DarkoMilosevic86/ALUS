@@ -1,6 +1,6 @@
 # Faza 5 — Tekst i review: rezultati
 
-> Izveštaj o izvršenoj fazi. Prati `02-FAZE.md` → *Faza 5 — Tekst i review*.
+> Izveštaj o izvršenoj fazi. Prati `phase-plan.md` → *Faza 5 — Tekst i review*.
 > Datum: 2026-11-06. Prethodne faze: 1 (jezgro), 2 (govor), 3 (ulaz),
 > 4 (objektni model), zelene.
 
@@ -290,7 +290,7 @@ najvažniji nov kod projekta, i on je Faza 6.
 ### O15 — `review_currentSymbol`, `reviewCursorToStatusLine` i tabela nisu u Fazi 5
 
 Komandna tabela ima 441 skript; Faza 5 implementira **35** iz kategorija „Text
-review" i „System caret", tačno onoliko koliko ručni test iz `02-FAZE.md`
+review" i „System caret", tačno onoliko koliko ručni test iz `phase-plan.md`
 pritiska. Tabelarna navigacija (§8.4) je vezana za `Table` interfejs i stoji
 uz app module Faze 8; `review_currentSymbol` traži GUI za uređivanje simbola
 (Faza 9); `reviewCursorToStatusLine` traži pojam statusne linije koji na

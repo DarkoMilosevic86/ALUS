@@ -7,7 +7,7 @@
 //
 // Separate from the modules themselves so that the question "what does ALUS
 // adjust, and for which applications" has a single answer a reader can check
-// against the phase 8 table of 02-FAZE.md -- and so that a test can register
+// against the phase 8 table of phase-plan.md -- and so that a test can register
 // one module and nothing else.
 #include "alus/app/modules.hpp"
 

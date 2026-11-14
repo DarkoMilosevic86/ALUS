@@ -91,7 +91,7 @@ PlatformErrorKind classifyDBusError(std::string_view name) {
         std::string_view name;
         PlatformErrorKind kind;
     };
-    // The list from 01-ARHITEKTURA.md §3.8, plus the names GDBus really returns.
+    // The list from architecture.md §3.8, plus the names GDBus really returns.
     static constexpr Entry kTable[] = {
         {"org.freedesktop.DBus.Error.NoReply", PlatformErrorKind::NoReply},
         {"org.freedesktop.DBus.Error.ServiceUnknown", PlatformErrorKind::ServiceUnknown},

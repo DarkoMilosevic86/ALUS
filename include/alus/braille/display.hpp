@@ -7,7 +7,7 @@
 //
 // Port of NVDA's `braille/display/driver.py` (the driver interface) and of the
 // SINGLE-SLOT WRITE of `BrailleHandler._writeCells` /
-// `_bgThreadExecutor` -- 01-ARHITEKTURA.md §13 names it as one of the two
+// `_bgThreadExecutor` -- architecture.md §13 names it as one of the two
 // coalescing mechanisms that are "not optional".
 //
 // WHY A SINGLE SLOT AND NOT A QUEUE. A braille display takes 10-40 ms to
@@ -24,7 +24,7 @@
 // ONCE PER PUMP CYCLE, in `PumpStage::Braille` -- which §3.1 already defines
 // as the moment the cycle's state is final. The consequence is a measurement
 // instead of a race: N frames stored in one cycle are exactly one write, and
-// T7.6 asserts it (claude/FAZA7.md O7).
+// T7.6 asserts it (docs/history/phase-7.md O7).
 //
 // THE WORKER THREAD IS STILL THERE, because a `brlapi_writeDots` to a
 // disconnected Bluetooth display can block for seconds and that must not stop

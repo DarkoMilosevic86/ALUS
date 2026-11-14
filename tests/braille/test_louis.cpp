@@ -8,7 +8,7 @@
 // T7.3 — dotsIO: the cells arrive with bit 0x8000 set, masked to 0xFF
 // T7.4 — the custom table resolver finds a table from an add-on directory
 //
-// Four of the eight exit criteria of 02-FAZE.md's phase 7, and all four are
+// Four of the eight exit criteria of phase-plan.md's phase 7, and all four are
 // about liblouis rather than about ALUS. That is deliberate: §14 lists exactly
 // three details of `louisHelper.py` "that are easy to miss", and three of
 // these tests are those three details. The fourth, T7.1, is the one that says
@@ -306,7 +306,7 @@ TEST_CASE("T7.4 the table resolver finds a table from an add-on directory",
         // the display falls back to raw codepoints (§3.8). The list is data,
         // so a typo in it is invisible until someone picks that language --
         // this is the test that reads it. `hr-comp8.ctb` was such a typo:
-        // liblouis ships `hr-comp8.utb` (FAZA7.md N63).
+        // liblouis ships `hr-comp8.utb` (phase-7.md N63).
         TableRegistry clean;
         clean.addKnownTables();
         REQUIRE_FALSE(clean.tables().empty());

@@ -5,7 +5,7 @@
 //
 // `alus::app::Module` -- one application's adjustments.
 //
-// Port of NVDA's `appModuleHandler.AppModule` (01-ARHITEKTURA.md §12.1, §12.2).
+// Port of NVDA's `appModuleHandler.AppModule` (architecture.md §12.1, §12.2).
 // All five customisation mechanisms are here, with NVDA's own names, because
 // the names are what someone porting an app module knows:
 //

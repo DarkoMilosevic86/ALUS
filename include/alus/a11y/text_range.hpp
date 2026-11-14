@@ -5,7 +5,7 @@
 //
 // `ObjectTextRange`: a text range over one accessible's `AtspiText`.
 //
-// This is the subclass 01-ARHITEKTURA.md §7.2 specifies, hook for hook:
+// This is the subclass architecture.md §7.2 specifies, hook for hook:
 //
 //     _getStoryText      -> Text::get_text(0, get_character_count())
 //     _getStoryLength    -> Text::get_character_count()
@@ -25,7 +25,7 @@
 //                                 Hyperlink::get_object
 //     _getOffsetsFromNVDAObject -> Hyperlink::get_start_index / get_end_index
 //
-// WHERE IT DEVIATES, and why (both measured, both in FAZA5.md):
+// WHERE IT DEVIATES, and why (both measured, both in phase-5.md):
 //
 //   * WORDS DO NOT COME FROM THE PLATFORM. `GRANULARITY_WORD` gives UAX#29
 //     word boundaries, which stop before the space after a word; NVDA's word
@@ -41,7 +41,7 @@
 // knows something ALUS cannot: where the text was WRAPPED. A line of a wrapped
 // paragraph has no character in it that says so.
 //
-// ONE RULE ABOUT LIFETIME, learned under valgrind (FAZA5.md N49): THIS RANGE
+// ONE RULE ABOUT LIFETIME, learned under valgrind (phase-5.md N49): THIS RANGE
 // HOLDS ITS OBJECT ALIVE. So nothing that is OWNED BY an object may store one
 // -- a behaviour that kept its last selection as a range made a reference ring
 // through itself, and every editable field the user focused leaked itself and
@@ -95,7 +95,7 @@ public:
 
 protected:
     const void* bookmarkKind() const override;
-    // AT-SPI counts CODEPOINTS. Measured, not assumed: FAZA10.md N113.
+    // AT-SPI counts CODEPOINTS. Measured, not assumed: phase-10.md N113.
     OffsetUnit offsetUnit() const override { return OffsetUnit::Codepoints; }
 
     int storyLength() const override;

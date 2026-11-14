@@ -6,7 +6,7 @@
 // One piece of input from the user.
 //
 // Port of NVDA's `inputCore.InputGesture` and
-// `keyboardHandler.KeyboardInputGesture` (01-ARHITEKTURA.md §5.1, §5.2). This
+// `keyboardHandler.KeyboardInputGesture` (architecture.md §5.1, §5.2). This
 // is the layer users actually know — the key names, the identifier syntax and
 // the normalization rules — so it is ported 1:1 and not improved upon.
 //

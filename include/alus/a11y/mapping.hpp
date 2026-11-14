@@ -5,7 +5,7 @@
 //
 // AT-SPI -> ALUS: roles, states, and the refinement that makes them specific.
 //
-// 01-ARHITEKTURA.md §6.5 measured the shapes of the two vocabularies, and the
+// architecture.md §6.5 measured the shapes of the two vocabularies, and the
 // measurement on this system (AT-SPI 2.56.2) is:
 //
 //     roles     131 AT-SPI  ->  156 ALUS (NVDA's)

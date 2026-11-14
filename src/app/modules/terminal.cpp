@@ -21,7 +21,7 @@
 //
 //  1. THE TERMINALS WHOSE WIDGET DOES NOT SAY `terminal`. Konsole and Xfce
 //     Terminal are not installed on the measuring system, so what their text
-//     widget reports is UNKNOWN here (claude/FAZA8.md records this as a
+//     widget reports is UNKNOWN here (docs/history/phase-8.md records this as a
 //     deviation rather than guessing). The rule is written so that it is right
 //     either way: in a process that IS a terminal emulator, a focused object
 //     that exposes Text and reports a generic role is treated as a terminal.

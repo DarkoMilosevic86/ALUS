@@ -20,7 +20,7 @@
 //     delivery would wait for a default context nobody iterates.
 //  3. THE DEVICE API IS NOT USED. No atspi_device, no key grabs through
 //     libatspi -- that code is the cause of N19 and N7, and phase 3 replaced
-//     it with direct D-Bus to the compositor (claude/FAZA3.md O1).
+//     it with direct D-Bus to the compositor (docs/history/phase-3.md O1).
 #pragma once
 
 #include "alus/a11y/backend.hpp"

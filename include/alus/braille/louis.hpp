@@ -6,7 +6,7 @@
 // liblouis: text to braille cells and back.
 //
 // Port of NVDA's `louisHelper.py` plus the part of `brailleTables/__init__.py`
-// that a running screen reader needs (01-ARHITEKTURA.md §14). The library is
+// that a running screen reader needs (architecture.md §14). The library is
 // the same one NVDA uses, so the three details §14 warns about are the three
 // things this file exists to get right:
 //
@@ -29,7 +29,7 @@
 // resolver -- is process global and not re-entrant, so every call here happens
 // on the main thread. §13 lists `liblouis` on long lines as a candidate for
 // the thread pool; that is deliberately NOT done in phase 7 (see
-// claude/FAZA7.md): a region is at most a paragraph, the measurement is in
+// docs/history/phase-7.md): a region is at most a paragraph, the measurement is in
 // microseconds, and a second thread in a non-re-entrant C library would buy
 // nothing for a real risk.
 #pragma once
@@ -216,7 +216,7 @@ public:
     //
     // NVDA uses a separate hyphenation library here; ALUS uses the one the
     // braille table itself ships, which is one dependency fewer and the same
-    // answer where a table has the rules (claude/FAZA7.md O4).
+    // answer where a table has the rules (docs/history/phase-7.md O4).
     std::vector<int> hyphenationPositions(const std::vector<std::string>& tables,
                                           std::string_view word);
 

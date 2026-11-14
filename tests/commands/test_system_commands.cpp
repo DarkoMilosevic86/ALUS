@@ -296,7 +296,7 @@ TEST_CASE("alus+f12 says the time, then the date", "[commands][system]") {
 }
 
 TEST_CASE("the seconds come out of every way a locale spells them", "[commands][system]") {
-    // FAZA10.md N122: sr_RS says `%T`, and "12:17:46" was spoken.
+    // phase-10.md N122: sr_RS says `%T`, and "12:17:46" was spoken.
     CHECK(commands::timePatternWithoutSeconds("%T") == "%H:%M");
     CHECK(commands::timePatternWithoutSeconds("%r") == "%I:%M %p");
     CHECK(commands::timePatternWithoutSeconds("%X") == "%H:%M");
@@ -308,7 +308,7 @@ TEST_CASE("the seconds come out of every way a locale spells them", "[commands][
 
 TEST_CASE("alus+f12 counts repeats with a dispatcher that did not exist yet",
           "[commands][system]") {
-    // FAZA10.md N122: the daemon builds the command contexts BEFORE the input
+    // phase-10.md N122: the daemon builds the command contexts BEFORE the input
     // service starts and creates its dispatcher. A pointer taken then was
     // null forever, and the second press said the time again.
     testing::QuietLog quiet;

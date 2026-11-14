@@ -53,7 +53,7 @@ public:
     // of the ring, and it is upstream's driver order: voice first, then the
     // numbers, because the voice is what a user reaches for first.
     //
-    // Module and Variant are ALUS's (FAZA10.md N126): speech-dispatcher fronts
+    // Module and Variant are ALUS's (phase-10.md N126): speech-dispatcher fronts
     // several engines, and a user on a module with one voice (mbrola_ng) had
     // nothing in the ring to change it with; eSpeak's 14805 "voices" are 140
     // languages times 105 variants, which NVDA's eSpeak driver also offers as

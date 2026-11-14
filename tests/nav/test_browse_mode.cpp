@@ -3,7 +3,7 @@
 //
 // This file is part of ALUS (Access Linux Using Speech).
 //
-// The phase 6 exit criteria, T6.1 to T6.10 (claude/02-FAZE.md).
+// The phase 6 exit criteria, T6.1 to T6.10 (docs/history/phase-plan.md).
 //
 // Every one of them runs against the mock platform, which means against a
 // document shaped the way N47 measured a real one: the root's own text is
@@ -84,7 +84,7 @@ TEST_CASE("T6.1 control fields are synthesised from objects", "[browsemode][T6.1
         // was what the presentation layer needed for "heading level 1"; the
         // presentation rules for FIELDS test `Role::Heading` alone, so a
         // `Heading1` field was Layout and silent, and in Chrome neither the
-        // down arrow nor `h` ever said "heading" (FAZA10.md N116).
+        // down arrow nor `h` ever said "heading" (phase-10.md N116).
         CHECK(field->role == a11y::Role::Heading);
         CHECK(field->getInt("level") == 1);
         CHECK(field->isBlock);
@@ -513,7 +513,7 @@ TEST_CASE("T6.6 quick navigation follows reading order, not tree order",
 // T6.7 -- quick-nav latency. The criterion names p95 < 20 ms on the real
 //         Firefox and Chromium; what a hermetic test CAN measure is the thing
 //         that makes that possible, which is the CALL COUNT: one round trip
-//         per press. See claude/FAZA6.md for the measured wall-clock figures.
+//         per press. See docs/history/phase-6.md for the measured wall-clock figures.
 // ---------------------------------------------------------------------------
 
 TEST_CASE("T6.7 a quick-nav press costs one collection call", "[browsemode][T6.7]") {
@@ -652,7 +652,7 @@ TEST_CASE("T6.9 single-letter navigation is filtered by the script lookup",
         //
         // The fixture has no input service (--no-input), so what can be
         // asserted here is that the call is made and survives a null one;
-        // the real grab count is in tools/phase6-browse-check.sh.
+        // the real grab count was measured live (phase-6.md).
         CHECK_NOTHROW(interceptor->setPassThrough(true, /*announce=*/false));
         CHECK_NOTHROW(interceptor->setPassThrough(false, /*announce=*/false));
         CHECK_NOTHROW(fixture.nav().refreshGrabs());
@@ -1012,7 +1012,7 @@ TEST_CASE("the tree interceptor registry attaches and collects", "[browsemode]")
 // What the second live pass heard in Chrome, written down as tests. Each one
 // builds the page the way CHROME answers it -- not the way an earlier test
 // assumed a browser would -- because every one of these defects was hidden by
-// a mock that was more convenient than the platform (FAZA10.md N112-N116).
+// a mock that was more convenient than the platform (phase-10.md N112-N116).
 // ---------------------------------------------------------------------------
 
 namespace {

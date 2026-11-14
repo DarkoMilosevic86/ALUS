@@ -48,7 +48,7 @@ class SettingsRing;
 struct GlobalCommandsContext {
     // Both are asked for on every key press rather than held, because the
     // speech service rebuilds them when the synthesizer changes (rule 3 of
-    // 02-FAZE.md: every subsystem is restartable in process). A getter that
+    // phase-plan.md: every subsystem is restartable in process). A getter that
     // returns null is the normal state in alus-cli and in the command-coverage
     // test, and every script below says so out loud instead of doing nothing.
     std::function<Presenter*()> presenter;
@@ -62,7 +62,7 @@ struct GlobalCommandsContext {
     // Asked for on every press, not held: the input service creates its
     // dispatcher when it starts -- AFTER the daemon builds this context -- and
     // again on every restart. A held pointer was null for the whole life of
-    // the daemon, so every second press counted as a first (FAZA10.md N122).
+    // the daemon, so every second press counted as a first (phase-10.md N122).
     std::function<const script::Dispatcher*()> dispatcher;
 };
 

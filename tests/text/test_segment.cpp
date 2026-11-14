@@ -5,7 +5,7 @@
 //
 // T5.3 — UNIT_WORD through ICU: correct for Serbian, English and Japanese.
 //
-// 01-ARHITEKTURA.md §7.3 says ICU and only ICU, and the reason is the third
+// architecture.md §7.3 says ICU and only ICU, and the reason is the third
 // language in that list: Japanese has no spaces to break on, so no rule-based
 // segmenter can do it and only a dictionary can. The first two work either
 // way, and the test says which answer this build is giving.
@@ -39,7 +39,7 @@ std::string textOf(std::string_view text, const Segment& segment) {
 
 TEST_CASE("T5.3 the build says which segmenter it is using", "[text][segment][T5.3]") {
     // Not a tautology: `Segmenter::icuAvailable()` is what the phase 5 report
-    // and tools/phase5-text-check.sh print, and a build that lost ICU must
+    // and `alus-cli text-info` print, and a build that lost ICU must
     // say so rather than quietly segmenting Japanese wrongly.
     if (Segmenter::icuAvailable()) {
         CHECK_FALSE(Segmenter::icuVersion().empty());
@@ -49,7 +49,7 @@ TEST_CASE("T5.3 the build says which segmenter it is using", "[text][segment][T5
         SUCCEED("ICU IS NOT LINKED INTO THIS BUILD. Serbian and English word "
                 "segmentation are correct (the rule-based fallback handles "
                 "space-separated scripts); Japanese is NOT. Install libicu-dev "
-                "and rebuild: 01-ARHITEKTURA.md 7.3 requires ICU.");
+                "and rebuild: architecture.md 7.3 requires ICU.");
     }
 }
 

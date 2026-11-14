@@ -5,23 +5,23 @@
 # This file is part of ALUS (Access Linux Using Speech).
 #
 # Extracts the command table ALUS inherits into ALUS data files
-# (01-ARHITEKTURA.md §5.4). The source is the upstream screen reader's Python
+# (architecture.md §5.4). The source is the upstream screen reader's Python
 # source tree, read and never executed; the licence and the attribution are in
-# 00-VIZIJA.md §6.
+# vision.md §6.
 #
 #   data/scripts.csv           one row per script: name, description, category,
 #                              gestures per layout, behaviour flags, v1.0 scope
 #   data/gestures-builtin.ini  the built-in gesture layer, in NVDA
 #                              `gestures.ini` format and with NVDA's own
 #                              `module.Class` section names, so that a user's
-#                              NVDA gestures.ini overlays it unchanged (Z3)
+#                              NVDA gestures.ini overlays it unchanged (H3)
 #   data/key-labels.ini        key name -> spoken label, from NVDA keyLabels.py
 #                              ("capsLock" -> "caps lock"); what input help and
 #                              "speak command keys" say out loud
 #   data/locale/<lang>/gestures.ini
 #                              NVDA's own per-language key overrides, copied
 #                              verbatim: the Serbian one remaps the laptop
-#                              mouse and flow commands onto `š` and `đ` (Z8),
+#                              mouse and flow commands onto `š` and `đ` (H8),
 #                              and the format is identical, so it is data, not
 #                              code to be rewritten
 #
@@ -77,7 +77,7 @@ CONSTANT_MODULES: list[tuple[str, str]] = [
     ("textInfos/__init__.py", "textInfos"),
 ]
 
-#: Script categories outside ALUS v1.0 (00-VIZIJA.md §5, binding list). The
+#: Script categories outside ALUS v1.0 (vision.md §5, binding list). The
 #: scripts stay in the CSV, marked `deferred`, and are left out of the built-in
 #: gesture layer: a key bound to a script that does not exist would be dead
 #: weight in the map and a lie in the gesture dialog.
@@ -106,7 +106,7 @@ DEFERRED_SCRIPTS = {
     # earliest).
     "toggleBrailleViewer",
     "toggleSpeechViewer",
-    # Settings dialogs for v1.0 non-goals (00-VIZIJA.md §5).
+    # Settings dialogs for v1.0 non-goals (vision.md §5).
     "activateMagnifierSettingsDialog",
     "activateVisionSettingsDialog",
     "activateRemoteAccessSettings",
@@ -703,7 +703,7 @@ def rewrite_script_name(name: str) -> str:
     (`braille_toggleNVDAKey`). The name is an API — plugins and gesture maps
     bind by it — so it is renamed here rather than left half-and-half. An
     imported map that binds those two by their old name is the one thing this
-    does not keep working, and it is written down in claude/FAZA3.md O14.
+    does not keep working, and it is written down in docs/history/phase-3.md O14.
     """
     return name.replace("NVDAKey", "AlusKey")
 
@@ -714,7 +714,7 @@ def rewrite_gesture(identifier: str) -> str:
     Upstream spells its modifier key `NVDA`; in ALUS the key is `ALUS`, because
     ALUS is the screen reader saying it and writing it. Compatibility is not
     lost: `normalizeGestureIdentifier` accepts the old spelling on the way IN,
-    so a user's imported gesture map still matches (00-VIZIJA.md Z3). Only the
+    so a user's imported gesture map still matches (vision.md H3). Only the
     source prefix is left alone — `kb(laptop):` is a device, not a key.
     """
     prefix, separator, keys = identifier.partition(":")
@@ -963,10 +963,10 @@ def write_ini(path: Path, scripts: list[Script], extractor: Extractor, nvda_comm
         "; ALUS built-in gesture map — GENERATED, DO NOT EDIT.",
         ";",
         f";   tools/extract-commands.py, {today}",
-        f";   from upstream commit {nvda_commit} (see 00-VIZIJA.md §6 and LICENSE)",
+        f";   from upstream commit {nvda_commit} (see vision.md §6 and LICENSE)",
         ";",
         "; The file format and the section names are the ones imported maps use,",
-        "; so a user's own gesture map overlays this file unchanged (Z3).",
+        "; so a user's own gesture map overlays this file unchanged (H3).",
         "; The ALUS key is spelled ALUS here; the imported spelling is accepted on",
         "; load and never written back (KeyNames::kImportedAlusKeyName).",
         "; This is the LOWEST priority layer: user > locale > braille driver > this.",
@@ -1020,7 +1020,7 @@ def write_key_labels(path: Path, labels: dict[str, str], nvda_commit: str) -> No
         ";",
         f";   tools/extract-commands.py, {today}",
         f";   from upstream commit {nvda_commit}, keyLabels.py"
-        "  (see 00-VIZIJA.md §6)",
+        "  (see vision.md §6)",
         ";",
         "; Key name (lower case, as it appears in a gesture identifier) = spoken",
         "; label. A key that is missing here is spoken as its own name, which is",
@@ -1144,7 +1144,7 @@ def copy_locale_maps(source_root: Path, out_dir: Path) -> list[str]:
     """Copies NVDA's per-language gesture maps.
 
     These are a derived work ALUS takes over under GPL-2.0-or-later
-    (00-VIZIJA.md §6), in the same format ALUS already parses, and they are the
+    (vision.md §6), in the same format ALUS already parses, and they are the
     locale LAYER of the three-layer map (§5.1). Rewriting them by hand would
     only introduce typos in other people's keyboards.
     """
@@ -1197,7 +1197,7 @@ def copy_locale_maps(source_root: Path, out_dir: Path) -> list[str]:
             "; SPDX-License-Identifier: GPL-2.0-or-later\n"
             f"; ALUS key overrides for '{language}'. Derived from the upstream screen\n"
             "; reader's data under GPL-2.0-or-later; the attribution and the source are\n"
-            "; in 00-VIZIJA.md §6 and LICENSE.\n"
+            "; in vision.md §6 and LICENSE.\n"
             "; GENERATED by tools/extract-commands.py — DO NOT EDIT.\n"
             + dropped_note
             + "; A user's own ~/.config/alus/gestures.ini overrides this file.\n\n"

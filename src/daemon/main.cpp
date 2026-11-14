@@ -21,7 +21,7 @@
 // same way.
 //
 // One thing about input is spelled out because a blind user cannot see it: if
-// the compositor refuses ALUS the keyboard (03-RIZICI.md R1, or another screen
+// the compositor refuses ALUS the keyboard (risks.md R1, or another screen
 // reader holding the bus name, N8), that is ANNOUNCED. The alternative is a
 // screen reader that starts, says "ALUS started", and then answers no key —
 // the worst failure mode this project has, and the one phase 0 found four
@@ -30,7 +30,7 @@
 // Signals:
 //   SIGTERM, SIGINT — clean shutdown
 //   SIGHUP          — resetConfiguration() in place, without restarting the
-//                     process (the requirement from 01-ARHITEKTURA.md §3.9)
+//                     process (the requirement from architecture.md §3.9)
 #include "alus/a11y/service.hpp"
 #include "alus/app/service.hpp"
 #include "alus/audio/wave_player.hpp"
@@ -323,7 +323,7 @@ int main(int argc, char* argv[]) {
     // passes through. The g_free calls used to be at the end of main only, so
     // `--version` and the already-running exit leaked whatever strings the
     // command line had set -- six bytes, and six bytes the leak checker
-    // reports is six bytes somebody has to triage (FAZA9.md N87).
+    // reports is six bytes somebody has to triage (phase-9.md N87).
     const auto freeOptions = [&options] {
         g_free(options.logLevel);
         g_free(options.language);
@@ -448,7 +448,7 @@ int main(int argc, char* argv[]) {
     inputHooks.speakSpelling = [&speech](const std::string& text) {
         // Phase 5's real spelling path: the punctuation named, the pitch
         // raised for a capital, and character mode so that "b" is a letter
-        // and not a word (FAZA4.md O11, now closed).
+        // and not a word (phase-4.md O11, now closed).
         if (auto* presenter = speech.presenter()) {
             presenter->speakSpelling(text);
         }
@@ -469,7 +469,7 @@ int main(int argc, char* argv[]) {
         auto* api = objectModel != nullptr ? objectModel->api() : nullptr;
         return api != nullptr && api->isTypingProtected();
     };
-    // Phase 5's answer to the last hook phase 3 left empty (FAZA4.md handover
+    // Phase 5's answer to the last hook phase 3 left empty (phase-4.md handover
     // point 5). The text layer does not exist yet either, so the same
     // late-bound pointer trick is used.
     alus::nav::Service* textLayer = nullptr;
@@ -611,7 +611,7 @@ int main(int argc, char* argv[]) {
     guiHooks.message = [](const std::string& text) { alus::ui::message(text); };
     // A setting changed in the window re-reads ONE section rather than
     // restarting everything: changing the speech rate must not take the
-    // braille display down (§3.9, and rule 3 of 02-FAZE.md).
+    // braille display down (§3.9, and rule 3 of phase-plan.md).
     guiHooks.reloadSection = [&manager, &speech, &a11y, &nav, &braille, &input,
                               &i18nService](const std::string& section) {
         std::string saveError;
@@ -654,7 +654,7 @@ int main(int argc, char* argv[]) {
     // context the lookup assembles per key press. The getters are called on
     // every press rather than captured: the speech service rebuilds its
     // presenter and its settings ring whenever the synthesizer changes, and a
-    // captured pointer would be the OLD one (rule 3 of 02-FAZE.md).
+    // captured pointer would be the OLD one (rule 3 of phase-plan.md).
     alus::speech::GlobalCommandsContext speechCommandContext;
     speechCommandContext.presenter = [&speech] { return speech.presenter(); };
     speechCommandContext.ring = [&speech] { return speech.settingsRing(); };

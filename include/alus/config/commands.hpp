@@ -15,7 +15,7 @@
 // MEMORY and not to disk, upstream and here. That is deliberate: a user trying
 // out voices must be able to get the old one back. It is also what makes
 // `alus+control+c` the only way to keep any of it, and what made its absence
-// (claude/FAZA9.md N99's sibling) a screen reader whose settings silently
+// (docs/history/phase-9.md N99's sibling) a screen reader whose settings silently
 // reverted at every restart.
 //
 // `revertConfiguration` is the other half of the same promise: a setting a
@@ -48,7 +48,7 @@ struct CommandsContext {
     // Asked for on every press, not held: the input service creates its
     // dispatcher when it starts -- AFTER the daemon builds this context -- and
     // again on every restart. A held pointer was null for the whole life of
-    // the daemon, so every second press counted as a first (FAZA10.md N122).
+    // the daemon, so every second press counted as a first (phase-10.md N122).
     std::function<const script::Dispatcher*()> dispatcher;
     // ui::message by default; injected so the tests can read what was said.
     std::function<void(const std::string&)> message;

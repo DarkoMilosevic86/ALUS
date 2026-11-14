@@ -7,7 +7,7 @@
 //
 // Port of NVDA's `inputCore.InputManager` and the state machine in
 // `keyboardHandler.internal_keyDownEvent` / `internal_keyUpEvent`
-// (01-ARHITEKTURA.md §5.1, §5.2). Four behaviours here are the ones users
+// (architecture.md §5.1, §5.2). Four behaviours here are the ones users
 // would notice immediately if they were missing:
 //
 //   trapped keys        a consumed key down must be matched by a consumed key
@@ -15,7 +15,7 @@
 //                       still held (T3.5);
 //   the ALUS key        is never passed to the system, EXCEPT when pressed
 //                       twice within the multi-press timeout, which is how a
-//                       user types a real Insert (T3.6, Z2);
+//                       user types a real Insert (T3.6, H2);
 //   repeat by SCRIPT    "press twice to spell" counts repeats of the script,
 //                       not of the key, so two different keys bound to the
 //                       same script still count as a repeat (T3.7);
@@ -52,7 +52,7 @@ class Loop;
 namespace alus::input {
 
 // The [keyboard] configuration section. Defaults are NVDA's defaults, because
-// a user coming from NVDA must find the same screen reader (Z1).
+// a user coming from NVDA must find the same screen reader (H1).
 struct KeyboardConfig {
     Layout layout = Layout::Desktop;
     // Which physical keys act as the ALUS key (NVDA key). Insert and numpad
@@ -89,7 +89,7 @@ public:
         // NVDA: `script_quit`. Supplied by the daemon, which is the only thing
         // that owns the loop. Without it `alus+q` has nothing to call, which
         // is why the command went unimplemented for a whole phase
-        // (claude/FAZA9.md N99) -- a screen reader a blind user cannot stop
+        // (docs/history/phase-9.md N99) -- a screen reader a blind user cannot stop
         // from the keyboard is stopped from a terminal they have to find.
         std::function<void()> quit;
     };

@@ -13,7 +13,7 @@
 // gesture dialog can show the live gesture maps. It built in 83 ms and
 // presented in 122 ms, and then the screen reader froze for 7.5 seconds and
 // the window could not be read at all. The log says exactly why
-// (claude/FAZA9.md N79):
+// (docs/history/phase-9.md N79):
 //
 //     AT-SPI get_role failed: Did not receive a reply.
 //     core stuck for 516 ms, recovery started
@@ -217,7 +217,7 @@ int main(int argc, char* argv[]) {
     // Every gchar* GOption filled is copied out and freed HERE, before any
     // early return. The alternative -- g_free at the end of main -- leaks on
     // `--version`, on a bad page and on the hand-over path, which is exactly
-    // what valgrind found (FAZA9.md N87). A process about to exit leaking 18
+    // what valgrind found (phase-9.md N87). A process about to exit leaking 18
     // bytes harms nobody, but a leak the leak checker reports is a leak
     // someone has to triage, and the checker is only useful while it is quiet.
     const std::string page = options.page != nullptr ? options.page : "general";
@@ -439,7 +439,7 @@ int main(int argc, char* argv[]) {
     // and the running screen reader applies them once. Closed any other way
     // -- Cancel, Escape, the header's button -- nothing is written: the user
     // chose eSpeak only to look at it, pressed Escape, and heard eSpeak
-    // (FAZA10.md N125).
+    // (phase-10.md N125).
     if (s->pending && !s->accepted) {
         ALUS_INFO("settings: closed without OK; the changes are discarded");
     }

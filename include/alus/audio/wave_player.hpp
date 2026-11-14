@@ -5,7 +5,7 @@
 //
 // Audio output.
 //
-// Port of NVDA's `nvwave.WavePlayer`. See 01-ARHITEKTURA.md §4.6. The one
+// Port of NVDA's `nvwave.WavePlayer`. See architecture.md §4.6. The one
 // non-negotiable part of the interface is `feed(data, size, onDone)` WITH A
 // PER-BLOCK CALLBACK: that callback is the mechanism by which a synthesizer
 // that hands ALUS raw audio (EspeakDirectSynth, planned for v1.1 — see

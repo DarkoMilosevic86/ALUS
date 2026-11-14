@@ -212,7 +212,7 @@ alus_a11y_dep = declare_dependency(
 # cursor, the caret, say-all and the text commands all need a11y::Object and
 # the text range, and nothing in the object model needs them back. Keeping the
 # dependency one-way is what lets tests/a11y stay free of the review cursor
-# and tests/nav free of the platform (02-FAZE.md, the rule for every phase).
+# and tests/nav free of the platform (phase-plan.md, the rule for every phase).
 alus_nav_sources = files(
   'nav/browse_mode.cpp',
   'nav/control_field.cpp',
@@ -363,7 +363,7 @@ alus_app_dep = declare_dependency(
 #   * and because the daemon does not link GTK, it is not registered on the
 #     accessibility bus as a GTK application at all -- which it has no business
 #     being, and which produced a `GetItems ... /org/a11y/atspi/cache` warning
-#     for every tree walk while it was (FAZA9.md N80).
+#     for every tree walk while it was (phase-9.md N80).
 alus_gui_sources = files(
   'gui/gesture_model.cpp',
   'gui/model.cpp',
@@ -413,7 +413,7 @@ alus_daemon = executable('alus-daemon',
 # ITS OWN PROCESS AND NOT THE DAEMON'S, which was measured rather than
 # preferred: a window in the screen reader's own process cannot be read at
 # all, because ALUS's synchronous AT-SPI calls about it are answered from the
-# very main loop they are blocking (claude/FAZA9.md N79, and the file comment
+# very main loop they are blocking (docs/history/phase-9.md N79, and the file comment
 # in src/gui/main.cpp). Only built when GTK is: without it there is no window
 # to put in a process.
 if have_gui

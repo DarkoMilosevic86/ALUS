@@ -6,10 +6,10 @@
 // Key names: keysym <-> NVDA name <-> spoken label.
 //
 // Port of NVDA's `vkCodes.py` and `keyLabels.py` onto X11 keysyms
-// (01-ARHITEKTURA.md §5.2). The NAMES ARE USER INTERFACE: they appear in
+// (architecture.md §5.2). The NAMES ARE USER INTERFACE: they appear in
 // `gestures.ini`, in the generated command reference and in the gesture
 // dialog, so they must be NVDA's spelling exactly — "numpad7", "leftArrow",
-// "numpadInsert" — or a user's own NVDA gesture map stops working (Z3).
+// "numpadInsert" — or a user's own NVDA gesture map stops working (H3).
 //
 // Two things make this simpler on Linux than on Windows:
 //
@@ -130,7 +130,7 @@ public:
     static constexpr std::string_view kAlusKeyName = "alus";
 
     // The spelling an imported gesture map may use for the same key. A user
-    // arriving with their own map has `kb:NVDA+tab` in it, and 00-VIZIJA.md Z3
+    // arriving with their own map has `kb:NVDA+tab` in it, and vision.md H3
     // promises that file loads WITHOUT EDITS — so the old name is accepted on
     // the way IN, canonicalised to `alus` by normalizeGestureIdentifier, and
     // never written back out. Read-only compatibility, in exactly one place.

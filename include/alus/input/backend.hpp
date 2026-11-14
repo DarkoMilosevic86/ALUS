@@ -5,7 +5,7 @@
 //
 // The input backend: where key events come from.
 //
-// `IInputBackend` is the abstraction required by 00-VIZIJA.md Z6 (one build
+// `IInputBackend` is the abstraction required by vision.md H6 (one build
 // for GNOME Wayland, KDE Wayland and X11, no conditional compilation in the
 // core). `AtspiDeviceBackend` is its first implementation.
 //
@@ -103,7 +103,7 @@ public:
 
     // Whether the PLATFORM already gives the application a real key press when
     // a grabbed modifier is pressed twice in quick succession — the ALUS key's
-    // "let me type a real Insert" rule (Z2).
+    // "let me type a real Insert" rule (H2).
     //
     // On the KeyboardMonitor backend this is true and it is a published part
     // of the interface contract (finding N34), which is why ALUS does not try

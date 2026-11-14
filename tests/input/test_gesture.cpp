@@ -6,7 +6,7 @@
 // Gestures, key names and identifier normalization:
 //
 //   T3.1  — "alus+shift+t" == "shift+alus+t" == "T+SHIFT+ALUS", and the same
-//           for an imported map's spelling of the key (Z3)
+//           for an imported map's spelling of the key (H3)
 //
 // plus the key-name table and the gesture properties that decide whether a key
 // press is a command or a character.
@@ -51,7 +51,7 @@ TEST_CASE("T3.1 identifier normalization is order and case independent") {
     // The parts are sorted by character, so the canonical form is predictable.
     CHECK(canonical == "kb:alus+shift+t");
 
-    // Z3: an imported map spells the modifier key the upstream way. It is
+    // H3: an imported map spells the modifier key the upstream way. It is
     // canonicalised here, in the one place that does it, so the same key press
     // matches both spellings and only ALUS's own is ever stored.
     CHECK(canonical == normalizeGestureIdentifier("kb:nvda+shift+t"));
@@ -119,7 +119,7 @@ TEST_CASE("key names keep the spelling users already know") {
         CHECK(names.keysym("t") == static_cast<std::uint32_t>('t'));
         CHECK(names.keysym("plus") == keysym::kPlus);
         // The reason libxkbcommon is a dependency: the LEGACY keysym, which is
-        // what the compositor compares a grab against (O2 in claude/FAZA3.md).
+        // what the compositor compares a grab against (O2 in docs/history/phase-3.md).
         CHECK(names.keysym("š") == 0x1b9);
         CHECK(names.keysym("đ") == 0x1f0);
         CHECK_FALSE(names.keysym("there-is-no-such-key").has_value());
@@ -129,7 +129,7 @@ TEST_CASE("key names keep the spelling users already know") {
         CHECK(names.modifierFor("leftControl") == Modifier::Control);
         CHECK(names.modifierFor("rightShift") == Modifier::Shift);
         CHECK(names.modifierFor("alus") == Modifier::Alus);
-        // Accepted for imported maps only (Z3).
+        // Accepted for imported maps only (H3).
         CHECK(names.modifierFor("nvda") == Modifier::Alus);
         CHECK_FALSE(names.modifierFor("t").has_value());
     }

@@ -11,7 +11,7 @@
 // `ReviewCursorManagerRegion`.
 //
 // THIS IS THE SECOND CONSUMER OF `text::TextWithFields`, which is the promise
-// phase 6 made (FAZA6.md, handover point 1). `getControlFieldBraille` reads
+// phase 6 made (phase-6.md, handover point 1). `getControlFieldBraille` reads
 // exactly the fields `getControlFieldSpeech` reads, from the same stream, and
 // the only reason this file is long is that braille also has to keep a
 // POSITION MAP: every cell must be traceable back to a place in the document,
@@ -229,7 +229,7 @@ private:
 };
 
 // NVDA: `CursorManagerRegion`. The named deliverable `CursorRegion` of
-// 02-FAZE.md: a text region over the caret ALUS owns rather than over the
+// phase-plan.md: a text region over the caret ALUS owns rather than over the
 // application's.
 class CursorRegion final : public TextInfoRegion {
 public:

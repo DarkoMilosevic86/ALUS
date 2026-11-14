@@ -5,7 +5,7 @@
 //
 // Freeze detection.
 //
-// Port of NVDA's `watchdog.py`. See 01-ARHITEKTURA.md §3.7: when an application
+// Port of NVDA's `watchdog.py`. See architecture.md §3.7: when an application
 // blocks on an accessibility call, ALUS must not block with it.
 //
 // `alive()` is called on EVERY pump cycle, EVERY queue item and EVERY coroutine

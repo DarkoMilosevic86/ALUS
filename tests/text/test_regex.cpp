@@ -4,7 +4,7 @@
 // This file is part of ALUS (Access Linux Using Speech).
 //
 // The regular expression engine, and the one property the whole text layer
-// rests on (01-ARHITEKTURA.md §11.1): A WORD CHARACTER CLASS THAT INCLUDES
+// rests on (architecture.md §11.1): A WORD CHARACTER CLASS THAT INCLUDES
 // COMBINING MARKS. Python's standard `re` excludes them, which is why NVDA had
 // to move its word-boundary dictionary entries to the `regex` module, and why
 // ALUS writes the class out instead of trusting any engine's \w.

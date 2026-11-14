@@ -87,7 +87,7 @@ Od **207** najava u tom prozoru, **161** je sadržalo *„недоступно"*
 izmeren nezavisnom bibliotekom (Atspi/GI, mimo ALUS-ovog koda): **GTK 4
 postavlja `SENSITIVE` na svaki objekat, a `ENABLED` ni na jedan**, a ALUS je
 tražio oba. Orca gleda samo `SENSITIVE`. Popravljeno; detalji i sva tri koraka
-dijagnoze su u `FAZA10.md`, N111.
+dijagnoze su u `phase-10.md`, N111.
 
 | `[unavailable]` u `alus-settings` (199 objekata) | |
 |---|---|

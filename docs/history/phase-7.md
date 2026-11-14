@@ -263,7 +263,7 @@ napisana.
   `activateGeneralSettingsDialog` i ostali. Pritisak tog tastera ne radi
   ništa. Podešavanja se za sada menjaju skriptovima koji ciklusiraju jednu
   opciju i prijave je rečima (`braille_toggleTether`, `braille_cycleCursorShape`
-  i srodni). UI sloj je Faza 9; O10 iz `FAZA6.md` ostaje otvoren.
+  i srodni). UI sloj je Faza 9; O10 iz `phase-6.md` ostaje otvoren.
 - **Nema ubacivanja tastera.** `handleBrailleInput` je podrazumevano
   isključen i brajeva tastatura ide kroz brltty-jev sopstveni uinput. Sa
   uključenim, ALUS prevodi, pokaže ćelije i **pošteno kaže** da ne može da

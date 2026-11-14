@@ -5,7 +5,7 @@
 //
 // The global state: what has the focus, what the user is looking at.
 //
-// Port of NVDA's `api.py` (01-ARHITEKTURA.md §6.4), transferred as it stands:
+// Port of NVDA's `api.py` (architecture.md §6.4), transferred as it stands:
 // the focus object AND ITS ANCESTOR CHAIN, `getFocusDifferenceLevel()`, the
 // navigator object, the review position, the foreground object, the mouse
 // object and the desktop object.

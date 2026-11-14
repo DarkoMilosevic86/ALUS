@@ -6,7 +6,7 @@
 #
 # Builds ALUS's Serbian catalogues from upstream's, by msgid.
 #
-# WHY THIS IS LEGITIMATE AND WHY IT IS THE POINT. 00-VIZIJA.md §6 says ALUS
+# WHY THIS IS LEGITIMATE AND WHY IT IS THE POINT. vision.md §6 says ALUS
 # takes upstream's DERIVED WORKS -- the command tables, the symbol
 # dictionaries, the command descriptions -- and that ALUS is GPL-2.0-or-later
 # for exactly that reason. The translations are the same kind of derived work,
@@ -225,7 +225,7 @@ KEEP = re.compile(
 # cannot tell "cmnt" from "meni", because both are four lower-case letters.
 # The result was 76 ordinary Serbian words left in LATIN inside the CYRILLIC
 # catalogue, among them the most frequently spoken words a screen reader has:
-# prozor, dugme, meni, lista, naslov, tabela, slika, link (claude/FAZA9.md
+# prozor, dugme, meni, lista, naslov, tabela, slika, link (docs/history/phase-9.md
 # N106). The list is verified against the .pot on every run, so a renamed or
 # dropped label fails loudly instead of quietly becoming a word again.
 ABBREVIATION_MSGIDS = frozenset({
@@ -265,7 +265,7 @@ def to_cyrillic(text: str) -> str:
 # leaves the foreign letters behind and produces a word in neither script.
 # That is how "windows" became "wиндоwс" and "Waylandu" became "Wаyланду" in
 # the shipped Cyrillic catalogue -- names KEEP does not list, or lists only in
-# their uninflected form (claude/FAZA9.md N106). The rule costs nothing and
+# their uninflected form (docs/history/phase-9.md N106). The rule costs nothing and
 # removes the whole class.
 FOREIGN_LETTERS = frozenset("qwxyQWXY")
 

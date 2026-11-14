@@ -178,7 +178,7 @@ StateSet statesFromPlatform(std::uint64_t bits, PlatformRole platform) {
         // A control is unavailable when the toolkit reports NEITHER ENABLED
         // NOR SENSITIVE -- both absent, and not either one.
         //
-        // Each half of that was learned the hard way (FAZA10.md N111):
+        // Each half of that was learned the hard way (phase-10.md N111):
         //   * GTK 4 reports SENSITIVE on every widget and ENABLED on none --
         //     measured with an independent binding; even a dialog's Close
         //     button answers enabled=False, sensitive=True. The original

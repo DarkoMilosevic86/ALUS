@@ -3,7 +3,7 @@
 //
 // This file is part of ALUS (Access Linux Using Speech).
 //
-// The three paragraph styles of 01-ARHITEKTURA.md §11.2, and the
+// The three paragraph styles of architecture.md §11.2, and the
 // `(passKey, moved)` convention the plan says to keep.
 #include "alus/nav/paragraph_nav.hpp"
 

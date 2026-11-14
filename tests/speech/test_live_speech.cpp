@@ -76,7 +76,7 @@ TEST_CASE("T2.11 speech starts within the budget over SSIP", "[speech][live]") {
     std::string error;
     if (!synth->initialize(&error)) {
         // A build machine with no speech-dispatcher is not a broken ALUS.
-        // SKIP and not WARN + SUCCEED: see FAZA7.md N65 -- a warning is its
+        // SKIP and not WARN + SUCCEED: see phase-7.md N65 -- a warning is its
         // own TAP test point and the plan line then disagrees with the
         // count, which meson reports as a failed test rather than a skip.
         SKIP("no speech-dispatcher (" + error + ")");
@@ -171,7 +171,7 @@ TEST_CASE("T2.11 speech starts within the budget over SSIP", "[speech][live]") {
     g_main_context_unref(context);
 
     REQUIRE_FALSE(toFirstMark.empty());
-    // The budget from 02-FAZE.md, applied to what this test can see. It is
+    // The budget from phase-plan.md, applied to what this test can see. It is
     // deliberately the same number: the SSIP path has to stay well inside it
     // for the audio-onset budget to hold at all.
     CHECK(percentile(toFirstMark, 0.95) < 50.0);

@@ -73,7 +73,7 @@ struct Settings {
     // `a11y::` -- the text layer is given these settings, it does not read the
     // configuration. The handful of keys that appear in both places are
     // filled from the same configuration entry by settingsFrom(), so there is
-    // one source of truth and two shapes of it (FAZA5.md O4).
+    // one source of truth and two shapes of it (phase-5.md O4).
     text::FormatReportSettings format;
 
     // ---- [reviewCursor] ----

@@ -7,7 +7,7 @@
 //
 // Port of NVDA's `OrderedWinEventLimiter`
 // (`IAccessibleHandler/orderedWinEventLimiter.py`) plus the second stage from
-// `IAccessibleHandler.pumpAll`. See 01-ARHITEKTURA.md §3.4.
+// `IAccessibleHandler.pumpAll`. See architecture.md §3.4.
 //
 // It sits BETWEEN the platform callback threads and the pump: callbacks add raw
 // events from whatever thread delivers them, and the pump drains what is left

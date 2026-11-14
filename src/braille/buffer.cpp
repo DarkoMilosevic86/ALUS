@@ -496,7 +496,7 @@ std::string Buffer::windowRawText() const {
     //
     // NVDA passes `windowEndPos` here unchanged and so reports one character
     // too many; harmless for a log line, wrong for anything that measures the
-    // window (claude/FAZA7.md O8).
+    // window (docs/history/phase-7.md O8).
     return bufferPositionsToRawText(start, end - 1);
 }
 

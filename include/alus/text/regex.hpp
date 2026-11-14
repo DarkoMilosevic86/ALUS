@@ -5,7 +5,7 @@
 //
 // The regular expression engine ALUS uses for text processing.
 //
-// WHY THIS IS A WRAPPER AND NOT std::regex: 01-ARHITEKTURA.md §11.1 records a
+// WHY THIS IS A WRAPPER AND NOT std::regex: architecture.md §11.1 records a
 // trap NVDA fell into and had to fix. The four speech-dictionary entry types
 // with word boundaries (WORD, PART_OF_WORD, START_OF_WORD, END_OF_WORD) need a
 // `\w` THAT INCLUDES COMBINING MARKS. Python's standard `re` excludes them, so

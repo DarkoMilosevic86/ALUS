@@ -32,7 +32,7 @@ constexpr std::array<EventRow, 38> kEvents{{
     {"object:state-changed:checked", events::kStateChange},
     {"object:state-changed:pressed", events::kStateChange},
     {"object:state-changed:expanded", events::kStateChange},
-    // Ignored (FAZA10.md N121). Nothing in ALUS reads it -- offscreen is read
+    // Ignored (phase-10.md N121). Nothing in ALUS reads it -- offscreen is read
     // from the states when an object is spoken -- and gnome-shell sends 1700 of
     // them in three seconds of typing into the overview's search. Kept, they
     // used up the per-application budget of the limiter and pushed out the one

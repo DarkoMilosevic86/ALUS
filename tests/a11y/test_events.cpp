@@ -9,7 +9,7 @@
 // T4.5 — Window:Activate erases a pending StateChanged:Focused for the same
 //        object.
 //
-// These are phase 1's EventLimiter (01-ARHITEKTURA.md §3.4) doing its job with
+// These are phase 1's EventLimiter (architecture.md §3.4) doing its job with
 // phase 4's event names in it. Both halves have to be right: the limiter was
 // written and tested with platform-neutral names, and a wrong name here would
 // leave the whole mechanism switched off while every test of it still passed.
@@ -417,7 +417,7 @@ TEST_CASE("a live region announcement is spoken as a message", "[a11y][events]")
 
 TEST_CASE("a GTK 4 combo box: the shown item is its value, and a new one is said",
           "[a11y][events]") {
-    // FAZA10.md N124, the measured shape of AdwComboRow (GTK 4.18): no Value,
+    // phase-10.md N124, the measured shape of AdwComboRow (GTK 4.18): no Value,
     // no Selection; the choice is a label in the one list item, and the arrow
     // keys rename that label.
     A11yFixture fixture;
@@ -469,7 +469,7 @@ TEST_CASE("a GTK 4 combo box: the shown item is its value, and a new one is said
 }
 
 TEST_CASE("a selection in the focused list is where the user is", "[a11y][events]") {
-    // FAZA10.md N127, Nautilus 48 (GTK 4): opening a folder focuses the list
+    // phase-10.md N127, Nautilus 48 (GTK 4): opening a folder focuses the list
     // and selects the first file; type-ahead selects a file; only `selected`
     // comes, never a focus event.
     A11yFixture fixture;

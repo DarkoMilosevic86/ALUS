@@ -7,7 +7,7 @@
 // is.
 //
 // Port of NVDA's `review.py` (190 lines, transferred in full per
-// 01-ARHITEKTURA.md §8.1) plus the review half of `api.py`
+// architecture.md §8.1) plus the review half of `api.py`
 // (`getReviewPosition`, `setReviewPosition`). Three modes:
 //
 //     object    the text inside the navigator object      Object::makeTextRange

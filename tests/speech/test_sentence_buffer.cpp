@@ -6,7 +6,7 @@
 // T2.8 — ten lines with no full stop become ONE utterance, not ten.
 //
 // This is what makes say-all sound like reading rather than a list of lines
-// (01-ARHITEKTURA.md §4.4). The second test here is the detail that is easy to
+// (architecture.md §4.4). The second test here is the detail that is easy to
 // miss: the language of the held fragment has to travel with it.
 #include "alus/speech/sentence_buffer.hpp"
 

@@ -209,7 +209,7 @@ bool Registry::onPlatformEvent(PlatformEvent event) {
     // The arrival of every platform event, at IO level. Without it a gap in
     // the log could not tell "nothing arrived" from "it arrived and was
     // dropped" -- which is exactly what the Super-key investigation needed
-    // (FAZA10.md, N120).
+    // (phase-10.md, N120).
     if (core::Log::instance().isEnabledFor(core::LogLevel::Io)) {
         ALUS_IO("event in: {} ({}) app {:#x}", event.type,
                 name.empty() ? std::string_view{"ignored"} : name,
@@ -436,7 +436,7 @@ std::size_t Registry::pumpEvents() {
 }
 
 bool Registry::selectionFollowsFocus(const ObjectPtr& object) const {
-    // GTK 4 lists move the SELECTION and not the focus (FAZA10.md N127,
+    // GTK 4 lists move the SELECTION and not the focus (phase-10.md N127,
     // Nautilus 48): opening a folder focuses the list ("list") and selects
     // the first file; type-ahead selects the file whose name was typed; the
     // first arrow after opening selects the next row. Only `selected` comes,
@@ -511,7 +511,7 @@ void Registry::announceShownChoice() {
     // list, and the value ALUS derives (Object::value, shownChoiceText) is
     // simply different afterwards. So after every cycle that dispatched
     // anything, the focused combo box's value is compared with the one last
-    // seen and spoken when it moved (FAZA10.md N124). A combo box with Value
+    // seen and spoken when it moved (phase-10.md N124). A combo box with Value
     // or Selection is left alone: its own events already announce it.
     const ObjectPtr& focus = api_.focus();
     if (focus == nullptr || focus->role() != Role::ComboBox ||

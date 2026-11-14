@@ -6,7 +6,7 @@
 // Three kinds of paragraph.
 //
 // Port of NVDA's `documentNavigation/paragraphHelper.py` (301 lines) and
-// `sentenceHelper.py`. 01-ARHITEKTURA.md §11.2 names the three styles and one
+// `sentenceHelper.py`. architecture.md §11.2 names the three styles and one
 // convention that must be kept:
 //
 //     APPLICATION        trust the application's own paragraph unit

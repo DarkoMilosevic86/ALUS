@@ -5,7 +5,7 @@
 //
 // The plugin host: `dlopen`, the ABI check, and the two-phase uninstall.
 //
-// 01-ARHITEKTURA.md §12.3. The C side of the contract is `alus/alus-plugin.h`,
+// architecture.md §12.3. The C side of the contract is `alus/alus-plugin.h`,
 // which is the only header an add-on includes; this is the side that enforces
 // it.
 //

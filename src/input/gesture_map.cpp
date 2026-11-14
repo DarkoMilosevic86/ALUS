@@ -49,7 +49,7 @@ bool startsAGesture(std::string_view text) {
 // kb:shift+,`. Splitting on every comma turned those two into `kb:` and
 // `kb:shift+` -- identifiers no keyboard can produce -- so both commands were
 // unreachable, silently, in the generated map that every user gets
-// (claude/FAZA9.md N102). A comma is a separator only when another gesture
+// (docs/history/phase-9.md N102). A comma is a separator only when another gesture
 // follows it.
 std::vector<std::string_view> splitComma(std::string_view text) {
     std::vector<std::string_view> parts;
@@ -177,7 +177,7 @@ void GestureMap::add(std::string_view gesture, std::string_view location,
     }
     // An EXACT duplicate is dropped. Found by phase 9's gesture dialog, which
     // is the first caller to add a binding a user typed rather than one a file
-    // or the extractor produced (FAZA9.md N78).
+    // or the extractor produced (phase-9.md N78).
     //
     // Why it matters, and why it is fixed here rather than in the dialog: the
     // same binding written twice is one binding. Two identical entries show up

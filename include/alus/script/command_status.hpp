@@ -11,7 +11,7 @@
 // that says so, and it is what makes an unfinished command AUDIBLE:
 //
 //   [announce]   the key is bound and says the command is not in this
-//                version. §3.8's rule and FAZA6.md's O10: an expected gap is
+//                version. §3.8's rule and phase-6.md's O10: an expected gap is
 //                reported, never swallowed. A blind user can tell an
 //                unfinished feature from a broken one only if it speaks.
 //   [platform]   the key must NOT be bound, because it belongs to the

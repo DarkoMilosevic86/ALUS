@@ -5,7 +5,7 @@
 //
 // Braille INPUT: the display's own keyboard.
 //
-// 02-FAZE.md leaves this side of the phase to the MANUAL test -- `bk:dot7`,
+// phase-plan.md leaves this side of the phase to the MANUAL test -- `bk:dot7`,
 // `bk:dot8`, `bk:dot7+dot8` pressed on a real display. A manual test is not a
 // measurement that survives a refactor, so everything that does not need
 // hardware is asserted here instead, and what the manual test is left with is
@@ -125,7 +125,7 @@ private:
 
 TEST_CASE("the three reserved dot combinations are bindable on their own",
           "[braille][input]") {
-    // These three ARE the manual test of 02-FAZE.md, as identifiers: dot 7
+    // These three ARE the manual test of phase-plan.md, as identifiers: dot 7
     // erases, dot 8 is enter, dot 7+8 translates. Each has to reach the
     // script dispatcher by its own name, or binding it is impossible.
     const std::vector<std::string> erase = InputGesture{kDot7, false}.identifiers();

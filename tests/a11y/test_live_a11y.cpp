@@ -80,7 +80,7 @@ TEST_CASE("libatspi starts and the desktop can be read", "[live][a11y]") {
         // SKIP and not WARN + SUCCEED: the TAP reporter counts a warning as
         // its own test point, the plan line then disagrees with the count,
         // and meson reports the whole executable as ERROR -- turning the
-        // graceful skip this file promises into a failure (FAZA7.md N65).
+        // graceful skip this file promises into a failure (phase-7.md N65).
         SKIP("no accessibility bus: " + fixture.error);
     }
     std::printf("AT-SPI %s\n", AtspiBackend::platformVersion().c_str());

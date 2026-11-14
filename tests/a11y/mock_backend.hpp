@@ -22,7 +22,7 @@
 //     test, it is a coin toss.
 //
 // What it does NOT cover, and what therefore has to be measured live (see
-// tests/a11y/test_live_a11y.cpp and tools/phase4-object-check.sh): libatspi's
+// tests/a11y/test_live_a11y.cpp and phase-4.md): libatspi's
 // own behaviour -- the call timeout, the event delivery, the cache, and
 // whether a real toolkit says what this mock assumes it says.
 #pragma once
@@ -384,7 +384,7 @@ public:
     }
 
     // EVERY OFFSET IN AND OUT OF THIS MOCK IS A CODEPOINT, as it is in
-    // AT-SPI -- measured on Chrome / AT-SPI 2.56.2 (FAZA10.md N113). The text
+    // AT-SPI -- measured on Chrome / AT-SPI 2.56.2 (phase-10.md N113). The text
     // is stored as UTF-8 and converted at the edge.
     //
     // It counted BYTES until N113, and that is how the defect survived: the

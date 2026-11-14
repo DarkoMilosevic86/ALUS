@@ -11,7 +11,7 @@
 //       SetKeyGrabs(in au modifier_keysyms, in a(uu) keystrokes);
 //       signal KeyEvent(b released, u state, u keysym, u unichar, q keycode);
 //
-// WHY NOT libatspi's AtspiDevice, which 01-ARHITEKTURA.md §5.2 named. Reading
+// WHY NOT libatspi's AtspiDevice, which architecture.md §5.2 named. Reading
 // `atspi-device-a11y-manager.c` (at-spi2-core 2.56.2) answered the question
 // phase 0 left open, and the answer rules that layer out for ALUS:
 //
@@ -34,7 +34,7 @@
 //
 // What this costs: the X11 and legacy AT-SPI paths that libatspi would have
 // given for free. They are a second IInputBackend (that is what the interface
-// is for), and Z6 is met by the same build choosing a backend at run time, not
+// is for), and H6 is met by the same build choosing a backend at run time, not
 // by compiling differently.
 //
 // TWO THINGS THE COMPOSITOR DOES NOT DO FOR US, both confirmed in that source:
@@ -76,7 +76,7 @@ namespace alus::input {
 // initializers cannot be used in a default argument of the enclosing class.
 struct A11yManagerOptions {
     // The D-Bus name ALUS asks for. Mutter's allowlist contains exactly one
-    // assistive-technology name, `org.gnome.Orca` (03-RIZICI.md R1, confirmed
+    // assistive-technology name, `org.gnome.Orca` (risks.md R1, confirmed
     // by the control experiment N6: with `org.alus` every call is refused).
     // Until the upstream patch lands, ALUS BORROWS Orca's name, which also
     // means Orca must not be running (N8).
@@ -144,7 +144,7 @@ private:
     // All three of these require `mutex_` to be held. The convention is
     // explicit because the first bug in this class was the obvious one: a
     // locked `setGrabs` calling a locking `callAsync` and deadlocking the
-    // process at start-up (claude/FAZA3.md N28).
+    // process at start-up (docs/history/phase-3.md N28).
     void sendGrabsLocked();
     void callAsyncLocked(const char* method, GVariant* parameters);
     void callAsync(const char* method, GVariant* parameters);

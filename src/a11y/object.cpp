@@ -280,7 +280,7 @@ Object::Object(Registry& registry, Ref ref)
                      // Value nor Selection: the shown choice is the one
                      // `list item` inside it, measured as
                      //     combo box > panel > panel > list > list item > panel > label
-                     // Orca reads it from there too (FAZA10.md N124).
+                     // Orca reads it from there too (phase-10.md N124).
                      return shownChoiceText(*this);
                  }
                  return std::string{};

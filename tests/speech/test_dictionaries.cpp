@@ -5,7 +5,7 @@
 //
 // T2.10 — a dictionary entry with a diacritic and a word boundary works.
 //
-// This is the trap from 01-ARHITEKTURA.md §11.1 made executable. With a `\w`
+// This is the trap from architecture.md §11.1 made executable. With a `\w`
 // that excludes combining marks, an entry for a word containing a diacritic
 // either fails to match or matches inside a longer word. Serbian is ALUS's
 // first locale, so this is not a corner case.

@@ -3,7 +3,7 @@
 //
 // This file is part of ALUS (Access Linux Using Speech).
 //
-// The review command group: the numpad, as the manual test of 02-FAZE.md
+// The review command group: the numpad, as the manual test of phase-plan.md
 // presses it. These are the commands the user actually touches, so they are
 // driven here by name, through the same `script::Script` the dispatcher would
 // have found.

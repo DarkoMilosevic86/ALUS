@@ -5,7 +5,7 @@
 //
 // The sentence buffer: why say-all sounds continuous.
 //
-// Port of NVDA's `speech/speechWithoutPauses.py`. See 01-ARHITEKTURA.md §4.4.
+// Port of NVDA's `speech/speechWithoutPauses.py`. See architecture.md §4.4.
 //
 // A synthesizer inserts an utterance-final pause at the end of every utterance
 // it is given. Feed it one line of a document at a time and say-all stutters

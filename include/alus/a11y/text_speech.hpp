@@ -10,7 +10,7 @@
 // `speakSelectionChange` and the selection message helpers.
 //
 // It lives in the object model for the same reason `object_speech.hpp` does
-// (claude/FAZA4.md O1): the dependency runs a11y -> speech and never back, and
+// (docs/history/phase-4.md O1): the dependency runs a11y -> speech and never back, and
 // a `text::ControlField` carries an `a11y::Role`. Every function here is PURE
 // except the three that speak, so a test asserts on what WOULD be said with no
 // synthesizer (which is how T5.6 and T5.7 are measured at all).

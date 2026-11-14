@@ -5,7 +5,7 @@
 //
 // gnome-shell: the activities overview, its search, the window switcher.
 //
-// WHY THIS MODULE EXISTS (FAZA10.md N121). Typing into the overview's search
+// WHY THIS MODULE EXISTS (phase-10.md N121). Typing into the overview's search
 // finds things -- "datot" brings up Files -- and gnome-shell marks the result
 // Enter will start with the SELECTED state while the keyboard focus stays in
 // the entry. Measured on GNOME 48:

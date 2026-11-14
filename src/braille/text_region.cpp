@@ -301,7 +301,7 @@ void TextInfoRegion::addTextWithFields(const text::TextRange& range, bool isSele
                 // containers the first chunk already rendered. NVDA tests
                 // `_startOfNode`; ALUS can do better, because §9.1 gave every
                 // field a stable identity -- so the test is "have I shown
-                // this exact control in this update" (claude/FAZA7.md O5).
+                // this exact control in this update" (docs/history/phase-7.md O5).
                 stack.push_back(*field);
                 continue;
             }
@@ -483,7 +483,7 @@ void TextInfoRegion::update() {
             // leaves the last cell mapped to the stripped newline instead of
             // to the end of the line. Trimming costs nothing and makes the
             // map exact, so a routing key on the last cell of a line lands at
-            // the end of that line (claude/FAZA7.md O6).
+            // the end of that line (docs/history/phase-7.md O6).
             rawToContentPos_.resize(length);
         }
     }

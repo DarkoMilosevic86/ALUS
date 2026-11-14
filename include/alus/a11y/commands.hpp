@@ -102,7 +102,7 @@ private:
     void say(const std::string& text) const;
     void spell(const std::string& text) const;
     // The third press: spell with character descriptions. Phase 5 made this
-    // real (FAZA4.md O11); before it, the third press spelled like the second.
+    // real (phase-4.md O11); before it, the third press spelled like the second.
     void describeCharacters(const std::string& text) const;
     // NVDA's "press once to say, twice to spell, three times to describe"
     // pattern, which every object query command uses.

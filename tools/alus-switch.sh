@@ -27,7 +27,7 @@
 #                                        # debug log, and the other reader
 #                                        # comes back by itself when ALUS exits
 #
-# `measure` is for the live comparison in claude/MERENJE-ORCA.md. The first
+# `measure` is for the live comparison in docs/history/orca-comparison.md. The first
 # pass did the swap by hand and the way back failed: flipping the desktop
 # switch did not restart the other reader, the first restart did not survive,
 # and the user sat without a reader until it was started by hand. So the way
@@ -187,7 +187,7 @@ to_alus() {
   # "ALUS is running" is NOT enough to be done: BOTH can be running at once,
   # and that is the broken state this script exists to get out of. It happens
   # for real -- launching ALUS from the application menu while the other
-  # reader is up produces exactly it (FAZA9.md N97). Only return early when
+  # reader is up produces exactly it (phase-9.md N97). Only return early when
   # ALUS is up AND nothing else is.
   if alus_running && ! other_running; then
     say "ALUS is already running"
@@ -203,7 +203,7 @@ to_alus() {
   # opening the activities overview sent 344 `showing` and 132
   # `children-changed` events and not one focus), so the Super key -- the
   # overview, the app grid, the search -- said nothing under ALUS, and the
-  # browsers read the same key (FAZA10.md N120). This script used to turn it
+  # browsers read the same key (phase-10.md N120). This script used to turn it
   # off for the whole time ALUS ran.
   #
   # It was off to keep the session from restarting the other reader, and the

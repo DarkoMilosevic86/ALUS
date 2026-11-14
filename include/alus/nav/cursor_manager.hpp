@@ -5,7 +5,7 @@
 //
 // `CursorManager`: the caret ALUS owns.
 //
-// Port of NVDA's `cursorManager.py` as 01-ARHITEKTURA.md §8.2 specifies: every
+// Port of NVDA's `cursorManager.py` as architecture.md §8.2 specifies: every
 // movement command by line, word, character, paragraph, sentence and page;
 // selection with shift; `control+a`; `control+c`; and find
 // (`alus+control+f`, `alus+f3`, `alus+shift+f3`).

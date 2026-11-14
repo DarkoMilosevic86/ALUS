@@ -104,7 +104,7 @@ TEST_CASE("T3.6 the ALUS key pressed twice asks for a real key press") {
     harness.bind("kb:alus+t", "reportSomething");
     const std::uint32_t keycode = 118;
 
-    // First press: ALUS keeps it, whatever it is bound to (Z2).
+    // First press: ALUS keeps it, whatever it is bound to (H2).
     CHECK(harness.press(keyDown(keysym::kInsert, 0, keycode)));
     CHECK(harness.press(keyUp(keysym::kInsert, 0, keycode)));
     CHECK(harness.manager->stats().alusKeyPassThroughRequested == 0);
@@ -414,7 +414,7 @@ TEST_CASE("the emergency release drops every grab") {
 }
 
 // ---------------------------------------------------------------------------
-// What the interactive run against the real compositor found (claude/FAZA3.md,
+// What the interactive run against the real compositor found (docs/history/phase-3.md,
 // "Interaktivno merenje"). All three of these were measured on GNOME 48.7 and
 // two of them were audible, which is why they are regression tests now.
 // ---------------------------------------------------------------------------
@@ -554,7 +554,7 @@ public:
 }  // namespace
 
 TEST_CASE("a double press with the ALUS key held counts as a repeat") {
-    // Measured (FAZA10.md N122): numpad Insert held, F12 twice 200 ms apart;
+    // Measured (phase-10.md N122): numpad Insert held, F12 twice 200 ms apart;
     // the second press said the time again instead of the date.
     Harness harness;
     RepeatProbe probe{harness.dispatcher};

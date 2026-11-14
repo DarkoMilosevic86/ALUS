@@ -5,7 +5,7 @@
 //
 // A module's voice list, split into voices and variants when it has them.
 //
-// WHY (FAZA10.md N126). speech-dispatcher's espeak-ng module reports 14805
+// WHY (phase-10.md N126). speech-dispatcher's espeak-ng module reports 14805
 // "voices": 140 languages times 105 variants, each as "Serbian+Adam" with
 // language "sr" and variant "Adam". As one list -- in the settings window or
 // in the alus+control+arrows ring -- that is unusable. NVDA's eSpeak driver

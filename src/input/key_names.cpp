@@ -143,7 +143,7 @@ constexpr std::pair<std::string_view, Modifier> kModifierNames[] = {
     {"leftwindows", Modifier::Windows},
     {"rightwindows", Modifier::Windows},
     {"alus", Modifier::Alus},
-    // Accepted only so that an imported gesture map keeps working (Z3); see
+    // Accepted only so that an imported gesture map keeps working (H3); see
     // KeyNames::kImportedAlusKeyName.
     {"nvda", Modifier::Alus},
 };

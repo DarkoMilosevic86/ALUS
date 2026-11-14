@@ -6,7 +6,7 @@
 # `alus-settings` is a program of its own, and that was measured rather than
 # chosen: a window in the screen reader's own process cannot be read at all,
 # because ALUS's synchronous AT-SPI calls about it are answered from the very
-# main loop they are blocking (claude/FAZA9.md N79). So this entry starts a
+# main loop they are blocking (docs/history/phase-9.md N79). So this entry starts a
 # program, and it works whether or not ALUS itself is running -- a user can
 # set the voice before turning the screen reader on.
 [Desktop Entry]

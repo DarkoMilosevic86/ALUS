@@ -236,7 +236,7 @@ std::optional<text::ControlField> ControlFieldSynth::forObject(const a11y::Objec
     // wrote with `explicit-name=true` (measured: toolbar buttons have it, the
     // page's headings and links do not). Said as a name and then again as the
     // text, `h` read "Prvi naslov stranice, Prvi naslov stranice, heading
-    // level 1" (FAZA10.md N116). NVDA keys the same decision on the same
+    // level 1" (phase-10.md N116). NVDA keys the same decision on the same
     // attribute; the text comparison is there for a toolkit that does not send
     // it, so that a real label is never dropped on a guess.
     if (!field.name.empty() && hasText(object)) {
@@ -273,7 +273,7 @@ std::optional<text::ControlField> ControlFieldSynth::forObject(const a11y::Objec
     // single-line control) and "list" was spoken on EVERY line inside it
     // instead of once on entry. The same state is what the "report lists"
     // setting is tested against, so that switch did nothing on the web either.
-    // FAZA10.md N115.
+    // phase-10.md N115.
     //
     // An editable object keeps its states untouched: a list box in a form is
     // focusable, not editable, so the FOCUSABLE test is what keeps it a
@@ -328,7 +328,7 @@ std::optional<text::ControlField> ControlFieldSynth::forObject(const a11y::Objec
     // way NVDA presents a heading OBJECT). The presentation rules for fields
     // test `Role::Heading` alone: a `Heading2` field matched no category,
     // fell through to Layout and was silent, so neither the down arrow nor `h`
-    // ever said "heading level 2" -- only the heading's text (FAZA10.md N116).
+    // ever said "heading level 2" -- only the heading's text (phase-10.md N116).
     if (field.role >= Role::Heading1 && field.role <= Role::Heading6) {
         const int fromRole = static_cast<int>(field.role) - static_cast<int>(Role::Heading1) + 1;
         field.role = Role::Heading;

@@ -9,7 +9,7 @@
 // process, and this service starts it -- because a window in the screen
 // reader's own process cannot be read at all: ALUS's synchronous AT-SPI calls
 // about it are answered from the very main loop they are blocking
-// (claude/FAZA9.md N79, and the file comment in src/gui/main.cpp). So this
+// (docs/history/phase-9.md N79, and the file comment in src/gui/main.cpp). So this
 // layer is the same whether or not GTK is installed; what changes is whether
 // `alus-settings` exists to start.
 //

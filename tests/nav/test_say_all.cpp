@@ -44,7 +44,7 @@ namespace {
 
 // Whether Memcheck is running, as its own test setup announces.
 //
-// WHY A LATENCY ASSERTION HAS TO ASK. 02-FAZE.md rule 2 says a latency budget
+// WHY A LATENCY ASSERTION HAS TO ASK. phase-plan.md rule 2 says a latency budget
 // is a test and not a note, and T5.8's budget is 50 ms from a key press to
 // say-all stopping. Under Memcheck every instruction costs 20 to 50 times
 // more, so the same code measures 90 ms and the assertion fails for a reason
@@ -190,7 +190,7 @@ TEST_CASE("T5.8 a key press stops say all at once", "[nav][sayall][T5.8]") {
 TEST_CASE("T5.8 the key event hook stops say all before the script runs",
           "[nav][sayall][T5.8]") {
     // The wiring, not only the stop: phase 3 left `isSayAllRunning` empty and
-    // asked phase 5 to fill it (FAZA4.md handover point 5). This is a real
+    // asked phase 5 to fill it (phase-4.md handover point 5). This is a real
     // input service with a real GestureManager, fed a real key event.
     alus::testing::QuietLog quiet;
     alus::testing::NavFixture fixture;
@@ -267,7 +267,7 @@ TEST_CASE("say all falls back to reading objects when there is no text",
 
 TEST_CASE("say all goes on into the next paragraph object, and the caret with it",
           "[nav][sayall]") {
-    // FAZA10.md N127, LibreOffice Writer: every paragraph is an object of its
+    // phase-10.md N127, LibreOffice Writer: every paragraph is an object of its
     // own, linked by FLOWS_TO, and say-all stopped after the first line.
     NavFixture fixture;
     auto& backend = fixture.backend;
@@ -315,7 +315,7 @@ TEST_CASE("say all goes on into the next paragraph object, and the caret with it
 }
 
 TEST_CASE("the focus say-all moves through paragraphs is not announced", "[nav][sayall]") {
-    // FAZA10.md N128, LibreOffice Writer: the focus follows the caret into
+    // phase-10.md N128, LibreOffice Writer: the focus follows the caret into
     // every paragraph, and announcing it read each paragraph twice, with
     // "paragraph, multi line, editable" before it.
     NavFixture fixture;

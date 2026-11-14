@@ -9,7 +9,7 @@
 // the app module and every global plugin get to add, remove and reorder entries
 // in `clsList`, and Python builds a type from the result. C++ cannot build
 // types at run time, so ALUS composes BEHAVIOUR OBJECTS instead
-// (01-ARHITEKTURA.md §6.2) and keeps the contract that matters:
+// (architecture.md §6.2) and keeps the contract that matters:
 //
 //   * the list is ordered and the FIRST entry wins;
 //   * each stage may insert at the front, append, or REMOVE what an earlier

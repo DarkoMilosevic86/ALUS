@@ -5,7 +5,7 @@
 //
 // Where a document's control fields come from.
 //
-// This is half of what 01-ARHITEKTURA.md §9.3 calls the most important new
+// This is half of what architecture.md §9.3 calls the most important new
 // code in ALUS. AT-SPI hands over flat text plus attributes per offset; it
 // does NOT hand over NVDA's nested `controlStart`/`controlEnd` stream, and
 // every piece of document reading rests on that stream. The other half --
@@ -42,7 +42,7 @@
 //  3. FOUR STATES ARE DISCARDED (editable, multiline, focused, focusable).
 //     They are properties of the CONTAINER the user is already in, not news
 //     about the control they just entered; NVDA discards the first three and
-//     the fourth is a measured addition (FAZA6.md).
+//     the fourth is a measured addition (phase-6.md).
 //
 // THREADING: main thread only -- it reads an a11y::Object.
 #pragma once

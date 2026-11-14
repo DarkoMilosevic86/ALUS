@@ -337,8 +337,8 @@ std::string AtspiBackend::path(Ref ref) {
     // path: the top of the page. Every caret move therefore started from the
     // top -- `h` found the first heading again and again, the down arrow read
     // the second line forever, the up arrow said "edge of document" -- which
-    // is what the second live pass heard in Chrome (claude/MERENJE-ORCA.md,
-    // FAZA10.md N112). The mock backend had always answered a unique path, so
+    // is what the second live pass heard in Chrome (docs/history/orca-comparison.md,
+    // phase-10.md N112). The mock backend had always answered a unique path, so
     // no test could see it.
     auto* object = ATSPI_OBJECT(toAccessible(ref));
     if (object == nullptr || object->path == nullptr) {
@@ -683,7 +683,7 @@ int AtspiBackend::caretOffset(Ref ref) {
 // Phase 5: the text interface
 //
 // Every offset below is a UTF-8 BYTE offset, which is what AT-SPI counts in.
-// The text layer keeps those offsets as they are (01-ARHITEKTURA.md §7.3), so
+// The text layer keeps those offsets as they are (architecture.md §7.3), so
 // nothing in this file converts anything.
 // ---------------------------------------------------------------------------
 
@@ -1512,7 +1512,7 @@ std::vector<Ref> AtspiBackend::matchesFrom(Ref root, Ref from, const MatchRule& 
         // libatspi consider only the object's immediate children, so a
         // document of any depth answers nothing: measured on a Wikipedia
         // article, traverse=FALSE found 0 links in 0.09 ms where TRUE found
-        // 333 in 2.70 ms (FAZA6.md N-traverse). Quick navigation needs the
+        // 333 in 2.70 ms (phase-6.md N-traverse). Quick navigation needs the
         // whole subtree.
         array = atspi_collection_get_matches_from(
             collection.value, toAccessible(from), matchRule.rule, toSortOrder(order),

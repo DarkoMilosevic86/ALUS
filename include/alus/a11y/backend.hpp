@@ -6,7 +6,7 @@
 // The platform boundary of the object model: one interface, every AT-SPI call
 // behind it.
 //
-// 01-ARHITEKTURA.md §6.1 says ALUS has ONE API layer, `alus::a11y` over
+// architecture.md §6.1 says ALUS has ONE API layer, `alus::a11y` over
 // `libatspi`. This header is where that layer meets the platform, and it is an
 // interface for one reason that is worth stating plainly: EVERY CALL HERE IS A
 // BLOCKING D-BUS ROUND TRIP to another process. That has two consequences
@@ -189,7 +189,7 @@ struct LinkInfo {
 // Collection: the search service the browse mode is built on
 // ---------------------------------------------------------------------------
 
-// `org.a11y.atspi.Collection.MatchRule`. 01-ARHITEKTURA.md §9.1 point 2: this
+// `org.a11y.atspi.Collection.MatchRule`. architecture.md §9.1 point 2: this
 // is the DIRECT REPLACEMENT for NVDA's `VBuf_findNodeByAttributes`, and the
 // reason ALUS does not port the virtual buffers at all. One D-Bus round trip
 // answers "the next heading", instead of a tree walk over D-Bus.
@@ -323,7 +323,7 @@ public:
     // ---- text ----
     //
     // EVERY OFFSET HERE IS A UTF-8 BYTE OFFSET, which is what AT-SPI counts in
-    // (01-ARHITEKTURA.md §7.3). The text layer above keeps those offsets
+    // (architecture.md §7.3). The text layer above keeps those offsets
     // unchanged and converts to character indices only where a human-facing
     // count is needed; see include/alus/text/offsets.hpp for why that is the
     // decision and not the other way round.

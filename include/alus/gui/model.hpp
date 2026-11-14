@@ -5,7 +5,7 @@
 //
 // What the settings window CONTAINS, as data, with no GTK in sight.
 //
-// WHY THE MODEL IS SEPARATE FROM THE WIDGETS. 02-FAZE.md's rule for every
+// WHY THE MODEL IS SEPARATE FROM THE WIDGETS. phase-plan.md's rule for every
 // phase is that the exit criterion is a runnable test. A GTK window needs a
 // display, and a test that needs a display does not run in CI -- so if the
 // pages were built inline in `settings_window.cpp`, T9.1 ("the shortcuts open
@@ -120,7 +120,7 @@ struct Page {
 // WHY THESE TWO SETTINGS ARE CHOICES AND NOT TEXT ENTRIES. They used to be
 // free text, which meant typing the exact name of a voice -- the one thing a
 // user who cannot make out the synthesizer cannot find out -- and an empty
-// entry was written as `voice=\s` (FAZA10.md N107). A choice can only hold a
+// entry was written as `voice=\s` (phase-10.md N107). A choice can only hold a
 // value the synthesizer actually has.
 struct SpeechChoices {
     // False when speech-dispatcher could not be reached. The rows then offer

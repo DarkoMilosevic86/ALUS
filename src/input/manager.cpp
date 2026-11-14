@@ -388,7 +388,7 @@ bool GestureManager::onKeyDown(const KeyEvent& event) {
                                      sinceRelease < config_.multiPressTimeout;
         if (bypassAlusKey_ || repeatedQuickly) {
             // Pressed twice inside the multi-press timeout: the user wants the
-            // key to do its ordinary job (Z2). The flag stays set until the
+            // key to do its ordinary job (H2). The flag stays set until the
             // key is released, so auto-repeat does not flip it back.
             bypassAlusKey_ = true;
             treatAsAlusKey = false;
@@ -449,7 +449,7 @@ bool GestureManager::onKeyDown(const KeyEvent& event) {
 
     bool consumed = result == Result::Executed || result == Result::Captured;
     if (!consumed && treatAsAlusKey) {
-        // The ALUS key is never given to the system (Z2), even when nothing
+        // The ALUS key is never given to the system (H2), even when nothing
         // was bound to it.
         consumed = true;
     }
@@ -617,7 +617,7 @@ void GestureManager::applySpeechEffect(const Gesture& /*gesture*/, SpeechEffect 
                 // Immediate, like the cancel above, and for the same reason:
                 // the two must run in the order the keys came. Shift (pause)
                 // then Tab (cancel) with the pause queued behind the cancel
-                // left speech paused after it (FAZA10.md N123).
+                // left speech paused after it (phase-10.md N123).
                 loop_.queueFunction([this, pause]() { hooks_.pauseSpeech(pause); }, true,
                                     "pauseSpeech");
             }

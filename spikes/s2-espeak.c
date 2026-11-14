@@ -1,7 +1,7 @@
 /*
  * S2b — Direktni `libespeak-ng` u AUDIO_OUTPUT_SYNCHRONOUS modu.
  *
- * Poređenje koje 02-FAZE.md traži za S2: da li `EspeakDirectSynth` nosi
+ * Poređenje koje phase-plan.md traži za S2: da li `EspeakDirectSynth` nosi
  * prednost koja opravdava drugi backend, ili `SsipSynth` ostaje sam.
  *
  * Šta se meri — i šta se NE meri:

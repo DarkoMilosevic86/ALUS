@@ -7,7 +7,7 @@
 //
 // Port of NVDA's `_iterNodesByType` and its `_searchableAttribsForNodeType`
 // tables (`virtualBuffers/gecko_ia2.py`), rewritten against
-// `org.a11y.atspi.Collection` exactly as 01-ARHITEKTURA.md §9.2 specifies:
+// `org.a11y.atspi.Collection` exactly as architecture.md §9.2 specifies:
 //
 //     _iterNodesByType(itemType, direction, pos)
 //       -> Collection::GetMatchesFrom(current, matchRule, sortBy = FLOW,

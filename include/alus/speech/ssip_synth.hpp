@@ -5,7 +5,7 @@
 //
 // The speech-dispatcher driver. ALUS's default synthesizer.
 //
-// See 01-ARHITEKTURA.md §4.5. The choice is measured, not assumed
+// See architecture.md §4.5. The choice is measured, not assumed
 // (spikes/RESULTS.md S2, decision (b)): through SSIP with the espeak-ng module,
 // speech starts 11.5 ms after speak() at p95 and stops 29.0 ms after cancel()
 // at p95, against budgets of 50 and 30 ms. And it gives the user every voice

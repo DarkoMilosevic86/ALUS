@@ -5,7 +5,7 @@
  *
  * The ALUS add-on ABI, version 1.
  *
- * 01-ARHITEKTURA.md §12.3. This is the ONLY header an add-on includes, it is
+ * architecture.md §12.3. This is the ONLY header an add-on includes, it is
  * C and not C++, and it is the one file in ALUS whose layout may never change:
  * an add-on compiled against it must keep working against a later ALUS.
  *

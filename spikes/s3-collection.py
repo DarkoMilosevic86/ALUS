@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-S3 — Quick-nav preko AT-SPI Collection (Faza 0, 02-FAZE.md).
+S3 — Quick-nav preko AT-SPI Collection (Faza 0, phase-plan.md).
 
 Pitanje: da li je `Collection.GetMatchesFrom` dovoljno brz da browse mode
-(Faza 6) ne mora da drži lokalni keš drveta — rizik R3 iz 03-RIZICI.md.
+(Faza 6) ne mora da drži lokalni keš drveta — rizik R3 iz risks.md.
 
 Izlazni kriterijum: p95 latencija jednog quick-nav skoka < 20 ms u Firefox-u
 i u Chrome-u, nad stvarnim Wikipedia člankom.

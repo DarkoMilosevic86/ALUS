@@ -10,7 +10,7 @@
 // the layout puts on it. Wayland hands ALUS a keysym at the CURRENT shift
 // level instead, so the same key press arrives as `@` on a US layout and as
 // `"` on a Serbian one — and a gesture written `kb:nvda+shift+'` (which the
-// Serbian locale map really does use, 00-VIZIJA.md Z8) would never match.
+// Serbian locale map really does use, vision.md H8) would never match.
 //
 // So the level-1 keysym has to be recovered from the keycode. libxkbcommon can
 // do that from a keymap built out of the user's active layout, which GNOME
@@ -42,7 +42,7 @@ struct KeyMapOptions {
     std::string options;
     std::string model;
     // The compositor reports X11-style keycodes (evdev code + 8), as libatspi
-    // has always done. Measured, not assumed — see claude/FAZA3.md.
+    // has always done. Measured, not assumed — see docs/history/phase-3.md.
     int keycodeOffset = 0;
 };
 

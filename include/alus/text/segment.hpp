@@ -5,11 +5,11 @@
 //
 // Segmentation: where does a character, a word or a sentence begin and end.
 //
-// Deliverable `alus::text::WordSeg` of 02-FAZE.md, under the name this ended
+// Deliverable `alus::text::WordSeg` of phase-plan.md, under the name this ended
 // up deserving: it segments characters and sentences as well as words, and
-// calling that `WordSeg` would misname two thirds of it (see FAZA5.md O1).
+// calling that `WordSeg` would misname two thirds of it (see phase-5.md O1).
 //
-// 01-ARHITEKTURA.md §7.3 is explicit: ALUS uses ICU AND ONLY ICU, and NVDA's
+// architecture.md §7.3 is explicit: ALUS uses ICU AND ONLY ICU, and NVDA's
 // `textUtils/uniscribe.py` is deleted rather than replaced. That is a better
 // position than NVDA's, not a worse one:
 //

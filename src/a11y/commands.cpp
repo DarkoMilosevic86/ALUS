@@ -81,7 +81,7 @@ void ObjectCommands::describeCharacters(const std::string& text) const {
 void ObjectCommands::sayOrSpell(const std::string& text) const {
     // NVDA: once says it, twice spells it, three times describes each
     // character. The third press is what phase 5 made different from the
-    // second (FAZA4.md O11).
+    // second (phase-4.md O11).
     if (repeatCount() >= 2) {
         describeCharacters(text);
         return;

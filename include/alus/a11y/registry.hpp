@@ -5,7 +5,7 @@
 //
 // The object model's hub: the event stream in, objects out.
 //
-// What belongs here (01-ARHITEKTURA.md §6.1, §3.4, §3.3):
+// What belongs here (architecture.md §6.1, §3.4, §3.3):
 //
 //   * the subscription to the platform's events, with `properties`;
 //   * the two-stage event limiter, which is NOT optional -- Chromium loading a

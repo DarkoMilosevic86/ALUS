@@ -6,7 +6,7 @@
 // Character and word echo.
 //
 // Port of NVDA's `speech.speakTypedCharacters` and its word buffer
-// (01-ARHITEKTURA.md §5.2). Three behaviours matter and all three are here:
+// (architecture.md §5.2). Three behaviours matter and all three are here:
 //
 //   * a typed character is SPELLED, not spoken as text, so that "a" is "a"
 //     and not a word;

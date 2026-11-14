@@ -5,7 +5,7 @@
 //
 // Script dispatch: the ten-step lookup, and script execution.
 //
-// Port of NVDA's `scriptHandler` (01-ARHITEKTURA.md §5.1, §5.3). The ten steps
+// Port of NVDA's `scriptHandler` (architecture.md §5.1, §5.3). The ten steps
 // are not a heuristic; the ORDER is the behaviour users know:
 //
 //    1. the gesture's own scriptable object (a braille display for `br:`)

@@ -300,7 +300,7 @@ Writer:   document text  [Accessible,Collection,Component,Selection]
 Nautilus: nijedan objekat u celom drvetu ne oglašava Collection
 ```
 
-`FAZA6.md` (red 82) kaže kategorično: „LibreOffice ne izlaže `Collection`, pa
+`phase-6.md` (red 82) kaže kategorično: „LibreOffice ne izlaže `Collection`, pa
 `matchesFrom` odgovori prazno i korisnik čuje 'no next heading', što je
 **istina**." Prva polovina te tvrdnje je **netačna za ovu verziju**.
 

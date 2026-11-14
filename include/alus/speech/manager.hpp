@@ -5,7 +5,7 @@
 //
 // The speech manager: queueing, priorities, indexes, callbacks, profile latch.
 //
-// Port of NVDA's `speech/manager.py` (773 lines), which 01-ARHITEKTURA.md §4.1
+// Port of NVDA's `speech/manager.py` (773 lines), which architecture.md §4.1
 // calls the hardest-won logic in NVDA. The flow, unchanged from NVDA:
 //
 //   1. speak() → queueSpeechSequence() for the caller's priority

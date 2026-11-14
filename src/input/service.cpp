@@ -51,7 +51,7 @@ Service::~Service() { terminate(); }
 
 void Service::registerDefaults(config::Manager& config) {
     // NVDA's own defaults and NVDA's own key names, so that a user arriving
-    // from NVDA finds the same screen reader (Z1).
+    // from NVDA finds the same screen reader (H1).
     config.setDefault("keyboard", "keyboardLayout", "desktop");
     config.setDefault("keyboard", "alusKeyInsert", "true");
     config.setDefault("keyboard", "alusKeyNumpadInsert", "true");
@@ -221,7 +221,7 @@ void Service::loadMaps() {
         return;
     }
     // Layer 1: the user's own map. The same file NVDA writes, so an NVDA user
-    // can copy it across unchanged (Z3).
+    // can copy it across unchanged (H3).
     const std::filesystem::path userPath = options_.userGestureMap.empty()
                                                ? config_.paths().configDir / "gestures.ini"
                                                : options_.userGestureMap;

@@ -24,7 +24,7 @@
 //
 // WITHOUT brltty IT SKIPS, like every other live check in this project: a
 // build machine with no braille display is not a broken ALUS. With one it is
-// the automatic half of what FAZA7.md leaves to the manual test, so the
+// the automatic half of what phase-7.md leaves to the manual test, so the
 // moment a display exists this runs instead of being read.
 //
 // IT DOES NOT TAKE THE DISPLAY AWAY FROM A RUNNING SCREEN READER for longer
@@ -75,7 +75,7 @@ TEST_CASE("BrlAPI answers a size, takes a frame and gives its keys back",
         // SKIP and not WARN + SUCCEED, because the TAP reporter counts a
         // warning as its own test point and the plan line then disagrees
         // with the count -- which meson reports as ERROR, turning a skip
-        // into a failure (FAZA7.md N65).
+        // into a failure (phase-7.md N65).
         SKIP("no brltty (" + error +
              ") -- for a virtual display: brltty -b no -d /dev/null -x no -n");
     }

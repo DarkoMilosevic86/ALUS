@@ -5,7 +5,7 @@
 //
 // Event dispatch: a chain with an explicit continuation.
 //
-// Port of NVDA's `eventHandler.py:1-166`. See 01-ARHITEKTURA.md §3.3 — the most
+// Port of NVDA's `eventHandler.py:1-166`. See architecture.md §3.3 — the most
 // valuable extensibility pattern in NVDA. Levels 1-3 receive `(event, next)` and
 // DECIDE whether to continue; level 4 is terminal and gets no continuation:
 //

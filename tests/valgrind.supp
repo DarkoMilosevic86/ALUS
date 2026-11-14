@@ -55,7 +55,7 @@
 #
 # Measured while adding the input backend (phase 3): with the real backend the
 # process ends with exactly one such block, 368 bytes, GLib's never-joined
-# worker. See claude/FAZA3.md.
+# worker. See docs/history/phase-3.md.
 {
    glib-unnamed-worker-thread-tls
    Memcheck:Leak

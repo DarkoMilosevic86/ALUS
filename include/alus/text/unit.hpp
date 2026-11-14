@@ -5,7 +5,7 @@
 //
 // The units a text range can be expanded to or moved by.
 //
-// Port of NVDA's `textInfos.UNIT_*` constants (01-ARHITEKTURA.md §7.1). They
+// Port of NVDA's `textInfos.UNIT_*` constants (architecture.md §7.1). They
 // are an enum here rather than strings, for a reason that is not style: a
 // misspelt unit in NVDA is a run-time LookupError in a screen reader, and
 // every `unit` argument in this phase comes from a command table.

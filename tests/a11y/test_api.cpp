@@ -7,7 +7,7 @@
 // T4.9 — setFocusObject returns false for a dead object, and the caller looks.
 //
 // The focus ancestor chain is the least visible and most load-bearing piece of
-// the object model (01-ARHITEKTURA.md §6.4). Everything hangs off it: which
+// the object model (architecture.md §6.4). Everything hangs off it: which
 // ancestors are announced on a focus change, which are not announced again,
 // where the script dispatch looks for a binding, and what the foreground
 // window is.

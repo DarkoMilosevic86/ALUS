@@ -1,6 +1,6 @@
 # Faza 2 — Govor: rezultati
 
-> Izveštaj o izvršenoj fazi. Prati `02-FAZE.md` → *Faza 2 — Govor*.
+> Izveštaj o izvršenoj fazi. Prati `phase-plan.md` → *Faza 2 — Govor*.
 > Datum: 2026-11-04. Prethodna faza: Faza 1 (jezgro), zelena.
 
 ## Status: završena
@@ -46,7 +46,7 @@ niže (`EspeakDirectSynth` → v1.1, `ICU regex` → `GRegex`/PCRE2).
 ### O1 — `EspeakDirectSynth` nije implementiran u Fazi 2
 
 Plan ga je već prebacio u „planiran za v1.1" (`RESULTS.md`, ispravka 6 za
-`02-FAZE.md`), jer S2 pokazuje da SSIP prolazi sve prolazne budžete. Ono što
+`phase-plan.md`), jer S2 pokazuje da SSIP prolazi sve prolazne budžete. Ono što
 Faza 2 duguje tom planu je **dokaz da apstrakcija nosi dva implementatora**, i
 taj dokaz postoji: `ISynth` ima `SsipSynth` i `NullSynth`, a `NullSynth` nije
 atrapa — on nosi `--no-speech` režim demona i ceo testni pogon menadžera.
@@ -56,7 +56,7 @@ bez prepravke (§4.6).
 
 ### O2 — tekstualni sloj koristi `GRegex` (PCRE2), ne ICU
 
-`01-ARHITEKTURA.md` §11.1 traži „ICU regex, ne `std::regex`". Zahtev iza te
+`architecture.md` §11.1 traži „ICU regex, ne `std::regex`". Zahtev iza te
 rečenice je **`\w` koje ne isključuje kombinujuće znakove** — bez toga unosi
 rečnika pucaju na svakom jeziku sa dijakriticima, uključujući srpski. Taj
 zahtev je ispunjen, ali drugim alatom, iz razloga koji se nije video kad je
@@ -92,7 +92,7 @@ izraste audio tap da bi testirao sam sebe. Posledica:
 
 ### O4 — `index_mark` pomeraj se ne meri pri dizanju
 
-`RESULTS.md` (ispravka 4 za `01-ARHITEKTURA.md`) traži da `SsipSynth` **izmeri**
+`RESULTS.md` (ispravka 4 za `architecture.md`) traži da `SsipSynth` **izmeri**
 pomeraj od −40 ms pri prvom dizanju, jer zavisi od audio uređaja. Merenje
 zahteva audio tap (isti razlog kao O3), pa je izmerena vrednost **podrazumevana
 konfiguraciona vrednost** (`speech/indexMarkOffsetMs = -40`), dostupna preko
@@ -271,7 +271,7 @@ Dve napomene o alatima:
 
 `alus-daemon` sada drži **dva** restartabilna podsistema (log, govor), pa
 `SIGHUP` ponovo diže i vezu ka speech-dispatcher-u, bez restarta procesa
-(pravilo 3 iz `02-FAZE.md`).
+(pravilo 3 iz `phase-plan.md`).
 
 ---
 

@@ -12,7 +12,7 @@
 //     2. the app module  (appModules/<name>.py)
 //     3. every global plugin
 //
-// ALUS keeps that contract exactly (01-ARHITEKTURA.md §6.2); only the result
+// ALUS keeps that contract exactly (architecture.md §6.2); only the result
 // differs, being a list of behaviour objects rather than a synthesised class.
 // The choosing keys on Linux are not NVDA's `windowClassName`:
 //

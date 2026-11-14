@@ -14,7 +14,7 @@
 // THE DEFAULTS ARE NVDA'S AND THAT MATTERS. `expandAtCursor` on, `showCursor`
 // on, `cursorBlink` on at 500 ms, `textWrap` at word boundaries, `tetherTo`
 // automatic, `readByParagraph` OFF: a user coming from NVDA must find the
-// display behaving the way they left it (01-ARHITEKTURA.md Z1).
+// display behaving the way they left it (architecture.md H1).
 #pragma once
 
 #include <chrono>
@@ -37,7 +37,7 @@ std::string_view tetherLabel(TetherTo tether);
 TetherTo parseTether(std::string_view name);
 
 // NVDA: `config.featureFlagEnums.BrailleTextWrapFlag`. The four word-wrap
-// modes 02-FAZE.md T7.5 measures.
+// modes phase-plan.md T7.5 measures.
 enum class TextWrap {
     // Cut at the edge of the display, mid-word, with no mark. The display
     // shows as much as fits and the user scrolls.

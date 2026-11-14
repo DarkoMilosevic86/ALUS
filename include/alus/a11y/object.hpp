@@ -6,7 +6,7 @@
 // `alus::a11y::Object` -- one accessible, with NVDA's property set.
 //
 // Port of `NVDAObjects/__init__.py`'s property set, with the AT-SPI sources of
-// 01-ARHITEKTURA.md §6.2. Three things about this class are load-bearing:
+// architecture.md §6.2. Three things about this class are load-bearing:
 //
 //  1. EVERY PROPERTY IS A `Cached<T>` (§3.5). The getter runs at most once per
 //     pump cycle, so the fact that speech, braille and review all ask the same

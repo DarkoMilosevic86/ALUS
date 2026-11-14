@@ -10,9 +10,9 @@
 // `a11y::ObjectCommands`, this is another step-10 command group, not a second
 // `GlobalCommands`: it ANSWERS TO that NVDA class name, so the generated
 // command table (data/scripts.csv, §5.4) gives every script here NVDA's own
-// description, category and keys, and nothing is retyped (claude/FAZA4.md O4).
+// description, category and keys, and nothing is retyped (docs/history/phase-4.md O4).
 //
-// WHAT THE USER GETS, which is the manual test of 02-FAZE.md:
+// WHAT THE USER GETS, which is the manual test of phase-plan.md:
 //
 //     numpad7/8/9     previous / current / next line
 //     numpad4/5/6     previous / current / next word

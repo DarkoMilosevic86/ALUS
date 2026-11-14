@@ -95,7 +95,7 @@ test('speech', test_speech,
 # carries it: Catch2 exits 4 when all of its test cases were skipped, and meson
 # reads any non-zero exit as a failed test. Without the flag the graceful skip
 # these files promise is a red suite on exactly the machines it was written for
-# (claude/FAZA7.md N65).
+# (docs/history/phase-7.md N65).
 test_speech_live = executable('test-speech-live',
   files('speech/test_live_speech.cpp'),
   dependencies: [alus_core_dep, alus_speech_dep, catch2_dep],
@@ -296,7 +296,7 @@ test('braille', test_braille,
 # The phase 7 live check: BrlAPI against a real brltty. Its own suite for the
 # same reason every other live check is -- it needs hardware (or brltty in its
 # virtual mode), and a build machine with no braille display is not a broken
-# ALUS. It is the automatic half of what FAZA7.md leaves to the manual test:
+# ALUS. It is the automatic half of what phase-7.md leaves to the manual test:
 # the display size, the frame and the key names, which no mock can answer.
 test_braille_live = executable('test-braille-live',
   files('braille/test_live_braille.cpp'),
@@ -404,7 +404,7 @@ test('app', test_app,
 # NO DISPLAY IS NEEDED, and that is deliberate: the settings window is split
 # into a model (pure C++, asserted here) and widgets (a loop over the model,
 # which holds no knowledge worth asserting). See include/alus/gui/model.hpp.
-# The widget layer is exercised by tools/phase9-gui-check.sh, which needs a
+# The widget layer is exercised live (phase-9.md), which needs a
 # session and is therefore not a CI test.
 #
 # ALUS_SOURCE_ROOT: these tests read generated DATA -- po/POTFILES.in,
@@ -464,7 +464,7 @@ test('command-reference-up-to-date', python,
 # of it a machine with no session can reach.
 #
 # It is here because the settings window is a SEPARATE EXECUTABLE as of phase
-# 9 (claude/FAZA9.md N79) and nothing else in the suite would notice if it
+# 9 (docs/history/phase-9.md N79) and nothing else in the suite would notice if it
 # stopped linking.
 if have_gui
   test('settings-smoke', alus_settings,
@@ -485,7 +485,7 @@ endif
 # The commands that change speech and the configuration, RUN rather than
 # looked up. tests/coverage asks whether a key finds a command; this asks what
 # the command then does -- and both are needed, because a key that finds a
-# command that says nothing is the defect FAZA6.md O10 is about.
+# command that says nothing is the defect phase-6.md O10 is about.
 #
 # Its own executable because it is the only test that links the commands
 # library, and its own place in the `commands` suite next to the coverage
@@ -514,7 +514,7 @@ test('command-behaviour', test_commands,
 # asks the ten-step lookup about every shipped key assignment. Its own suite
 # (`meson test -C build --suite commands`) because a failure here is not a
 # failure of any one layer; it is a command that was documented and never
-# implemented (claude/FAZA9.md N99).
+# implemented (docs/history/phase-9.md N99).
 #
 # ALUS_SOURCE_ROOT as well as the data directory: the second test case reads
 # src/ to check that the inventory this file assembles has not been left

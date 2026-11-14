@@ -84,7 +84,7 @@ public:
     // rate, pitch, volume, inflection, voice, and everything the presenter
     // reads. Phase 9's settings window calls it, because changing the speech
     // rate must not take the braille display down with a full
-    // resetConfiguration (rule 3 of 02-FAZE.md, read narrowly).
+    // resetConfiguration (rule 3 of phase-plan.md, read narrowly).
     //
     // Changing `synth` or `outputModule` is NOT applied here -- those need the
     // driver replaced -- and the function says so in the log, so a user who

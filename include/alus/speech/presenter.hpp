@@ -6,7 +6,7 @@
 // The presentation layer: speak().
 //
 // Port of the platform-neutral half of NVDA's `speech/speech.py` (3198 lines).
-// See 01-ARHITEKTURA.md §4.2. What matters here is not the code but THE ORDER
+// See architecture.md §4.2. What matters here is not the code but THE ORDER
 // OF OPERATIONS, which is a contract (`speech.py:1126-1233`):
 //
 //   filter_speechSequence → type validation → priority → empty? → speech viewer
@@ -160,7 +160,7 @@ public:
     // ---- spelling (phase 5; NVDA: speech.getSpellingSpeech family) ----
     //
     // This is what phase 4's `PresentationHooks::spell` was standing in for
-    // (claude/FAZA4.md O11): the real path, with character descriptions, the
+    // (docs/history/phase-4.md O11): the real path, with character descriptions, the
     // pitch change for capitals and the character mode the synthesizer needs
     // in order to spell "a" rather than say the word "a".
     //

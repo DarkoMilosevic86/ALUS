@@ -125,7 +125,7 @@ TEST_CASE("the pages are well formed", "[gui]") {
             }
         }
     }
-    // The six pages 02-FAZE.md names for phase 9, plus general.
+    // The six pages phase-plan.md names for phase 9, plus general.
     for (const char* id : {"general", "speech", "braille", "keyboard", "presentation",
                            "formatting", "gestures"}) {
         INFO("missing page: " << id);
@@ -143,7 +143,7 @@ TEST_CASE("T9.1 — every settings shortcut names a page or says it has none",
     const std::vector<alus::gui::ScriptPage>& table = alus::gui::scriptPages();
     REQUIRE(table.size() >= 15);
 
-    // The shortcut 02-FAZE.md names by hand.
+    // The shortcut phase-plan.md names by hand.
     CHECK(alus::gui::pageForScript("activateGeneralSettingsDialog") == "general");
 
     // And the rest of the keys the generated command table binds.
@@ -269,7 +269,7 @@ TEST_CASE("the settings window writes nothing until something changes", "[gui]")
 //
 // They were free text, which meant typing the exact name of a voice -- the one
 // thing a user who cannot make out the synthesizer cannot find out -- and an
-// empty entry was written to alus.ini as `voice=\s` (FAZA10.md N107). What is
+// empty entry was written to alus.ini as `voice=\s` (phase-10.md N107). What is
 // asserted here is the part with no GTK in it: which choices a row shows.
 // ---------------------------------------------------------------------------
 

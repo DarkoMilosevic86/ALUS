@@ -1,6 +1,6 @@
 # ALUS — Fazni plan
 
-> Dokument 3 od 4. Pretpostavlja `00-VIZIJA.md` i `01-ARHITEKTURA.md`.
+> Dokument 3 od 4. Pretpostavlja `vision.md` i `architecture.md`.
 >
 > **Pravilo:** izlazni kriterijum svake faze je **izvršiv test**, ne opis. Ako se ne može pokrenuti, faza nije završena.
 
@@ -57,7 +57,7 @@ pkill orca
 busctl --user list | grep KeyboardMonitor    # mora da pokaže naš proces
 ```
 
-Ako S1 padne → `03-RIZICI.md` R1/R2, evdev backend, i **ceo plan se revidira** jer je obim veći.
+Ako S1 padne → `risks.md` R1/R2, evdev backend, i **ceo plan se revidira** jer je obim veći.
 
 ### S2 — Latencija i tačnost govora
 
@@ -98,7 +98,7 @@ Nad **živim** Firefox i Chromium prozorom sa stvarnom stranom (npr. Wikipedia �
 4. Proveri da `attributes{level=N}` radi za `1`–`9` quick-nav.
 5. Izmeri koliko traje `Text::get_text(0, get_character_count())` na telu dokumenta (koliko je „ravan tekst" brz).
 
-**Izlazni kriterijum:** p95 latencija jednog quick-nav skoka **< 20 ms** u oba pregledača. Ako ne — `03-RIZICI.md` R3, i Faza 6 mora da uvede lokalni keš drveta.
+**Izlazni kriterijum:** p95 latencija jednog quick-nav skoka **< 20 ms** u oba pregledača. Ako ne — `risks.md` R3, i Faza 6 mora da uvede lokalni keš drveta.
 
 ```bash
 python3 spikes/s3-collection.py --browser firefox --url https://sr.wikipedia.org/
@@ -195,7 +195,7 @@ meson test -C build --suite speech
 # T2.9 — simboli: alus+p nivoi menjaju izgovor interpunkcije
 # T2.10 — rečnik izgovora: unos sa dijakritikom i granicom reči radi (ICU regex)
 # T2.11 — latencija: p95 speak→zvuk < 50 ms
-#         Budžet je PODELJEN (vidi FAZA2.md O3): merenje stvarnog zvuka traži
+#         Budžet je PODELJEN (vidi phase-2.md O3): merenje stvarnog zvuka traži
 #         audio tap (nalaz N14) i ostaje u spikes/s2-speech.c; CI test
 #         (--suite live) čuva SSIP putanju, na koju ALUS-ov kod utiče.
 # T2.12 — rizik R14: izgubljena index oznaka ne sme da zaustavi govor zauvek
@@ -205,7 +205,7 @@ meson test -C build --suite speech
 ./build/alus-cli bench-speech --iterations 100
 ```
 
-**Izvršeno:** `claude/FAZA2.md` — status svakog kriterijuma, šest odstupanja sa
+**Izvršeno:** `docs/history/phase-2.md` — status svakog kriterijuma, šest odstupanja sa
 razlogom i šest novih nalaza (N20–N25).
 
 ---
@@ -257,7 +257,7 @@ meson test -C build --suite input
 bash tools/phase3-input-check.sh
 ```
 
-**Izvršeno:** `claude/FAZA3.md` — status svakog kriterijuma, četrnaest
+**Izvršeno:** `docs/history/phase-3.md` — status svakog kriterijuma, četrnaest
 odstupanja sa razlogom i deset novih nalaza (N26–N35), uključujući **dijagnozu
 N19**: uzrok je `g_dbus_proxy_call_sync(..., -1, ...)` iz glavne petlje u
 `libatspi`-jevom `AtspiDeviceA11yManager`, pa ALUS govori direktno sa
@@ -307,7 +307,7 @@ meson test -C build --suite a11y     # mock AT-SPI server u testovima
 
 **Ovo je tačka na kojoj ALUS prvi put „radi".**
 
-**Izvršeno:** `claude/FAZA4.md` — status svih devet kriterijuma, sedamnaest
+**Izvršeno:** `docs/history/phase-4.md` — status svih devet kriterijuma, sedamnaest
 odstupanja sa razlogom i devet novih nalaza (N36–N44). Dva od njih čitač ekrana
 čine nemim bez ijedne greške u logu: **N36** (`atspi_set_main_context` pre
 `atspi_init` se tiho odbacuje, pa ne stiže nijedan događaj) i **N43**
@@ -369,7 +369,7 @@ meson test -C build --suite text
 
 **Posle Faze 5 → alfa izdanje za desktop aplikacije.**
 
-**Izvršeno:** `claude/FAZA5.md` — status svih devet kriterijuma, petnaest
+**Izvršeno:** `docs/history/phase-5.md` — status svih devet kriterijuma, petnaest
 odstupanja sa razlogom i sedam novih nalaza (N45–N51). **T5.3 je jedini
 kriterijum koji nije u celosti ispunjen**, i to zbog spoljnog paketa:
 `libicu-dev` nije instaliran, pa je segmentacija srpskog i engleskog tačna a
@@ -508,7 +508,7 @@ meson test -C build --suite app
 bash tools/phase8-app-check.sh --manual
 ```
 
-**Izvršeno:** `claude/FAZA8.md` — status svih sedam kriterijuma, petnaest
+**Izvršeno:** `docs/history/phase-8.md` — status svih sedam kriterijuma, petnaest
 odstupanja sa razlogom i devet novih nalaza (N66–N74). **Sva četiri app modula
 su prepisana posle merenja na živim aplikacijama**, jer drvo koje LibreOffice i
 Nautilus stvarno izlažu nije ono koje §12.1 pretpostavlja: LibreOffice je
@@ -559,7 +559,7 @@ bash tools/phase9-gui-check.sh
 bash tools/phase9-gui-check.sh --manual
 ```
 
-**Izvršeno:** `claude/FAZA9.md` — status svih pet kriterijuma **svih pet
+**Izvršeno:** `docs/history/phase-9.md` — status svih pet kriterijuma **svih pet
 prošlo**, petnaest odstupanja sa razlogom i trinaest novih nalaza (N75–N87).
 **Prozor podešavanja je sopstveni proces, a ne deo demona**, i to je izmereno a
 ne izabrano: u procesu čitača ekrana jezgro je stalo **7,5 sekundi** i prozor
@@ -579,6 +579,6 @@ koja nijedan test ne bi: najave su se gradile spajanjem fragmenata rečenice
 1. **Faza nije završena dok joj testovi ne prođu u CI.** Testovi iz prethodnih faza se ne smeju pokvariti.
 2. **Merenja latencije su testovi, ne beleške.** `speak→zvuk < 50 ms` i `quick-nav < 20 ms` se mere u CI i obaraju build.
 3. **Svaki podsistem je restartabilan u procesu** (NVDA-ov `resetConfiguration` model). Testira se u svakoj fazi koja dodaje podsistem.
-4. **Ne-ciljevi iz `00-VIZIJA.md` su obavezujući.** Ako se faza širi, obim se reže, ne rok.
+4. **Ne-ciljevi iz `vision.md` su obavezujući.** Ako se faza širi, obim se reže, ne rok.
 5. **Očekivane greške ne puštaju zvuk greške** (§3.8). Čitač ekrana koji cvrkuće je neupotrebljiv.
 6. **Kod iz NVDA se ne kopira**, logika se prenosi. Svaki fajl nosi `SPDX-License-Identifier: GPL-2.0-or-later`.

@@ -6,7 +6,7 @@
 // Character descriptions: "a, Avala".
 //
 // Port of the `CharacterDescriptions` half of NVDA's `characterProcessing.py`
-// (01-ARHITEKTURA.md §11.1 covers the file; phase 2 ported the symbol half
+// (architecture.md §11.1 covers the file; phase 2 ported the symbol half
 // into text/symbols.hpp). This is what the THIRD press of a review command
 // speaks, and what `alus+numpad2` three times gives: not the character, but a
 // word that contains it, so "b" and "d" can be told apart over a telephone of

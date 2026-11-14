@@ -71,7 +71,7 @@ Dokaz (gnome-shell, rola `push button`, istina po obilasku drveta = 160):
 Ispravna kombinacija je Orcina (`orca/ax_collection.py:54-60`):
 `state=ALL, attribute=ANY (ili ALL), role=ANY, interface=ALL`.
 
-> Posledica za plan: `01-ARHITEKTURA.md` mora da zabeleži ove match-tipove kao
+> Posledica za plan: `architecture.md` mora da zabeleži ove match-tipove kao
 > deo ugovora, a ne kao detalj. Pogrešna vrednost ne pada — vrati prazno, pa
 > izgleda kao „pregledač ne podržava Collection".
 
@@ -85,7 +85,7 @@ Provereno da `CANONICAL` **jeste** redosled čitanja na ovoj strani: prvih pet
 naslova izlaze kao `Никола Тесла → Биографија → Детињство... → Школовање → Студије`,
 što je redosled u članku.
 
-> Posledica za plan: `02-FAZE.md` S3 tačka 3 („proveri da `sortBy=FLOW` daje
+> Posledica za plan: `phase-plan.md` S3 tačka 3 („proveri da `sortBy=FLOW` daje
 > redosled čitanja") je **nemerljiva** — FLOW ne postoji. Faza 6 koristi
 > `CANONICAL` i mora da **pretpostavi** da je to redosled čitanja. To je nova,
 > nezatvorena pretpostavka: treba je proveriti na stranama sa CSS-om koji menja
@@ -209,13 +209,13 @@ nekoliko pokušaja.
 > već drži drugi proces i da to **jasno kaže**, umesto da tiho ne radi (N7).
 
 **N9 — `map_keysym_modifier` vraća MASKU, ne indeks.**
-Plan (`02-FAZE.md` S1 tačka 4) traži „virtualni modifikator u opsegu 15–31" —
+Plan (`phase-plan.md` S1 tačka 4) traži „virtualni modifikator u opsegu 15–31" —
 to je indeks. `libatspi` vraća `1 << indeks`: za `XK_Insert` dobijamo
 **32768 = 1<<15**, tj. indeks **15**, prvi virtualni modifikator.
 `AtspiKeyDefinition.modifiers` takođe očekuje masku, pa se vrednost prosleđuje
 kakva je. `get_keysym_modifier` vrati istu vrednost.
 
-> Posledica: ispraviti formulaciju u `02-FAZE.md`; i upozoriti u arhitekturi,
+> Posledica: ispraviti formulaciju u `phase-plan.md`; i upozoriti u arhitekturi,
 > jer `1 << 32768` je greška koja se ne vidi u tipovima (u Pythonu je ogroman
 > int, u C-u je UB).
 
@@ -229,7 +229,7 @@ To je put preko XTEST-a, koji na Wayland-u ne postoji.
 > Posledica za obim: NVDA ima funkcije koje **šalju** tastere aplikaciji —
 > „pošalji sledeći taster aplikaciji", unos sa brajevog reda, emulacija
 > tastature. Na Wayland-u ALUS to **ne može** preko AT-SPI-ja.
-> Mora da se eksplicitno upiše u `00-VIZIJA.md` kao **ne-cilj za v1.0**, ili da
+> Mora da se eksplicitno upiše u `vision.md` kao **ne-cilj za v1.0**, ili da
 > se reši privilegovanim `/dev/uinput` helperom — što je ista cena kao evdev
 > backend iz R2, i isto pripada v1.1.
 
@@ -255,13 +255,13 @@ korisnikovoj tastaturi i nije prijavio **nijedan** pritisak.
 >    oslobađa D-Bus ime — bezuslovno, pre svega ostalog.
 > Uzrok zaglavljivanja nije dijagnostikovan i to je prvi posao Faze 3.
 >
-> **Dijagnostikovano u Fazi 3** (`claude/FAZA3.md`, N26): uzrok je u
+> **Dijagnostikovano u Fazi 3** (`docs/history/phase-3.md`, N26): uzrok je u
 > `libatspi`-jevom `atspi/atspi-device-a11y-manager.c`, koji kompozitor zove
 > sa `g_dbus_proxy_call_sync(..., timeout = -1, ...)` **iz `g_timeout_add`
 > callback-a**, to jest iz glavne petlje klijenta, i pri tom odbacuje `GError`.
 > Petlja zato staje bez roka dok grab-ovi stoje — tačno izmereno ponašanje. To
 > je i uzrok N7. ALUS zato ne koristi taj sloj nego govori direktno sa
-> `org.freedesktop.a11y.KeyboardMonitor` (FAZA3.md O1).
+> `org.freedesktop.a11y.KeyboardMonitor` (phase-3.md O1).
 
 ## S2 — Latencija i tačnost govora — **3 od 4 budžeta PASS**
 
@@ -339,7 +339,7 @@ Bafer Bluetooth sink-a (~20 ms, vidi N11) ovo **ne** objašnjava.
 > `end`, dobija **~294 ms mrtvog vazduha između svaka dva izgovora**. Za čitač
 > ekrana to je razlika između tečnog i mucavog govora.
 > Mera: ulančavanje ide preko `IndexCommand`-a na kraju svakog izgovora, kao
-> `speech/manager.py` u NVDA — što `01-ARHITEKTURA.md` već propisuje kao
+> `speech/manager.py` u NVDA — što `architecture.md` već propisuje kao
 > obavezan deo `ISynth` interfejsa. S2 sada daje **merljiv razlog** zašto, a ne
 > samo zato što NVDA tako radi.
 
@@ -459,12 +459,12 @@ Za espeak-ng ta zamka se nije aktivirala (šumni pod 0, `min` 5.50 ms, svih
 100 uzoraka verodostojno), pa espeak brojevi stoje.
 
 > Posledica: `rhvoice` ostaje kao korisnikov izbor glasa kroz SSIP, ali
-> `01-ARHITEKTURA.md` ne sme da računa na vremenske garancije kada korisnik
+> `architecture.md` ne sme da računa na vremenske garancije kada korisnik
 > izabere modul koji nije espeak-ng. Budžeti su svojstvo **modula**, ne SSIP-a.
 
 ## Ispravke koje plan duguje
 
-### `02-FAZE.md`
+### `phase-plan.md`
 
 1. **S1 tačka 4** — „virtualni modifikator u opsegu 15–31" je indeks, a
    `map_keysym_modifier` vraća **masku** (`1 << indeks`). Preformulisati (N9).
@@ -486,7 +486,7 @@ Za espeak-ng ta zamka se nije aktivirala (šumni pod 0, `min` 5.50 ms, svih
    (uzorak-tačan `mark`), pa ulazi kao **planiran za v1.1**, vezan za
    govorni kursor.
 
-### `01-ARHITEKTURA.md`
+### `architecture.md`
 
 1. **Match-tipovi za `Collection` su obavezujući ugovor,** ne detalj:
    `state=ALL, attribute=ALL/ANY, role=ANY, interface=ALL`. Pogrešna vrednost
@@ -515,7 +515,7 @@ Za espeak-ng ta zamka se nije aktivirala (šumni pod 0, `min` 5.50 ms, svih
    Arhitektura ne sme da obećava latenciju kada korisnik izabere modul koji
    nije `espeak-ng`.
 
-### `03-RIZICI.md`
+### `risks.md`
 
 1. **R1** — uzrok, posledica i mera su **potvrđeni merenjem** (N6).
    Dopisati kontrolni eksperiment: `org.alus` → `AccessDenied` na svaku
@@ -575,7 +575,7 @@ koliki je prozor za dupli pritisak) i ona pripadaju Fazi 3, gde se ulaz i piše.
 Prvi posao Faze 3 je zato dijagnoza N19 — zaglavljivanja — jer bez stabilnog
 klijenta ta merenja ionako nisu verodostojna.
 
-> **ZATVORENO u Fazi 3**, 2026-11-05 (`claude/FAZA3.md`, „Interaktivno
+> **ZATVORENO u Fazi 3**, 2026-11-05 (`docs/history/phase-3.md`, „Interaktivno
 > merenje"). Sva četiri koraka su prošla protiv `alus-daemon`-a, sa izmerenim
 > brojevima: watcher vidi sve tastere i ne troši ih; grab troši `Insert+t`
 > (taster ne stiže do terminala); dupli ALUS taster je detektovan 120 ms posle
@@ -649,7 +649,7 @@ zatvoriti; ništa od rezultata ne zavisi od njih.
 
 ## Predaja Fazi 1
 
-Faza 1 (`02-FAZE.md`, Infrastruktura jezgra) je jedino što može da počne —
+Faza 1 (`phase-plan.md`, Infrastruktura jezgra) je jedino što može da počne —
 Faze 2 i 3 zavise od nje. Ništa u Fazi 1 ne zna o AT-SPI-ju, govoru ni
 tasterima, pa je sve jedinično testabilno i ništa od nedokazanog u S1 je ne
 blokira.
@@ -672,7 +672,7 @@ blokira.
    oznaku u sredini izgovora. To je zahtev koji Faza 1 mora da podrži rokovima
    u `TaskRegistry`-ju.
 4. **21 ispravka plana** iz sekcije „Ispravke koje plan duguje" — pre pisanja
-   koda Faze 1 treba primeniti bar one za `01-ARHITEKTURA.md` (8 stavki).
+   koda Faze 1 treba primeniti bar one za `architecture.md` (8 stavki).
 
 **Prvi korak Faze 1:** `meson setup build`, skelet `alus::core` i testovi
-T1.1–T1.10 iz `02-FAZE.md`. Izlazni kriterijum je već napisan i izvršiv.
+T1.1–T1.10 iz `phase-plan.md`. Izlazni kriterijum je već napisan i izvršiv.

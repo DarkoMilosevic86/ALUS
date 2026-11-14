@@ -5,7 +5,7 @@
 //
 // Speech dictionaries: user-defined pronunciation.
 //
-// Port of NVDA's `speechDictHandler/`. See 01-ARHITEKTURA.md §11.1. Four
+// Port of NVDA's `speechDictHandler/`. See architecture.md §11.1. Four
 // dictionaries are applied IN THIS ORDER, and the order is user-visible:
 //
 //   builtin → default → voice → temp

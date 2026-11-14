@@ -8,7 +8,7 @@
 // Port of NVDA's `braille/brailleHandler.py` (`BrailleHandler`) and
 // `braille/regions/focus.py` (`getFocusRegions`, `getFocusContextRegions`).
 //
-// 01-ARHITEKTURA.md §14 names TWO coalescing mechanisms and says neither is
+// architecture.md §14 names TWO coalescing mechanisms and says neither is
 // optional. Both are here, and they are the two exit criteria that measure
 // this file:
 //

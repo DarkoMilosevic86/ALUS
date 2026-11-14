@@ -5,7 +5,7 @@
 //
 // The main-thread work queue.
 //
-// Port of NVDA's `queueHandler.py:61-69`. See 01-ARHITEKTURA.md §3.2: ONE FIFO.
+// Port of NVDA's `queueHandler.py:61-69`. See architecture.md §3.2: ONE FIFO.
 // Priority is not expressed by having several queues, but by the `immediate`
 // flag that changes how the pump is scheduled (`Loop::queue()`).
 //

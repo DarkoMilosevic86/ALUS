@@ -5,7 +5,7 @@
 //
 // A text range over a whole DOCUMENT, not over one accessible.
 //
-// This is the other half of 01-ARHITEKTURA.md §9.3, and the file the phase 5
+// This is the other half of architecture.md §9.3, and the file the phase 5
 // handover pointed at: `nav::ControlFieldSynth` makes the fields, and
 // `AncestorChainDiff` here turns a sequence of leaves into NVDA's nested
 // `controlStart`/`controlEnd` stream. Together they are the port of
@@ -234,7 +234,7 @@ private:
     bool stepLeaf(DocumentPosition& position, bool forwards) const;
     bool normalise(DocumentPosition& position) const;
 
-    // ---- positions INSIDE a link (FAZA10.md N117) ----
+    // ---- positions INSIDE a link (phase-10.md N117) ----
     //
     // A link inside a line is not a leaf: it is one U+FFFC in its parent's
     // text, and the parent is the leaf (DocumentLeaves says why). NVDA lets

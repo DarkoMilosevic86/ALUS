@@ -448,7 +448,7 @@ TEST_CASE("T9.4 — the Serbian catalogue is in the script it claims",
     // lista, naslov, tabela, slika, link, the words a screen reader says most
     // often -- because they WERE translated, just not transliterated. Five
     // more came out in neither script: "wиндоwс", "Wаyланд", "рхвоице"
-    // (claude/FAZA9.md N106).
+    // (docs/history/phase-9.md N106).
     //
     // Two checks, and neither restates the importer's rule: both read the
     // shipped text and one short declared list.

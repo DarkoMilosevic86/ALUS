@@ -3,7 +3,7 @@
 #
 # This file is part of ALUS (Access Linux Using Speech).
 
-# C is here for ONE reason: the add-on ABI (phase 8, 01-ARHITEKTURA.md §12.3)
+# C is here for ONE reason: the add-on ABI (phase 8, architecture.md §12.3)
 # is a C header, and the test plugins in tests/app/plugins/ are compiled as C
 # against it and nothing else. That is what makes "an add-on needs only a C
 # compiler and one header" a property of the build rather than a claim in a
@@ -45,7 +45,7 @@ thread_dep   = dependency('threads')
 # Speech and audio (phase 2). speech-dispatcher is the default synthesizer path,
 # decided by measurement in spikes/RESULTS.md S2 (11.5 ms p95 to first audio).
 speechd_dep  = dependency('speech-dispatcher', version: '>=0.11', include_type: 'system')
-# libpulse-simple also covers PipeWire, through pipewire-pulse (01-ARHITEKTURA.md
+# libpulse-simple also covers PipeWire, through pipewire-pulse (architecture.md
 # §4.6). Optional on purpose: without it ALUS still speaks through
 # speech-dispatcher, it only loses its own tones and sounds, and that must not
 # stop the screen reader from starting.
@@ -54,26 +54,26 @@ pulse_dep    = dependency('libpulse-simple', required: false, include_type: 'sys
 # Phase 3: keysym names and the keysym <-> Unicode conversion. The canonical
 # source for both on Linux, and the same library the compositor uses, so a grab
 # ALUS builds for `nvda+š` names the keysym the compositor will compare against
-# (claude/FAZA3.md O2). Debian ships no .pc for it before libxkbcommon-dev, so
+# (docs/history/phase-3.md O2). Debian ships no .pc for it before libxkbcommon-dev, so
 # this is a hard dependency, not an optional one: without it ALUS could only
 # bind ASCII keys, and silently.
 xkbcommon_dep = dependency('xkbcommon', version: '>=1.0', include_type: 'system')
 
 # Phase 4: the object model. libatspi is the ONE accessibility API ALUS speaks
-# (01-ARHITEKTURA.md §6.1). Its DEVICE API is deliberately not used -- that is
+# (architecture.md §6.1). Its DEVICE API is deliberately not used -- that is
 # what phase 3 found to be the cause of N19/N26 -- so this dependency covers
 # the accessible tree and the event stream only.
 atspi_dep = dependency('atspi-2', version: '>=2.46', include_type: 'system')
 
 # Phase 9: the settings window and the gesture dialog. GTK4 + libadwaita, in
 # the screen reader's own process and on its own main loop
-# (01-ARHITEKTURA.md §1 names both; include/alus/gui/window.hpp says why
+# (architecture.md §1 names both; include/alus/gui/window.hpp says why
 # in-process).
 #
 # `required: false` with a loud fallback, for the third time in this file and
 # for the strongest reason yet: ALUS without its settings window is a screen
 # reader that is configured through ~/.config/alus/alus.ini and `alus-cli`,
-# which is exactly what 00-VIZIJA.md §5 listed as the v1.0 position before
+# which is exactly what vision.md §5 listed as the v1.0 position before
 # this phase. ALUS without GTK is still a screen reader; ALUS that refuses to
 # build on a machine with no libgtk-4-dev is not one at all.
 gtk_dep = dependency('gtk4', version: '>=4.10', required: false, include_type: 'system')
@@ -85,7 +85,7 @@ if not have_gui
           'configure it with ~/.config/alus/alus.ini and alus-cli')
 endif
 
-# Phase 5: word, sentence and grapheme segmentation. 01-ARHITEKTURA.md §7.3
+# Phase 5: word, sentence and grapheme segmentation. architecture.md §7.3
 # says ICU and only ICU: it is the UAX#29 implementation the rest of the
 # desktop agrees with, and it carries the dictionaries without which Japanese
 # and Thai cannot be segmented at all (T5.3 names Japanese).
@@ -99,7 +99,7 @@ icu_dep = dependency('icu-uc', version: '>=70', required: false, include_type: '
 
 # Phase 7: braille. liblouis is the braille translator the rest of the Linux
 # desktop (and NVDA) uses, so a user's own table files and grade-2 tables work
-# unchanged (01-ARHITEKTURA.md §14). Hard dependency: a braille display with no
+# unchanged (architecture.md §14). Hard dependency: a braille display with no
 # translator shows nothing, and there is no partial version of that.
 louis_dep = dependency('liblouis', version: '>=3.0', include_type: 'system')
 
@@ -107,7 +107,7 @@ louis_dep = dependency('liblouis', version: '>=3.0', include_type: 'system')
 # ~40 device drivers of ALUS's own (§14). Debian 13 ships libbrlapi-dev with
 # the headers and the shared library but NO pkg-config file, so the dependency
 # is assembled by hand -- the plan's `pkg-config --modversion libbrlapi` does
-# not work on the target system (claude/FAZA7.md O1).
+# not work on the target system (docs/history/phase-7.md O1).
 #
 # `required: false` with a loud fallback, for the same reason ICU is: without
 # BrlAPI, ALUS still translates braille and still drives the braille viewer and
@@ -164,7 +164,7 @@ install_subdir('data/symbols',
   strip_directory: false)
 # The character descriptions, which `numpad2` three times reads out ("a, Avala").
 #
-# NOT INSTALLED UNTIL PHASE 9 (claude/FAZA9.md N86), and the gap was invisible:
+# NOT INSTALLED UNTIL PHASE 9 (docs/history/phase-9.md N86), and the gap was invisible:
 # alus::text::CharacterDescriptions looks for <datadir>/alus/characters/<lang>.dic
 # and falls back to a compiled-in ENGLISH set, so an installed ALUS answered in
 # English for every language and never said why. Found by reading the list of
@@ -183,7 +183,7 @@ install_subdir('data/characters',
 # data/gestures-alus.ini is deliberately NOT here. It is an input to
 # tools/extract-commands.py, not something the daemon reads: its effect is
 # already inside the generated gestures-builtin.ini and scripts.csv
-# (claude/FAZA9.md N105). Installing it would suggest otherwise.
+# (docs/history/phase-9.md N105). Installing it would suggest otherwise.
 install_data(
   ['data/scripts.csv', 'data/gestures-builtin.ini', 'data/key-labels.ini',
    'data/commands-status.ini'],
@@ -206,7 +206,7 @@ install_subdir('data/locale',
 # `alus-cli autostart --enable` is what copies it -- because enabling ALUS's
 # autostart on a machine where another screen reader already starts means one
 # of the two gets no keyboard at all (N8), and choosing which is the user's
-# call, not the installer's (03-RIZICI.md R12).
+# call, not the installer's (risks.md R12).
 # ---------------------------------------------------------------------------
 desktop_data = configuration_data()
 desktop_data.set('bindir', get_option('prefix') / get_option('bindir'))
@@ -256,7 +256,7 @@ add_test_setup('valgrind',
   exclude_suites: ['live', 'catch2', 'external'],
   env: {
     'ALUS_REGEX_NO_JIT': '1',
-    # Latency budgets are tests and not notes (02-FAZE.md rule 2), but under
+    # Latency budgets are tests and not notes (phase-plan.md rule 2), but under
     # Memcheck every instruction costs 20 to 50 times more, so T5.8's 50 ms
     # measures 90 ms for reasons that have nothing to do with the code. The
     # tests that assert a BUDGET report the number instead when they see this,

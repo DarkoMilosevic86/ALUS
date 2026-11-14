@@ -6,7 +6,7 @@
 // What a piece of text is: its formatting, and the controls that contain it.
 //
 // Port of NVDA's `textInfos.Field`, `FormatField`, `ControlField` and
-// `FieldCommand` (01-ARHITEKTURA.md §7.1), including
+// `FieldCommand` (architecture.md §7.1), including
 // `ControlField.getPresentationCategory`.
 //
 // WHY A STRING MAP AND NOT A STRUCT. NVDA's fields are dicts, and two things

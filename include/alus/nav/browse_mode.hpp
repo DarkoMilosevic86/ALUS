@@ -17,7 +17,7 @@
 // §5.4's rule, which is also why the quick-navigation and cursor scripts are
 // bound FROM A TABLE in a loop rather than written out 64 times.
 //
-// WHAT THE USER GETS, which is the manual test of 02-FAZE.md:
+// WHAT THE USER GETS, which is the manual test of phase-plan.md:
 //
 //     alus+space       browse <-> focus mode
 //     arrows           read by line / character

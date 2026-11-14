@@ -5,7 +5,7 @@
 //
 // An object that owns scripts.
 //
-// Port of NVDA's `baseObject.ScriptableObject` (01-ARHITEKTURA.md §5.3). An
+// Port of NVDA's `baseObject.ScriptableObject` (architecture.md §5.3). An
 // object declares which NVDA CLASS NAMES it answers to — "the class chain" —
 // because that is what a gesture map section names:
 //
@@ -67,7 +67,7 @@ protected:
     // Replaces the class chain after construction. The object model needs it:
     // which NVDA classes an a11y::Object answers to depends on the overlay
     // behaviours chosen for it, and those are chosen once the object exists
-    // and can be asked about its role and attributes (01-ARHITEKTURA.md §6.2).
+    // and can be asked about its role and attributes (architecture.md §6.2).
     void setScriptClasses(std::vector<std::string> classChain);
 
 private:

@@ -6,7 +6,7 @@
 // What identifies an application, for the purpose of choosing its app module.
 //
 // Port of the concept behind NVDA's `appModuleHandler.getAppNameFromProcessID`
-// and `EXECUTABLE_NAMES_TO_APP_MODS`, with 01-ARHITEKTURA.md §12.1's key:
+// and `EXECUTABLE_NAMES_TO_APP_MODS`, with architecture.md §12.1's key:
 //
 //     primary:       basename(readlink("/proc/<pid>/exe"))
 //     secondary:     the Application accessible's name

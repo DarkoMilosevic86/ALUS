@@ -5,7 +5,7 @@
 //
 // The caret in an editable field: has it moved, and what should be said.
 //
-// Port of NVDA's `editableText.py` (514 lines). 01-ARHITEKTURA.md §8.3 is
+// Port of NVDA's `editableText.py` (514 lines). architecture.md §8.3 is
 // blunt about why this is not simplified: `_hasCaretMoved` has THREE
 // STRATEGIES WITH A TIME BUDGET, because applications lie about caret events,
 // and "GTK, Qt, Electron, Java and LibreOffice lie in DIFFERENT ways". The
@@ -85,8 +85,8 @@ CaretDetectionSettings caretTuningFor(std::string_view toolkitName);
 // What the caret wait concluded.
 struct CaretMoveResult {
     bool moved = false;
-    // How the move was detected, for the log and for the measurement in
-    // tools/phase5-text-check.sh. "event", "bookmark", "word" or "timeout".
+    // How the move was detected, for the log and for the live measurement in
+    // phase-5.md. "event", "bookmark", "word" or "timeout".
     std::string_view strategy = "timeout";
     // The caret position afterwards, or null when it could not be read.
     text::TextRangePtr position;
@@ -200,7 +200,7 @@ private:
     // storing a range here would be a reference ring through the behaviour,
     // and every editable field the user ever focused would leak itself and its
     // cached subtree. Measured under valgrind, and it is the same shape as
-    // claude/FAZA4.md N40 -- see FAZA5.md N49.
+    // docs/history/phase-4.md N40 -- see phase-5.md N49.
     std::optional<text::Bookmark> lastSelection_;
     bool selectionAnchoredAtStart_ = true;
     bool autoSelectDetection_ = false;

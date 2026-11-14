@@ -5,7 +5,7 @@
 //
 // Which module an application gets, and what happens when the user switches.
 //
-// Port of NVDA's `appModuleHandler` (01-ARHITEKTURA.md §12.1): the running
+// Port of NVDA's `appModuleHandler` (architecture.md §12.1): the running
 // table, the lookup, and `handleAppSwitch`'s choreography.
 //
 // THE LOOKUP IS RULES, NOT FILENAMES. NVDA imports `appModules/<name>.py` and

@@ -6,7 +6,7 @@
 // `OffsetsTextRange`: a text range whose position is two numbers.
 //
 // Port of NVDA's `textInfos.offsets.OffsetsTextInfo` (952 lines), which is the
-// base of nearly every text implementation NVDA has. 01-ARHITEKTURA.md §7.2
+// base of nearly every text implementation NVDA has. architecture.md §7.2
 // maps its hooks onto `AtspiText` one for one, and the subclass that does that
 // is `a11y::ObjectTextRange`.
 //
@@ -24,7 +24,7 @@
 // bytes, and get_text(31, 32) is "č"). With bytes assumed, every letter
 // outside ASCII was a step of the wrong size: the right arrow on "Treći" read
 // "ći" and then skipped the "i", and for Cyrillic every letter is two bytes
-// (FAZA10.md N113). The mock backend counted in bytes too, so every test with
+// (phase-10.md N113). The mock backend counted in bytes too, so every test with
 // a Serbian letter in it agreed with the defect.
 //
 // WHAT A SUBCLASS MUST PROVIDE: `storyLength()`. Nothing else is mandatory.

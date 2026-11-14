@@ -46,7 +46,7 @@ TEST_CASE("T4.6 every AT-SPI role maps to an ALUS role", "[a11y][mapping]") {
 }
 
 TEST_CASE("the measured sizes of the two vocabularies", "[a11y][mapping]") {
-    // 01-ARHITEKTURA.md §6.5 said 133 roles and 45 states; those counts
+    // architecture.md §6.5 said 133 roles and 45 states; those counts
     // include ATSPI_ROLE_LAST_DEFINED and the PUSH_BUTTON alias. Measured on
     // AT-SPI 2.56.2:
     CHECK(kPlatformRoleCount == 131);

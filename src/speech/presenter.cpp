@@ -311,7 +311,7 @@ void Presenter::cancelSpeech() {
     // has to be told so. speech-dispatcher keeps a connection paused across
     // spd_cancel: Shift (which pauses) and then Tab (which cancels) left
     // every later utterance queued behind the pause, and ALUS silent until
-    // the connection was rebuilt (FAZA10.md N123).
+    // the connection was rebuilt (phase-10.md N123).
     //
     // The resume goes FIRST. Measured against speech-dispatcher 0.12 with
     // rhvoice: pause, cancel, resume while an utterance was playing leaves

@@ -303,7 +303,7 @@ void AncestorChainDiff::enter(const ObjectPtr& leaf, text::TextWithFields& into,
         if (isTheLeaf && !content.empty()) {
             // A link (or any object with text of its own) inside a paragraph:
             // it occupies ONE U+FFFC in its parent's text, and this is what
-            // that character stands for. FAZA10.md N114.
+            // that character stands for. phase-10.md N114.
             field->set("content", std::string(content));
         } else if (embedded && !object->name().empty()) {
             // N47 resolved: the U+FFFC placeholder becomes the object's name,

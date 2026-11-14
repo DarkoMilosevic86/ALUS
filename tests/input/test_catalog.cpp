@@ -10,7 +10,7 @@
 //
 // plus the checks that keep the generator honest — the key assignments users
 // already know have to come out the other end, or ALUS is not the screen
-// reader they moved from (Z1).
+// reader they moved from (H1).
 #include "alus/script/catalog.hpp"
 
 #include "alus/input/gesture.hpp"
@@ -58,7 +58,7 @@ TEST_CASE("the generated catalogue loads") {
     // ~300 scripts was the plan's estimate; the extractor finds more because
     // browse mode's quick navigation is registered programmatically.
     CHECK(catalog.scriptCount() > 300);
-    // v1.0 non-goals are deliberately NOT registered (00-VIZIJA.md §5).
+    // v1.0 non-goals are deliberately NOT registered (vision.md §5).
     CHECK(catalog.deferredCount() > 0);
     CHECK(catalog.find("globalCommands.GlobalCommands", "activateMagnifierSettingsDialog") ==
           nullptr);

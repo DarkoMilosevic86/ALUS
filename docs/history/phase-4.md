@@ -1,6 +1,6 @@
 # Faza 4 — Objektni model: rezultati
 
-> Izveštaj o izvršenoj fazi. Prati `02-FAZE.md` → *Faza 4 — Objektni model*.
+> Izveštaj o izvršenoj fazi. Prati `phase-plan.md` → *Faza 4 — Objektni model*.
 > Datum: 2026-11-05. Prethodne faze: 1 (jezgro), 2 (govor), 3 (ulaz), zelene.
 
 ## Status: ZAVRŠENA — svih devet kriterijuma prošlo, merenje na živom sistemu izvršeno

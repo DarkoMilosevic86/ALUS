@@ -414,7 +414,7 @@ void TextCommands::review_copy(input::Gesture& /*gesture*/) {
     }
     // Twice: copy to the clipboard. The clipboard is phase 9's work (it needs
     // a GUI toolkit connection), so this reports what it would copy and says
-    // so rather than pretending -- FAZA5.md O9.
+    // so rather than pretending -- phase-5.md O9.
     const std::string text = selection->text();
     ALUS_INFO("review copy requested for {} bytes; the clipboard arrives in phase 9",
               text.size());

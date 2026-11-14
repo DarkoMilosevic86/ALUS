@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-S1 — Ulaz tastature na Wayland-u (Faza 0, 02-FAZE.md).
+S1 — Ulaz tastature na Wayland-u (Faza 0, phase-plan.md).
 
 Pitanje: može li ALUS da vidi i da POTROŠI tastere na GNOME Wayland sesiji —
-rizici R1 i R2 iz 03-RIZICI.md. Ako ne može, ceo plan se revidira.
+rizici R1 i R2 iz risks.md. Ako ne može, ceo plan se revidira.
 
 Plan je tražio C + libatspi. `libatspi2.0-dev` nije instaliran na ciljnom
 sistemu, pa je spike u Python/GI. To je ravnopravan dokaz: GI poziva isti
@@ -143,7 +143,7 @@ def step2_busname(app_id):
 def step4_modifier(dev):
     """
     NALAZ: `map_keysym_modifier` vraća MASKU, ne indeks modifikatora.
-    Plan (02-FAZE.md S1, tačka 4) traži „virtualni modifikator u opsegu 15–31" —
+    Plan (phase-plan.md S1, tačka 4) traži „virtualni modifikator u opsegu 15–31" —
     to je indeks. libatspi vraća `1 << indeks`. Za Insert dobijamo 32768 = 1<<15,
     tj. indeks 15 — prvi virtualni modifikator, tačno na dnu očekivanog opsega.
     `AtspiKeyDefinition.modifiers` očekuje MASKU, pa se vraćena vrednost
@@ -480,7 +480,7 @@ def main():
     crit_ok = all(results.get(k, {}).get("pass") for k in critical)
     log(f"\nKritični koraci (1, 2, 2b, 4, 5a): {'PASS' if crit_ok else 'FAIL'}")
     if not crit_ok:
-        log("→ R1/R2: ulaz na Wayland-u nije dokazan. Vidi 03-RIZICI.md.")
+        log("→ R1/R2: ulaz na Wayland-u nije dokazan. Vidi risks.md.")
     log("=" * 78)
 
     if args.json:

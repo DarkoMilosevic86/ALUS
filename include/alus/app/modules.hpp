@@ -5,7 +5,7 @@
 //
 // The app modules ALUS ships with, and the one function that registers them.
 //
-// 02-FAZE.md's phase 8 table. Each one exists because a MEASURED behaviour of
+// phase-plan.md's phase 8 table. Each one exists because a MEASURED behaviour of
 // that application needs it, and each file in src/app/modules/ says which; a
 // module that cannot name what it fixes does not belong here, because every
 // module is a layer between the user and what the application really said.

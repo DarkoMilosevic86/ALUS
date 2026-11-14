@@ -5,7 +5,7 @@
 //
 // The synthesizer interface.
 //
-// See 01-ARHITEKTURA.md §4.5. Two implementations are planned; one exists.
+// See architecture.md §4.5. Two implementations are planned; one exists.
 // SsipSynth (speech-dispatcher) is the default, decided by measurement in
 // spikes/RESULTS.md S2: 11.5 ms p95 to first audio, 29.0 ms p95 to silence
 // after cancel, index marks accurate to 46 ms p95 against a 100 ms budget.
@@ -96,7 +96,7 @@ public:
     // Output modules, for a driver that fronts several engines (speech-
     // dispatcher). The defaults say "none": a driver with one engine has no
     // module to choose. Changing the module changes availableVoices(); the
-    // caller picks a voice afterwards (FAZA10.md N126).
+    // caller picks a voice afterwards (phase-10.md N126).
     virtual std::vector<std::string> availableModules() const { return {}; }
     virtual std::string outputModule() const { return {}; }
     virtual bool setOutputModule(const std::string& module) {

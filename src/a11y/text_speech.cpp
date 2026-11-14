@@ -453,7 +453,7 @@ SpeechSequence getFormatFieldSpeech(const text::Field& attributes,
 // getControlFieldSpeech
 //
 // Port of NVDA's `speech.getControlFieldSpeech` (:2288-2614). The hole phase 5
-// left behind on purpose (FAZA5.md O14): the loop in `getTextRangeSpeech`
+// left behind on purpose (phase-5.md O14): the loop in `getTextRangeSpeech`
 // already maintained the field stack, and this is what it was waiting for.
 // ---------------------------------------------------------------------------
 
@@ -1196,7 +1196,7 @@ TextRangeSpeechResult getTextRangeSpeech(const text::TextRange& range,
             // link inside a paragraph, an image -- and the object's own field
             // has already said what it is and what it says (`content`, set by
             // nav::DocumentTextRange). Spoken, it was "<U+FFFC>" after every
-            // link in a navigation bar (FAZA10.md N114); it stays in the
+            // link in a navigation bar (phase-10.md N114); it stays in the
             // STREAM only so braille's cell-to-offset map stays one to one.
             for (std::size_t at = piece.find("\xEF\xBF\xBC"); at != std::string::npos;
                  at = piece.find("\xEF\xBF\xBC", at)) {

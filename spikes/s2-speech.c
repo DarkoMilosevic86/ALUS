@@ -1,8 +1,8 @@
 /*
- * S2 — Latencija i tačnost govora (Faza 0, 02-FAZE.md).
+ * S2 — Latencija i tačnost govora (Faza 0, phase-plan.md).
  *
  * Pitanje: drži li speech-dispatcher govorni ugovor koji ALUS-u treba
- * (rizik R4 iz 03-RIZICI.md), i ostaje li `SsipSynth` podrazumevani backend.
+ * (rizik R4 iz risks.md), i ostaje li `SsipSynth` podrazumevani backend.
  *
  * Budžeti:
  *   speak()  -> prvi audio sample      < 50 ms

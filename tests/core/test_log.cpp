@@ -3,7 +3,7 @@
 //
 // This file is part of ALUS (Access Linux Using Speech).
 //
-// Logging: levels, and degradation of expected exceptions (01-ARHITEKTURA.md §3.8).
+// Logging: levels, and degradation of expected exceptions (architecture.md §3.8).
 #include "alus/core/log.hpp"
 
 #include <catch2/catch_test_macros.hpp>

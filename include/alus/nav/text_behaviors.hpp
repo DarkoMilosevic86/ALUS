@@ -6,11 +6,11 @@
 // Text that changes by itself: `LiveText` and `Terminal`.
 //
 // Port of NVDA's `NVDAObjects/behaviors.py` `LiveText`, `Terminal` and
-// `EnhancedTermTypedCharSupport`. These are the deliverables 02-FAZE.md calls
+// `EnhancedTermTypedCharSupport`. These are the deliverables phase-plan.md calls
 // `alus::a11y::behaviors::{LiveText, Terminal}`; they live in the nav library
 // because they need the text layer, and they keep the `a11y::behaviors`
 // namespace so that the gesture maps and the overlay chooser read as before
-// (FAZA5.md O7).
+// (phase-5.md O7).
 //
 // WHAT THE PROBLEM IS. A terminal, a chat window and a log viewer present
 // their whole contents as ONE piece of text and only say "something changed".
@@ -55,7 +55,7 @@ class Service;
 // diff-match-patch) is NOT ported: it exists in NVDA to catch a changed word
 // in the middle of a line, and it costs a dependency plus an O(n·m) character
 // diff on every screen update. What a terminal user needs is the new LINES,
-// and FAZA5.md O8 records the measurement that led to this.
+// and phase-5.md O8 records the measurement that led to this.
 //
 // The fast path is the common case: output that was APPENDED. When the old
 // lines are a prefix of the new ones, the answer is the suffix, in one pass.

@@ -4,7 +4,7 @@
 // This file is part of ALUS (Access Linux Using Speech).
 //
 // The command hierarchy, and above all the prosody semantics from
-// 01-ARHITEKTURA.md §4.3: a prosody change is an OFFSET XOR a MULTIPLIER, and
+// architecture.md §4.3: a prosody change is an OFFSET XOR a MULTIPLIER, and
 // both are relative to THE VALUE THE USER CONFIGURED. "Raise the pitch on
 // capital letters" is PitchCommand::byOffset(30) — plus 30 on top of whatever
 // the user set, not an absolute pitch.

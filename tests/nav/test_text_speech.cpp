@@ -3,7 +3,7 @@
 //
 // This file is part of ALUS (Access Linux Using Speech).
 //
-// How text is said out loud: the spelling path (which closes claude/FAZA4.md
+// How text is said out loud: the spelling path (which closes docs/history/phase-4.md
 // O11), the format field reporting behind `alus+f`, the indentation report,
 // and the selection change announcement.
 #include "alus/a11y/text_speech.hpp"
@@ -291,7 +291,7 @@ TEST_CASE("text already selected when a control gets the focus is announced firs
 
 TEST_CASE("an object with navigable text reads its text, not its value",
           "[nav][speech]") {
-    // claude/FAZA4.md O10, closed: until phase 5 there was no text layer, so
+    // docs/history/phase-4.md O10, closed: until phase 5 there was no text layer, so
     // getObjectSpeech spoke the value.
     NavFixture fixture;
     DocumentTree tree(fixture.backend, "the first line\nthe second line");

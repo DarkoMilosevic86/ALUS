@@ -6,7 +6,7 @@
 // The input commands: the part of NVDA's `globalCommands` that phase 3 owns.
 //
 // These five are the ones a user needs in order to USE the input layer, and
-// they are the ones the phase 3 manual test exercises (02-FAZE.md):
+// they are the ones the phase 3 manual test exercises (phase-plan.md):
 //
 //     nvda+1    input help on and off
 //     nvda+2    cycle speaking of typed characters

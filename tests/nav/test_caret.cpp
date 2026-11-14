@@ -6,7 +6,7 @@
 // T5.5 — caret movement detection works in GTK4, Qt6 and LibreOffice; three
 //        separate tests, and a different timeout for each is allowed.
 //
-// 01-ARHITEKTURA.md §8.3: the three strategies are transferred, not
+// architecture.md §8.3: the three strategies are transferred, not
 // simplified, because the toolkits lie in DIFFERENT ways. Each test below
 // makes one of them lie the way that toolkit really does, and checks that the
 // right strategy caught it.
@@ -321,7 +321,7 @@ TEST_CASE("the generated command table carries the caret and review keys",
     REQUIRE(review != nullptr);
     CHECK_FALSE(review->gestures.empty());
     CHECK_FALSE(review->description.empty());
-    // numpad9, which is what the manual test of 02-FAZE.md presses.
+    // numpad9, which is what the manual test of phase-plan.md presses.
     bool hasNumpad9 = false;
     for (const std::string& gesture : review->gestures) {
         if (gesture.find("numpad9") != std::string::npos) {

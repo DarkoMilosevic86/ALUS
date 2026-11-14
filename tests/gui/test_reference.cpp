@@ -124,7 +124,8 @@ TEST_CASE("T9.5 — the command reference matches the command table", "[gui][T9.
              << info->name
              << "` with no sign that it is not in this version; regenerate with "
                 "python3 tools/generate-command-reference.py");
-        if (line.find("НЕМА") != std::string::npos) {
+        if (line.find("NOT IN THIS VERSION") != std::string::npos ||
+            line.find("NOT ON WAYLAND") != std::string::npos) {
             ++marked;
         } else {
             FAIL_CHECK("docs/commands.md promises `" + info->name +

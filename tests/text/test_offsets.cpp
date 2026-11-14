@@ -8,7 +8,7 @@
 // T5.4 — unicodeNormalize: a decomposed "é" is recognised as ONE character
 //        for spelling.
 //
-// 01-ARHITEKTURA.md §7.3 calls this "the most likely source of silent bugs",
+// architecture.md §7.3 calls this "the most likely source of silent bugs",
 // which is why these tests are the first ones phase 5 has: a mistake here is
 // invisible in English and breaks every other language.
 #include "alus/text/offsets.hpp"

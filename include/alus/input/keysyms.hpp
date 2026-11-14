@@ -7,7 +7,7 @@
 //
 // These are protocol constants from `X11/keysymdef.h`: stable for decades,
 // and what both `libatspi` and the compositor's KeyboardMonitor signal speak
-// (01-ARHITEKTURA.md §5.2). They are repeated here rather than included so
+// (architecture.md §5.2). They are repeated here rather than included so
 // that the input layer does not pull `x11proto-dev` into the build on a
 // Wayland-only system. Everything that needs a NAME for a keysym, or a keysym
 // for a character, goes through `KeyNames`, which uses libxkbcommon — the same

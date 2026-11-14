@@ -6,7 +6,7 @@
 // Core logging.
 //
 // Port of NVDA's `logHandler.py`. The one functionally important detail (see
-// 01-ARHITEKTURA.md §3.8): `Log::exception()` degrades EXPECTED platform errors
+// architecture.md §3.8): `Log::exception()` degrades EXPECTED platform errors
 // to the DebugWarning level, because errors play an error sound, and a screen
 // reader that chirps on every D-Bus timeout is unusable.
 #pragma once

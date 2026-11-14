@@ -6,7 +6,7 @@
 // `TreeInterceptor`: the thing that stands between the user and an
 // application's own object tree.
 //
-// Port of NVDA's `treeInterceptorHandler.py` as 01-ARHITEKTURA.md §8.5
+// Port of NVDA's `treeInterceptorHandler.py` as architecture.md §8.5
 // specifies it: the lifecycle, `isReady`, the `passThrough` policy,
 // `rootNVDAObject`, `RootProxyTextInfo`, and creation through
 // `Object::treeInterceptorClass`.
@@ -61,7 +61,7 @@ public:
     // description is HIDDEN from the gesture dialog (NVDA's rule, T9.3) and
     // input help has nothing to say about it. Browse mode's ~150 commands had
     // no catalogue at all until this parameter was threaded through
-    // (claude/FAZA9.md N101).
+    // (docs/history/phase-9.md N101).
     TreeInterceptor(std::vector<std::string> classChain, a11y::ObjectPtr root,
                     Service& service, const script::Catalog* catalog = nullptr);
     ~TreeInterceptor() override;

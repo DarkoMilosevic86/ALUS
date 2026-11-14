@@ -91,7 +91,7 @@ bool A11yManagerBackend::start(std::string* error) {
     }
 
     // Is there a KeyboardMonitor at all? On a compositor without one (sway,
-    // wlroots — 03-RIZICI.md R2) this is where ALUS finds out, instead of
+    // wlroots — risks.md R2) this is where ALUS finds out, instead of
     // appearing to work and reporting no keys (N7's failure mode).
     GVariant* owner = g_dbus_connection_call_sync(
         connection_, "org.freedesktop.DBus", "/org/freedesktop/DBus", "org.freedesktop.DBus",
@@ -100,7 +100,7 @@ bool A11yManagerBackend::start(std::string* error) {
     if (owner == nullptr) {
         const std::string message =
             std::string("this compositor exposes no ") + kBusName + " (" + takeError(gerror) +
-            "); keyboard input is not available — see 03-RIZICI.md R2";
+            "); keyboard input is not available — see risks.md R2";
         setError(message);
         health_ = BackendHealth::NoDevice;
         if (error != nullptr) {
@@ -176,7 +176,7 @@ bool A11yManagerBackend::start(std::string* error) {
         const std::string message =
             denied ? "the compositor refuses keyboard monitoring for the name '" + busName_ +
                          "' — only its allow-listed assistive technology may monitor keys "
-                         "(03-RIZICI.md R1); start ALUS with an allow-listed app id"
+                         "(risks.md R1); start ALUS with an allow-listed app id"
                    : "WatchKeyboard failed: " + watchError;
         setError(message);
         health_ = denied ? BackendHealth::AccessDenied : BackendHealth::Failed;

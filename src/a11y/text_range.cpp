@@ -142,7 +142,7 @@ text::FormatField normaliseTextAttributes(const Attributes& attributes) {
     // ATK's `invisible`: text that is there and not drawn. NVDA reports it as
     // "hidden", and it matters -- hidden text in a document is text the user
     // would otherwise never know about. Found by measurement: GTK sets this
-    // attribute on every run (tools/phase5-text-check.sh step 3).
+    // attribute on every run (the phase 5 live check, phase-5.md).
     if (const std::string_view invisible = value("invisible"); !invisible.empty()) {
         field.set("hidden", isTrue(invisible));
     }

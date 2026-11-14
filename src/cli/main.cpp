@@ -89,6 +89,7 @@ using Clock = std::chrono::steady_clock;
 
 struct Options {
     gboolean version = FALSE;
+    gboolean help = FALSE;
     gboolean noAudio = FALSE;
     gint rate = -1;
     gint pitch = -1;
@@ -342,7 +343,7 @@ int commandProcess(Service& service, const std::string& text, const std::string&
 // Phase 3: input diagnostics.
 //
 // These exist because the failure they report is INVISIBLE. If the compositor
-// refuses ALUS the keyboard, every key simply does nothing (03-RIZICI.md R1,
+// refuses ALUS the keyboard, every key simply does nothing (risks.md R1,
 // findings N7 and N8), and a user who cannot see the terminal has no other way
 // to tell that apart from a broken binding. So there is a command that says it.
 // --------------------------------------------------------------------------
@@ -788,7 +789,7 @@ alus::a11y::ObjectPtr documentNamed(alus::a11y::Registry& registry, const std::s
 // the same scripts the keys run, and what WOULD be spoken printed after each.
 //
 // It exists because browse mode met a real browser for the first time in the
-// second live pass (claude/MERENJE-ORCA.md) and failed in three ways at once
+// second live pass (docs/history/orca-comparison.md) and failed in three ways at once
 // -- `h` found the same heading every time, the down arrow read "U+FFFC", the
 // up arrow said "edge of document" -- and every one of those had to be
 // diagnosed by asking a blind user to press keys and then reading a log. This
@@ -975,7 +976,7 @@ int commandBrowseInfo(Loop& loop) {
     const int characters = root->characterCount();
     // CLAMPED to the character count, and not a flat 120: Firefox returns an
     // EMPTY string when the end offset is past the end of the text, where
-    // Chrome clamps and answers (FAZA6.md N94). Asking for 120 characters of
+    // Chrome clamps and answers (phase-6.md N94). Asking for 120 characters of
     // an 11-character document therefore reported "0 of them U+FFFC" in
     // Firefox -- which looked like Firefox contradicting N47, and did not.
     const std::string own =
@@ -1441,7 +1442,7 @@ int commandGuiInfo() {
         std::printf("  why not:           %s\n", service.unavailableReason().c_str());
     }
     std::printf("  its own process:   yes -- a window in the screen reader's own\n"
-                "                     process cannot be read at all (FAZA9.md N79)\n");
+                "                     process cannot be read at all (phase-9.md N79)\n");
     std::printf("  pages:             ");
     bool first = true;
     for (const std::string& id : alus::gui::pageIds()) {
@@ -1474,7 +1475,7 @@ int commandGuiInfo() {
 // `alus-cli autostart [--enable|--disable]`: does ALUS start with the session,
 // and does anything else.
 //
-// 03-RIZICI.md R12 is explicit that the Orca conflict is OFFERED and never
+// risks.md R12 is explicit that the Orca conflict is OFFERED and never
 // resolved silently, because masking another screen reader's autostart is not
 // a decision an installer gets to make for a user who may be relying on it.
 // So the default is --status and it only reports.
@@ -1570,6 +1571,10 @@ int main(int argc, char* argv[]) {
 
     Options options;
     const GOptionEntry entries[] = {
+        // GLib's own --help is turned off below because it would list only
+        // the options; usage() lists the commands, which is what is asked for.
+        {"help", 'h', 0, G_OPTION_ARG_NONE, &options.help, "Show the commands and options",
+         nullptr},
         {"version", 'v', 0, G_OPTION_ARG_NONE, &options.version, "Print the version and exit",
          nullptr},
         {"rate", 0, 0, G_OPTION_ARG_INT, &options.rate, "Speech rate, 0-100", "N"},
@@ -1607,7 +1612,7 @@ int main(int argc, char* argv[]) {
         return 2;
     }
     // One place every return path passes through; see the same lambda in
-    // src/daemon/main.cpp for why (FAZA9.md N87). `settings` never reaches it,
+    // src/daemon/main.cpp for why (phase-9.md N87). `settings` never reaches it,
     // because it execv()s -- and the kernel frees the whole image there.
     const auto freeOptions = [&options] {
         g_free(options.voice);
@@ -1628,6 +1633,11 @@ int main(int argc, char* argv[]) {
 
     if (options.version != FALSE) {
         std::printf("alus-cli %s\n", ALUS_VERSION);
+        freeOptions();
+        return 0;
+    }
+    if (options.help != FALSE) {
+        usage();
         freeOptions();
         return 0;
     }

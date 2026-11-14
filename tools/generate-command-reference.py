@@ -6,7 +6,7 @@
 #
 # Generates the command reference from data/scripts.csv.
 #
-# WHY GENERATED. 00-VIZIJA.md Z1 says the command set is checked by comparing
+# WHY GENERATED. vision.md H1 says the command set is checked by comparing
 # "the generated command table against the upstream user guide", and §5.4 makes
 # tools/extract-commands.py the source of truth for ~390 commands. A reference
 # typed by hand would be a fourth copy of that truth -- after the extractor,
@@ -88,14 +88,14 @@ def read_status(path: Path) -> dict[str, tuple[str, str]]:
     return out
 
 
-# What the Opis column says before the description, for a command that is not
+# What the Description column says before the description, for a command that is not
 # in this version. The point is that the reference STOPS PROMISING it.
 def status_prefix(state: str) -> str:
     if state == "announce":
-        return "**НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — "
+        return "**NOT IN THIS VERSION** (the key says so when pressed) — "
     if state == "platform":
-        return ("**НЕМА НА WAYLAND-У** (тастер остаје апликацији; ALUS не може "
-                "да га пошаље назад, N18) — ")
+        return ("**NOT ON WAYLAND** (the key stays with the application; ALUS "
+                "cannot send it back, N18) — ")
     return ""
 
 
@@ -120,7 +120,7 @@ def main() -> int:
     # Which commands ALUS has not written yet. scripts.csv cannot say: it is
     # generated from upstream's source and knows only what a command IS.
     # Without this the reference promises every one of them, which is exactly
-    # how `quit` came to be documented, key-bound and silent (FAZA9.md N99).
+    # how `quit` came to be documented, key-bound and silent (phase-9.md N99).
     status = read_status(args.status)
 
     # A command with no description is not documented, for the same reason the
@@ -133,31 +133,35 @@ def main() -> int:
     bound = sum(1 for r in documented if any(
         (r["gestures"], r["gestures_desktop"], r["gestures_laptop"])))
 
+    announce = sum(1 for r in documented
+                   if status.get(r["script"], ("",))[0] == "announce")
+    platform = sum(1 for r in documented
+                   if status.get(r["script"], ("",))[0] == "platform")
     lines = [
-        "# ALUS — referenca komandi",
+        "# ALUS command reference",
         "",
-        "> **GENERISANO** iz `data/scripts.csv` sa "
+        "> **GENERATED** from `data/scripts.csv` by "
         "`tools/generate-command-reference.py`.",
-        "> Ne menjati rukom: izmena se gubi pri sledećem generisanju, a test "
-        "T9.5",
-        "> (`meson test -C build --suite gui`) pada kad se ovaj fajl i tabela "
-        "komandi raziđu.",
+        "> Do not edit by hand: changes are lost at the next generation, and the "
+        "tests",
+        "> (`meson test -C build --suite external --suite gui`) fail when this "
+        "file and the command table disagree.",
         "",
-        "`ALUS` je ALUS taster: Insert, numpad Insert i/ili Caps Lock, po "
-        "podešavanju",
-        "u `[keyboard]`. Komanda bez tastera je u tabeli ali nije vezana — "
-        "vezuje se",
-        "u dijalogu gestova (`alus+f6`) ili u `~/.config/alus/gestures.ini`.",
+        "`ALUS` is the ALUS key: Insert, numpad Insert and/or Caps Lock, as set "
+        "in",
+        "Settings → Keyboard. **Desktop** and **Laptop** are the two keyboard "
+        "layouts.",
+        "A command without a key is in the table but not bound; bind it in the",
+        "gestures dialog (Settings → Gestures) or in "
+        "`~/.config/alus/gestures.ini`.",
         "",
-        f"Komandi: **{len(documented)}** u {len(by_category)} kategorija, od "
-        f"toga **{bound}** vezanih.",
+        f"Commands: **{len(documented)}** in {len(by_category)} categories, "
+        f"**{bound}** of them bound to keys.",
         "",
-        f"Od toga **{sum(1 for r in documented if r['script'] in status)}** "
-        "nije u ovoj verziji i tako je i označeno u koloni *Opis*: "
-        f"**{sum(1 for r in documented if status.get(r['script'], ('',))[0] == 'announce')}** "
-        "ima taster koji **izgovori** da komande nema, a "
-        f"**{sum(1 for r in documented if status.get(r['script'], ('',))[0] == 'platform')}** "
-        "namerno nije vezano jer taster pripada aplikaciji (N18). Izvor je "
+        f"**{announce + platform}** are not in this version and are marked so in "
+        f"the *Description* column: **{announce}** have a key that **says** the "
+        f"command is missing, and **{platform}** are deliberately left unbound "
+        "because the key belongs to the application (N18). The source is "
         "`data/commands-status.ini`.",
         "",
     ]
@@ -165,7 +169,7 @@ def main() -> int:
     for category in sorted(by_category):
         lines.append(f"## {category}")
         lines.append("")
-        lines.append("| Komanda | Desktop | Laptop | Opis |")
+        lines.append("| Command | Desktop | Laptop | Description |")
         lines.append("|---|---|---|---|")
         for row in sorted(by_category[category], key=lambda r: r["description"]):
             desktop, laptop = gestures_of(row)
@@ -178,20 +182,21 @@ def main() -> int:
     lines += [
         "---",
         "",
-        "## Odakle ovo dolazi",
+        "## Where this comes from",
         "",
-        "Imena skriptova, opisi i podrazumevani tasteri su preuzeti iz NVDA "
-        "izvornog",
-        "koda sa `tools/extract-commands.py` (vidi `01-ARHITEKTURA.md` §5.4 i "
-        "`00-VIZIJA.md` §6).",
-        "Zato su komande **iste** kao u NVDA: korisnik koji prelazi sa Windows-a "
-        "ne uči",
-        "ništa novo (Z1).",
+        "The script names, descriptions and default keys come from the NVDA "
+        "source",
+        "code, extracted by `tools/extract-commands.py` (see "
+        "`docs/design/architecture.md` §5.4",
+        "and `docs/design/vision.md` §6). That is why the commands are **the "
+        "same** as in NVDA:",
+        "a user coming from Windows has nothing new to learn (H1).",
         "",
-        "Opisi se prevode preko gettext-a; na srpskom ih prikazuje",
-        "`alus-cli --language sr list-commands`.",
+        "The descriptions are translated through gettext; "
+        "`alus-cli --language sr list-commands`",
+        "shows them in Serbian.",
         "",
-        f"Generisano {datetime.date.today().isoformat()}.",
+        f"Generated {datetime.date.today().isoformat()}.",
         "",
     ]
     markdown = "\n".join(lines)
@@ -219,9 +224,9 @@ def main() -> int:
             # would fail every day. The rows are what must match.
             if path.suffix == ".md":
                 current = "\n".join(l for l in current.splitlines()
-                                    if not l.startswith("Generisano "))
+                                    if not l.startswith("Generated "))
                 wanted_ = "\n".join(l for l in wanted.splitlines()
-                                    if not l.startswith("Generisano "))
+                                    if not l.startswith("Generated "))
             else:
                 wanted_ = wanted
             if current.strip() != wanted_.strip():

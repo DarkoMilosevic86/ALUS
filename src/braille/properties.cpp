@@ -303,7 +303,7 @@ std::optional<std::string> getControlFieldBraille(
     // `reportObjectDescriptions` is about focus and object navigation, not
     // about a document being read.
     //
-    // DEVIATION (claude/FAZA7.md O3): ALUS has no `descriptionFrom` -- AT-SPI
+    // DEVIATION (docs/history/phase-7.md O3): ALUS has no `descriptionFrom` -- AT-SPI
     // reports a description without saying where it came from, and phases 4
     // to 6 never needed to know. So `reportAriaDescription`, whose entire
     // purpose is this one decision, governs ALL document descriptions in

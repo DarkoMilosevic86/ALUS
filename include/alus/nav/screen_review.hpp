@@ -5,7 +5,7 @@
 //
 // Screen review, without a display model.
 //
-// 01-ARHITEKTURA.md §10 is the whole design decision and it is worth restating
+// architecture.md §10 is the whole design decision and it is worth restating
 // here, because this file is the only place it is implemented:
 //
 //   NVDA's `displayModel.py` is a RECORD OF EVERY TEXT DRAWING CALL, captured
@@ -37,7 +37,7 @@
 // sees and what T5.9 measures.
 //
 // THE SNAPSHOT IS TAKEN ONCE AND SHARED. Phase 4 measured 578 µs PER OBJECT to
-// build one (claude/FAZA4.md), so a window with sixty controls costs 35 ms --
+// build one (docs/history/phase-4.md), so a window with sixty controls costs 35 ms --
 // once. Every `copy()` of this range shares the same snapshot, which matters
 // because `move()` copies, and the review commands move several times per key
 // press.

@@ -5,7 +5,7 @@
 //
 // T2.1 — ui::message("zdravo") is spoken.
 //
-// And the rest of the pipeline from 01-ARHITEKTURA.md §4.2, whose ORDER is the
+// And the rest of the pipeline from architecture.md §4.2, whose ORDER is the
 // contract: the filter chain, the speech modes, the language pass, the text
 // pass, and the two-space chunk separator that exists because one space would
 // merge adjacent numbers in French and German.
@@ -374,7 +374,7 @@ TEST_CASE("whitespace inside a chunk is flattened", "[speech][presenter]") {
 }
 
 TEST_CASE("shift then tab: the cancel ends the synthesizer's pause", "[speech][presenter]") {
-    // FAZA10.md N123, measured in the settings window: Shift pauses, Tab
+    // phase-10.md N123, measured in the settings window: Shift pauses, Tab
     // cancels, and everything after it was silent.
     PresenterFixture fixture;
     fixture.presenter().speakMessage("Rate 81");

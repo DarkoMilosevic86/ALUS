@@ -5,7 +5,7 @@
 //
 // The braille display, through brltty's BrlAPI.
 //
-// 01-ARHITEKTURA.md §14's one large simplification: NVDA ships ~40 drivers for
+// architecture.md §14's one large simplification: NVDA ships ~40 drivers for
 // individual braille displays; ALUS ships none, and talks to brltty instead.
 // brltty already has the drivers, Linux users already have it configured, and
 // the ~6000 lines of device protocol NVDA carries are 6000 lines ALUS does not

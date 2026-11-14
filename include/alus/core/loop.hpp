@@ -6,7 +6,7 @@
 // The core loop and the pump.
 //
 // Port of NVDA's `CorePump` (`core.py:990-1049`) and `requestPump`
-// (`core.py:1180-1199`). See 01-ARHITEKTURA.md §3.1.
+// (`core.py:1180-1199`). See architecture.md §3.1.
 //
 // Like NVDA, ALUS has no loop of its own: the loop belongs to the toolkit
 // (`GMainLoop` here, `wx.MainLoop()` there), and the core's work is driven by a

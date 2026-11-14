@@ -22,7 +22,7 @@
 // split a word. That is what `_WindowRow` records and what makes the window a
 // list of rows rather than a start and a length.
 //
-// WORD WRAP (02-FAZE.md T7.5) has four modes and they differ only in where a
+// WORD WRAP (phase-plan.md T7.5) has four modes and they differ only in where a
 // row ends:
 //   None                        at the display edge, mid-word, no mark
 //   MarkWordCuts                one cell earlier, with dots 7-8 as the mark

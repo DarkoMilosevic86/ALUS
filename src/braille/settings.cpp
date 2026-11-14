@@ -269,7 +269,7 @@ void registerSettingDefaults(config::Manager& manager) {
     manager.setDefault(kBraille, "brlapiHost", defaults.brlapiHost);
     // These two live in [documentFormatting] in NVDA as well: they are the
     // braille half of a setting speech also reads, and one key must not have
-    // two homes (FAZA5.md O4 again).
+    // two homes (phase-5.md O4 again).
     manager.setDefault(kFormatting, "reportFontAttributesInBraille", boolText(false));
     manager.setDefault(kFormatting, "reportSpellingErrorsInBraille", boolText(true));
 }

@@ -154,7 +154,7 @@ void fillChoices(GtkWidget* widget, RowBinding* binding, std::vector<Choice> cho
 
 // Up/Down, Home/End and Page Up/Down change a combo row's choice in place,
 // the way a closed combo box does on Windows and in GTK 3 -- what a screen
-// reader user expects from "Synthesizer: combo box" (FAZA10.md N124). Out of
+// reader user expects from "Synthesizer: combo box" (phase-10.md N124). Out of
 // the box AdwComboRow only opens a popover on Space or Enter, and the arrows
 // move to the next ROW, so choosing a voice took Space, arrows, Enter and a
 // search for where the focus had gone. Space and Enter still open the list.

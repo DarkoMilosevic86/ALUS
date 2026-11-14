@@ -473,7 +473,7 @@ std::vector<a11y::ObjectPtr> QuickNav::all(ElementType type, int limit,
     // provider on Linux implements FLOW in `Collection::GetMatches`. Chrome
     // 157 (Blink), Firefox 153 (Gecko) and LibreOffice Writer (VCL/UNO) all
     // answer an EMPTY array for FLOW and TAB, and all three answer correctly
-    // for CANONICAL (FAZA6.md N90). Asking for FLOW here therefore bought a
+    // for CANONICAL (phase-6.md N90). Asking for FLOW here therefore bought a
     // guaranteed-empty round trip and nothing else.
     //
     // The KEYPRESS still asks for reading order, in find() below, because

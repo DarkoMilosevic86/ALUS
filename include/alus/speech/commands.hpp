@@ -5,7 +5,7 @@
 //
 // Speech commands: the whole hierarchy from NVDA's `speech/commands.py`.
 //
-// See 01-ARHITEKTURA.md §4.3 for the command → SSML mapping. The distinction
+// See architecture.md §4.3 for the command → SSML mapping. The distinction
 // that matters is the one NVDA draws:
 //
 //   Command          anything that can sit between strings in a sequence

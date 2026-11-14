@@ -11,7 +11,7 @@
 // what it is checking is the part a blind user experiences directly:
 //
 //   * every one of them SAYS something, every time, including when it cannot
-//     do what was asked (claude/FAZA6.md O10: an unfinished feature a user
+//     do what was asked (docs/history/phase-6.md O10: an unfinished feature a user
 //     can hear is a different thing from a broken one),
 //   * the value they announce is the value they actually set, and
 //   * the change reaches the configuration -- but NOT the disk, until

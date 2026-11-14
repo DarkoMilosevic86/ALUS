@@ -121,7 +121,7 @@ public:
     // and must not call resetConfiguration for it -- changing the speech rate
     // would otherwise take the braille display and every app module down and
     // bring them back, which the user hears as the screen reader stuttering.
-    // Rule 3 of 02-FAZE.md read narrowly: restartable in place, and the
+    // Rule 3 of phase-plan.md read narrowly: restartable in place, and the
     // smallest place that will do.
     void applyConfiguration();
 

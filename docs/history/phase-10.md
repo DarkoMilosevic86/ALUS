@@ -1,6 +1,6 @@
 # Faza 10 — Komande koje su se najavljivale, a nisu bile napisane
 
-Izveštaj o izvršenoj fazi. Nije bila u `02-FAZE.md`: naručena je posle Faze 9,
+Izveštaj o izvršenoj fazi. Nije bila u `phase-plan.md`: naručena je posle Faze 9,
 iz jedne rečenice korisnika — *„ne mogu da podesim sintezu, glas, ovde ti skoro
 ništa od komandi ne radi"*.
 
@@ -28,7 +28,7 @@ kraju). Napisano je **29 komandi**.
 | Prevedenih poruka (`po/sr.po`) | 1105/1106 | **1170/1170** |
 
 Brojevi dodela su izračunati iz `data/gestures-builtin.ini` i
-`data/commands-status.ini`, i **oba stupca istom metodom** — `FAZA9.md`
+`data/commands-status.ini`, i **oba stupca istom metodom** — `phase-9.md`
 navodi 238/64, što je ista stvar izmerena kroz živo traženje skripta u sviti
 `commands`, gde kontekst odlučuje da li se komanda dohvata. Broj koji meri
 **pokrenuti program** je i dalje tamo
@@ -145,7 +145,7 @@ izraza.
 
 ### N111 — ceo GTK 4 je bio „onemogućen", i ALUS-ov prozor podešavanja sa njim
 
-**Nađeno živim merenjem prema Orci** (`MERENJE-ORCA.md`), i to je pravi uzrok
+**Nađeno živim merenjem prema Orci** (`orca-comparison.md`), i to je pravi uzrok
 rečenice od koje je faza počela. Korisnik je, sa ALUS-om na tastaturi, otvorio
 prozor podešavanja (`alus+control+s`) i prošao ga tabom i strelicama. Od **207**
 stvari koje je ALUS za to vreme izgovorio, **161** je sadržalo reč
@@ -216,7 +216,7 @@ mock i kod slagali u grešci.
 | Nalaz | Šta se čulo | Uzrok | Popravka |
 |---|---|---|---|
 | **N112** | `h` uvek isti naslov; strelica dole uvek isti red; gore „ivica dokumenta" | `AtspiBackend::path()` je vraćao **AccessibleId** (HTML `id`, većinom prazan), pa je bookmark kursora vraćao poziciju na prvi list sa praznom putanjom — vrh stranice. Mock je uvek vraćao jedinstvenu putanju. | `path()` = ime magistrale + putanja objekta (javna polja AtspiObject, bez D-Bus poziva) |
-| **N113** | strelica desno na „Treći": „ći", pa preskočeno „i" | AT-SPI offseti su **codepoint-i**; tekstualni sloj ih je tretirao kao UTF-8 bajtove (§7.3 plana). Mock je brojao bajtove. | `OffsetsTextRange::offsetUnit()`; `ObjectTextRange` = codepoint-i; mock broji kao platforma; odstupanje upisano u `01-ARHITEKTURA.md` §7.3 |
+| **N113** | strelica desno na „Treći": „ći", pa preskočeno „i" | AT-SPI offseti su **codepoint-i**; tekstualni sloj ih je tretirao kao UTF-8 bajtove (§7.3 plana). Mock je brojao bajtove. | `OffsetsTextRange::offsetUnit()`; `ObjectTextRange` = codepoint-i; mock broji kao platforma; odstupanje upisano u `architecture.md` §7.3 |
 | **N114** | „navigation, `<U+FFFC>` `<U+FFFC>` `<U+FFFC>`" umesto linkova | List sa mešovitim sadržajem (tekst + U+FFFC za decu) išao je u tok bez razrešavanja hypertexta | svaki U+FFFC dobija polje svog deteta sa `content` = tekst linka; znak ostaje u toku (brajeva mapa), govor ga ne izgovara |
 | **N115** | „lista" na svakom redu liste | Chrome ne postavlja READ_ONLY na `<ul>`, pa je lista bila „list box" (jednoredna kontrola). NVDA-ov virtuelni bafer dodaje READONLY svakom neuređivom čvoru. Mock lista je imala READONLY eksplicitno. | polje dokumenta dobija READONLY ako objekat nije ni uređiv ni fokusabilan |
 | **N116** | naslov bez „heading level N"; kod `h` tekst dvaput | objektni model daje `Heading1`–`Heading6`, a pravila za polja traže `Heading` + `level`; Chrome naslovu daje ime = tekst, bez `explicit-name` | polje dokumenta: `Heading` + `level`; ime jednako sopstvenom tekstu, bez `explicit-name`, se ne izgovara posebno |
@@ -465,7 +465,7 @@ put događaja bio bi veća šteta.
 `reference/nvda/` (1,9 MB, 55 fajlova) nosi samo module koji su **izvor
 istine**: ono što skenira `tools/extract-commands.py`, `keyLabels.py`,
 `controlTypes/`, 28 locale mapa gestova, srpski katalog, i tri fajla koja
-citiraju `01-ARHITEKTURA.md` i `03-RIZICI.md`. Provereno **pre** brisanja:
+citiraju `architecture.md` i `risks.md`. Provereno **pre** brisanja:
 ekstraktori daju bajt-identične `scripts.csv`, `gestures-builtin.ini`,
 `key-labels.ini` i `locale/sr/gestures.ini`, a `extract-controltypes.py
 --check` javlja `unchanged` za svih 6 generisanih fajlova. Commit upstream-a je

@@ -7,7 +7,7 @@
 //
 // WHY THIS FILE EXISTS. `quit` is in data/scripts.csv with the gesture
 // `kb:ALUS+q`, docs/commands.md promises it, and pressing it does nothing at
-// all: nothing in src/ ever binds it (claude/FAZA9.md N99). T9.5 cannot see
+// all: nothing in src/ ever binds it (docs/history/phase-9.md N99). T9.5 cannot see
 // that, because it compares the reference with the catalogue and the reference
 // is GENERATED FROM the catalogue -- two copies of one truth, agreeing
 // perfectly about a command that does not exist. The same shape as N91 (the
@@ -480,7 +480,7 @@ TEST_CASE("T9.6 every key the built-in map assigns runs something",
     //                the command is not in this version. Silence and
     //                "not in this version" are the same to a test that only
     //                counts; they are not the same to a blind user, which is
-    //                why the announcement is bound at all (FAZA6.md O10).
+    //                why the announcement is bound at all (phase-6.md O10).
     //   [platform]   the key must find NOTHING, because grabbing it would
     //                take it from the application and ALUS cannot give it
     //                back (N18). This one is asserted the other way round, so

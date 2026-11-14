@@ -5,7 +5,7 @@
 //
 // Translation as a restartable subsystem.
 //
-// Rule 3 of 02-FAZE.md: every subsystem is restartable in process. That is not
+// Rule 3 of phase-plan.md: every subsystem is restartable in process. That is not
 // a formality here -- `[general] language` is a setting a user changes in the
 // GUI, and a screen reader that has to be restarted to speak Serbian is a
 // screen reader the user restarts while unable to hear what the desktop is

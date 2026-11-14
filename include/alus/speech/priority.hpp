@@ -5,7 +5,7 @@
 //
 // Speech priorities.
 //
-// Port of NVDA's `speech/priorities.py`. See 01-ARHITEKTURA.md §4.1.
+// Port of NVDA's `speech/priorities.py`. See architecture.md §4.1.
 //
 // The numeric values are NVDA's, because they are part of a user-visible
 // contract (they appear in NVDA's controller client interface, and add-ons

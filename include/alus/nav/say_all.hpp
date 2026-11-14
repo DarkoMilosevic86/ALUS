@@ -28,8 +28,8 @@
 // boundary. Without it the synthesizer inserts an utterance-final pause at the
 // end of every line and say-all stutters once per line.
 //
-// 02-FAZE.md calls this deliverable a coroutine. It is not one, and
-// FAZA5.md O6 says why: a coroutine resumed once per pump cycle is a POLLING
+// phase-plan.md calls this deliverable a coroutine. It is not one, and
+// phase-5.md O6 says why: a coroutine resumed once per pump cycle is a POLLING
 // shape, and what this needs is to be woken by the synthesizer reaching a
 // mark. The one place a `core::Task` is right -- waiting for an application to
 // move its caret -- does use one (nav::EditableText).
@@ -82,7 +82,7 @@ public:
 
     // NVDA: `isRunning`. The answer phase 3 has been waiting for: its
     // `GestureManager::Hooks::isSayAllRunning` is filled from this
-    // (claude/FAZA4.md handover point 5).
+    // (docs/history/phase-4.md handover point 5).
     bool isRunning() const noexcept { return reader_ != nullptr || objectsRoot_ != nullptr; }
 
     // NVDA: `readText(cursor)`. False when there is nothing to read.
@@ -108,15 +108,15 @@ public:
     // event arrives after the move, by which time the reader may be a few
     // paragraphs further on, so the last few are remembered, until stop().
     bool ownsFocusChangeTo(const a11y::Object& object) const;
-    // How many lines were read, for the measurement in
-    // tools/phase5-text-check.sh and for T5.7.
+    // How many lines were read, for the log, the live measurement in
+    // phase-5.md and T5.7.
     std::size_t linesRead() const noexcept { return linesRead_; }
 
 private:
     void nextLine();
     bool advanceToNextChunk();
     // At the end of the reader's object: the object reading continues in --
-    // FLOWS_TO, else the next sibling with text (FAZA10.md N127: in Writer
+    // FLOWS_TO, else the next sibling with text (phase-10.md N127: in Writer
     // every paragraph is an object, and say-all stopped after one line).
     a11y::ObjectPtr nextReadingObject(const a11y::ObjectPtr& from) const;
     void lineReached(a11y::ObjectPtr object, text::Bookmark bookmark,

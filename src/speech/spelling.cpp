@@ -12,7 +12,7 @@
 // because they need the symbol processor, the character descriptions and the
 // synthesizer's capabilities -- all three of which the Presenter already has.
 //
-// This file closes claude/FAZA4.md O11: phase 4 spelled by sending the text
+// This file closes docs/history/phase-4.md O11: phase 4 spelled by sending the text
 // with `CharacterModeCommand` and nothing else, so the third press of
 // `alus+tab` spelled exactly like the second. Now the third press describes
 // the characters, and a capital letter changes pitch.

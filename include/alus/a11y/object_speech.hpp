@@ -171,7 +171,7 @@ inline speech::SpeechSequence getObjectSpeech(Object& object, OutputReason reaso
 
 // NVDA: `shouldReportTextContent` inside getObjectSpeech. True when the text
 // of the object is what the user wants to hear, rather than its value. This is
-// the check claude/FAZA4.md O10 left open.
+// the check docs/history/phase-4.md O10 left open.
 bool shouldReportTextContent(const Object& object, OutputReason reason);
 
 // The row/column/level memory that makes "row 3" silent when the row did not

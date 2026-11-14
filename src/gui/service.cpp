@@ -27,7 +27,7 @@ namespace {
 // The inherited command table has one script per upstream settings panel.
 // ALUS has SEVEN pages where upstream has fifteen panels, because most of what
 // those panels configure is either one of ALUS's pages or a v1.0 non-goal
-// (00-VIZIJA.md §5: the mouse, the add-on store, input composition and the
+// (vision.md §5: the mouse, the add-on store, input composition and the
 // dictionary editors are all deferred).
 //
 // An empty page is DELIBERATE and is not a gap to be filled with the nearest

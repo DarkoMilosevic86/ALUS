@@ -6,7 +6,7 @@
 // Offset encoding: the most likely source of silent bugs in the whole project.
 //
 // Port of NVDA's `textUtils.OffsetConverter` family, and specifically of
-// `UTF8OffsetConverter` (`textUtils/__init__.py:320`). 01-ARHITEKTURA.md §7.3
+// `UTF8OffsetConverter` (`textUtils/__init__.py:320`). architecture.md §7.3
 // states the problem: THREE OFFSET SYSTEMS ARE IN PLAY.
 //
 //   * AT-SPI2 counts in UTF-8 BYTES. Every offset that crosses the platform

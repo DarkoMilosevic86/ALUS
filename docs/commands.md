@@ -1,27 +1,28 @@
-# ALUS — referenca komandi
+# ALUS command reference
 
-> **GENERISANO** iz `data/scripts.csv` sa `tools/generate-command-reference.py`.
-> Ne menjati rukom: izmena se gubi pri sledećem generisanju, a test T9.5
-> (`meson test -C build --suite gui`) pada kad se ovaj fajl i tabela komandi raziđu.
+> **GENERATED** from `data/scripts.csv` by `tools/generate-command-reference.py`.
+> Do not edit by hand: changes are lost at the next generation, and the tests
+> (`meson test -C build --suite external --suite gui`) fail when this file and the command table disagree.
 
-`ALUS` je ALUS taster: Insert, numpad Insert i/ili Caps Lock, po podešavanju
-u `[keyboard]`. Komanda bez tastera je u tabeli ali nije vezana — vezuje se
-u dijalogu gestova (`alus+f6`) ili u `~/.config/alus/gestures.ini`.
+`ALUS` is the ALUS key: Insert, numpad Insert and/or Caps Lock, as set in
+Settings → Keyboard. **Desktop** and **Laptop** are the two keyboard layouts.
+A command without a key is in the table but not bound; bind it in the
+gestures dialog (Settings → Gestures) or in `~/.config/alus/gestures.ini`.
 
-Komandi: **316** u 17 kategorija, od toga **178** vezanih.
+Commands: **316** in 17 categories, **178** of them bound to keys.
 
-Od toga **16** nije u ovoj verziji i tako je i označeno u koloni *Opis*: **16** ima taster koji **izgovori** da komande nema, a **0** namerno nije vezano jer taster pripada aplikaciji (N18). Izvor je `data/commands-status.ini`.
+**16** are not in this version and are marked so in the *Description* column: **16** have a key that **says** the command is missing, and **0** are deliberately left unbound because the key belongs to the application (N18). The source is `data/commands-status.ini`.
 
 ## Audio
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
-| `cycleAudioDuckingMode` | ALUS+shift+d | ALUS+shift+d | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Cycles through audio ducking modes which determine when ALUS lowers the volume of other sounds |
-| `cycleSoundSplit` | ALUS+alt+s | ALUS+alt+s | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Cycles through sound split modes |
+| `cycleAudioDuckingMode` | ALUS+shift+d | ALUS+shift+d | **NOT IN THIS VERSION** (the key says so when pressed) — Cycles through audio ducking modes which determine when ALUS lowers the volume of other sounds |
+| `cycleSoundSplit` | ALUS+alt+s | ALUS+alt+s | **NOT IN THIS VERSION** (the key says so when pressed) — Cycles through sound split modes |
 
 ## Braille
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
 | `braille_cycleUnicodeNormalization` | — | — | Cycle through the braille Unicode normalization states |
 | `braille_cycleCursorShape` | — | — | Cycle through the braille cursor shapes |
@@ -52,7 +53,7 @@ Od toga **16** nije u ovoj verziji i tako je i označeno u koloni *Opis*: **16**
 
 ## Browse mode
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
 | `nextSelectedElement` | — | — | Moves to the next element of the selected type in browse mode touch navigation |
 | `nextHeading1` | 1 | 1 | Moves to the next heading at level 1 |
@@ -75,8 +76,8 @@ Od toga **16** nije u ovoj verziji i tako je i označeno u koloni *Opis*: **16**
 | `previousHeading8` | shift+8 | shift+8 | Moves to the previous heading at level 8 |
 | `previousHeading9` | shift+9 | shift+9 | Moves to the previous heading at level 9 |
 | `toggleVirtualBufferPassThrough` | ALUS+space | ALUS+space | Toggles between browse mode and focus mode. When in focus mode, keys will pass straight through to the application, allowing you to interact directly with a control. When in browse mode, you can navigate the document with the cursor, quick navigation keys, etc. |
-| `toggleNativeAppSelectionMode` | ALUS+shift+f10 | ALUS+shift+f10 | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Toggles native selection mode on and off |
-| `toggleScreenLayout` | ALUS+v | ALUS+v | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Toggles on and off if the screen layout is preserved while rendering the document content |
+| `toggleNativeAppSelectionMode` | ALUS+shift+f10 | ALUS+shift+f10 | **NOT IN THIS VERSION** (the key says so when pressed) — Toggles native selection mode on and off |
+| `toggleScreenLayout` | ALUS+v | ALUS+v | **NOT IN THIS VERSION** (the key says so when pressed) — Toggles on and off if the screen layout is preserved while rendering the document content |
 | `findNext` | ALUS+f3 | ALUS+f3 | find the next occurrence of the previously entered text string from the current cursor's position |
 | `findPrevious` | ALUS+shift+f3 | ALUS+shift+f3 | find the previous occurrence of the previously entered text string from the current cursor's position |
 | `nextAnnotation` | a | a | moves to the next annotation |
@@ -154,7 +155,7 @@ Od toga **16** nije u ovoj verziji i tako je i označeno u koloni *Opis*: **16**
 
 ## Configuration
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
 | `revertConfiguration` | ALUS+control+r | ALUS+control+r | Pressing once reverts the current configuration to the most recently saved state. Pressing three times resets to factory defaults. |
 | `reportActiveConfigurationProfile` | — | — | Reports the name of the current ALUS configuration profile |
@@ -184,13 +185,13 @@ Od toga **16** nije u ovoj verziji i tako je i označeno u koloni *Opis*: **16**
 
 ## Configuration profiles
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
 | `activateConfigProfilesDialog` | ALUS+control+p | ALUS+control+p | Shows the ALUS Configuration Profiles dialog |
 
 ## Document formatting
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
 | `toggleReportTableHeaders` | — | — | Cycle through the possible modes to report table row and column headers |
 | `toggleReportFontAttributes` | — | — | Cycles font attribute reporting between speech, braille, speech and braille, and off. |
@@ -230,7 +231,7 @@ Od toga **16** nije u ovoj verziji i tako je i označeno u koloni *Opis*: **16**
 
 ## Emulated system keyboard keys
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
 | `braille_toggleAlusKeyShift` | — | — | Virtually toggles the ALUS and shift keys to emulate a keyboard shortcut with braille input |
 | `braille_toggleAlusKey` | — | — | Virtually toggles the ALUS key to emulate a keyboard shortcut with braille input |
@@ -246,7 +247,7 @@ Od toga **16** nije u ovoj verziji i tako je i označeno u koloni *Opis*: **16**
 
 ## Input
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
 | `passNextKeyThrough` | ALUS+f2 | ALUS+f2 | The next key that is pressed will not be handled at all by ALUS, it will be passed directly through to the application. |
 | `toggleKeyboardLayout` | — | — | Toggles between desktop and laptop keyboard layout |
@@ -254,7 +255,7 @@ Od toga **16** nije u ovoj verziji i tako je i označeno u koloni *Opis*: **16**
 
 ## Miscellaneous
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
 | `quit` | ALUS+q | ALUS+q | Quits ALUS! |
 | `restart` | — | — | Restarts ALUS! |
@@ -263,25 +264,25 @@ Od toga **16** nije u ovoj verziji i tako je i označeno u koloni *Opis*: **16**
 
 ## Mouse
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
-| `leftMouseClick` | numpadDivide | numpadDivide, ALUS+[ | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Clicks the left mouse button once at the current mouse position |
-| `rightMouseClick` | numpadMultiply | numpadMultiply, ALUS+] | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Clicks the right mouse button once at the current mouse position |
-| `toggleLeftMouseButton` | shift+numpadDivide | shift+numpadDivide, ALUS+control+[ | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Locks or unlocks the left mouse button |
-| `toggleRightMouseButton` | shift+numpadMultiply | shift+numpadMultiply, ALUS+control+] | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Locks or unlocks the right mouse button |
-| `moveMouseToNavigatorObject` | ALUS+numpadDivide | ALUS+numpadDivide, ALUS+shift+m | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Moves the mouse pointer to the current navigator object |
+| `leftMouseClick` | numpadDivide | numpadDivide, ALUS+[ | **NOT IN THIS VERSION** (the key says so when pressed) — Clicks the left mouse button once at the current mouse position |
+| `rightMouseClick` | numpadMultiply | numpadMultiply, ALUS+] | **NOT IN THIS VERSION** (the key says so when pressed) — Clicks the right mouse button once at the current mouse position |
+| `toggleLeftMouseButton` | shift+numpadDivide | shift+numpadDivide, ALUS+control+[ | **NOT IN THIS VERSION** (the key says so when pressed) — Locks or unlocks the left mouse button |
+| `toggleRightMouseButton` | shift+numpadMultiply | shift+numpadMultiply, ALUS+control+] | **NOT IN THIS VERSION** (the key says so when pressed) — Locks or unlocks the right mouse button |
+| `moveMouseToNavigatorObject` | ALUS+numpadDivide | ALUS+numpadDivide, ALUS+shift+m | **NOT IN THIS VERSION** (the key says so when pressed) — Moves the mouse pointer to the current navigator object |
 | `mouseScrollDown` | — | — | Scroll down at the mouse position |
 | `mouseScrollLeft` | — | — | Scroll left at the mouse position |
 | `mouseScrollRight` | — | — | Scroll right at the mouse position |
 | `mouseScrollUp` | — | — | Scroll up at the mouse position |
-| `moveNavigatorObjectToMouse` | ALUS+numpadMultiply | ALUS+numpadMultiply, ALUS+shift+n | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Sets the navigator object to the current object under the mouse pointer and speaks it |
+| `moveNavigatorObjectToMouse` | ALUS+numpadMultiply | ALUS+numpadMultiply, ALUS+shift+n | **NOT IN THIS VERSION** (the key says so when pressed) — Sets the navigator object to the current object under the mouse pointer and speaks it |
 | `toggleMouseAudioCoordinates` | — | — | Toggles beeps that report mouse coordinates as the mouse moves |
 | `toggleMouseTextResolution` | — | — | Toggles how much text will be spoken when the mouse moves |
-| `toggleMouseTracking` | ALUS+m | ALUS+m | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Toggles the reporting of information as the mouse moves |
+| `toggleMouseTracking` | ALUS+m | ALUS+m | **NOT IN THIS VERSION** (the key says so when pressed) — Toggles the reporting of information as the mouse moves |
 
 ## Object navigation
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
 | `navigatorObject_firstChild` | ALUS+numpad2 | ALUS+numpad2, ALUS+shift+downArrow | Moves the navigator object to the first object inside it |
 | `navigatorObject_next` | ALUS+numpad6 | ALUS+numpad6, ALUS+shift+rightArrow | Moves the navigator object to the next object |
@@ -302,9 +303,9 @@ Od toga **16** nije u ovoj verziji i tako je i označeno u koloni *Opis*: **16**
 
 ## Speech
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
-| `copyLastSpokenInformation` | ALUS+control+x | ALUS+control+x | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Copies the last spoken information to the clipboard. |
+| `copyLastSpokenInformation` | ALUS+control+x | ALUS+control+x | **NOT IN THIS VERSION** (the key says so when pressed) — Copies the last spoken information to the clipboard. |
 | `speech_cycleUnicodeNormalization` | — | — | Cycle through the speech Unicode normalization states |
 | `speechMode` | ALUS+s | ALUS+s | Cycles between speech modes. |
 | `toggleSpeakTypedCharacters` | ALUS+2 | ALUS+2 | Cycles through options for when to speak typed characters. |
@@ -328,7 +329,7 @@ Od toga **16** nije u ovoj verziji i tako je i označeno u koloni *Opis*: **16**
 
 ## System caret
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
 | `reportCurrentSelection` | ALUS+shift+upArrow | ALUS+shift+s | Announces the current selection in edit controls and documents. Pressing twice spells this information. Pressing three times spells it using character descriptions. Pressing four times shows it in a browsable message. |
 | `cycleParagraphStyle` | — | — | Cycles through paragraph navigation styles |
@@ -344,7 +345,7 @@ Od toga **16** nije u ovoj verziji i tako je i označeno u koloni *Opis*: **16**
 
 ## System focus
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
 | `copyStatusLine` | — | — | Copies content of the status bar of current application to the clipboard. |
 | `moveToParentTreeInterceptor` | ALUS+control+space | ALUS+control+space | Moves the focus out of the current embedded object and into the document that contains it |
@@ -359,15 +360,15 @@ Od toga **16** nije u ovoj verziji i tako je i označeno u koloni *Opis*: **16**
 
 ## System status
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
 | `dateTime` | ALUS+f12 | ALUS+f12 | If pressed once, reports the current time. If pressed twice, reports the current date |
 | `say_battery_status` | ALUS+shift+b | ALUS+shift+b | Reports battery status and time remaining if AC is not plugged in |
-| `reportClipboardText` | ALUS+c | ALUS+c | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Reports the text on the system clipboard. Pressing twice spells this information. Pressing three times spells it using character descriptions. |
+| `reportClipboardText` | ALUS+c | ALUS+c | **NOT IN THIS VERSION** (the key says so when pressed) — Reports the text on the system clipboard. Pressing twice spells this information. Pressing three times spells it using character descriptions. |
 
 ## Text review
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
 | `review_copy` | ALUS+f10 | ALUS+f10 | If pressed once, the text from the previously set start marker up to and including the current position of the review cursor is selected. If pressed twice, the text is copied to the clipboard |
 | `review_markStartForCopy` | ALUS+f9 | ALUS+f9 | Marks the current position of the review cursor as the start of text to be selected or copied |
@@ -400,29 +401,29 @@ Od toga **16** nije u ovoj verziji i tako je i označeno u koloni *Opis*: **16**
 
 ## Tools
 
-| Komanda | Desktop | Laptop | Opis |
+| Command | Desktop | Laptop | Description |
 |---|---|---|---|
-| `activatePythonConsole` | ALUS+control+z | ALUS+control+z | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Activates the ALUS Python Console, primarily useful for development |
+| `activatePythonConsole` | ALUS+control+z | ALUS+control+z | **NOT IN THIS VERSION** (the key says so when pressed) — Activates the ALUS Python Console, primarily useful for development |
 | `activateAddonsManager` | — | — | Activates the Add-on Store to browse and manage add-on packages for ALUS |
 | `reportLinkDestinationInWindow` | — | — | Displays the destination URL of the link at the position of caret or focus in a window, instead of just speaking it. May be preferred by braille users. |
 | `navigatorObject_devInfo` | ALUS+f1 | ALUS+f1 | Logs information about the current navigator object which is useful to developers and activates the log viewer so the information can be examined. |
-| `log_markStartThenCopy` | ALUS+control+shift+f1 | ALUS+control+shift+f1 | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Mark the current end of the log as the start of the fragment to be copied to clipboard by pressing again. |
+| `log_markStartThenCopy` | ALUS+control+shift+f1 | ALUS+control+shift+f1 | **NOT IN THIS VERSION** (the key says so when pressed) — Mark the current end of the log as the start of the fragment to be copied to clipboard by pressing again. |
 | `openUserConfigurationDirectory` | — | — | Opens ALUS configuration directory for the current user. |
 | `startWxInspectionTool` | — | — | Opens the WX GUI inspection tool. Used to get more information about the state of GUI components. |
-| `reloadPlugins` | ALUS+control+f3 | ALUS+control+f3 | **НЕМА У ОВОЈ ВЕРЗИЈИ** (тастер то и каже кад се притисне) — Reloads app modules and global plugins without restarting ALUS, which can be Useful for developers |
+| `reloadPlugins` | ALUS+control+f3 | ALUS+control+f3 | **NOT IN THIS VERSION** (the key says so when pressed) — Reloads app modules and global plugins without restarting ALUS, which can be Useful for developers |
 | `reportLinkDestination` | ALUS+k | ALUS+k | Report the destination URL of the link at the position of caret or focus. If pressed twice, shows the URL in a window for easier review. |
 | `reportAppModuleInfo` | ALUS+control+f1 | ALUS+control+f1 | Speaks the filename of the active application along with the name of the currently loaded appModule |
 
 ---
 
-## Odakle ovo dolazi
+## Where this comes from
 
-Imena skriptova, opisi i podrazumevani tasteri su preuzeti iz NVDA izvornog
-koda sa `tools/extract-commands.py` (vidi `01-ARHITEKTURA.md` §5.4 i `00-VIZIJA.md` §6).
-Zato su komande **iste** kao u NVDA: korisnik koji prelazi sa Windows-a ne uči
-ništa novo (Z1).
+The script names, descriptions and default keys come from the NVDA source
+code, extracted by `tools/extract-commands.py` (see `docs/design/architecture.md` §5.4
+and `docs/design/vision.md` §6). That is why the commands are **the same** as in NVDA:
+a user coming from Windows has nothing new to learn (H1).
 
-Opisi se prevode preko gettext-a; na srpskom ih prikazuje
-`alus-cli --language sr list-commands`.
+The descriptions are translated through gettext; `alus-cli --language sr list-commands`
+shows them in Serbian.
 
-Generisano 2026-11-13.
+Generated 2026-11-14.

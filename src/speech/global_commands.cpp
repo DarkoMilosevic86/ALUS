@@ -195,7 +195,7 @@ void GlobalCommands::repeatLastSpokenInformation(input::Gesture& /*gesture*/) {
     if (!last.has_value() || last->sequence.empty()) {
         // Upstream returns silently here. ALUS does not: a key that answers
         // nothing is indistinguishable from a key that did not arrive, which
-        // is the defect FAZA9.md N99 is about. Nothing having been said yet is
+        // is the defect phase-9.md N99 is about. Nothing having been said yet is
         // a fact, and a short one.
         // Translators: reported when `alus+x` is pressed before ALUS has said
         // anything there is to repeat.

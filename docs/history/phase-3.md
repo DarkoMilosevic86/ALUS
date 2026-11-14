@@ -1,6 +1,6 @@
 # Faza 3 — Ulaz i skriptovi: rezultati
 
-> Izveštaj o izvršenoj fazi. Prati `02-FAZE.md` → *Faza 3 — Ulaz i skriptovi*.
+> Izveštaj o izvršenoj fazi. Prati `phase-plan.md` → *Faza 3 — Ulaz i skriptovi*.
 > Datum: 2026-11-05. Prethodne faze: 1 (jezgro) i 2 (govor), zelene.
 
 ## Status: ZAVRŠENA — svi kriterijumi prošli, merenje izvršeno i potvrđeno
@@ -102,7 +102,7 @@ ne vidi. 21 kategorija, tačno kao u NVDA.
 
 ### O1 — ulazni backend je direktan D-Bus, ne `AtspiDevice`
 
-`01-ARHITEKTURA.md` §5.2 kaže „Backend: `AtspiDevice`". ALUS umesto toga
+`architecture.md` §5.2 kaže „Backend: `AtspiDevice`". ALUS umesto toga
 razgovara sa `org.freedesktop.a11y.KeyboardMonitor` direktno
 (`src/input/a11y_manager_backend.cpp`). Razlog je dijagnoza N19 iznad: taj
 sloj **jeste** zaglavljivanje (sinhroni pozivi bez roka iz glavne petlje) i
@@ -129,7 +129,7 @@ zavisnost uopšte; ona dolazi u Fazi 4, za objektni model.
 
 ### O2 — `libxkbcommon` ulazi u stek
 
-`01-ARHITEKTURA.md` §1 ga nije imao. Potreban je zbog jedne konkretne
+`architecture.md` §1 ga nije imao. Potreban je zbog jedne konkretne
 rečenice: gest `kb(laptop):alus+š` iz srpskog locale-a mora da postane keysym
 koji kompozitor poredi sa grab-om, a to je **legacy** keysym `XK_scaron`
 (0x1b9), ne Unicode forma 0x1000161. `xkb_utf32_to_keysym` to radi kanonski i
@@ -318,7 +318,7 @@ Tri posledice koje treba znati:
    kozmetika. `appModules.soffice.*` (LibreOffice) **ostaje**.
 3. **Atribucija ostaje, bez imena proizvoda u podacima.** Generisani fajlovi
    kažu „derived from the upstream screen reader's data under
-   GPL-2.0-or-later" i pokazuju na `00-VIZIJA.md` §6 i `LICENSE`, gde atribucija
+   GPL-2.0-or-later" i pokazuju na `vision.md` §6 i `LICENSE`, gde atribucija
    stoji eksplicitno. Komentari u izvornom kodu koji kažu odakle je dizajn
    prenet (`// Port of …`) takođe ostaju: to je provenijencija, zahtev licence
    za izvedeni rad, i jedini način da se kod uporedi sa originalom pri

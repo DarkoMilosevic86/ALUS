@@ -7,7 +7,7 @@
 //
 // Also the `.dic` format itself, because that format IS NVDA's locale data:
 // ALUS has to read what the locale files already contain, escapes, complex
-// symbols, display names and all (01-ARHITEKTURA.md §11.1).
+// symbols, display names and all (architecture.md §11.1).
 #include "alus/text/symbols.hpp"
 
 #include "../support/loop_fixture.hpp"

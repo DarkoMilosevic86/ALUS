@@ -6,7 +6,7 @@
 // The audio path: WavePlayer, tones and WAVE files.
 //
 // The part that matters for later phases is `feed(data, size, onDone)` WITH ITS
-// PER-BLOCK CALLBACK (01-ARHITEKTURA.md §4.6). That callback is how a
+// PER-BLOCK CALLBACK (architecture.md §4.6). That callback is how a
 // synthesizer which hands ALUS raw audio reports sample-accurate positions, and
 // it is the reason EspeakDirectSynth can exist in v1.1 (spikes/RESULTS.md S2b:
 // a mark accurate to 0.000 ms, against a persistent 40 ms shift over SSIP).

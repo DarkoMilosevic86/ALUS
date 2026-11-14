@@ -5,9 +5,9 @@
 //
 // A gesture map: `gestures.ini`, loaded, queried and written back.
 //
-// Port of NVDA's `inputCore.GlobalGestureMap` (01-ARHITEKTURA.md §5.1). The
+// Port of NVDA's `inputCore.GlobalGestureMap` (architecture.md §5.1). The
 // file format is NVDA's, down to the section names, because a hard requirement
-// (00-VIZIJA.md Z3) is that a user's own NVDA `gestures.ini` loads into ALUS
+// (vision.md H3) is that a user's own NVDA `gestures.ini` loads into ALUS
 // WITHOUT EDITS:
 //
 //     [globalCommands.GlobalCommands]
