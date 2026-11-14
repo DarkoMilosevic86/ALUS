@@ -255,6 +255,10 @@ bool Registry::onPlatformEvent(PlatformEvent event) {
     raw.object = static_cast<core::ObjectId>(source);
     raw.source = event.application;
     raw.payload = std::move(owned);
+    // An item becoming selected is where the user is when the focus does not
+    // move -- gnome-shell's search results, list boxes driven from an entry.
+    // It must survive the flood that usually comes with it (N121).
+    raw.priority = payload->atspiType == "object:state-changed:selected" && payload->detail1 != 0;
 
     // A focus event is rare and urgent; everything else may be one of a
     // thousand. Only the urgent one is worth creating an object for here, and
@@ -305,6 +309,9 @@ std::size_t Registry::pumpEvents() {
         if (ancestor != nullptr) {
             alwaysAllowed.push_back(ancestor->id());
         }
+    }
+    if (watched_ != nullptr) {
+        alwaysAllowed.push_back(watched_->id());
     }
 
     const std::size_t emitted = limiter_.pumpAll(
@@ -382,23 +389,6 @@ std::size_t Registry::pumpEvents() {
         },
         alwaysAllowed);
     return emitted;
-}
-
-bool Registry::redirectFocus(const ObjectPtr& object) {
-    if (object == nullptr || !object->isAlive()) {
-        return false;
-    }
-    if (const ObjectPtr& focus = api_.focus(); focus != nullptr && focus->sameAs(*object)) {
-        return false;
-    }
-    if (!handleGainFocus(object)) {
-        return false;
-    }
-    core::Event event;
-    event.name = std::string{events::kGainFocus};
-    event.object = object->id();
-    dispatcher_.executeEvent(event);
-    return true;
 }
 
 bool Registry::handleGainFocus(const ObjectPtr& object) {

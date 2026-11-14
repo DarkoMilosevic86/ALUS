@@ -348,11 +348,11 @@ TEST_CASE("the status line command reports, spells and says when there is none",
     CHECK(said.front() == "Ready");
 }
 
-TEST_CASE("the gnome-shell module makes the selected search result the focus",
+TEST_CASE("the gnome-shell module speaks the selected search result",
           "[app][modules]") {
     // FAZA10.md N121, the measured shape: typing into the overview's search
     // leaves the keyboard focus in the entry and marks the first result with
-    // SELECTED. No focus event comes, and ALUS said nothing about the result.
+    // SELECTED; the next letters only rename it. No focus event comes.
     AppFixture fixture{true};
     const a11y::Ref application = fixture.addApplication("gnome-shell", "clutter");
     const a11y::Ref window =
@@ -372,34 +372,73 @@ TEST_CASE("the gnome-shell module makes the selected search result the focus",
     REQUIRE(fixture.registry.api().focus() != nullptr);
     REQUIRE(fixture.registry.api().focus()->ref() == entry);
 
+    SECTION("the shell window's focus claim right after the entry is refused") {
+        // Measured: entry, then "Main stage", in the same cycle.
+        fixture.clearRecords();
+        fixture.backend.emit("object:state-changed:focused", entry, 1);
+        fixture.backend.emit("object:state-changed:focused", window, 1);
+        fixture.pumpOnce();
+        REQUIRE(fixture.registry.api().focus() != nullptr);
+        CHECK(fixture.registry.api().focus()->ref() == entry);
+    }
+
     fixture.clearRecords();
     fixture.backend.addState(first, a11y::PlatformState::Selected);
     fixture.backend.emit("object:state-changed:selected", first, 1);
     fixture.pumpOnce();
 
-    REQUIRE(fixture.registry.api().focus() != nullptr);
-    CHECK(fixture.registry.api().focus()->ref() == first);
+    // Spoken -- and the focus stays in the entry, so the letters typed next
+    // are still echoed and edited as text.
     REQUIRE_FALSE(fixture.spoken.empty());
     CHECK(fixture.lastSpoken().find("Terminal") != std::string::npos);
+    CHECK(fixture.registry.api().focus()->ref() == entry);
 
-    SECTION("and the result renamed as the search narrows is said again") {
-        // gnome-shell reuses the result objects: "datot" turns the first one
-        // into Files without another selected event.
+    SECTION("the result renamed as the search narrows is said again, once") {
         fixture.clearRecords();
         fixture.backend.node(first).name = "Files";
         fixture.backend.emit("object:property-change:accessible-name", first);
         fixture.pumpOnce();
-        REQUIRE_FALSE(fixture.changes.empty());
-        CHECK(fixture.changes.back().text.find("Files") != std::string::npos);
+        REQUIRE(fixture.spoken.size() == 1);
+        CHECK(fixture.lastSpoken().find("Files") != std::string::npos);
+        // gnome-shell renames every result several times per letter.
+        fixture.backend.emit("object:property-change:accessible-name", first);
+        fixture.pumpOnce();
+        CHECK(fixture.spoken.size() == 1);
     }
 
-    SECTION("an item letting go of the selection is not a focus") {
+    SECTION("a selected result survives a flood from the same application") {
+        // 1700 `showing` and 400 `children-changed` in three seconds of
+        // typing (measured). The limiter's per-application budget is 10.
+        const a11y::Ref second =
+            fixture.backend.add(results, a11y::PlatformRole::Button, "Settings");
+        fixture.clearRecords();
+        fixture.backend.addState(second, a11y::PlatformState::Selected);
+        fixture.backend.emit("object:state-changed:selected", second, 1);
+        for (int i = 0; i < 40; ++i) {
+            const a11y::Ref noise =
+                fixture.backend.add(results, a11y::PlatformRole::Label, "x");
+            fixture.backend.emit("object:property-change:accessible-name", noise);
+            fixture.backend.emit("object:children-changed:add", results);
+        }
+        fixture.pumpOnce();
+        REQUIRE_FALSE(fixture.spoken.empty());
+        CHECK(fixture.lastSpoken().find("Settings") != std::string::npos);
+    }
+
+    SECTION("an item letting go of the selection says nothing") {
         const a11y::Ref second =
             fixture.backend.add(results, a11y::PlatformRole::Button, "Settings");
         fixture.clearRecords();
         fixture.backend.emit("object:state-changed:selected", second, 0);
         fixture.pumpOnce();
-        CHECK(fixture.registry.api().focus()->ref() == first);
         CHECK(fixture.spoken.empty());
+    }
+
+    SECTION("arrowing onto a result is a real focus, spoken once") {
+        fixture.clearRecords();
+        fixture.backend.emit("object:state-changed:focused", first, 1);
+        fixture.backend.emit("object:state-changed:selected", first, 1);
+        fixture.pumpOnce();
+        CHECK(fixture.spoken.size() == 1);
     }
 }

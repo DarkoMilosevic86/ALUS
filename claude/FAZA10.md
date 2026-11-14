@@ -321,14 +321,39 @@ polju; posle svakog sledećeg slova samo **preimenuje** postojeće rezultate (19
 stanja izgovarao samo za fokus i njegove pretke, pa rezultat nije čuo nikad —
 dok strelica nije pomerila pravi fokus.
 
-Orca to rešava u svom gnome-shell skriptu (`on_selected_changed` →
-`set_locus_of_focus`): označena stavka postaje fokus. ALUS sada ima modul
-`gnome_shell` (`src/app/modules/gnome_shell.cpp`) koji radi isto preko nove
-`Registry::redirectFocus`; kad je rezultat fokus, njegovo preimenovanje
-(„Terminal" → „Datoteke") objektni sloj izgovara kao promenu imena. Test:
-`tests/app/test_modules.cpp`. Živa provera sa pravim kucanjem ostaje korisniku:
-sintetička proba (pregled preko D-Bus-a, tekst preko AT-SPI-ja) nije bila
-merodavna jer je u isto vreme Chrome preuzimao fokus. U prolazu je ALUS video pritisak
+Prvi pokušaj (`07a3900`, preusmeravanje fokusa na rezultat, kao Orca) **nije
+radio** uživo. Druga živa proba korisnika (dnevnik od 11:46) pokazala je tri
+uzroka, nijedan u sintezi:
+
+1. **Ograničivač događaja** propušta 10 događaja po aplikaciji u ciklusu,
+   najnovije. Gnome-shell za tri sekunde kucanja pošalje 1693 `showing`, 398
+   `children-changed` i 45 preimenovanja — prvi `selected` je odbačen i modul
+   ga nije ni video.
+2. **Lažni fokus prozora:** na prvo slovo stižu dva fokusa, polje pa prozor
+   „Main stage". ALUS je zadržao prozor: slova nisu izgovarana, a „Main stage
+   prozor" i „Pregled panel" su izgovoreni ispred rezultata. „Датотеке, дугме"
+   je u 11:46:36.267 stavljeno u red, ali nikad nije stiglo do sinteze — sledeći
+   taster je prekinuo govor dok je još trajao „Main stage".
+3. Preusmeren fokus na rezultat gasi **odjek otkucanih slova** (odjek je samo
+   za polja za unos, `speakTypedCharacters=editControls`, kao NVDA).
+
+Ćirilica nije uzrok: hrvatski glas RHVoice-a ima ćirilična slova u
+`graph.txt` i `g2g.fst`.
+
+Popravka (`src/app/modules/gnome_shell.cpp`, `src/core/event_limiter.cpp`,
+`src/a11y/events.cpp`):
+
+* `object:state-changed:showing` se više ne prima (ALUS ga ne koristi);
+* `selected` sa detail1=1 je **prioritetan** i ne troši budžet; `children-changed`
+  ima svoj budžet; objekat koji modul prati (`Registry::setWatchedObject`)
+  izuzet je kao fokus;
+* modul odbija fokus gnome-shell prozora (Orca isto);
+* izabrani rezultat se **izgovara, a fokus ostaje u polju** (kao NVDA u
+  Windows Start pretrazi), pa se slova i dalje izgovaraju; kad gnome-shell
+  preimenuje taj rezultat, novo ime se izgovori jednom.
+
+Testovi u `tests/app/test_modules.cpp`; test poplave je proveren i obrnuto
+(bez prioriteta pada). U prolazu je ALUS video pritisak
 (Super_L stiže, nije progutan, GNOME otvara pregled aktivnosti), posle toga su
 stigli događaji iz gnome-shell-a, ali je upit o objektu vraćao „The
 application no longer exists" i ništa nije izgovoreno. Kad se pregled otvori

@@ -90,6 +90,7 @@ std::vector<RawEvent> EventLimiter::flushEvents(const std::vector<ObjectId>& alw
     std::optional<Entry> menu;
     std::size_t maxPerSource = 0;
     std::size_t maxFocus = 0;
+    std::vector<std::string> bulkNames;
 
     {
         const std::lock_guard lock{mutex_};
@@ -99,6 +100,7 @@ std::vector<RawEvent> EventLimiter::flushEvents(const std::vector<ObjectId>& alw
         lastMenuEvent_.reset();
         maxPerSource = config_.maxEventsPerSource;
         maxFocus = config_.maxFocusEvents;
+        bulkNames = config_.bulkNames;
     }
 
     std::vector<Entry> kept;
@@ -117,11 +119,15 @@ std::vector<RawEvent> EventLimiter::flushEvents(const std::vector<ObjectId>& alw
     std::sort(byRecency.begin(), byRecency.end(),
               [](const Entry& a, const Entry& b) { return a.sequence > b.sequence; });
 
-    std::unordered_map<std::uintptr_t, std::size_t> perSource;
+    // Two budgets per source: bulk tree events, and everything else.
+    std::map<std::pair<std::uintptr_t, bool>, std::size_t> perSource;
     std::uint64_t dropped = 0;
     for (Entry& entry : byRecency) {
-        const std::size_t count = perSource[entry.event.source]++;
-        const bool exempt = std::find(alwaysAllowed.begin(), alwaysAllowed.end(),
+        const bool bulk = std::find(bulkNames.begin(), bulkNames.end(), entry.event.name) !=
+                          bulkNames.end();
+        const std::size_t count = perSource[{entry.event.source, bulk}]++;
+        const bool exempt = entry.event.priority ||
+                            std::find(alwaysAllowed.begin(), alwaysAllowed.end(),
                                       entry.event.object) != alwaysAllowed.end();
         if (count >= maxPerSource && !exempt) {
             if (count == maxPerSource) {

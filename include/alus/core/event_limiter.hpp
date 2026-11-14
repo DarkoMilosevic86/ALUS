@@ -56,11 +56,19 @@ struct RawEvent {
     // identity, supplied by phase 4.
     std::uintptr_t source = 0;
     std::shared_ptr<void> payload;
+    // Never dropped by the per-source budget. For the rare event that says
+    // where the user IS when the focus did not move (a newly selected item);
+    // set by the platform layer, which is the one that can tell.
+    bool priority = false;
 };
 
 struct EventLimiterConfig {
     // NVDA: MAX_WINEVENTS_PER_THREAD.
     std::size_t maxEventsPerSource = 10;
+    // Events that come by the hundred when a container is rebuilt. They get a
+    // budget of their own, `maxEventsPerSource` again, so that a rebuild
+    // cannot starve the name and state changes that arrive with it.
+    std::vector<std::string> bulkNames = {"childrenAdded", "childrenRemoved"};
     // NVDA: maxFocusItems.
     std::size_t maxFocusEvents = 4;
 
