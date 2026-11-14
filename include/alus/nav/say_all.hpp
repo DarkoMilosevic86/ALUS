@@ -106,6 +106,10 @@ public:
 private:
     void nextLine();
     bool advanceToNextChunk();
+    // At the end of the reader's object: the object reading continues in --
+    // FLOWS_TO, else the next sibling with text (FAZA10.md N127: in Writer
+    // every paragraph is an object, and say-all stopped after one line).
+    a11y::ObjectPtr nextReadingObject(const a11y::ObjectPtr& from) const;
     void lineReached(a11y::ObjectPtr object, text::Bookmark bookmark,
                      a11y::TextRangeSpeechState state);
     void finish();

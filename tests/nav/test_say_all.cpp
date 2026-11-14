@@ -264,3 +264,52 @@ TEST_CASE("say all falls back to reading objects when there is no text",
     CHECK(spoken.find("Close") != std::string::npos);
     CHECK(spoken.find("Remember me") != std::string::npos);
 }
+
+TEST_CASE("say all goes on into the next paragraph object, and the caret with it",
+          "[nav][sayall]") {
+    // FAZA10.md N127, LibreOffice Writer: every paragraph is an object of its
+    // own, linked by FLOWS_TO, and say-all stopped after the first line.
+    NavFixture fixture;
+    auto& backend = fixture.backend;
+    const alus::a11y::Ref application = backend.addApplication("soffice", "VCL");
+    const alus::a11y::Ref window = backend.add(application, alus::a11y::PlatformRole::Frame, "Book - Writer");
+    backend.addState(window, alus::a11y::PlatformState::Active);
+    const alus::a11y::Ref page = backend.add(window, alus::a11y::PlatformRole::DocumentText, "Book");
+    std::vector<alus::a11y::Ref> paragraphs;
+    for (const char* const text : {"The first paragraph.", "", "The third paragraph.",
+                                   "The last paragraph."}) {
+        const alus::a11y::Ref paragraph = backend.add(page, alus::a11y::PlatformRole::Paragraph, {});
+        alus::testing::MockNode& node = backend.node(paragraph);
+        node.text = text;
+        node.caret = 0;
+        node.interfaces |= alus::a11y::Interface::Text;
+        node.interfaces |= alus::a11y::Interface::EditableText;
+        backend.addState(paragraph, alus::a11y::PlatformState::Editable);
+        backend.addState(paragraph, alus::a11y::PlatformState::Focusable);
+        paragraphs.push_back(paragraph);
+    }
+    // The empty second paragraph is linked like any other; say-all skips it.
+    for (std::size_t i = 0; i + 1 < paragraphs.size(); ++i) {
+        backend.node(paragraphs[i]).relations[alus::a11y::PlatformRelation::FlowsTo] = {paragraphs[i + 1]};
+    }
+
+    const auto first = fixture.registry.objectFor(paragraphs.front());
+    REQUIRE(fixture.registry.api().setFocusObject(first));
+    fixture.clearSpeech();
+    fixture.backend.caretsSet.clear();
+
+    REQUIRE(fixture.sayAll().readText(SayAllCursor::Caret));
+    for (int cycle = 0; cycle < 2000 && fixture.sayAll().isRunning(); ++cycle) {
+        fixture.loop().iterateUntilIdle();
+    }
+    fixture.drainSpeech();
+
+    const std::string spoken = fixture.spokenJoined();
+    CHECK(spoken.find("The first paragraph") != std::string::npos);
+    CHECK(spoken.find("The third paragraph") != std::string::npos);
+    CHECK(spoken.find("The last paragraph") != std::string::npos);
+    // The caret went into the paragraphs as they were read, ending in the
+    // last one -- where a key press would have left the user.
+    REQUIRE_FALSE(fixture.backend.caretsSet.empty());
+    CHECK(fixture.backend.caretsSet.back().ref == paragraphs.back());
+}

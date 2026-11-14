@@ -712,3 +712,34 @@ nije imao ništa osim brojeva; na eSpeak-u bi ih bilo 14805.
 Croatian (hr)`, `COMBOBOX "Варијанта" = Adam`, `BUTTON "Пробај глас"`. Testovi:
 `tests/speech/test_settings_ring.cpp` (katalog, eSpeak u prstenu, modul u
 prstenu), `tests/gui/test_model.cpp`.
+
+**Potvrda N126 (korisnik, uživo):** jezik i varijanta, prsten i „Probaj" rade.
+
+**N127 — Nautilus ne kaže prvi fajl ni fajl nađen slovom; „čitaj sve" u
+Writer-u čita jedan red.**
+
+1. **Nautilus 48 (GTK 4)** pomera **izbor**, a ne fokus (dnevnik 13:52:59):
+   otvaranje fascikle daje fokus listi („листа") i `selected` za prvi fajl;
+   prva strelica posle otvaranja opet samo `selected`; skok slovom isto. Fokus
+   za red stiže tek od druge strelice. Sada, kao NVDA (IAccessible `selection`)
+   i Orca (`on_selected_changed`): stavka (list item, table row, tree item,
+   icon) koja postane izabrana dok je fokus na njenoj listi — pretku do četiri
+   nivoa — ili na drugoj stavci iste liste, **postaje fokus** i izgovara se
+   (`Registry::selectionFollowsFocus`). Izuzetak: ako je trenutni fokus i dalje
+   izabran, izbor se proširuje (Ctrl+A, Shift) i fokus ostaje.
+   Sporost (≈200 ms od strelice do govora, bez ijednog reda u dnevniku između)
+   su sinhroni AT-SPI pozivi ka Nautilusu; od sada se svaki događaj duži od
+   50 ms beleži („slow event: … took N ms") sa objektom i ulogom, da sledeći
+   prolaz pokaže koje svojstvo košta.
+2. **„Čitaj sve" u LibreOffice Writer-u** (13:54:32): pročitan jedan red, pa
+   `say-all:stop`. Svaki pasus je poseban objekat, a čitač je radio samo nad
+   tekstom tekućeg. Sada se na kraju objekta prelazi na sledeći — `FLOWS_TO`
+   (Writer tako vezuje pasuse, i preko stranica), inače sledeći tekstualni
+   brat — preskačući prazne pasuse, najviše 200 skokova. Kursor već prati glas
+   (karet se pomera kad sinteza stigne do reda), pa i u novim pasusima: posle
+   prekida Ctrl-om karet je gde je čitanje stalo. Samo za karet; pregledni
+   kursor ostaje u svom objektu, kao u NVDA.
+
+Testovi: `tests/a11y/test_events.cpp` (izbor u listi: otvaranje, skok slovom,
+Ctrl+A, druga lista), `tests/nav/test_say_all.cpp` (četiri pasusa sa praznim,
+karet završava u poslednjem; bez popravke pada).

@@ -467,3 +467,62 @@ TEST_CASE("a GTK 4 combo box: the shown item is its value, and a new one is said
         CHECK(fixture.changes.empty());
     }
 }
+
+TEST_CASE("a selection in the focused list is where the user is", "[a11y][events]") {
+    // FAZA10.md N127, Nautilus 48 (GTK 4): opening a folder focuses the list
+    // and selects the first file; type-ahead selects a file; only `selected`
+    // comes, never a focus event.
+    A11yFixture fixture;
+    MockBackend& backend = fixture.backend;
+    const Ref application = backend.addApplication("nautilus");
+    const Ref window = backend.add(application, PlatformRole::Frame, "Home");
+    backend.addState(window, PlatformState::Active);
+    const Ref view = backend.add(window, PlatformRole::TreeTable, "Content view");
+    const Ref list = backend.add(view, PlatformRole::List, "");
+    backend.addState(list, PlatformState::Focusable);
+    const Ref first = backend.add(list, PlatformRole::TableRow, "ALUS");
+    const Ref second = backend.add(list, PlatformRole::TableRow, "Applio");
+    const Ref third = backend.add(list, PlatformRole::TableRow, "Documents");
+
+    backend.emit("object:state-changed:focused", list, 1);
+    fixture.pumpOnce();
+    REQUIRE(fixture.registry.api().focus()->ref() == list);
+
+    fixture.clearRecords();
+    backend.addState(first, PlatformState::Selected);
+    backend.emit("object:state-changed:selected", first, 1);
+    fixture.pumpOnce();
+    REQUIRE(fixture.registry.api().focus()->ref() == first);
+    CHECK(fixture.lastSpoken().find("ALUS") != std::string::npos);
+
+    SECTION("type-ahead moves the selection, and the file is said") {
+        fixture.clearRecords();
+        backend.removeState(first, PlatformState::Selected);
+        backend.emit("object:state-changed:selected", first, 0);
+        backend.addState(third, PlatformState::Selected);
+        backend.emit("object:state-changed:selected", third, 1);
+        fixture.pumpOnce();
+        REQUIRE(fixture.registry.api().focus()->ref() == third);
+        CHECK(fixture.lastSpoken().find("Documents") != std::string::npos);
+    }
+
+    SECTION("extending the selection (ctrl+a) leaves the user where they are") {
+        fixture.clearRecords();
+        backend.addState(second, PlatformState::Selected);
+        backend.emit("object:state-changed:selected", second, 1);
+        backend.addState(third, PlatformState::Selected);
+        backend.emit("object:state-changed:selected", third, 1);
+        fixture.pumpOnce();
+        CHECK(fixture.registry.api().focus()->ref() == first);
+    }
+
+    SECTION("a selection in a list that does not have the focus moves nothing") {
+        const Ref sidebar = backend.add(window, PlatformRole::List, "Places");
+        const Ref place = backend.add(sidebar, PlatformRole::ListItem, "Trash");
+        fixture.clearRecords();
+        backend.addState(place, PlatformState::Selected);
+        backend.emit("object:state-changed:selected", place, 1);
+        fixture.pumpOnce();
+        CHECK(fixture.registry.api().focus()->ref() == first);
+    }
+}

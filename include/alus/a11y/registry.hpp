@@ -267,6 +267,7 @@ public:
 
 private:
     void announceShownChoice();
+    bool selectionFollowsFocus(const ObjectPtr& object) const;
     void installDispatchProviders();
     // Primes an object's property cache from the values AT-SPI delivered with
     // the event. See the comment in registry.cpp: the window in which those

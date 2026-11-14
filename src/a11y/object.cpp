@@ -591,6 +591,15 @@ const std::string& Object::placeholder() const { return refined().placeholder; }
 
 const PositionInfo& Object::positionInfo() const { return positionInfo_.get(); }
 
+ObjectPtr Object::flowsTo() const {
+    for (const ObjectPtr& target : objectsFrom(backend().relation(ref_, PlatformRelation::FlowsTo))) {
+        if (target != nullptr) {
+            return target;
+        }
+    }
+    return nullptr;
+}
+
 bool Object::isFocusable() const {
     if (auto override = askBehaviors<bool>(
             [this](const Behavior& behavior) { return behavior.isFocusable(*this); })) {

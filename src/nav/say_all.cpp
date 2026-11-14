@@ -168,12 +168,60 @@ bool SayAll::advanceToNextChunk() {
     // reason worth keeping: the user may have started in the MIDDLE of a line,
     // and expanding would read from its start. It is also cheaper for every
     // line after the first, which already begins at a chunk boundary.
-    const int delta = reader_->move(text::TextUnit::ReadingChunk, 1, text::EndPoint::End);
-    if (delta <= 0) {
-        finish();
-        return false;
+    if (reader_->move(text::TextUnit::ReadingChunk, 1, text::EndPoint::End) > 0) {
+        return true;
     }
-    return true;
+    // The end of this object is not the end of the document. Writer exposes
+    // every paragraph as an object of its own, so reading stopped after the
+    // first line (N127); NVDA's compound documents and Orca both continue
+    // through FLOWS_TO. Only for the caret: the review cursor stays inside
+    // the object it reviews, as NVDA's does. Empty paragraphs are skipped,
+    // and the hops are bounded in case an application's relations loop.
+    if (cursor_ == SayAllCursor::Caret) {
+        constexpr int kMaxHops = 200;
+        a11y::ObjectPtr next = nextReadingObject(readerObject_);
+        for (int hop = 0; hop < kMaxHops && next != nullptr; ++hop) {
+            text::TextRangePtr range = next->makeTextRange(text::Position::First);
+            if (range != nullptr) {
+                range->collapse();
+                range->setReadingUnit(service_.settings().sayAllReadingUnit);
+                if (range->move(text::TextUnit::ReadingChunk, 1, text::EndPoint::End) > 0) {
+                    reader_ = std::move(range);
+                    readerObject_ = next;
+                    return true;
+                }
+            }
+            next = nextReadingObject(next);
+        }
+    }
+    finish();
+    return false;
+}
+
+a11y::ObjectPtr SayAll::nextReadingObject(const a11y::ObjectPtr& from) const {
+    if (from == nullptr) {
+        return nullptr;
+    }
+    if (a11y::ObjectPtr flow = from->flowsTo(); flow != nullptr && flow->isAlive()) {
+        return flow;
+    }
+    const a11y::ObjectPtr parent = from->parent();
+    if (parent == nullptr) {
+        return nullptr;
+    }
+    bool after = false;
+    for (const a11y::ObjectPtr& sibling : parent->children()) {
+        if (sibling == nullptr) {
+            continue;
+        }
+        if (after && sibling->hasInterface(a11y::Interface::Text)) {
+            return sibling;
+        }
+        if (sibling->sameAs(*from)) {
+            after = true;
+        }
+    }
+    return nullptr;
 }
 
 void SayAll::nextLine() {

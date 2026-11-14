@@ -8,6 +8,7 @@
 #include "alus/core/loop.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <functional>
 #include <utility>
 
@@ -325,6 +326,26 @@ std::size_t Registry::pumpEvents() {
             }
             auto payload = std::static_pointer_cast<EventPayload>(raw.payload);
 
+            // How long one event took, focus to announcement, when it was
+            // long enough to hear (N127: about 200 ms from an arrow key to
+            // speech in Nautilus, with nothing logged in between). Almost all
+            // of it is synchronous AT-SPI calls into the application, so the
+            // line names the object and its role; a pattern across runs says
+            // which property is the expensive one.
+            struct SlowEventTrace {
+                std::chrono::steady_clock::time_point started = std::chrono::steady_clock::now();
+                const core::RawEvent& raw;
+                const ObjectPtr& object;
+                ~SlowEventTrace() {
+                    const auto took = std::chrono::duration_cast<std::chrono::milliseconds>(
+                        std::chrono::steady_clock::now() - started);
+                    if (took.count() >= 50) {
+                        ALUS_DEBUG("slow event: {} for {} ({}) took {} ms", raw.name,
+                                   object->path(), roleName(object->role()), took.count());
+                    }
+                }
+            } slowEventTrace{std::chrono::steady_clock::now(), raw, object};
+
             if (raw.name == events::kGainFocus) {
                 if (!object->isAlive()) {
                     // Refusing makes the limiter try an older focus event,
@@ -375,6 +396,20 @@ std::size_t Registry::pumpEvents() {
                         }
                     }
                 }
+            } else if (raw.name == events::kStateChange && payload != nullptr &&
+                       payload->detail1 != 0 &&
+                       payload->atspiType == "object:state-changed:selected" &&
+                       selectionFollowsFocus(object) && handleGainFocus(object)) {
+                // See selectionFollowsFocus: the selected item IS where the
+                // user is, announced as a focus.
+                core::Event event;
+                event.name = std::string{events::kGainFocus};
+                event.object = object->id();
+                event.payload = raw.payload;
+                dispatcher_.executeEvent(event);
+                eventDispatched_.notify(event, object);
+                ++dispatched_;
+                return true;
             }
 
             core::Event event;
@@ -392,6 +427,51 @@ std::size_t Registry::pumpEvents() {
         announceShownChoice();
     }
     return emitted;
+}
+
+bool Registry::selectionFollowsFocus(const ObjectPtr& object) const {
+    // GTK 4 lists move the SELECTION and not the focus (FAZA10.md N127,
+    // Nautilus 48): opening a folder focuses the list ("list") and selects
+    // the first file; type-ahead selects the file whose name was typed; the
+    // first arrow after opening selects the next row. Only `selected` comes,
+    // so the first file was never said and letters said nothing. NVDA treats
+    // a selection inside the focused list as the focus (IAccessible's
+    // `selection` event), and Orca does (`on_selected_changed`); so does this,
+    // when:
+    //   * the object is an item, alive, selected now, and not the focus;
+    //   * the focus is its list -- an ancestor a few levels up, through
+    //     GTK's wrapper panels -- or another item of the same list;
+    //   * and the focus is not itself still selected: that is a selection
+    //     being EXTENDED (ctrl+a, shift+arrows), where the user stays put.
+    const ObjectPtr& focus = api_.focus();
+    if (object == nullptr || focus == nullptr || focus->sameAs(*object)) {
+        return false;
+    }
+    const auto isItem = [](Role role) {
+        return role == Role::ListItem || role == Role::TableRow || role == Role::TreeViewItem ||
+               role == Role::Icon;
+    };
+    if (!isItem(object->role()) || !object->isAlive() ||
+        !object->states().has(State::Selected)) {
+        return false;
+    }
+    if (isItem(focus->role())) {
+        if (focus->states().has(State::Selected)) {
+            return false;
+        }
+        const ObjectPtr parent = object->parent();
+        const ObjectPtr focusParent = focus->parent();
+        return parent != nullptr && focusParent != nullptr && parent->sameAs(*focusParent);
+    }
+    constexpr int kMaxLevels = 4;
+    ObjectPtr ancestor = object->parent();
+    for (int level = 0; level < kMaxLevels && ancestor != nullptr; ++level) {
+        if (ancestor->sameAs(*focus)) {
+            return true;
+        }
+        ancestor = ancestor->parent();
+    }
+    return false;
 }
 
 void Registry::announceShownChoice() {

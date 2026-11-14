@@ -123,6 +123,10 @@ public:
 
     // ---- the tree ----
     ObjectPtr parent() const;
+    // The FLOWS_TO relation's first target: where reading continues after
+    // this object. LibreOffice links its paragraphs this way, across pages
+    // (Orca and NVDA follow it for say-all too). Null when there is none.
+    ObjectPtr flowsTo() const;
     // NVDA's `container`: the parent by default, but a behaviour may say
     // otherwise (a table cell's container is its table, not its row).
     ObjectPtr container() const;
