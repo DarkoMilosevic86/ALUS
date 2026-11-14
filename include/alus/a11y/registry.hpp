@@ -188,6 +188,14 @@ public:
     // for every new ancestor. Returns false when the object turned out to be
     // unusable, which makes the limiter fall back to an older focus event.
     bool handleGainFocus(const ObjectPtr& object);
+    // Makes `object` the focus as if the platform had said so, and announces
+    // it: handleGainFocus, then a gainFocus event through the whole chain.
+    // For an app module whose toolkit marks the current item with SELECTED
+    // instead of moving the focus -- gnome-shell's search results, where the
+    // keyboard stays in the entry (Orca: set_locus_of_focus from
+    // on_selected_changed). Safe to call from inside an event handler; does
+    // nothing when the object already is the focus.
+    bool redirectFocus(const ObjectPtr& object);
     // A best-effort scan for the object that has the focus right now. AT-SPI
     // has no "who has the focus" call -- focus arrives as an event -- so at
     // start-up the tree is walked for the active window and its focused

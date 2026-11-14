@@ -319,6 +319,7 @@ alus_app_sources = files(
   'app/modules/electron.cpp',
   'app/modules/libreoffice.cpp',
   'app/modules/nautilus.cpp',
+  'app/modules/gnome_shell.cpp',
   'app/modules/terminal.cpp',
 )
 

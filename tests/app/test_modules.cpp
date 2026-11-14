@@ -347,3 +347,59 @@ TEST_CASE("the status line command reports, spells and says when there is none",
     REQUIRE(said.size() == 1);
     CHECK(said.front() == "Ready");
 }
+
+TEST_CASE("the gnome-shell module makes the selected search result the focus",
+          "[app][modules]") {
+    // FAZA10.md N121, the measured shape: typing into the overview's search
+    // leaves the keyboard focus in the entry and marks the first result with
+    // SELECTED. No focus event comes, and ALUS said nothing about the result.
+    AppFixture fixture{true};
+    const a11y::Ref application = fixture.addApplication("gnome-shell", "clutter");
+    const a11y::Ref window =
+        fixture.backend.add(application, a11y::PlatformRole::Window, "Main stage");
+    fixture.backend.addState(window, a11y::PlatformState::Active);
+    const a11y::Ref overview =
+        fixture.backend.add(window, a11y::PlatformRole::Panel, "Overview");
+    const a11y::Ref entry = fixture.backend.add(overview, a11y::PlatformRole::Entry, "");
+    fixture.backend.addState(entry, a11y::PlatformState::Editable);
+    const a11y::Ref results = fixture.backend.add(overview, a11y::PlatformRole::Panel, "");
+    const a11y::Ref first =
+        fixture.backend.add(results, a11y::PlatformRole::Button, "Terminal");
+
+    REQUIRE(fixture.modules().moduleFor(keyOf("gnome-shell", "clutter")) != nullptr);
+    fixture.backend.emit("object:state-changed:focused", entry, 1);
+    fixture.pumpOnce();
+    REQUIRE(fixture.registry.api().focus() != nullptr);
+    REQUIRE(fixture.registry.api().focus()->ref() == entry);
+
+    fixture.clearRecords();
+    fixture.backend.addState(first, a11y::PlatformState::Selected);
+    fixture.backend.emit("object:state-changed:selected", first, 1);
+    fixture.pumpOnce();
+
+    REQUIRE(fixture.registry.api().focus() != nullptr);
+    CHECK(fixture.registry.api().focus()->ref() == first);
+    REQUIRE_FALSE(fixture.spoken.empty());
+    CHECK(fixture.lastSpoken().find("Terminal") != std::string::npos);
+
+    SECTION("and the result renamed as the search narrows is said again") {
+        // gnome-shell reuses the result objects: "datot" turns the first one
+        // into Files without another selected event.
+        fixture.clearRecords();
+        fixture.backend.node(first).name = "Files";
+        fixture.backend.emit("object:property-change:accessible-name", first);
+        fixture.pumpOnce();
+        REQUIRE_FALSE(fixture.changes.empty());
+        CHECK(fixture.changes.back().text.find("Files") != std::string::npos);
+    }
+
+    SECTION("an item letting go of the selection is not a focus") {
+        const a11y::Ref second =
+            fixture.backend.add(results, a11y::PlatformRole::Button, "Settings");
+        fixture.clearRecords();
+        fixture.backend.emit("object:state-changed:selected", second, 0);
+        fixture.pumpOnce();
+        CHECK(fixture.registry.api().focus()->ref() == first);
+        CHECK(fixture.spoken.empty());
+    }
+}

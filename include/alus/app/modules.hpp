@@ -34,5 +34,6 @@ void registerLibreOfficeModule(Registry& registry);
 void registerTerminalModules(Registry& registry);
 void registerElectronModule(Registry& registry);
 void registerNautilusModule(Registry& registry);
+void registerGnomeShellModule(Registry& registry);
 
 }  // namespace alus::app

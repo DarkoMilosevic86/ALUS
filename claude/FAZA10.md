@@ -306,7 +306,29 @@ ALUS-om pokrenutim novom skriptom, bez otvorenog poziva.
 Usput nađeno, otvoreno: pri kucanju u Messenger-ovom polju svako otkucano
 slovo dolazi sa „naslov nivo 1" ispred sebe.
 
-**Ranija beleška (pre N120):** Super taster ne govori ništa. U prolazu je ALUS video pritisak
+**Ranija beleška (pre N120):** Super taster ne govori ništa.
+
+**Potvrda N120 (korisnik, uživo):** sa novom skriptom Super taster govori.
+
+**N121 — rezultat pretrage u pregledu se ne izgovara dok se ne pritisne
+strelica.**
+
+Kucanje „datot" u pretrazi pregleda nađe Datoteke, ali ALUS ništa ne kaže.
+Izmereno (dnevnik od 11:21): gnome-shell posle prvog slova pošalje **jedan**
+`object:state-changed:selected` za prvi rezultat, dok fokus tastature ostaje u
+polju; posle svakog sledećeg slova samo **preimenuje** postojeće rezultate (19
+`accessible-name` događaja po slovu), bez novog `selected`. ALUS je promenu
+stanja izgovarao samo za fokus i njegove pretke, pa rezultat nije čuo nikad —
+dok strelica nije pomerila pravi fokus.
+
+Orca to rešava u svom gnome-shell skriptu (`on_selected_changed` →
+`set_locus_of_focus`): označena stavka postaje fokus. ALUS sada ima modul
+`gnome_shell` (`src/app/modules/gnome_shell.cpp`) koji radi isto preko nove
+`Registry::redirectFocus`; kad je rezultat fokus, njegovo preimenovanje
+(„Terminal" → „Datoteke") objektni sloj izgovara kao promenu imena. Test:
+`tests/app/test_modules.cpp`. Živa provera sa pravim kucanjem ostaje korisniku:
+sintetička proba (pregled preko D-Bus-a, tekst preko AT-SPI-ja) nije bila
+merodavna jer je u isto vreme Chrome preuzimao fokus. U prolazu je ALUS video pritisak
 (Super_L stiže, nije progutan, GNOME otvara pregled aktivnosti), posle toga su
 stigli događaji iz gnome-shell-a, ali je upit o objektu vraćao „The
 application no longer exists" i ništa nije izgovoreno. Kad se pregled otvori

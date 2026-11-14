@@ -22,6 +22,7 @@ std::size_t registerBuiltinModules(Registry& registry) {
     registerElectronModule(registry);
     registerTerminalModules(registry);
     registerNautilusModule(registry);
+    registerGnomeShellModule(registry);
     registerLibreOfficeModule(registry);
     return registry.ruleCount() - before;
 }

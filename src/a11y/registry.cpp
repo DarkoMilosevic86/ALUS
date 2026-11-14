@@ -384,6 +384,23 @@ std::size_t Registry::pumpEvents() {
     return emitted;
 }
 
+bool Registry::redirectFocus(const ObjectPtr& object) {
+    if (object == nullptr || !object->isAlive()) {
+        return false;
+    }
+    if (const ObjectPtr& focus = api_.focus(); focus != nullptr && focus->sameAs(*object)) {
+        return false;
+    }
+    if (!handleGainFocus(object)) {
+        return false;
+    }
+    core::Event event;
+    event.name = std::string{events::kGainFocus};
+    event.object = object->id();
+    dispatcher_.executeEvent(event);
+    return true;
+}
+
 bool Registry::handleGainFocus(const ObjectPtr& object) {
     // Port of NVDA's eventHandler.doPreGainFocus.
     if (object == nullptr) {

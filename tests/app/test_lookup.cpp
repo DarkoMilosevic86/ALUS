@@ -194,9 +194,10 @@ TEST_CASE("the built-in rules are the applications phase 8 promises",
     Registry registry{Services{}};
     const std::size_t added = registerBuiltinModules(registry);
     // The phase 8 table of 02-FAZE.md: LibreOffice, three terminals, Electron,
-    // Nautilus. The browsers are deliberately absent (§9.4).
-    CHECK(added == 6);
-    CHECK(registry.ruleCount() == 6);
+    // Nautilus -- and gnome-shell, added in phase 10 (FAZA10.md N121). The
+    // browsers are deliberately absent (§9.4).
+    CHECK(added == 7);
+    CHECK(registry.ruleCount() == 7);
 
     const auto moduleName = [&registry](const AppKey& key) -> std::string {
         const Registry::Rule* rule = registry.ruleFor(key);
@@ -207,6 +208,7 @@ TEST_CASE("the built-in rules are the applications phase 8 promises",
     CHECK(moduleName(keyOf("konsole", "qt")) == "konsole");
     CHECK(moduleName(keyOf("nautilus", "gtk")) == "nautilus");
     CHECK(moduleName(keyOf("code", "chromium")) == "electron");
+    CHECK(moduleName(keyOf("gnome-shell", "clutter")) == "gnome_shell");
     CHECK(moduleName(keyOf("firefox", "gtk")) == "(generic)");
 }
 
