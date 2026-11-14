@@ -603,3 +603,32 @@ svakom pritisku (`std::function`), što preživljava i restart ulaza.
 Sekunde: `sr_RS` (i većina glibc locale-a) za vreme kaže `%T`, skraćenicu za
 `%H:%M:%S`; kod je tražio samo `:%S`. Skraćenice `%T`, `%r`, `%X` se sada
 razvijaju pre uklanjanja sekundi. Testovi u `tests/commands/test_system_commands.cpp`.
+
+**Potvrda N122 (korisnik, uživo):** `alus+f12` dvaput kaže datum.
+
+**N123 — u prozoru podešavanja Shift+Tab „ruši" govor.**
+
+Nije pad: posle Shift+Tab speech-dispatcher ne počne nijednu poruku dok se
+prozor ne zatvori (dnevnik 12:45:27.739–33.514, nijedan `ssip begin`, a ALUS
+je sve vreme slao tekst; isto u prolazu od 12:44:47). Prozor nije bio kriv —
+vezivalo se za Shift: Tab je radio, Shift+Tab nije.
+
+Uzrok: Shift sam po sebi pauzira govor (kao NVDA), a Tab koji sledi ga
+prekida. `Presenter::cancelSpeech` je pri prekidu brisao samo svoju oznaku
+`paused_`; sintezi nije javljao da pauza prestaje. speech-dispatcher drži
+vezu pauziranom i posle `spd_cancel`, pa je svaka sledeća poruka čekala iza
+pauze — do ponovnog povezivanja, koje se desilo tek kad je zatvaranje prozora
+upisalo podešavanja.
+
+Izmereno na speech-dispatcher 0.12 + rhvoice, svaka proba na novoj vezi:
+
+| redosled (dok poruka traje) | posle toga |
+|---|---|
+| pauza, prekid, govor (staro) | tišina |
+| pauza, prekid, nastavak, govor | **tišina** |
+| pauza, nastavak, prekid, govor | govori |
+
+Popravka: `cancelSpeech` sada, ako je govor pauziran, **prvo** javi sintezi
+nastavak pa tek onda prekida. Usput: pauza od Shift-a se zakazuje kao hitna,
+kao i prekid, da bi se izvršavale redom kojim su tasteri stigli. Testovi u
+`tests/speech/test_presenter.cpp` (bez popravke padaju dva).

@@ -614,7 +614,11 @@ void GestureManager::applySpeechEffect(const Gesture& /*gesture*/, SpeechEffect 
         case SpeechEffect::Resume:
             if (hooks_.pauseSpeech) {
                 const bool pause = effect == SpeechEffect::Pause;
-                loop_.queueFunction([this, pause]() { hooks_.pauseSpeech(pause); }, false,
+                // Immediate, like the cancel above, and for the same reason:
+                // the two must run in the order the keys came. Shift (pause)
+                // then Tab (cancel) with the pause queued behind the cancel
+                // left speech paused after it (FAZA10.md N123).
+                loop_.queueFunction([this, pause]() { hooks_.pauseSpeech(pause); }, true,
                                     "pauseSpeech");
             }
             break;

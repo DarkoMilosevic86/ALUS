@@ -307,6 +307,20 @@ void Presenter::cancelSpeech() {
     if (beenCanceled_ || mode_ == SpeechMode::Off || mode_ == SpeechMode::Beeps) {
         return;
     }
+    // A cancel ends a pause (NVDA: `isPaused = False`), and the SYNTHESIZER
+    // has to be told so. speech-dispatcher keeps a connection paused across
+    // spd_cancel: Shift (which pauses) and then Tab (which cancels) left
+    // every later utterance queued behind the pause, and ALUS silent until
+    // the connection was rebuilt (FAZA10.md N123).
+    //
+    // The resume goes FIRST. Measured against speech-dispatcher 0.12 with
+    // rhvoice: pause, cancel, resume while an utterance was playing leaves
+    // the connection silent all the same; pause, resume, cancel does not.
+    if (paused_) {
+        if (ISynth* synth = manager_.synth()) {
+            synth->pause(false);
+        }
+    }
     manager_.cancel();
     speechCanceled_.notify();
     beenCanceled_ = true;

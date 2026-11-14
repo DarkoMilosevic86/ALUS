@@ -344,6 +344,10 @@ TEST_CASE("speaking while paused resumes by cancelling", "[speech][presenter]") 
     fixture.drain();
     // The paused utterance was stale by definition; the new one is spoken.
     CHECK_FALSE(fixture.presenter().isPaused());
+    // ... and the SYNTHESIZER is no longer paused either, or it would hold
+    // the new utterance behind the pause (N123: speech-dispatcher keeps a
+    // pause across spd_cancel, and so does NullSynth).
+    CHECK_FALSE(fixture.synth().isPaused());
     CHECK(fixture.spoken().back().starts_with("second"));
 }
 
@@ -367,4 +371,19 @@ TEST_CASE("whitespace inside a chunk is flattened", "[speech][presenter]") {
     CHECK(spoken.find('\n') == std::string::npos);
     CHECK(spoken.find('\r') == std::string::npos);
     CHECK(spoken.find("one two three") != std::string::npos);
+}
+
+TEST_CASE("shift then tab: the cancel ends the synthesizer's pause", "[speech][presenter]") {
+    // FAZA10.md N123, measured in the settings window: Shift pauses, Tab
+    // cancels, and everything after it was silent.
+    PresenterFixture fixture;
+    fixture.presenter().speakMessage("Rate 81");
+    fixture.drain();
+    fixture.presenter().pauseSpeech(true);
+    REQUIRE(fixture.synth().isPaused());
+    fixture.presenter().cancelSpeech();
+    CHECK_FALSE(fixture.synth().isPaused());
+    fixture.presenter().speakMessage("Voice");
+    fixture.drain();
+    CHECK(fixture.spoken().back().starts_with("Voice"));
 }
