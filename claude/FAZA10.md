@@ -274,7 +274,39 @@ bookmark u linku), filler u `test_object.cpp` i `test_object_speech.cpp`,
 GTK3 kartica u `test_mapping.cpp`. Valgrind nad `browsemode`, `nav`, `a11y`,
 `gui`: 0 grešaka, 0 izgubljenih bajtova.
 
-**Otvoreno: Super taster ne govori ništa.** U prolazu je ALUS video pritisak
+**N120 — Super taster: uzrok nađen delimično, popravka delimično proverena.**
+
+Četiri čuvane žive probe (ALUS drži tastaturu, čuvar vraća Orcu; korisnik je
+pristao) i novi trag dolaznih događaja na IO nivou (`event in: …`) pokazali su:
+
+1. Posle pravog Super tastera ALUS **dve sekunde ne prima nikakav fokus**, pa
+   ne kaže ništa — a pošto ne zna da je fokus otišao u pregled aktivnosti,
+   zadržava grabove browse mode-a iz Chrome-a, i prvo otkucano slovo u
+   pretrazi („t") ode brzoj navigaciji („nema sledeće tabele") umesto u polje.
+   Watchdog za to vreme ne reaguje: petlja nije blokirana, događaji fokusa
+   jednostavno ne stižu.
+2. U čistoj probi sa isključenim `screen-reader-enabled` gnome-shell je pri
+   otvaranju pregleda poslao 344 `showing` i 132 `children-changed` događaja i
+   **nijedan fokus**. `alus-switch.sh` je taj ključ isključivao za sve vreme
+   rada ALUS-a, da sesija ne bi vratila Orcu.
+3. Ključ više nije isključen: Orca se gasi bez diranja ključa — preko session
+   managera (`Client.Stop`) ako ju je pokrenula sesija, signalom inače — i
+   provereno je uživo da se **ne vraća sama** (sesija je pokreće kad ključ
+   PROMENI vrednost u `true`, i vraća onu koju je sama pokrenula kad umre —
+   prva verzija popravke je ključ isključila pa uključila, i baš to uključivanje
+   je pokrenulo Orcu za 4 s; skripta je to uhvatila, zaustavila je ponovo i
+   izgovorila upozorenje).
+
+Šta **nije** dokazano: da je ključ jedini uzrok. Poslednja poređenja su rađena
+dok je u Chrome-u bio otvoren prozor Messenger poziva, koji uzima fokus kad se
+pregled otvori preko D-Bus-a — i sa Orcom na tastaturi i uključenim ključem
+gnome-shell tada nije poslao fokus. Konačna provera je pravi Super taster sa
+ALUS-om pokrenutim novom skriptom, bez otvorenog poziva.
+
+Usput nađeno, otvoreno: pri kucanju u Messenger-ovom polju svako otkucano
+slovo dolazi sa „naslov nivo 1" ispred sebe.
+
+**Ranija beleška (pre N120):** Super taster ne govori ništa. U prolazu je ALUS video pritisak
 (Super_L stiže, nije progutan, GNOME otvara pregled aktivnosti), posle toga su
 stigli događaji iz gnome-shell-a, ali je upit o objektu vraćao „The
 application no longer exists" i ništa nije izgovoreno. Kad se pregled otvori

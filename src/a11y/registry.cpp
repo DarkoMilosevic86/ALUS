@@ -205,6 +205,15 @@ void Registry::primeFromEvent(const ObjectPtr& object) {
 
 bool Registry::onPlatformEvent(PlatformEvent event) {
     const std::string_view name = alusEventName(event.type, event.detail1);
+    // The arrival of every platform event, at IO level. Without it a gap in
+    // the log could not tell "nothing arrived" from "it arrived and was
+    // dropped" -- which is exactly what the Super-key investigation needed
+    // (FAZA10.md, N120).
+    if (core::Log::instance().isEnabledFor(core::LogLevel::Io)) {
+        ALUS_IO("event in: {} ({}) app {:#x}", event.type,
+                name.empty() ? std::string_view{"ignored"} : name,
+                static_cast<std::uintptr_t>(event.application));
+    }
     if (name.empty()) {
         // Not an event ALUS has a use for. The references still have to go
         // back, or every mouse move leaks one accessible.
@@ -326,6 +335,8 @@ std::size_t Registry::pumpEvents() {
                     return false;
                 }
                 if (!handleGainFocus(object)) {
+                    ALUS_DEBUG("focus event for {} ({}) not handled", object->path(),
+                               roleName(object->role()));
                     return false;
                 }
             } else if (raw.name == events::kForeground) {

@@ -85,6 +85,32 @@ say() {  # to the terminal AND out loud, because the second one is the point
 die() { say "$1"; exit 1; }
 
 alus_running()  { pgrep -x alus-daemon >/dev/null 2>&1; }
+
+# Stops the other reader through gnome-session when the SESSION started it,
+# so that X-GNOME-AutoRestart does not bring it straight back. False when no
+# session client is the reader (it was started by hand or by this script --
+# then a signal is enough and nothing restarts it).
+stop_session_reader() {
+  command -v gdbus >/dev/null 2>&1 || return 1
+  local clients client app stopped=1
+  clients=$(gdbus call --session --dest org.gnome.SessionManager \
+              --object-path /org/gnome/SessionManager \
+              --method org.gnome.SessionManager.GetClients 2>/dev/null \
+            | grep -oE "/org/gnome/SessionManager/Client[0-9]+") || return 1
+  for client in $clients; do
+    app=$(gdbus call --session --dest org.gnome.SessionManager --object-path "$client" \
+            --method org.gnome.SessionManager.Client.GetAppId 2>/dev/null) || continue
+    case "$app" in
+      *"$OTHER_BIN"*)
+        gdbus call --session --dest org.gnome.SessionManager --object-path "$client" \
+          --method org.gnome.SessionManager.Client.Stop >/dev/null 2>&1 && stopped=0 ;;
+    esac
+  done
+  [ "$stopped" -eq 0 ] || return 1
+  # Then wait for it to be gone, as for any other stop.
+  stop_and_wait "$OTHER_BIN" >/dev/null 2>&1 || true
+  return 0
+}
 other_running() { pgrep -x "$OTHER_BIN" >/dev/null 2>&1; }
 
 switch_set() { gsettings set "$SWITCH_SCHEMA" "$SWITCH_KEY" "$1" 2>/dev/null; }
@@ -171,17 +197,36 @@ to_alus() {
     say "both readers are running; stopping $OTHER_NAME"
   fi
 
-  # The switch goes off FIRST. The other reader's autostart entry has
-  # X-GNOME-AutoRestart, so stopping it while the switch is still on invites
-  # the session to start it again underneath us.
+  # THE DESKTOP SWITCH IS NOT TOUCHED. `screen-reader-enabled` is what the
+  # desktop reads to decide whether a screen reader is listening: gnome-shell
+  # sends NO focus event for its own interface while it is off (measured:
+  # opening the activities overview sent 344 `showing` and 132
+  # `children-changed` events and not one focus), so the Super key -- the
+  # overview, the app grid, the search -- said nothing under ALUS, and the
+  # browsers read the same key (FAZA10.md N120). This script used to turn it
+  # off for the whole time ALUS ran.
+  #
+  # It was off to keep the session from restarting the other reader, and the
+  # measurement says exactly what the session does: it starts the reader when
+  # the switch CHANGES to on (AutostartCondition), and restarts one IT started
+  # when that one dies (X-GNOME-AutoRestart). So the switch stays as it is, and
+  # a reader the session owns is stopped THROUGH the session, which is a
+  # requested stop and not a death.
   local had_switch; had_switch=$(switch_get)
-  switch_set false
-  stop_and_wait "$OTHER_BIN" || say "warning: $OTHER_NAME may still hold the keyboard"
+  if ! stop_session_reader; then
+    stop_and_wait "$OTHER_BIN" || say "warning: $OTHER_NAME may still hold the keyboard"
+  fi
 
   if ! wait_keyboard_free; then
     say "the keyboard did not come free; putting $OTHER_NAME back"
     [ "$had_switch" = "true" ] && { switch_set true; setsid "${OTHER_START[@]}" >>"$OTHER_LOG" 2>&1 < /dev/null & }
     exit 1
+  fi
+
+  if [ "$had_switch" != "true" ]; then
+    # Not turned on here: turning it on is exactly what makes the session
+    # start the other reader. Said, so the thinner desktop is not a mystery.
+    say "warning: the desktop's screen reader switch is off; some desktop announcements, such as the Super key, will be missing"
   fi
 
   # Only start one if the swap did not already leave one running (the BOTH
@@ -191,6 +236,19 @@ to_alus() {
     setsid "$DAEMON" "${DAEMON_ARGS[@]}" --log-file "$LOG" >/dev/null 2>&1 < /dev/null &
   fi
   if wait_alive alus-daemon; then
+    # The switch is on, so the session MAY start the other reader again. One
+    # look a few seconds in; if it did, it is stopped once more and the
+    # switch stays off -- ALUS keeps the keyboard, and the user is TOLD that
+    # the desktop's own announcements will be thinner, rather than finding
+    # out by pressing the Super key into silence.
+    sleep 4
+    if other_running; then
+      stop_session_reader || true
+      switch_set false
+      stop_and_wait "$OTHER_BIN" || true
+      say "ALUS is running, but the session kept restarting $OTHER_NAME; the desktop switch is off and some desktop announcements will be missing"
+      exit 0
+    fi
     say "ALUS is running"
     exit 0
   fi
