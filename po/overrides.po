@@ -1317,18 +1317,21 @@ msgstr "%s (sintetizator ga ne nudi)"
 # ćutao i sekao se dok je korisnik bio u prozoru. Sada je jedan upis, pri
 # zatvaranju.
 
-msgid "Takes effect when this window closes; ALUS does not need to be restarted."
-msgstr "Primenjuje se kad se ovaj prozor zatvori; ALUS ne treba ponovo pokretati."
+msgid "Takes effect when you press OK; ALUS does not need to be restarted."
+msgstr "Primenjuje se kad pritisnete U redu; ALUS ne treba ponovo pokretati."
 
-msgid "The speech-dispatcher module. Choosing one shows its voices below; nothing changes until this window closes."
-msgstr "Modul speech-dispatcher-a. Izbor modula odmah prikazuje njegove glasove ispod; ništa se ne menja dok se ovaj prozor ne zatvori."
+msgid "The speech-dispatcher module. Choosing one shows its voices below; nothing changes until you press OK."
+msgstr "Modul speech-dispatcher-a. Izbor modula odmah prikazuje njegove glasove ispod; ništa se ne menja dok ne pritisnete U redu."
 
-msgid "The voices of the output module above. The new voice is heard when this window closes."
-msgstr "Glasovi izlaznog modula iznad. Novi glas se čuje kad se ovaj prozor zatvori."
+msgid "The voices of the output module above. The new voice is heard when you press OK."
+msgstr "Glasovi izlaznog modula iznad. Novi glas se čuje kad pritisnete U redu."
 
-# N124: dugme na dnu svake stranice prozora podešavanja.
-msgid "Close"
-msgstr "Zatvori"
+# N125: U redu čuva izmene; Otkaži, Escape i dugme u zaglavlju ih odbacuju.
+msgid "OK"
+msgstr "U redu"
 
-msgid "Closes the window and applies the changed settings"
-msgstr "Zatvara prozor i primenjuje izmenjena podešavanja"
+msgid "Applies the changed settings and closes the window"
+msgstr "Primenjuje izmenjena podešavanja i zatvara prozor"
+
+msgid "Closes the window without changing anything"
+msgstr "Zatvara prozor bez ikakvih izmena"

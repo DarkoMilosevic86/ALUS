@@ -266,6 +266,7 @@ public:
     const Options& options() const noexcept { return options_; }
 
 private:
+    void announceShownChoice();
     void installDispatchProviders();
     // Primes an object's property cache from the values AT-SPI delivered with
     // the event. See the comment in registry.cpp: the window in which those
@@ -285,6 +286,9 @@ private:
     AppModuleProvider appModuleProvider_;
     ObjectInitHook objectInit_;
     FocusEventFilter focusEventFilter_;
+    // announceShownChoice: the focused combo box and the value last seen.
+    core::ObjectId shownChoiceOwner_ = 0;
+    std::string shownChoice_;
     ObjectPtr watched_;
     ContainerOverride containerOverride_;
     // Strong, and deliberately: it is compared against by identity, and an

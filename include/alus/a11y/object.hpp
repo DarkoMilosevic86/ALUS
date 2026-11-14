@@ -123,9 +123,6 @@ public:
 
     // ---- the tree ----
     ObjectPtr parent() const;
-    // True when `ancestor` is reached by walking up at most `maxLevels`
-    // parents. Bounded, because it is asked about events, not about trees.
-    bool isDescendantOf(const Object& ancestor, int maxLevels) const;
     // NVDA's `container`: the parent by default, but a behaviour may say
     // otherwise (a table cell's container is its table, not its row).
     ObjectPtr container() const;

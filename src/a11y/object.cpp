@@ -591,17 +591,6 @@ const std::string& Object::placeholder() const { return refined().placeholder; }
 
 const PositionInfo& Object::positionInfo() const { return positionInfo_.get(); }
 
-bool Object::isDescendantOf(const Object& ancestor, int maxLevels) const {
-    ObjectPtr current = parent();
-    for (int level = 0; level < maxLevels && current != nullptr; ++level) {
-        if (current->sameAs(ancestor)) {
-            return true;
-        }
-        current = current->parent();
-    }
-    return false;
-}
-
 bool Object::isFocusable() const {
     if (auto override = askBehaviors<bool>(
             [this](const Behavior& behavior) { return behavior.isFocusable(*this); })) {
@@ -951,18 +940,6 @@ void Object::handleEvent(const core::Event& event) {
             return;
         }
         if (!isFocus) {
-            // A GTK 4 combo box shows its choice in a label several levels
-            // down (see shownChoiceText), and choosing another one with the
-            // arrow keys renames THAT label: no event on the combo box at all.
-            // So a name change inside the focused combo box is the combo
-            // box's value changing (FAZA10.md N124).
-            if (event.name != events::kNameChange || focus == nullptr ||
-                focus->role() != Role::ComboBox || !isDescendantOf(*focus, 8)) {
-                return;
-            }
-            PropertyChange change;
-            change.value = true;
-            hooks.speakPropertyChange(*focus, change, OutputReason::Change);
             return;
         }
         PropertyChange change;

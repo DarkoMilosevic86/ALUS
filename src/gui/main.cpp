@@ -111,6 +111,8 @@ struct Session {
     // A setting changed and has not been written yet. Written when the window
     // closes (see `settingChanged`).
     bool pending = false;
+    // OK was pressed. Without it nothing is written (N125).
+    bool accepted = false;
 };
 
 Session* session() {
@@ -341,7 +343,7 @@ int main(int argc, char* argv[]) {
     // Now there is one write, and one reset, when the window closes.
     guiContext.settingChanged = [s](const std::string& section) {
         s->pending = true;
-        ALUS_DEBUG("settings: [{}] changed; written when the window closes", section);
+        ALUS_DEBUG("settings: [{}] changed; written if the window closes with OK", section);
     };
     // The voice list is the output MODULE's, so choosing another module asks
     // speech-dispatcher again -- in this process, through its own connection,
@@ -359,6 +361,8 @@ int main(int argc, char* argv[]) {
         }
         s->pending = false;
     };
+
+    guiContext.accept = [s] { s->accepted = true; };
 
     s->window = std::make_unique<alus::gui::Window>(std::move(guiContext));
 
@@ -394,9 +398,15 @@ int main(int argc, char* argv[]) {
         g_main_context_iteration(g_main_context_default(), TRUE);
     }
 
-    // The window is closed: now the changes go to the file, in ONE write, and
-    // the running screen reader applies them once.
-    if (s->pending) {
+    // The window is closed: with OK the changes go to the file, in ONE write,
+    // and the running screen reader applies them once. Closed any other way
+    // -- Cancel, Escape, the header's button -- nothing is written: the user
+    // chose eSpeak only to look at it, pressed Escape, and heard eSpeak
+    // (FAZA10.md N125).
+    if (s->pending && !s->accepted) {
+        ALUS_INFO("settings: closed without OK; the changes are discarded");
+    }
+    if (s->pending && s->accepted) {
         std::string saveError;
         if (s->config->save(&saveError)) {
             ALUS_INFO("settings: written on close");

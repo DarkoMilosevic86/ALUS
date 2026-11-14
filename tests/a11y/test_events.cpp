@@ -448,18 +448,21 @@ TEST_CASE("a GTK 4 combo box: the shown item is its value, and a new one is said
     CHECK(fixture.lastSpoken().find("Marija (hr)") != std::string::npos);
 
     fixture.clearRecords();
+    // Measured: the arrows send only `selected` for items of the combo's
+    // hidden popup list, and the shown label is simply different after.
+    const Ref popup = backend.add(window, PlatformRole::List, "");
+    const Ref popupItem = backend.add(popup, PlatformRole::ListItem, "");
     backend.node(shown).name = "Ana (sr)";
-    backend.emit("object:property-change:accessible-name", shown);
+    backend.addState(popupItem, PlatformState::Selected);
+    backend.emit("object:state-changed:selected", popupItem, 1);
     fixture.pumpOnce();
     REQUIRE(fixture.changes.size() == 1);
     CHECK(fixture.changes.front().ref == combo);
     CHECK(fixture.changes.front().text.find("Ana (sr)") != std::string::npos);
 
-    SECTION("a label renamed outside the focused combo box is not its value") {
-        const Ref elsewhere = backend.add(window, PlatformRole::Label, "Status");
+    SECTION("an event that leaves the shown choice as it was says nothing") {
         fixture.clearRecords();
-        backend.node(elsewhere).name = "Ready";
-        backend.emit("object:property-change:accessible-name", elsewhere);
+        backend.emit("object:state-changed:selected", popupItem, 1);
         fixture.pumpOnce();
         CHECK(fixture.changes.empty());
     }

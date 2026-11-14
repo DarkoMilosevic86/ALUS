@@ -498,23 +498,41 @@ void Window::Impl::build() {
             adw_preferences_page_add(ADW_PREFERENCES_PAGE(gtkPage),
                                      ADW_PREFERENCES_GROUP(gtkGroup));
         }
-        // A Close button at the end of every page, where Tab arrives after
-        // the last setting. The header bar has one too, but as an icon in a
-        // corner a keyboard user has to know to look for; this one is in the
-        // tab order where the page ends (N124). Closing is what applies the
-        // settings, so it says so.
+        // OK and Cancel at the end of every page, where Tab arrives after the
+        // last setting (N124, N125). OK keeps the changes; Cancel, Escape and
+        // the header's close button discard them -- the Windows convention a
+        // screen reader user brings, and the only safe one: Escape had applied
+        // a synthesizer the user was only looking at.
         {
-            GtkWidget* closeGroup = adw_preferences_group_new();
-            GtkWidget* closeRow = adw_button_row_new();
+            GtkWidget* buttons = adw_preferences_group_new();
+            GtkWidget* okRow = adw_button_row_new();
             // Translators: the button at the end of every settings page that
-            // closes the window; the changed settings apply when it closes.
-            adw_preferences_row_set_title(ADW_PREFERENCES_ROW(closeRow), _("Close"));
+            // keeps the changed settings and closes the window.
+            adw_preferences_row_set_title(ADW_PREFERENCES_ROW(okRow), _("OK"));
             gtk_accessible_update_property(
-                GTK_ACCESSIBLE(closeRow), GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
-                // Translators: the description of the Close button of the
+                GTK_ACCESSIBLE(okRow), GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
+                // Translators: the description of the OK button of the
                 // settings window.
-                _("Closes the window and applies the changed settings"), -1);
-            g_signal_connect(closeRow, "activated",
+                _("Applies the changed settings and closes the window"), -1);
+            g_signal_connect(okRow, "activated",
+                             G_CALLBACK(+[](AdwButtonRow*, gpointer data) {
+                                 auto* impl = static_cast<Impl*>(data);
+                                 if (impl->context.accept) {
+                                     impl->context.accept();
+                                 }
+                                 if (impl->dialog != nullptr) {
+                                     adw_dialog_close(impl->dialog);
+                                 }
+                             }),
+                             this);
+            GtkWidget* cancelRow = adw_button_row_new();
+            adw_preferences_row_set_title(ADW_PREFERENCES_ROW(cancelRow), _("Cancel"));
+            gtk_accessible_update_property(
+                GTK_ACCESSIBLE(cancelRow), GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
+                // Translators: the description of the Cancel button of the
+                // settings window; Escape does the same.
+                _("Closes the window without changing anything"), -1);
+            g_signal_connect(cancelRow, "activated",
                              G_CALLBACK(+[](AdwButtonRow*, gpointer data) {
                                  auto* impl = static_cast<Impl*>(data);
                                  if (impl->dialog != nullptr) {
@@ -522,9 +540,10 @@ void Window::Impl::build() {
                                  }
                              }),
                              this);
-            adw_preferences_group_add(ADW_PREFERENCES_GROUP(closeGroup), closeRow);
+            adw_preferences_group_add(ADW_PREFERENCES_GROUP(buttons), okRow);
+            adw_preferences_group_add(ADW_PREFERENCES_GROUP(buttons), cancelRow);
             adw_preferences_page_add(ADW_PREFERENCES_PAGE(gtkPage),
-                                     ADW_PREFERENCES_GROUP(closeGroup));
+                                     ADW_PREFERENCES_GROUP(buttons));
         }
         adw_preferences_dialog_add(ADW_PREFERENCES_DIALOG(dialog),
                                    ADW_PREFERENCES_PAGE(gtkPage));

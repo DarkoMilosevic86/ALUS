@@ -388,7 +388,42 @@ std::size_t Registry::pumpEvents() {
             return true;
         },
         alwaysAllowed);
+    if (emitted > 0) {
+        announceShownChoice();
+    }
     return emitted;
+}
+
+void Registry::announceShownChoice() {
+    // A combo box that reports its choice through neither Value nor
+    // Selection -- GTK 4's AdwComboRow and GtkDropDown -- changes it with no
+    // event of its own: the arrows send `selected` for items of a hidden
+    // list, and the value ALUS derives (Object::value, shownChoiceText) is
+    // simply different afterwards. So after every cycle that dispatched
+    // anything, the focused combo box's value is compared with the one last
+    // seen and spoken when it moved (FAZA10.md N124). A combo box with Value
+    // or Selection is left alone: its own events already announce it.
+    const ObjectPtr& focus = api_.focus();
+    if (focus == nullptr || focus->role() != Role::ComboBox ||
+        focus->hasInterface(Interface::Value) || focus->hasInterface(Interface::Selection)) {
+        shownChoiceOwner_ = 0;
+        return;
+    }
+    const std::string& value = focus->value();
+    if (shownChoiceOwner_ != focus->id()) {
+        shownChoiceOwner_ = focus->id();
+        shownChoice_ = value;
+        return;
+    }
+    if (value == shownChoice_ || value.empty()) {
+        return;
+    }
+    shownChoice_ = value;
+    if (presentation_.speakPropertyChange) {
+        PropertyChange change;
+        change.value = true;
+        presentation_.speakPropertyChange(*focus, change, OutputReason::Change);
+    }
 }
 
 bool Registry::handleGainFocus(const ObjectPtr& object) {

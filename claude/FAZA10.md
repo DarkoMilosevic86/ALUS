@@ -660,3 +660,22 @@ Tri stvari, izmerene na `alus-settings` (GTK 4.18.6, libadwaita 1.7.6):
 
 Testovi: `tests/a11y/test_events.cpp` (vrednost i najava). Strelice u samom
 prozoru nisu pokrivene testom (traže ekran); živa provera ostaje korisniku.
+
+**N125 — Escape je primenio sintezu koju je korisnik samo pogledao; strelice
+po listi i dalje ne govore.**
+
+1. **Escape.** N119 je čuvanje vezao za zatvaranje prozora, pa je i Escape
+   čuvao: korisnik je strelicama došao do eSpeak-a, pritisnuo Escape i čuo
+   eSpeak umesto svog MBROLA NG. Sada važi Windows-ova konvencija: dugme **U
+   redu** čuva i zatvara, a **Otkaži**, Escape i dugme u zaglavlju zatvaraju bez
+   upisa (`Context::accept`, `Session::accepted` u `src/gui/main.cpp`). Oba
+   dugmeta su na dnu svake stranice. Podnaslovi koji su obećavali „kad se
+   prozor zatvori" sada kažu „kad pritisnete U redu".
+2. **Strelice.** Pretpostavka iz N124 je bila pogrešna: strelice **ne**
+   preimenuju labelu izabrane stavke. Dnevnik (13:13:40–13:14:04) za svaku
+   strelicu pokazuje samo `object:state-changed:selected` na stavkama skrivene
+   liste, bez ijedne promene imena. Najava zato više ne zavisi od vrste
+   događaja: posle svakog ciklusa koji je nešto obradio, `Registry` uporedi
+   vrednost fokusirane padajuće liste (bez Value/Selection) sa poslednjom
+   viđenom i izgovori je ako se promenila (`announceShownChoice`). Test je
+   prepravljen po izmerenom obrascu i proveren je obrnuto (bez provere pada).

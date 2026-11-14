@@ -66,6 +66,10 @@ struct Context {
     std::function<void(const std::string& section)> settingChanged;
     // Called when the user asks for a factory reset.
     std::function<void()> resetAll;
+    // Called when the user presses OK: the changes are to be KEPT. Closing
+    // the window any other way -- Cancel, Escape, the header's close button
+    // -- discards them, as a Windows dialog does (FAZA10.md N125).
+    std::function<void()> accept;
     // What speech-dispatcher offers, for the voice and module rows. Filled
     // by alus-settings when it starts; empty means "not asked", and the rows
     // then offer only their fixed entries.
