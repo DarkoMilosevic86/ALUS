@@ -783,3 +783,125 @@ sporiji od događaja; bez popravke pada: tekst dva puta i „paragraph"),
 `tests/a11y/test_events.cpp` (mrtav fokus posle ulaska u fasciklu; bez
 popravke pada), `tests/input/test_manager.cpp` (tasteri se vraćaju posle
 puštanja).
+
+---
+
+*From N129 on, findings are written in English (the documentation moved to
+English on 2026-11-14).*
+
+**N129 — Nautilus: one arrow key cost ~300 AT-SPI calls (~190 ms).**
+(Log `alus-measure-20261114-181408.log`, then `tests/measure_focus.cpp` on
+the live desktop.)
+
+The N128 instrumentation showed no single slow call: a row's `gainFocus` was
+177–225 ms for 290–317 calls, i.e. many cheap calls. To see which, the
+backend now counts calls by name (`Backend::callsByName`) and the "slow
+event" line lists them (`states×40 parent×31 …`). A new developer tool,
+`build/tests/measure-focus`, assembles the daemon's layers silently against
+the live bus and replays a focus event for the current focus, so the
+breakdown could be measured without touching the user's desktop. A focus
+move inside one window (desktop icons, 9 ancestors) cost **99 calls**:
+
+1. **`appInfo` + `application`: 49 of 99.** The application's name, toolkit,
+   toolkit version, AT-SPI version and pid (five calls) were read again for
+   every object of every event, because the app module lookup, the tree
+   interceptor veto and the overlay choice all key on them. They cannot
+   change while the application is on the bus, and a unique bus name is never
+   reused, so `AtspiBackend::appInfo` now remembers the answer per bus name
+   (only a complete answer: toolkit and pid present; bounded at 256
+   applications).
+2. **The tree interceptor walked every ancestor on every key**, asking each
+   one `alive`, `parent`, and its refined role (`role` + `states` +
+   `attributes`) to see whether it is a document. Three changes:
+   * an object's **platform role is read once per object** instead of once
+     per cycle (GTK fixes it at construction; Gecko and Chromium create a new
+     accessible when an element's role changes); a failed read is not kept;
+   * `BrowseMode::isDocumentRoot` filters on the mapped platform role first
+     (only document roles map to `Role::Document`, and no refinement or
+     behaviour produces it otherwise) and asks `alive` only for a document;
+   * for the focus, `TreeInterceptorRegistry::update` walks the ancestry
+     `Api` already holds (and reuses across keys) instead of asking every
+     ancestor for its parent again.
+
+Result on the live desktop: **99 → 10 calls** for the same focus move. In the
+mock Nautilus window (12 nested panels, rows with cells) one arrow is 22
+calls, with the role read once and no walk to the top.
+
+Seen while measuring, not changed: a focus inside a Chromium document costs
+~180 calls in browse mode (`text`, `childAt`, `childCount` over ~16
+objects, reading the focused line). Chromium answers fast (~10 ms in total),
+so it is not the Nautilus problem; it is a candidate for the same treatment.
+
+Tests: `tests/app/test_modules.cpp` ("N129 an arrow key in Nautilus costs a
+few dozen platform calls"), `tests/nav/test_browse_mode.cpp` ("N129 a focus
+move does not ask every ancestor whether it is a document"; without the fix
+47 calls per move, `role` 17 times). T4.2 in `tests/a11y/test_object.cpp` now
+expects the role to cost nothing in a later cycle.
+
+**N130 — Chrome: silent when it opens; `e` does not find the YouTube search
+field; typed characters are not heard.**
+(Log `alus-measure-20261114-191835.log`.)
+
+1. **Silent start** (19:19:19): Chrome sent `window:activate` and
+   `document:load-complete`, and no focus event until the user pressed Tab.
+   ALUS only cancelled speech on the foreground event (NVDA's rule: a focus
+   event follows), so nothing was said. Now `Registry::armForegroundFocusCheck`
+   waits 250 ms after a window comes to the foreground; if the focus is still
+   outside it, the focused object is looked for in the window (breadth first,
+   the start-up scan's budget) and announced as a focus, or the window itself
+   when nothing reports FOCUSED. GTK's own focus event arrives within
+   milliseconds, so the check then finds the focus inside and does nothing.
+   The start-up scan (`findInitialFocus`) now searches breadth first too.
+2. **`e` said "no next edit field"** on YouTube (19:19:43, 19:19:58), and `f`
+   found the field: it is ARIA `combobox` over a text input, which Chromium
+   exposes as COMBO_BOX with EDITABLE. The edit rule now matches entries,
+   password fields and combo boxes that are EDITABLE (NVDA includes editable
+   combo boxes too). EDITABLE (ALL) replaces "not READ_ONLY" (NONE): the one
+   criterion that takes the combo box in and keeps both a read-only entry and
+   a plain drop-down out.
+3. **Typed characters silent** (19:20:09–23): every letter reached the
+   synthesizer, and every one was followed by `ssip cancel acknowledged`
+   within a millisecond. Each key's speech interrupt was *queued*
+   (`GestureManager::applySpeechEffect`), while the echo was spoken *at once*,
+   so the cancel ran after the echo and silenced it. The echo (character and
+   word) now goes through the same queue, behind the cancel.
+4. **Doubled letters** in the echo ("peeku", "suuze"): the compositor's
+   duplicate key events (N33) interleave when keys overlap — `up p, down e,
+   up p, down e` — and `KeyEventFilter` compared each event only with the
+   previous one. It now remembers the last four events and drops a copy of
+   any of them within the 5 ms window.
+
+Tests: `tests/a11y/test_events.cpp` ("N130 a window that comes up without a
+focus event gets its focus found"; fails without the fix),
+`tests/nav/test_browse_mode.cpp` (editable combo box for `e`),
+`tests/input/test_manager.cpp` (cancel before echo, in key order; interleaved
+duplicates).
+
+**N131 — YouTube in browse mode: "blank" on every other line, and the player's
+buttons say "button, graphic" instead of their names.**
+(Log `alus-measure-20261114-193516.log`.)
+
+1. **Blank lines** (19:35:35–19:36:06): YouTube builds its layout from empty
+   `<div>`s, which Chromium exposes as sections with a Text interface and no
+   characters. Each was a leaf, so each was a line, and each said "blank".
+   `DocumentLeaves::isBlankLeaf` now names them (a layout role — section,
+   panel, filler, unknown, paragraph, text frame, grouping — with no children,
+   no name and no characters), and the public walks (`first`, `last`, `next`,
+   `previous`) step over them; the raw walks are kept as `*Any`.
+2. **"button, graphic"** (19:36:06–09): each player button (play, next,
+   subtitles, settings…) holds only an unnamed SVG icon, which was the leaf;
+   the button's name (`aria-label`, "Pause (k)") was never said, because a
+   container's name is not read on a line. NVDA's buffer renders such a
+   button's name as its text. `DocumentLeaves::isNamedControlLeaf` makes a
+   button, toggle button, menu item or tab with a name, no words of its own
+   and no words below it (at most four children) a leaf in its own right, an
+   embedded one, so its content is its name. Links are left out on purpose:
+   a link often holds a heading that quick navigation lands inside.
+3. Found while testing it: wherever an embedded leaf's content is its name
+   (a named image too), a quick-nav jump said the name twice, once as the name
+   and once as the content ("Pause, Pause, button"). The field is now marked
+   `labelledByContent`.
+
+Test: `tests/nav/test_browse_mode.cpp` ("N131 empty layout containers are not
+lines, and an icon button says its name"; without the fix the arrow lands on
+a blank and the button's content is empty).

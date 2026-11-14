@@ -442,3 +442,69 @@ TEST_CASE("the gnome-shell module speaks the selected search result",
         CHECK(fixture.spoken.size() == 1);
     }
 }
+
+TEST_CASE("N129 an arrow key in Nautilus costs a few dozen platform calls, not hundreds",
+          "[app][modules][cost]") {
+    // Measured on the live session (N129): one arrow in the Nautilus file list
+    // cost ~300 AT-SPI calls, about 190 ms. Half was the application's name,
+    // toolkit and process asked again for every object, and most of the rest
+    // was the tree interceptor asking every ancestor, on every key, whether it
+    // was a document. The window here is as deep as the real one.
+    AppFixture fixture{true};
+    const a11y::Ref application = fixture.addApplication("org.gnome.Nautilus", "GTK");
+    const a11y::Ref window =
+        fixture.backend.add(application, a11y::PlatformRole::Frame, "Home");
+    fixture.backend.addState(window, a11y::PlatformState::Active);
+    a11y::Ref parentOfView = window;
+    for (int depth = 0; depth < 12; ++depth) {
+        parentOfView = fixture.backend.add(parentOfView, a11y::PlatformRole::Panel, "");
+    }
+    const a11y::Ref view =
+        fixture.backend.add(parentOfView, a11y::PlatformRole::TreeTable, "Content view");
+    const a11y::Ref header = fixture.backend.add(view, a11y::PlatformRole::TableRow,
+                                                 "Name Size Modified");
+    fixture.backend.add(header, a11y::PlatformRole::Filler, "Name");
+    const a11y::Ref rows = fixture.backend.add(view, a11y::PlatformRole::List, "");
+    // GTK 4's list view implements Selection, which is where the "is it the
+    // only selected item" question stops.
+    fixture.backend.addInterface(rows, a11y::Interface::Selection);
+    std::vector<a11y::Ref> items;
+    for (int i = 0; i < 9; ++i) {
+        const std::string name = "file" + std::to_string(i);
+        const a11y::Ref item = fixture.backend.add(rows, a11y::PlatformRole::TableRow, name);
+        fixture.backend.addState(item, a11y::PlatformState::Focusable);
+        fixture.backend.addState(item, a11y::PlatformState::Selectable);
+        fixture.backend.add(item, a11y::PlatformRole::TableCell, name + " " + name);
+        fixture.backend.add(item, a11y::PlatformRole::TableCell, "14 items");
+        fixture.backend.add(item, a11y::PlatformRole::TableCell, "Today, at 9:05");
+        items.push_back(item);
+    }
+    fixture.backend.addState(items[0], a11y::PlatformState::Focused);
+    fixture.backend.addState(items[0], a11y::PlatformState::Selected);
+    fixture.backend.emit("object:state-changed:focused", items[0], 1);
+    fixture.pumpOnce();
+
+    for (std::size_t step = 1; step <= 3; ++step) {
+        fixture.backend.resetCalls();
+        fixture.backend.removeState(items[step - 1], a11y::PlatformState::Selected);
+        fixture.backend.removeState(items[step - 1], a11y::PlatformState::Focused);
+        fixture.backend.addState(items[step], a11y::PlatformState::Selected);
+        fixture.backend.addState(items[step], a11y::PlatformState::Focused);
+        fixture.backend.emit("object:state-changed:focused", items[step], 1);
+        fixture.backend.emit("object:state-changed:selected", items[step - 1], 0);
+        fixture.backend.emit("object:state-changed:selected", items[step], 1);
+        fixture.backend.emit("object:selection-changed", rows, 0);
+        fixture.pumpOnce();
+        INFO("step " << step << ": " << fixture.backend.calls() << " calls");
+        REQUIRE(fixture.registry.api().focus() != nullptr);
+        CHECK(fixture.registry.api().focus()->ref() == items[step]);
+        CHECK(fixture.lastSpoken().find("file" + std::to_string(step)) != std::string::npos);
+        // (`appInfo` is remembered per application by the AT-SPI backend;
+        // the mock answers every time, so it is not counted here.)
+        // No walk to the top of the window: the ancestors' roles are known
+        // and their chain is reused.
+        CHECK(fixture.backend.callsFor("role") <= 2);
+        CHECK(fixture.backend.callsFor("parent") <= 4);
+        CHECK(fixture.backend.calls() <= 30);
+    }
+}

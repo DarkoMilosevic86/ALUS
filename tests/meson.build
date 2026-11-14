@@ -539,3 +539,12 @@ test('commands', test_coverage,
   # Hermetic: its own configuration directory, never the developer's own.
   env: {'ALUS_CONFIG_DIR': meson.current_build_dir() / 'coverage-test-config'},
   timeout: 180)
+
+# measure-focus: what one focus announcement costs on the live desktop, call
+# by call (N129). A developer tool, not a test: it needs the session's
+# accessibility bus, and what it prints is a measurement, not a verdict.
+# See docs/development.md.
+measure_focus = executable('measure-focus', files('measure_focus.cpp'),
+  dependencies: [alus_core_dep, alus_a11y_dep, alus_nav_dep, alus_braille_dep,
+                 alus_app_dep],
+  install: false)

@@ -65,13 +65,25 @@ struct SpeechRecorder {
     int cancels = 0;
     int pauses = 0;
     int resumes = 0;
+    // Everything above, in the order it reached the speech layer: "cancel",
+    // "speak:<text>", "spell:<text>". The ORDER is the point for N130.
+    std::vector<std::string> order;
 
     alus::input::GestureManager::Hooks hooks() {
         alus::input::GestureManager::Hooks hooks;
-        hooks.cancelSpeech = [this]() { ++cancels; };
+        hooks.cancelSpeech = [this]() {
+            ++cancels;
+            order.push_back("cancel");
+        };
         hooks.pauseSpeech = [this](bool pause) { pause ? ++pauses : ++resumes; };
-        hooks.speakText = [this](const std::string& text, bool) { spoken.push_back(text); };
-        hooks.speakSpelling = [this](const std::string& text) { spelled.push_back(text); };
+        hooks.speakText = [this](const std::string& text, bool) {
+            spoken.push_back(text);
+            order.push_back("speak:" + text);
+        };
+        hooks.speakSpelling = [this](const std::string& text) {
+            spelled.push_back(text);
+            order.push_back("spell:" + text);
+        };
         return hooks;
     }
 };

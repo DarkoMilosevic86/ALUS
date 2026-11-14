@@ -277,11 +277,20 @@ std::optional<MatchRule> QuickNav::ruleFor(ElementType type, bool includeLayoutT
         // c
         case ElementType::ComboBox:
             return byRoles({PlatformRole::ComboBox});
-        // e
+        // e -- a field the user can type into. AN EDITABLE COMBO BOX IS ONE
+        // (N130): the YouTube search field, and every search field with
+        // suggestions, is ARIA `combobox` over a text input, which Chromium
+        // exposes as COMBO_BOX with EDITABLE -- and `e` said "no next edit
+        // field" with the search box right there. NVDA's own rule includes
+        // editable combo boxes for the same reason. EDITABLE (ALL) instead of
+        // "not READ_ONLY" (NONE), because it is the one criterion that both
+        // takes the combo box in and keeps a read-only entry out; a
+        // non-editable combo box (a plain drop-down) stays `c`'s.
         case ElementType::Edit: {
-            MatchRule rule = byRoles({PlatformRole::Entry, PlatformRole::PasswordText});
-            rule.states = stateBit(PlatformState::ReadOnly);
-            rule.stateMatch = MatchType::None;
+            MatchRule rule = byRoles(
+                {PlatformRole::Entry, PlatformRole::PasswordText, PlatformRole::ComboBox});
+            rule.states = stateBit(PlatformState::Editable);
+            rule.stateMatch = MatchType::All;
             return rule;
         }
         // g

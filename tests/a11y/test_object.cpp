@@ -154,14 +154,16 @@ TEST_CASE("T4.2 thirty property reads in one cycle are one batch", "[a11y][objec
         (void)button->role();
         (void)button->states();
     }
-    // Thirty reads. Each of the three properties cost exactly one platform
-    // call, and `states` needs the attributes too (the refinement of §6.5), so
-    // the batch is four calls -- not thirty.
+    // Thirty reads. Each property costs at most one platform call, and
+    // `states` needs the attributes too (the refinement of §6.5), so the batch
+    // is three calls -- not thirty. The role costs NONE: the platform role was
+    // read when the object was created, and it is kept for the object's
+    // lifetime because it cannot change (N129).
     CHECK(fixture.backend.callsFor("name") == 1);
-    CHECK(fixture.backend.callsFor("role") == 1);
+    CHECK(fixture.backend.callsFor("role") == 0);
     CHECK(fixture.backend.callsFor("states") == 1);
     CHECK(fixture.backend.callsFor("attributes") == 1);
-    CHECK(fixture.backend.calls() == 4);
+    CHECK(fixture.backend.calls() == 3);
 
     // The next cycle starts with an empty cache, which is the whole point of
     // the one-cycle lifetime: an object that changed is read again.

@@ -28,6 +28,9 @@
 #include <chrono>
 #include <memory>
 #include <string>
+#include <string_view>
+#include <unordered_map>
+#include <utility>
 #include <vector>
 
 typedef struct _GMainContext GMainContext;
@@ -140,6 +143,7 @@ public:
     // what actually reached the bus, which is the number that matters for
     // T4.2 and for the latency budget.
     std::uint64_t callCount() const noexcept override { return calls_; }
+    std::vector<std::pair<std::string, std::uint64_t>> callsByName() const override;
     std::uint64_t errorCount() const noexcept { return errors_; }
     void resetCounters() noexcept;
 
@@ -152,12 +156,17 @@ private:
     // reaches this header.
     void deliver(void* event);
 
-    void noteCall() noexcept { ++calls_; }
+    // `name` is the calling function's __func__, a string with static
+    // storage, so the map keys by pointer-free string_view and never copies.
+    void noteCall(std::string_view name) {
+        ++calls_;
+        ++perCall_[name];
+    }
     // Counts the call and, when it took 20 ms or more, logs which one: the
     // ~200 ms from an arrow to speech in Nautilus is synchronous calls into
     // the application, and "slow event" alone did not say which (N128).
     struct CallTimer {
-        CallTimer(AtspiBackend& backend, const char* name) noexcept;
+        CallTimer(AtspiBackend& backend, const char* name);
         ~CallTimer();
         CallTimer(const CallTimer&) = delete;
         CallTimer& operator=(const CallTimer&) = delete;
@@ -172,6 +181,10 @@ private:
     EventSink sink_;
     std::vector<std::string> subscribed_;
     std::uint64_t calls_ = 0;
+    std::unordered_map<std::string_view, std::uint64_t> perCall_;
+    // AppInfo per application bus name; see appInfo() for why it may be kept.
+    static constexpr std::size_t kMaxRememberedApplications = 256;
+    std::unordered_map<std::string, AppInfo> appInfoByBus_;
     std::uint64_t errors_ = 0;
 };
 

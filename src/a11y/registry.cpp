@@ -9,8 +9,12 @@
 
 #include <algorithm>
 #include <chrono>
+#include <deque>
+#include <format>
 #include <functional>
+#include <string>
 #include <utility>
+#include <vector>
 
 namespace alus::a11y {
 namespace {
@@ -20,6 +24,37 @@ namespace {
 // first focus event arrives -- and it must be a bounded cost at start-up, not
 // a tree walk of every open application.
 constexpr int kInitialFocusBudget = 512;
+
+// How long a newly activated window may take to send its own focus event
+// before ALUS looks for the focus itself (N130). GTK's arrives within a few
+// milliseconds; long enough not to race it, short enough not to feel late.
+constexpr std::chrono::milliseconds kForegroundFocusWait{250};
+
+// "states×40 parent×31 …": the calls made between two snapshots of
+// Backend::callsByName, most frequent first, for the "slow event" line.
+std::string callBreakdown(const std::vector<std::pair<std::string, std::uint64_t>>& before,
+                          const std::vector<std::pair<std::string, std::uint64_t>>& after) {
+    std::vector<std::pair<std::string, std::uint64_t>> spent;
+    for (const auto& [name, count] : after) {
+        const auto old = std::find_if(before.begin(), before.end(),
+                                      [&name](const auto& entry) { return entry.first == name; });
+        const std::uint64_t was = old == before.end() ? 0 : old->second;
+        if (count > was) {
+            spent.emplace_back(name, count - was);
+        }
+    }
+    std::sort(spent.begin(), spent.end(), [](const auto& a, const auto& b) {
+        return a.second != b.second ? a.second > b.second : a.first < b.first;
+    });
+    std::string out;
+    for (const auto& [name, count] : spent) {
+        if (!out.empty()) {
+            out += ' ';
+        }
+        out += std::format("{}×{}", name, count);
+    }
+    return out;
+}
 
 }  // namespace
 
@@ -91,6 +126,11 @@ bool Registry::start(std::string* error) {
 }
 
 void Registry::stop() {
+    if (foregroundTimer_ != 0) {
+        loop_.cancelLater(foregroundTimer_);
+        foregroundTimer_ = 0;
+    }
+    pendingForeground_.reset();
     if (!running_) {
         return;
     }
@@ -338,15 +378,23 @@ std::size_t Registry::pumpEvents() {
                 const ObjectPtr& object;
                 const Backend& backend;
                 std::uint64_t callsBefore;
+                // Taken only when the line can be written: a copy of a few
+                // dozen counters per event is nothing, but it is not free.
+                std::vector<std::pair<std::string, std::uint64_t>> byNameBefore =
+                    core::Log::instance().isEnabledFor(core::LogLevel::Debug)
+                        ? backend.callsByName()
+                        : std::vector<std::pair<std::string, std::uint64_t>>{};
                 ~SlowEventTrace() {
                     const auto took = std::chrono::duration_cast<std::chrono::milliseconds>(
                         std::chrono::steady_clock::now() - started);
                     if (took.count() >= 50) {
                         // The call count tells many cheap calls from one
-                        // expensive one (N128).
-                        ALUS_DEBUG("slow event: {} for {} ({}) took {} ms, {} AT-SPI calls",
+                        // expensive one (N128); the breakdown says which
+                        // calls they were (N129).
+                        ALUS_DEBUG("slow event: {} for {} ({}) took {} ms, {} AT-SPI calls: {}",
                                    raw.name, object->path(), roleName(object->role()),
-                                   took.count(), backend.callCount() - callsBefore);
+                                   took.count(), backend.callCount() - callsBefore,
+                                   callBreakdown(byNameBefore, backend.callsByName()));
                     }
                 }
             } slowEventTrace{std::chrono::steady_clock::now(), raw, object, backend_,
@@ -378,6 +426,7 @@ std::size_t Registry::pumpEvents() {
                     return false;
                 }
                 api_.setForegroundObject(object);
+                armForegroundFocusCheck(object);
             } else if (raw.name == events::kActiveDescendantChange) {
                 // The container's active descendant changed. When the
                 // container has the focus, that descendant is what the user is
@@ -617,31 +666,112 @@ ObjectPtr Registry::findInitialFocus() {
     if (window == nullptr) {
         return nullptr;
     }
+    if (ObjectPtr focused = findFocusedIn(window)) {
+        return focused;
+    }
+    // The window itself is a usable answer: alus+tab then says which window
+    // the user is in, which beats silence.
+    return window;
+}
+
+ObjectPtr Registry::findFocusedIn(const ObjectPtr& window) {
+    if (window == nullptr) {
+        return nullptr;
+    }
     if (window->states().has(State::Focused)) {
         return window;
     }
-    // Depth first from the active window, looking for the FOCUSED state, with
-    // a budget: a web page has more objects than this is worth.
+    // BREADTH first, with a budget: a web page has more objects than this is
+    // worth, and the focused control (a document, an address bar) sits a few
+    // levels down, while depth first spent the budget inside the page.
     int budget = kInitialFocusBudget;
-    std::vector<ObjectPtr> stack = window->children();
-    while (!stack.empty() && budget-- > 0) {
-        ObjectPtr current = stack.back();
-        stack.pop_back();
+    std::deque<ObjectPtr> queue;
+    for (const ObjectPtr& child : window->children()) {
+        queue.push_back(child);
+    }
+    while (!queue.empty() && budget-- > 0) {
+        ObjectPtr current = std::move(queue.front());
+        queue.pop_front();
         if (current == nullptr) {
             continue;
         }
         if (current->states().has(State::Focused)) {
             return current;
         }
-        const std::vector<ObjectPtr>& children = current->children();
-        stack.insert(stack.end(), children.begin(), children.end());
+        for (const ObjectPtr& child : current->children()) {
+            queue.push_back(child);
+        }
     }
     if (budget <= 0) {
-        ALUS_DEBUG("initial focus scan gave up after {} objects", kInitialFocusBudget);
+        ALUS_DEBUG("focus scan of {} gave up after {} objects", window->name(),
+                   kInitialFocusBudget);
     }
-    // The window itself is a usable answer: alus+tab then says which window
-    // the user is in, which beats silence.
-    return window;
+    return nullptr;
+}
+
+bool Registry::focusIsInside(const Object& window) const {
+    const ObjectPtr& focus = api_.focus();
+    if (focus == nullptr) {
+        return false;
+    }
+    if (focus->sameAs(window)) {
+        return true;
+    }
+    for (const ObjectPtr& ancestor : api_.focusAncestors()) {
+        if (ancestor != nullptr && ancestor->sameAs(window)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Registry::armForegroundFocusCheck(const ObjectPtr& window) {
+    // NVDA gets the focus from the system when a window comes up; AT-SPI
+    // leaves it to the toolkit, and Chrome sends `window:activate` and then
+    // nothing at all until a key moves the focus -- so ALUS said nothing when
+    // Chrome opened (N130). GTK sends its focus event within a few
+    // milliseconds of the activation, so the check waits briefly and does
+    // nothing when the focus has arrived meanwhile.
+    if (foregroundTimer_ != 0) {
+        loop_.cancelLater(foregroundTimer_);
+    }
+    pendingForeground_ = window;
+    foregroundTimer_ = loop_.callLater(kForegroundFocusWait,
+                                       [this] { checkFocusAfterForeground(); },
+                                       "foreground-focus-check");
+}
+
+void Registry::checkFocusAfterForeground() {
+    foregroundTimer_ = 0;
+    const ObjectPtr window = std::move(pendingForeground_);
+    pendingForeground_.reset();
+    if (!running_ || window == nullptr || !window->isAlive()) {
+        return;
+    }
+    const ObjectPtr& foreground = api_.foreground();
+    if (foreground == nullptr || !foreground->sameAs(*window)) {
+        return;  // another window came up since
+    }
+    if (focusIsInside(*window)) {
+        return;  // the toolkit did send its focus event
+    }
+    ObjectPtr target = findFocusedIn(window);
+    if (target == nullptr) {
+        // Nothing reports FOCUSED yet: say the window, which is where the
+        // user is, instead of nothing.
+        target = window;
+    }
+    ALUS_DEBUG("no focus event after {} came to the foreground; focusing {} ({})",
+               window->name(), target->name(), roleName(target->role()));
+    if (!handleGainFocus(target)) {
+        return;
+    }
+    core::Event event;
+    event.name = std::string{events::kGainFocus};
+    event.object = target->id();
+    dispatcher_.executeEvent(event);
+    eventDispatched_.notify(event, target);
+    ++dispatched_;
 }
 
 void Registry::setAppModuleProvider(AppModuleProvider provider) {

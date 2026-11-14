@@ -541,3 +541,49 @@ TEST_CASE("a selection in the focused list is where the user is", "[a11y][events
         CHECK(fixture.registry.api().focus()->ref() == first);
     }
 }
+
+TEST_CASE("N130 a window that comes up without a focus event gets its focus found",
+          "[a11y][events][focus]") {
+    // Log 19:19:19: Chrome sent window:activate and document:load-complete,
+    // and no focus event until the user pressed Tab, so ALUS said nothing.
+    A11yFixture fixture;
+    MockBackend& backend = fixture.backend;
+    const ButtonTree editor{backend};
+    backend.addState(editor.button, PlatformState::Focused);
+    backend.emit("object:state-changed:focused", editor.button, 1);
+    fixture.pumpOnce();
+    REQUIRE(fixture.registry.api().focus()->ref() == editor.button);
+
+    const Ref browser = backend.addApplication("Google Chrome", "Chromium");
+    const Ref window = backend.add(browser, PlatformRole::Frame, "YouTube - Google Chrome");
+    const Ref toolbar = backend.add(window, PlatformRole::ToolBar, "");
+    backend.add(toolbar, PlatformRole::Button, "Back");
+    const Ref document = backend.add(window, PlatformRole::DocumentWeb, "YouTube");
+
+    SECTION("the focused object inside it is announced") {
+        backend.addState(document, PlatformState::Focused);
+        backend.emit("window:activate", window);
+        fixture.clearRecords();
+        REQUIRE(fixture.pumpUntil(
+            [&] { return fixture.registry.api().focus()->ref() == document; }));
+        CHECK(fixture.lastSpoken().find("YouTube") != std::string::npos);
+    }
+
+    SECTION("with nothing focused, the window itself is announced") {
+        backend.emit("window:activate", window);
+        REQUIRE(fixture.pumpUntil(
+            [&] { return fixture.registry.api().focus()->ref() == window; }));
+    }
+
+    SECTION("a focus event that does arrive is not doubled") {
+        backend.addState(document, PlatformState::Focused);
+        backend.emit("window:activate", window);
+        backend.emit("object:state-changed:focused", document, 1);
+        fixture.pumpOnce();
+        REQUIRE(fixture.registry.api().focus()->ref() == document);
+        fixture.clearRecords();
+        // Past the wait: the check finds the focus already inside the window.
+        fixture.pumpUntil([] { return false; }, std::chrono::milliseconds{400});
+        CHECK(fixture.spoken.empty());
+    }
+}

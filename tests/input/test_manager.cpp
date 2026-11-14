@@ -251,11 +251,13 @@ TEST_CASE("typed characters are echoed, and words when asked") {
     type('l', 3);
     type('l', 4);
     type('o', 5);
+    harness.fixture.drain();
     CHECK(harness.speech.spelled == std::vector<std::string>{"h", "e", "l", "l", "o"});
     CHECK(harness.speech.spoken.empty());
 
     // The space ends the word, and the word is spoken once — not five letters.
     harness.press(keyDown(keysym::kSpace, 0, 6, ' '));
+    harness.fixture.drain();
     CHECK(harness.speech.spoken == std::vector<std::string>{"hello"});
 
     SECTION("backspace corrects the word buffer") {
@@ -270,8 +272,30 @@ TEST_CASE("typed characters are echoed, and words when asked") {
         harness.speech.spelled.clear();
         harness.press(keyDown(keysym::kInsert, 0, 118));
         harness.press(keyDown('t', 0, 28, 't'));
+        harness.fixture.drain();
         CHECK(harness.speech.spelled.empty());
     }
+}
+
+TEST_CASE("N130 a typed character is echoed after the speech it interrupts is cancelled") {
+    // Log 19:20:20, Chrome: every key cancels speech, and the cancel was
+    // QUEUED while the echo was spoken at once, so the cancel ran after the
+    // echo and silenced it -- "ssip begin" then "ssip cancel acknowledged" for
+    // every letter. The user heard nothing while typing.
+    Harness harness;
+    alus::input::KeyboardConfig config = harness.manager->config();
+    config.speakTypedCharacters = TypingEcho::Always;
+    config.speakTypedWords = TypingEcho::Always;
+    config.speechInterruptForCharacters = true;
+    harness.manager->setConfig(config);
+
+    harness.press(keyDown('a', 0, 38, 'a'));
+    harness.press(keyDown('b', 0, 56, 'b'));
+    harness.press(keyDown(keysym::kSpace, 0, 65, ' '));
+    harness.fixture.drain();
+    CHECK(harness.speech.order == std::vector<std::string>{"cancel", "spell:a", "cancel",
+                                                           "spell:b", "cancel", "speak:ab",
+                                                           "spell: "});
 }
 
 TEST_CASE("pass next key through stops ALUS acting on one key") {
@@ -445,6 +469,24 @@ TEST_CASE("N33 a key event the platform delivers twice is handled once") {
         shifted.state = keysym::kStateShift;
         CHECK_FALSE(filter.isDuplicate(shifted, base + std::chrono::milliseconds(1)));
     }
+}
+
+TEST_CASE("N130 duplicates of overlapping keys are dropped even when interleaved") {
+    // Log 19:20:20: typing fast in Chrome, the doubled stream came as
+    // "up p, down e, up p, down e" and both copies of `e` were echoed.
+    alus::input::KeyEventFilter filter;
+    const auto t = std::chrono::steady_clock::now();
+    using std::chrono::milliseconds;
+    const KeyEvent upP = keyUp('p', 0, 33);
+    const KeyEvent downE = keyDown('e', 0, 26, 'e');
+    CHECK_FALSE(filter.isDuplicate(upP, t));
+    CHECK_FALSE(filter.isDuplicate(downE, t));
+    CHECK(filter.isDuplicate(upP, t + milliseconds(2)));
+    CHECK(filter.isDuplicate(downE, t + milliseconds(2)));
+    CHECK(filter.dropped() == 2);
+    // And the real next press of the same key, a human interval later, is kept.
+    CHECK_FALSE(filter.isDuplicate(keyUp('e', 0, 26), t + milliseconds(60)));
+    CHECK_FALSE(filter.isDuplicate(downE, t + milliseconds(150)));
 }
 
 TEST_CASE("the ALUS key does not modify itself") {

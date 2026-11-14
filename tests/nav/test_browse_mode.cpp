@@ -415,6 +415,23 @@ TEST_CASE("T6.5 quick navigation finds the right element", "[browsemode][T6.5]")
         CHECK(item->ref() == tree.item1);
     }
 
+    SECTION("N130 e finds an editable combo box, and not a plain drop-down or a read-only entry") {
+        // The YouTube search field: ARIA combobox over a text input, exposed
+        // by Chromium as COMBO_BOX with EDITABLE.
+        const a11y::Ref dropDown =
+            fixture.backend.add(tree.document, a11y::PlatformRole::ComboBox, "Sort by");
+        const a11y::Ref readOnly =
+            fixture.backend.add(tree.document, a11y::PlatformRole::Entry, "Total");
+        fixture.backend.addState(readOnly, a11y::PlatformState::ReadOnly);
+        const a11y::Ref search =
+            fixture.backend.add(tree.document, a11y::PlatformRole::ComboBox, "Search");
+        fixture.backend.addState(search, a11y::PlatformState::Editable);
+        (void)dropDown;
+        const a11y::ObjectPtr found = quickNav.find(nav::ElementType::Edit, root, true);
+        REQUIRE(found != nullptr);
+        CHECK(found->ref() == search);
+    }
+
     SECTION("t finds the table") {
         const a11y::ObjectPtr found = quickNav.find(nav::ElementType::Table, root, true);
         REQUIRE(found != nullptr);
@@ -1248,5 +1265,140 @@ TEST_CASE("N117: the arrow keys go into a link's text, as NVDA does", "[browsemo
         REQUIRE(restored != nullptr);
         REQUIRE(restored->moveToBookmark(mark));
         CHECK(restored->text() == "d");
+    }
+}
+
+TEST_CASE("N129 a focus move does not ask every ancestor whether it is a document",
+          "[browsemode][cost]") {
+    // Measured live (N129): the tree interceptor walked the whole ancestry of
+    // every focus, asking each ancestor its parent, its role, its states and
+    // its attributes, on every key. A row deep in a Nautilus window cost about
+    // forty calls for that alone. The platform role is now remembered per
+    // object and the focus ancestry Api already holds is walked instead.
+    NavFixture fixture;
+    const Ref application = fixture.backend.addApplication("Files", "gtk");
+    const Ref window = fixture.backend.add(application, PlatformRole::Frame, "Home");
+    fixture.backend.addState(window, PlatformState::Active);
+    Ref container = window;
+    for (int depth = 0; depth < 12; ++depth) {
+        container = fixture.backend.add(container, PlatformRole::Panel, "");
+    }
+    const Ref list = fixture.backend.add(container, PlatformRole::List, "Files");
+    fixture.backend.addInterface(list, Interface::Selection);
+    std::vector<Ref> rows;
+    for (int i = 0; i < 4; ++i) {
+        const Ref row = fixture.backend.add(list, PlatformRole::ListItem,
+                                            "file" + std::to_string(i));
+        fixture.backend.addState(row, PlatformState::Focusable);
+        rows.push_back(row);
+    }
+    fixture.backend.addState(rows[0], PlatformState::Focused);
+    fixture.backend.emit("object:state-changed:focused", rows[0], 1);
+    fixture.pumpOnce();
+
+    for (std::size_t step = 1; step < rows.size(); ++step) {
+        fixture.backend.resetCalls();
+        fixture.backend.removeState(rows[step - 1], PlatformState::Focused);
+        fixture.backend.addState(rows[step], PlatformState::Focused);
+        fixture.backend.emit("object:state-changed:focused", rows[step], 1);
+        fixture.pumpOnce();
+        INFO("step " << step << ": " << fixture.backend.calls() << " calls");
+        REQUIRE(fixture.registry.api().focus() != nullptr);
+        CHECK(fixture.registry.api().focus()->ref() == rows[step]);
+        CHECK(fixture.backend.callsFor("role") <= 1);
+        CHECK(fixture.backend.callsFor("parent") <= 2);
+        CHECK(fixture.backend.calls() <= 25);
+    }
+
+    SECTION("a document above the focus is still found through the chain") {
+        const Ref document = fixture.backend.add(container, PlatformRole::DocumentWeb, "Page");
+        fixture.backend.addState(document, PlatformState::ReadOnly);
+        const Ref link = fixture.backend.add(document, PlatformRole::Link, "Home page");
+        fixture.backend.addState(link, PlatformState::Focusable);
+        fixture.backend.addState(link, PlatformState::Focused);
+        fixture.backend.emit("object:state-changed:focused", link, 1);
+        fixture.pumpOnce();
+        CHECK(fixture.nav().interceptors()->current() != nullptr);
+    }
+}
+
+TEST_CASE("N131 empty layout containers are not lines, and an icon button says its name",
+          "[browsemode]") {
+    // Log 19:35: on YouTube the down arrow said "blank" for every empty <div>
+    // between the controls, and the player's buttons said "button, graphic":
+    // the only leaf inside each was its unnamed SVG icon, and the button's
+    // name ("Pause (k)") was never said.
+    NavFixture fixture;
+    const Ref application = fixture.backend.addApplication("Browser", "Chromium");
+    const Ref window = fixture.backend.add(application, PlatformRole::Frame, "Video");
+    fixture.backend.addState(window, PlatformState::Active);
+    const Ref document = fixture.backend.add(window, PlatformRole::DocumentWeb, "Video");
+    addTextLeaf(fixture.backend, document, PlatformRole::Paragraph, "Before the player");
+    const Ref player = fixture.backend.add(document, PlatformRole::Section, "");
+    // Empty layout divs: AT-SPI sections with a Text interface and no text.
+    for (int i = 0; i < 3; ++i) {
+        addTextLeaf(fixture.backend, player, PlatformRole::Section, "");
+    }
+    const Ref pause = fixture.backend.add(player, PlatformRole::Button, "Pause (k)");
+    fixture.backend.add(pause, PlatformRole::Image, "");  // the SVG icon
+    makeContainer(fixture.backend, pause, 1);
+    addTextLeaf(fixture.backend, player, PlatformRole::Section, "");
+    addTextLeaf(fixture.backend, document, PlatformRole::Paragraph, "After the player");
+    makeContainer(fixture.backend, player, 5);
+    makeContainer(fixture.backend, document, 3);
+
+    const a11y::ObjectPtr root = fixture.registry.objectFor(document);
+    const text::FormatReportSettings settings;
+    text::TextRangePtr caret = nav::DocumentTextRange::make(root, settings, text::Position::First);
+    REQUIRE(caret != nullptr);
+
+    // Down once: straight to the button, no blank line in between.
+    REQUIRE(caret->move(text::TextUnit::Line, 1) == 1);
+    text::TextRangePtr line = caret->copy();
+    REQUIRE(line->expand(text::TextUnit::Line));
+    std::string content;
+    bool sawImage = false;
+    for (const text::TextOrField& item : line->getTextWithFields(settings)) {
+        if (item.isCommand() && item.command->kind() == text::FieldCommand::Kind::ControlStart) {
+            const text::ControlField* field = item.command->control();
+            if (field->role == a11y::Role::Button) {
+                content = field->get("content");
+            }
+            if (field->role == a11y::Role::Graphic) {
+                sawImage = true;
+            }
+        }
+    }
+    CHECK(content == "Pause (k)");
+    CHECK_FALSE(sawImage);
+
+    // Down again: past the trailing empty div to the next paragraph.
+    REQUIRE(caret->move(text::TextUnit::Line, 1) == 1);
+    line = caret->copy();
+    REQUIRE(line->expand(text::TextUnit::Line));
+    CHECK(line->text() == "After the player");
+
+    // And back up: the button, not a blank.
+    REQUIRE(caret->move(text::TextUnit::Line, -1) == -1);
+    line = caret->copy();
+    REQUIRE(line->expand(text::TextUnit::Line));
+    CHECK(line->text().find("Before") == std::string::npos);
+
+    // What the user hears, by arrow and by `b`: the name once, then "button".
+    nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(root, fixture.nav());
+    auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+    REQUIRE(browse != nullptr);
+    const a11y::ObjectPtr button = fixture.registry.objectFor(pause);
+    for (const a11y::OutputReason reason : {a11y::OutputReason::Caret, a11y::OutputReason::QuickNav}) {
+        fixture.clearSpeech();
+        REQUIRE(browse->moveTo(button, reason));
+        fixture.drainSpeech();
+        const std::string spoken = fixture.spokenJoined();
+        INFO("reason " << static_cast<int>(reason) << ": " << spoken);
+        const std::size_t first = spoken.find("Pause");
+        REQUIRE(first != std::string::npos);
+        CHECK(spoken.find("Pause", first + 1) == std::string::npos);
+        CHECK(spoken.find("button") != std::string::npos);
+        CHECK(spoken.find("graphic") == std::string::npos);
     }
 }

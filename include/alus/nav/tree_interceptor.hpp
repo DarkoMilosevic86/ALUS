@@ -159,7 +159,12 @@ public:
     // NVDA: `treeInterceptorHandler.update(obj)`. Creates an interceptor for
     // this object or for the nearest ancestor that wants one, attaches it, and
     // returns it. Null when nothing in the chain is a document.
-    TreeInterceptor* update(const a11y::ObjectPtr& object);
+    //
+    // `ancestors`, when given, is the object's ancestor chain outermost first
+    // (the focus ancestry Api already holds). It is walked instead of asking
+    // every ancestor for its parent again on every key (N129).
+    TreeInterceptor* update(const a11y::ObjectPtr& object,
+                            const std::vector<a11y::ObjectPtr>* ancestors = nullptr);
     // The interceptor for this object, without creating one.
     TreeInterceptor* forObject(const a11y::Object& object) const;
     // The one the focus is currently inside, which is what the command group

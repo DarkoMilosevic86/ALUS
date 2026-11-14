@@ -307,6 +307,13 @@ public:
 };
 ```
 
+> **Deviation, measured ([`phase-10.md`](../history/phase-10.md) N129).** Two
+> facts are kept for an object's (or application's) whole lifetime instead of
+> one cycle, because they cannot change while it exists: the **platform
+> role** of an object, and the **application info** (name, toolkit, pid) per
+> application bus name. Re-reading them every cycle was most of the ~300
+> calls one arrow key cost in Nautilus. Everything else stays per cycle.
+
 **An extra lever specific to AT-SPI:** `org.a11y.atspi.Registry.RegisterEvent(s
 event, as properties, s app_bus_name)`. The `properties` argument asks for
 the named properties to be **included in the signal payload**, so a focus

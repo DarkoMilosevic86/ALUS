@@ -64,14 +64,73 @@ bool textIsAllPlaceholders(const std::string& text) {
 // DocumentLeaves
 // ---------------------------------------------------------------------------
 
+bool DocumentLeaves::isNamedControlLeaf(const Object& object) {
+    // NVDA's virtual buffers render a button's NAME as its text when the
+    // button has no text of its own; ALUS has no buffer, so the button itself
+    // becomes the leaf. Without this, YouTube's player said "button, graphic"
+    // for play, pause, next and subtitles: the only leaf inside each button is
+    // its unnamed SVG icon (N131). Links are not included: a link often holds
+    // a heading or other structure that quick navigation lands inside.
+    switch (object.role()) {
+        case a11y::Role::Button:
+        case a11y::Role::ToggleButton:
+        case a11y::Role::MenuItem:
+        case a11y::Role::Tab:
+            break;
+        default:
+            return false;
+    }
+    const int children = object.childCount();
+    if (children <= 0 || object.name().empty()) {
+        return false;
+    }
+    if (hasText(object) && object.characterCount() > 0 &&
+        !textIsAllPlaceholders(object.textRange(0, -1))) {
+        return false;  // it has words of its own; they are its content
+    }
+    // And nothing below it has words either: an icon, not a label.
+    constexpr int kMaxChildren = 4;
+    if (children > kMaxChildren) {
+        return false;
+    }
+    for (const ObjectPtr& child : object.children()) {
+        if (child != nullptr && hasText(*child) && child->characterCount() > 0 &&
+            !textIsAllPlaceholders(child->textRange(0, -1))) {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool DocumentLeaves::isEmbeddedLeaf(const Object& object) {
     if (object.childCount() > 0) {
-        return false;
+        return isNamedControlLeaf(object);
     }
     if (!hasText(object)) {
         return true;
     }
     return object.characterCount() == 0;
+}
+
+bool DocumentLeaves::isBlankLeaf(const Object& object) {
+    // The roles a page uses for layout only. Anything else -- a graphic, a
+    // separator, a button -- is announced even when it has no name.
+    switch (object.role()) {
+        case a11y::Role::Section:
+        case a11y::Role::Panel:
+        case a11y::Role::Filler:
+        case a11y::Role::Unknown:
+        case a11y::Role::Paragraph:
+        case a11y::Role::TextFrame:
+        case a11y::Role::Grouping:
+            break;
+        default:
+            return false;
+    }
+    if (object.childCount() > 0 || !object.name().empty()) {
+        return false;
+    }
+    return !hasText(object) || object.characterCount() == 0;
 }
 
 bool DocumentLeaves::isLeaf(const Object& object) {
@@ -81,6 +140,9 @@ bool DocumentLeaves::isLeaf(const Object& object) {
     if (object.childCount() == 0) {
         // Nothing below it: either it holds characters or it is an embedded
         // object that occupies one U+FFFC in its parent.
+        return true;
+    }
+    if (isNamedControlLeaf(object)) {
         return true;
     }
     if (!hasText(object) || object.characterCount() == 0) {
@@ -96,7 +158,7 @@ bool DocumentLeaves::isLeaf(const Object& object) {
     return !textIsAllPlaceholders(own);
 }
 
-ObjectPtr DocumentLeaves::first(const ObjectPtr& root) {
+ObjectPtr DocumentLeaves::firstAny(const ObjectPtr& root) {
     if (root == nullptr || !root->isAlive()) {
         return nullptr;
     }
@@ -115,7 +177,7 @@ ObjectPtr DocumentLeaves::first(const ObjectPtr& root) {
     return current;
 }
 
-ObjectPtr DocumentLeaves::last(const ObjectPtr& root) {
+ObjectPtr DocumentLeaves::lastAny(const ObjectPtr& root) {
     if (root == nullptr || !root->isAlive()) {
         return nullptr;
     }
@@ -148,14 +210,14 @@ bool DocumentLeaves::contains(const ObjectPtr& root, const ObjectPtr& object) {
     return false;
 }
 
-ObjectPtr DocumentLeaves::next(const ObjectPtr& root, const ObjectPtr& from) {
+ObjectPtr DocumentLeaves::nextAny(const ObjectPtr& root, const ObjectPtr& from) {
     if (from == nullptr || root == nullptr) {
         return nullptr;
     }
     // Down first: a container's own first leaf comes before its siblings.
     if (!isLeaf(*from)) {
         if (const ObjectPtr child = from->firstChild()) {
-            return first(child);
+            return firstAny(child);
         }
     }
     // Then across, then up. The root itself is never stepped past.
@@ -165,7 +227,7 @@ ObjectPtr DocumentLeaves::next(const ObjectPtr& root, const ObjectPtr& from) {
             return nullptr;
         }
         if (const ObjectPtr sibling = current->next()) {
-            return first(sibling);
+            return firstAny(sibling);
         }
         current = current->parent();
         if (current != nullptr && !contains(root, current)) {
@@ -175,7 +237,7 @@ ObjectPtr DocumentLeaves::next(const ObjectPtr& root, const ObjectPtr& from) {
     return nullptr;
 }
 
-ObjectPtr DocumentLeaves::previous(const ObjectPtr& root, const ObjectPtr& from) {
+ObjectPtr DocumentLeaves::previousAny(const ObjectPtr& root, const ObjectPtr& from) {
     if (from == nullptr || root == nullptr) {
         return nullptr;
     }
@@ -185,7 +247,7 @@ ObjectPtr DocumentLeaves::previous(const ObjectPtr& root, const ObjectPtr& from)
             return nullptr;
         }
         if (const ObjectPtr sibling = current->previous()) {
-            return last(sibling);
+            return lastAny(sibling);
         }
         current = current->parent();
         if (current == nullptr || !contains(root, current)) {
@@ -200,6 +262,47 @@ ObjectPtr DocumentLeaves::previous(const ObjectPtr& root, const ObjectPtr& from)
         }
     }
     return nullptr;
+}
+
+// The public walks step over blank leaves (isBlankLeaf): an empty layout
+// <div> is not a line, and YouTube has dozens of them between the controls,
+// each read as "blank" (N131). A run of them is bounded like every walk.
+ObjectPtr DocumentLeaves::next(const ObjectPtr& root, const ObjectPtr& from) {
+    ObjectPtr current = nextAny(root, from);
+    for (int skipped = 0; current != nullptr && skipped < kMaxWalk && isBlankLeaf(*current);
+         ++skipped) {
+        current = nextAny(root, current);
+    }
+    return current;
+}
+
+ObjectPtr DocumentLeaves::previous(const ObjectPtr& root, const ObjectPtr& from) {
+    ObjectPtr current = previousAny(root, from);
+    for (int skipped = 0; current != nullptr && skipped < kMaxWalk && isBlankLeaf(*current);
+         ++skipped) {
+        current = previousAny(root, current);
+    }
+    return current;
+}
+
+ObjectPtr DocumentLeaves::first(const ObjectPtr& root) {
+    ObjectPtr leaf = firstAny(root);
+    if (leaf != nullptr && isBlankLeaf(*leaf) && !leaf->sameAs(*root)) {
+        if (ObjectPtr better = next(root, leaf)) {
+            return better;
+        }
+    }
+    return leaf;
+}
+
+ObjectPtr DocumentLeaves::last(const ObjectPtr& root) {
+    ObjectPtr leaf = lastAny(root);
+    if (leaf != nullptr && isBlankLeaf(*leaf) && !leaf->sameAs(*root)) {
+        if (ObjectPtr better = previous(root, leaf)) {
+            return better;
+        }
+    }
+    return leaf;
 }
 
 ObjectPtr DocumentLeaves::leafFor(const ObjectPtr& root, const ObjectPtr& object) {
@@ -310,6 +413,10 @@ void AncestorChainDiff::enter(const ObjectPtr& leaf, text::TextWithFields& into,
             // which is what the user came to hear. NVDA does the same thing at
             // the same place (`controlField["content"] = childObject.name`).
             field->set("content", object->name());
+            // The content IS the name, so the name is not said before it as
+            // well: a quick-nav jump to an icon button said "Pause, Pause,
+            // button" (N131).
+            field->set("labelledByContent", true);
         }
         into.push_back(
             text::TextOrField::ofCommand(text::FieldCommand::controlStart(*field)));

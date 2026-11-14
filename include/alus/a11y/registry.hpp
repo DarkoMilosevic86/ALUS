@@ -204,6 +204,9 @@ public:
     // descendant. Without this the first thing a user does after starting ALUS
     // (alus+tab) answers nothing.
     ObjectPtr findInitialFocus();
+    // The focused object inside `window`, breadth first with a budget, or
+    // null. Shared by the start-up scan and the foreground check below.
+    ObjectPtr findFocusedIn(const ObjectPtr& window);
     // The active top-level window of the desktop, or null.
     ObjectPtr activeWindow();
 
@@ -278,6 +281,11 @@ private:
     // the event. See the comment in registry.cpp: the window in which those
     // values exist is the callback itself.
     void primeFromEvent(const ObjectPtr& object);
+    // N130: a window became the foreground and no focus event followed
+    // (Chrome on start-up). After a short wait the focus is looked for in it.
+    void armForegroundFocusCheck(const ObjectPtr& window);
+    void checkFocusAfterForeground();
+    bool focusIsInside(const Object& window) const;
 
     core::Loop& loop_;
     Backend& backend_;
@@ -297,6 +305,9 @@ private:
     std::string shownChoice_;
     ObjectPtr watched_;
     ContainerOverride containerOverride_;
+    // The window waiting for its focus event (armForegroundFocusCheck).
+    ObjectPtr pendingForeground_;
+    std::uint64_t foregroundTimer_ = 0;
     // Strong, and deliberately: it is compared against by identity, and an
     // object that died between the queue and the dispatch is exactly the case
     // the comparison has to answer -- a weak pointer would have expired by

@@ -262,12 +262,12 @@ bool AtspiBackend::initialize(std::string* error) {
     return true;
 }
 
-AtspiBackend::CallTimer::CallTimer(AtspiBackend& backend, const char* callName) noexcept
+AtspiBackend::CallTimer::CallTimer(AtspiBackend& backend, const char* callName)
     : name(callName),
       startedNs(std::chrono::duration_cast<std::chrono::nanoseconds>(
                     std::chrono::steady_clock::now().time_since_epoch())
                     .count()) {
-    backend.noteCall();
+    backend.noteCall(callName);
 }
 
 AtspiBackend::CallTimer::~CallTimer() {
@@ -278,6 +278,15 @@ AtspiBackend::CallTimer::~CallTimer() {
     if (tookMs >= 20) {
         ALUS_DEBUG("slow AT-SPI call: {} took {} ms", name, tookMs);
     }
+}
+
+std::vector<std::pair<std::string, std::uint64_t>> AtspiBackend::callsByName() const {
+    std::vector<std::pair<std::string, std::uint64_t>> out;
+    out.reserve(perCall_.size());
+    for (const auto& [name, count] : perCall_) {
+        out.emplace_back(std::string{name}, count);
+    }
+    return out;
 }
 
 void AtspiBackend::noteError(const char* what, const char* detail) {
@@ -291,6 +300,7 @@ void AtspiBackend::noteError(const char* what, const char* detail) {
 void AtspiBackend::resetCounters() noexcept {
     calls_ = 0;
     errors_ = 0;
+    perCall_.clear();
 }
 
 Ref AtspiBackend::addRef(Ref ref) {
@@ -613,13 +623,13 @@ std::optional<ValueInfo> AtspiBackend::value(Ref ref) {
         noteError("get_current_value", scope.message());
         return std::nullopt;
     }
-    noteCall();
+    noteCall(__func__);
     info.minimum = atspi_value_get_minimum_value(iface.value, nullptr);
-    noteCall();
+    noteCall(__func__);
     info.maximum = atspi_value_get_maximum_value(iface.value, nullptr);
-    noteCall();
+    noteCall(__func__);
     info.minimumIncrement = atspi_value_get_minimum_increment(iface.value, nullptr);
-    noteCall();
+    noteCall(__func__);
     const CharPtr text{atspi_value_get_text(iface.value, nullptr)};
     info.text = text.str();
     return info;
@@ -828,7 +838,7 @@ bool AtspiBackend::setSelection(Ref ref, int start, int end) {
     const CallTimer callTimer{*this, __func__};
     const gint count = atspi_text_get_n_selections(iface.value, nullptr);
     if (count > 0) {
-        noteCall();
+        noteCall(__func__);
         if (atspi_text_set_selection(iface.value, 0, start, end, &scope.error) != FALSE) {
             return true;
         }
@@ -837,7 +847,7 @@ bool AtspiBackend::setSelection(Ref ref, int start, int end) {
         }
     }
     GErrorScope addScope;
-    noteCall();
+    noteCall(__func__);
     if (atspi_text_add_selection(iface.value, start, end, &addScope.error) != FALSE) {
         return true;
     }
@@ -1017,14 +1027,14 @@ std::optional<LinkInfo> AtspiBackend::hyperlink(Ref ref, int index) {
         return std::nullopt;
     }
     LinkInfo info;
-    noteCall();
+    noteCall(__func__);
     info.startIndex = atspi_hyperlink_get_start_index(link.value, nullptr);
-    noteCall();
+    noteCall(__func__);
     info.endIndex = atspi_hyperlink_get_end_index(link.value, nullptr);
-    noteCall();
+    noteCall(__func__);
     const CharPtr uri{atspi_hyperlink_get_uri(link.value, 0, nullptr)};
     info.uri = uri.str();
-    noteCall();
+    noteCall(__func__);
     // A NEW reference, which the caller owns -- the rule N44 is about.
     AtspiAccessible* object = atspi_hyperlink_get_object(link.value, 0, nullptr);
     info.object = toRef(object);
@@ -1223,11 +1233,11 @@ TableInfo AtspiBackend::tableInfo(Ref ref) {
         noteError("get_n_rows", scope.message());
         return TableInfo{};
     }
-    noteCall();
+    noteCall(__func__);
     info.columnCount = atspi_table_get_n_columns(iface.value, nullptr);
-    noteCall();
+    noteCall(__func__);
     info.selectedRowCount = atspi_table_get_n_selected_rows(iface.value, nullptr);
-    noteCall();
+    noteCall(__func__);
     info.selectedColumnCount = atspi_table_get_n_selected_columns(iface.value, nullptr);
     return info;
 }
@@ -1576,7 +1586,7 @@ std::vector<Ref> AtspiBackend::matches(Ref root, const MatchRule& rule, SortOrde
                                                                   : SortOrder::ReverseCanonical;
         ALUS_DEBUG("collection: get_matches answered nothing in reading order, "
                    "retrying in tree order");
-        noteCall();
+        noteCall(__func__);
         GErrorScope retryScope;
         GArray* retry =
             atspi_collection_get_matches(collection.value, matchRule.rule,
@@ -1609,6 +1619,22 @@ AppInfo AtspiBackend::appInfo(Ref ref) {
     if (ref == 0) {
         return info;
     }
+    // AN APPLICATION'S NAME, TOOLKIT AND PROCESS NEVER CHANGE while it is on
+    // the bus, and a unique bus name is never reused in a session, so the
+    // answer is remembered per bus name. It used to be asked again for every
+    // object of every event -- five calls each, because the app layer, the
+    // tree interceptor veto and the overlay choice all key on it -- and that
+    // was half of the ~300 calls one arrow key cost in Nautilus (N129). The
+    // bus name is a public field of the object, so the lookup itself costs
+    // no round trip.
+    auto* object = ATSPI_OBJECT(toAccessible(ref));
+    const char* busName =
+        object != nullptr && object->app != nullptr ? object->app->bus_name : nullptr;
+    if (busName != nullptr) {
+        if (const auto it = appInfoByBus_.find(busName); it != appInfoByBus_.end()) {
+            return it->second;
+        }
+    }
     const Ref appRef = application(ref);
     if (appRef == 0) {
         return info;
@@ -1617,21 +1643,31 @@ AppInfo AtspiBackend::appInfo(Ref ref) {
     const CallTimer callTimer{*this, __func__};
     const CharPtr name{atspi_accessible_get_name(app, nullptr)};
     info.name = name.str();
-    noteCall();
+    noteCall(__func__);
     const CharPtr toolkit{atspi_accessible_get_toolkit_name(app, nullptr)};
     // THE PRIMARY KEY for choosing overlay behaviours and app modules on Linux
     // (§6.2): "gtk", "qt", "libreoffice", "chromium". It replaces NVDA's
     // windowClassName, which is a Windows concept.
     info.toolkitName = toolkit.str();
-    noteCall();
+    noteCall(__func__);
     const CharPtr version{atspi_accessible_get_toolkit_version(app, nullptr)};
     info.toolkitVersion = version.str();
-    noteCall();
+    noteCall(__func__);
     const CharPtr atspiVersion{atspi_accessible_get_atspi_version(app, nullptr)};
     info.atspiVersion = atspiVersion.str();
-    noteCall();
+    noteCall(__func__);
     info.processId = static_cast<int>(atspi_accessible_get_process_id(app, nullptr));
     release(appRef);
+    // Only a complete answer is remembered: an application still coming up
+    // can answer an empty toolkit, and that must not stick for its lifetime.
+    if (busName != nullptr && !info.toolkitName.empty() && info.processId > 0) {
+        if (appInfoByBus_.size() >= kMaxRememberedApplications) {
+            // Applications come and go over a long session; a bound keeps the
+            // map from growing with every one that ever ran.
+            appInfoByBus_.clear();
+        }
+        appInfoByBus_.emplace(busName, info);
+    }
     return info;
 }
 

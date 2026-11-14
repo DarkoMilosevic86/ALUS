@@ -306,7 +306,13 @@ void Service::handleInterceptorEvent(const core::Event& event) {
     }
     if (event.name == "gainFocus") {
         TreeInterceptor* before = interceptors_->current();
-        TreeInterceptor* after = interceptors_->update(object);
+        // The focus's ancestry is already known (Api reuses it across keys);
+        // walking it costs nothing, where asking each ancestor for its parent
+        // again was a round trip per ancestor per key (N129).
+        const a11y::ObjectPtr& focus = registry_->api().focus();
+        const bool isFocus = focus != nullptr && focus->sameAs(*object);
+        TreeInterceptor* after =
+            interceptors_->update(object, isFocus ? &registry_->api().focusAncestors() : nullptr);
         if (after == nullptr) {
             // The focus left every document: nothing intercepts the keys now,
             // so the letters go back to the application.

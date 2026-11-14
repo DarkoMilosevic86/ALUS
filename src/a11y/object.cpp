@@ -146,7 +146,25 @@ Object::Object(Registry& registry, Ref ref)
       // ---- the platform reads ----
       rawName_(scope_, [this] { return backend().name(ref_); }),
       rawDescription_(scope_, [this] { return backend().description(ref_); }),
-      rawRole_(scope_, [this] { return backend().role(ref_); }),
+      rawRole_(scope_,
+               [this] {
+                   // AN OBJECT'S PLATFORM ROLE NEVER CHANGES while it lives:
+                   // GTK fixes it at construction, and Gecko and Chromium make
+                   // a new accessible when an element's role changes. So it is
+                   // read once per object rather than once per cycle. Every
+                   // ancestor of every focus is asked for its role on every
+                   // key (the tree interceptor looks for a document), and that
+                   // was a round trip per ancestor per key (N129). A failed
+                   // read is not remembered.
+                   if (!stableRole_.has_value()) {
+                       const PlatformRole role = backend().role(ref_);
+                       if (role == PlatformRole::Invalid) {
+                           return role;
+                       }
+                       stableRole_ = role;
+                   }
+                   return *stableRole_;
+               }),
       rawStates_(scope_, [this] { return backend().states(ref_); }),
       rawAttributes_(scope_, [this] { return backend().attributes(ref_); }),
       rawInterfaces_(scope_, [this] { return backend().interfaces(ref_); }),
@@ -562,6 +580,8 @@ const std::string& Object::platformDescription() const { return rawDescription_.
 Role Object::role() const { return role_.get(); }
 
 Role Object::platformRole() const { return refined().role; }
+
+PlatformRole Object::rawPlatformRole() const { return rawRole_.get(); }
 
 const std::string& Object::roleText() const {
     static const std::string empty;

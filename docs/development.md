@@ -131,12 +131,24 @@ Useful log lines at `debug` level:
 
 | Line | Meaning |
 |---|---|
-| `slow event: <event> for <object> (<role>) took N ms, M AT-SPI calls` | an event that took long, and how many platform calls it cost |
+| `slow event: <event> for <object> (<role>) took N ms, M AT-SPI calls: states×12 parent×9 …` | an event that took long, how many platform calls it cost, and which |
 | `slow AT-SPI call: <function> took N ms` | one platform call of 20 ms or more |
 | `watchdog: …` | the core was stuck; keys were released and are reinstalled after recovery |
 | `the speech-dispatcher module is X, whose latency ALUS has not measured` | timing is not guaranteed with this module |
 
 `--log-level io` additionally logs every speech utterance and key event.
+
+To see what a focus announcement costs without running the daemon:
+
+```bash
+./build/tests/measure-focus            # the current focus, all layers
+./build/tests/measure-focus noapp      # the same without app modules (also nonav, nobraille)
+```
+
+It assembles the daemon's layers silently against the live accessibility bus
+and replays a focus event for whatever has the focus, printing the AT-SPI
+calls by name. It takes no keys, speaks nothing and moves no focus, so it is
+safe while another screen reader runs. It is how N129 was found.
 
 `alus-cli` has read-only diagnostics for every layer (`input-info`,
 `a11y-info`, `a11y-tree`, `text-info`, `browse-info`, `browse-walk`,

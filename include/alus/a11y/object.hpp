@@ -235,6 +235,9 @@ public:
     // use, and it has to be reachable without asking the behaviours that are
     // being chosen.
     Role platformRole() const;
+    // The AT-SPI role itself, before any mapping or refinement. Read once per
+    // object: a platform role does not change while the object lives.
+    PlatformRole rawPlatformRole() const;
 
     // ---- tree interceptor (phase 6) ----
     script::ScriptableObject* treeInterceptor() const noexcept { return treeInterceptor_; }
@@ -280,6 +283,7 @@ private:
     core::Cached<std::string> rawName_;
     core::Cached<std::string> rawDescription_;
     core::Cached<PlatformRole> rawRole_;
+    mutable std::optional<PlatformRole> stableRole_;
     core::Cached<std::uint64_t> rawStates_;
     core::Cached<Attributes> rawAttributes_;
     core::Cached<InterfaceSet> rawInterfaces_;

@@ -238,6 +238,13 @@ public:
         const auto it = perObject_.find(std::make_pair(ref, what));
         return it == perObject_.end() ? 0 : it->second;
     }
+    // Every call by name, for a test that wants to say WHICH calls an event
+    // costs rather than only how many.
+    const std::map<std::string, std::size_t>& perCall() const noexcept { return perCall_; }
+    std::uint64_t callCount() const noexcept override { return calls_; }
+    std::vector<std::pair<std::string, std::uint64_t>> callsByName() const override {
+        return {perCall_.begin(), perCall_.end()};
+    }
     void resetCalls() {
         calls_ = 0;
         perCall_.clear();

@@ -49,11 +49,24 @@ GestureManager::GestureManager(core::Loop& loop, script::Dispatcher& dispatcher,
     helpHooks.brailleMessage = hooks_.brailleMessage;
     inputHelp_ = InputHelp(std::move(helpHooks));
 
+    // THE ECHO GOES THROUGH THE QUEUE, behind the speech cancel the same key
+    // queued (applySpeechEffect). Spoken at once, it reached the synthesizer
+    // first and the cancel arriving after it silenced every typed letter
+    // (N130). Both are immediate queue items, and the queue is FIFO, so the
+    // order is the order of the keys.
     TypedChars::Hooks echoHooks;
     if (hooks_.speakText) {
-        echoHooks.speakText = [this](const std::string& text) { hooks_.speakText(text, false); };
+        echoHooks.speakText = [this](const std::string& text) {
+            loop_.queueFunction([this, text]() { hooks_.speakText(text, false); }, true,
+                                "echoTypedWord");
+        };
     }
-    echoHooks.speakSpelling = hooks_.speakSpelling;
+    if (hooks_.speakSpelling) {
+        echoHooks.speakSpelling = [this](const std::string& text) {
+            loop_.queueFunction([this, text]() { hooks_.speakSpelling(text); }, true,
+                                "echoTypedCharacter");
+        };
+    }
     echoHooks.isFocusEditable = hooks_.isFocusEditable;
     echoHooks.isTypingProtected = hooks_.isTypingProtected;
     typedChars_ = TypedChars(std::move(echoHooks));

@@ -37,6 +37,7 @@
 #include <map>
 #include <optional>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace alus::a11y {
@@ -282,6 +283,13 @@ public:
     // How many platform calls were made so far; 0 where nobody counts. The
     // registry's "slow event" line reports the calls one event cost.
     virtual std::uint64_t callCount() const noexcept { return 0; }
+    // The same count split by call ("states", "childAt", ...), cumulative.
+    // The "slow event" line subtracts two of these to say WHICH calls an
+    // event cost, not only how many: 300 calls for one arrow key in Nautilus
+    // could not be explained from the total (N129).
+    virtual std::vector<std::pair<std::string, std::uint64_t>> callsByName() const {
+        return {};
+    }
 
     // A name for the log: "atspi" or "mock".
     virtual const char* backendName() const = 0;

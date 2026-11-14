@@ -182,12 +182,27 @@ TreeInterceptor* TreeInterceptorRegistry::forObject(const a11y::Object& object) 
     return it != interceptors_.end() ? it->second.get() : nullptr;
 }
 
-TreeInterceptor* TreeInterceptorRegistry::update(const a11y::ObjectPtr& object) {
+TreeInterceptor* TreeInterceptorRegistry::update(const a11y::ObjectPtr& object,
+                                                 const std::vector<a11y::ObjectPtr>* ancestors) {
     if (object == nullptr || !object->isAlive()) {
         return nullptr;
     }
     // NVDA walks UP from the object: the focus is usually a paragraph or a
-    // link inside the document, not the document itself.
+    // link inside the document, not the document itself. With the chain
+    // given, the next candidate comes from it, innermost first.
+    std::size_t nextAncestor = ancestors != nullptr ? ancestors->size() : 0;
+    const auto next = [&](const a11y::ObjectPtr& current) -> a11y::ObjectPtr {
+        if (ancestors == nullptr) {
+            return current->parent();
+        }
+        while (nextAncestor > 0) {
+            const a11y::ObjectPtr& up = (*ancestors)[--nextAncestor];
+            if (up != nullptr) {
+                return up;
+            }
+        }
+        return nullptr;
+    };
     a11y::ObjectPtr candidate = object;
     for (int depth = 0; depth < kMaxAncestorDepth && candidate != nullptr; ++depth) {
         if (TreeInterceptor* existing = forObject(*candidate)) {
@@ -222,7 +237,7 @@ TreeInterceptor* TreeInterceptorRegistry::update(const a11y::ObjectPtr& object) 
                       raw->scriptClasses().empty() ? "?" : raw->scriptClasses().front());
             return raw;
         }
-        candidate = candidate->parent();
+        candidate = next(candidate);
     }
     return nullptr;
 }

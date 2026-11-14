@@ -72,6 +72,13 @@ public:
     // A leaf with no characters of its own: an image, a button, a check box.
     // It occupies one U+FFFC in its parent's text.
     static bool isEmbeddedLeaf(const a11y::Object& object);
+    // A control whose name is its content and that has no text of its own --
+    // a button holding only an icon. It is ONE leaf, and its name is what it
+    // says (N131).
+    static bool isNamedControlLeaf(const a11y::Object& object);
+    // An empty, unnamed layout container (an empty <div>): a leaf with nothing
+    // to say. Line movement steps over it (N131).
+    static bool isBlankLeaf(const a11y::Object& object);
 
     // Depth first, document order. Null at the end.
     static a11y::ObjectPtr first(const a11y::ObjectPtr& root);
@@ -92,6 +99,13 @@ public:
     // outermost first. What the diff diffs.
     static std::vector<a11y::ObjectPtr> ancestorChain(const a11y::ObjectPtr& root,
                                                       const a11y::ObjectPtr& leaf);
+
+private:
+    // The same walks without stepping over blank leaves.
+    static a11y::ObjectPtr firstAny(const a11y::ObjectPtr& root);
+    static a11y::ObjectPtr lastAny(const a11y::ObjectPtr& root);
+    static a11y::ObjectPtr nextAny(const a11y::ObjectPtr& root, const a11y::ObjectPtr& from);
+    static a11y::ObjectPtr previousAny(const a11y::ObjectPtr& root, const a11y::ObjectPtr& from);
 };
 
 // The port of `getTextWithFields`'s own body: a running field stack that is

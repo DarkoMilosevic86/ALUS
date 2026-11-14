@@ -6,6 +6,8 @@
 // See include/alus/nav/browse_mode.hpp.
 #include "alus/nav/browse_mode.hpp"
 
+#include "alus/a11y/mapping.hpp"
+
 #include "alus/text/regex.hpp"
 
 #include "alus/a11y/registry.hpp"
@@ -179,9 +181,9 @@ BrowseMode::BrowseMode(a11y::ObjectPtr root, Service& service,
 BrowseMode::~BrowseMode() = default;
 
 bool BrowseMode::isDocumentRoot(const a11y::Object& object) {
-    if (!object.isAlive()) {
-        return false;
-    }
+    // The role first and liveness only for a document: this runs for every
+    // ancestor of every focus, and a dead object answers Role::Unknown anyway,
+    // so asking `alive` first was one round trip per ancestor per key (N129).
     // THE ROLE IS THE WHOLE TEST, and it is one role: ALUS's role map folds
     // AT-SPI's six document roles (DOCUMENT_FRAME, DOCUMENT_WEB,
     // DOCUMENT_TEXT, DOCUMENT_SPREADSHEET, DOCUMENT_PRESENTATION,
@@ -194,7 +196,14 @@ bool BrowseMode::isDocumentRoot(const a11y::Object& object) {
     // only real difference is quick navigation, and that difference needs no
     // code: LibreOffice exposes no Collection interface, so `matchesFrom`
     // answers empty and the user hears "no next heading" -- which is true.
-    if (object.role() != Role::Document) {
+    // The platform role answers for nearly every object without a round trip
+    // (it is remembered per object); only the document roles map to
+    // Role::Document, and no refinement or behaviour turns anything else into
+    // one, so it is a safe first filter before the refined role.
+    if (a11y::roleFromPlatform(object.rawPlatformRole()) != Role::Document) {
+        return false;
+    }
+    if (object.role() != Role::Document || !object.isAlive()) {
         return false;
     }
     // A document the user cannot read is not worth intercepting -- an empty
