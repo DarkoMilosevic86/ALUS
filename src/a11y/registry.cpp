@@ -426,6 +426,19 @@ std::size_t Registry::pumpEvents() {
                     return false;
                 }
                 api_.setForegroundObject(object);
+                // N136: GTK 4 sends the window's focus event BEFORE
+                // `window:activate` (alus-elements: focused at .280,
+                // activated at .284). handleGainFocus has then already
+                // dispatched the foreground -- and its cancel -- before the
+                // focus was spoken; dispatching this one again cancelled the
+                // title, the list and the item just queued, which the user
+                // heard as speech cut off whenever Nautilus, the elements
+                // list or the settings window opened. On Windows, NVDA's
+                // order is the other way round.
+                if (focusIsInside(*object)) {
+                    ALUS_DEBUG("window:activate after its focus; already announced");
+                    return true;
+                }
                 armForegroundFocusCheck(object);
             } else if (raw.name == events::kActiveDescendantChange) {
                 // The container's active descendant changed. When the

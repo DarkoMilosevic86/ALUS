@@ -588,6 +588,47 @@ TEST_CASE("N130 a window that comes up without a focus event gets its focus foun
     }
 }
 
+TEST_CASE("N136 window:activate after the window's focus does not cut its announcement",
+          "[a11y][events][focus]") {
+    // Log 09:52:40: alus-elements (GTK 4) focused its list row at .280 and
+    // activated the window at .284. The focus was spoken (title, list, row),
+    // and then the activation cancelled all of it -- as with Nautilus and the
+    // settings window.
+    A11yFixture fixture;
+    MockBackend& backend = fixture.backend;
+    const ButtonTree editor{backend};
+    backend.addState(editor.button, PlatformState::Focused);
+    backend.emit("object:state-changed:focused", editor.button, 1);
+    fixture.pumpOnce();
+    REQUIRE(fixture.registry.api().focus()->ref() == editor.button);
+
+    const Ref dialogApp = backend.addApplication("alus-elements", "GTK");
+    const Ref window = backend.add(dialogApp, PlatformRole::Frame, "Elements List");
+    const Ref tree = backend.add(window, PlatformRole::Tree, "Links");
+    const Ref row = backend.add(tree, PlatformRole::TreeItem, "Shorts");
+
+    SECTION("focus first, then the activation: no second cancel, nothing more said") {
+        backend.addState(row, PlatformState::Focused);
+        backend.emit("object:state-changed:focused", row, 1);
+        fixture.pumpOnce();
+        REQUIRE(fixture.registry.api().focus()->ref() == row);
+        CHECK(fixture.lastSpoken().find("Shorts") != std::string::npos);
+        fixture.clearRecords();
+        backend.emit("window:activate", window);
+        fixture.pumpUntil([] { return false; }, std::chrono::milliseconds{400});
+        CHECK(fixture.cancellations == 0);
+        CHECK(fixture.spoken.empty());
+        CHECK(fixture.registry.api().foreground()->ref() == window);
+    }
+
+    SECTION("the activation first still cancels what was being said") {
+        fixture.clearRecords();
+        backend.emit("window:activate", window);
+        fixture.pumpOnce();
+        CHECK(fixture.cancellations > 0);
+    }
+}
+
 TEST_CASE("N132 a new Chrome window's focus is its address bar, not the page",
           "[a11y][events][focus]") {
     // Log 21:45:29: a new Chrome window had the focus in the address bar, but

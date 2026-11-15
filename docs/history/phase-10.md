@@ -1013,3 +1013,24 @@ element at the caret"): before every link, on a link, inside a link nested in
 a link, between two, after the last, and an empty list. Without the fix three
 checks fail. The dialog itself was run with a sample file and read over
 AT-SPI: the marked row is focused and selected, headings have `level`.
+
+**N136 — speech was cut off whenever a window opened.** Reported for
+Nautilus, the elements list and the settings window: the announcement
+stopped a moment after it began, as if Ctrl had been pressed. Log
+`alus-measure-20261115-095219.log`, 09:52:40: alus-elements focused its row
+at .280 and sent `window:activate` at .284. The focus was handled first
+(app switch, "Elements List", "Links tree view", the row queued), and then
+the activation, which `Object::handleEvent` answers with `cancelSpeech`
+(NVDA's foreground handling) -- the server acknowledged the cancel at .423
+and nothing queued was ever spoken. On Windows the foreground event comes
+before the focus; GTK 4 sends them the other way round. `handleGainFocus`
+already dispatches its own foreground, and its cancel, before the focus is
+spoken, so a `window:activate` for a window that already holds the focus
+now only records the foreground and goes no further
+(`Registry`, the kForeground branch). An activation with no focus yet
+(Chrome, N130) is unchanged.
+
+Test: `tests/a11y/test_events.cpp` ("N136 window:activate after the
+window's focus does not cut its announcement"): no cancel and nothing more
+said after the focus; an activation that comes first still cancels. Without
+the fix the first section fails.
