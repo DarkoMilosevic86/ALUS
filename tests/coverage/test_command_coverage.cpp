@@ -248,9 +248,12 @@ public:
 
     // Where the focus is for the next lookup, and whether it is inside the
     // browse-mode document.
-    void focusOn(a11y::ObjectPtr focus, bool withBrowseMode) {
+    void focusOn(a11y::ObjectPtr focus, bool withBrowseMode, bool inFocusMode = false) {
         focus_ = std::move(focus);
         useBrowse_ = withBrowseMode;
+        if (browse_ != nullptr && browse_->passThrough() != inFocusMode) {
+            browse_->setPassThrough(inFocusMode, /*announce=*/false);
+        }
     }
 
     testing::MockBackend backend;
@@ -401,6 +404,14 @@ TEST_CASE("T9.6 every key the built-in map assigns runs something",
         stack.focusOn(edit, /*withBrowseMode=*/false);
         if (stack.dispatcher().findScript(*gesture).has_value()) {
             return "editable text";
+        }
+        // Focus mode inside the document: Escape, which leaves it, is ALUS's
+        // only there -- in browse mode it is the application's (N144).
+        stack.focusOn(root, /*withBrowseMode=*/true, /*inFocusMode=*/true);
+        const bool inFocusMode = stack.dispatcher().findScript(*gesture).has_value();
+        stack.focusOn(root, /*withBrowseMode=*/true, /*inFocusMode=*/false);
+        if (inFocusMode) {
+            return "focus mode";
         }
         return {};
     };

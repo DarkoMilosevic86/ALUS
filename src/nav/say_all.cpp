@@ -12,6 +12,7 @@
 #include "alus/core/log.hpp"
 #include "alus/core/loop.hpp"
 #include "alus/core/queue.hpp"
+#include "alus/nav/browse_mode.hpp"
 #include "alus/nav/review.hpp"
 #include "alus/nav/service.hpp"
 #include "alus/speech/presenter.hpp"
@@ -67,11 +68,33 @@ text::TextRangePtr SayAll::initialRange(SayAllCursor cursor) const {
     if (focus == nullptr) {
         return nullptr;
     }
+    // N144, NVDA's script_sayAll: in a document in browse mode the caret is
+    // browse mode's, and so is the text. The focus object's own text is not
+    // the document: in Gecko (Thunderbird, Firefox) it is one U+FFFC per
+    // child, and say-all read three empty chunks of it and stopped.
+    if (const BrowseMode* document = documentForFocus()) {
+        if (text::TextRangePtr range = document->makeTextRange(text::Position::Caret)) {
+            range->collapse();
+            return range;
+        }
+    }
     if (text::TextRangePtr range = focus->makeTextRange(text::Position::Caret)) {
         range->collapse();
         return range;
     }
     return focus->makeTextRange(text::Position::First);
+}
+
+BrowseMode* SayAll::documentForFocus() const {
+    TreeInterceptorRegistry* interceptors = service_.interceptors();
+    if (interceptors == nullptr) {
+        return nullptr;
+    }
+    auto* document = dynamic_cast<BrowseMode*>(interceptors->current());
+    if (document == nullptr || document->passThrough()) {
+        return nullptr;
+    }
+    return document;
 }
 
 bool SayAll::readText(SayAllCursor cursor) {
@@ -82,6 +105,7 @@ bool SayAll::readText(SayAllCursor cursor) {
     }
     a11y::Registry* registry = service_.registry();
     cursor_ = cursor;
+    inDocument_ = cursor == SayAllCursor::Caret && documentForFocus() != nullptr;
     reader_ = std::move(range);
     readerObject_ = cursor == SayAllCursor::Review && service_.review() != nullptr
                         ? service_.review()->objectAtPosition()
@@ -207,7 +231,7 @@ bool SayAll::advanceToNextChunk() {
     // through FLOWS_TO. Only for the caret: the review cursor stays inside
     // the object it reviews, as NVDA's does. Empty paragraphs are skipped,
     // and the hops are bounded in case an application's relations loop.
-    if (cursor_ == SayAllCursor::Caret) {
+    if (cursor_ == SayAllCursor::Caret && !inDocument_) {
         constexpr int kMaxHops = 200;
         a11y::ObjectPtr next = nextReadingObject(readerObject_);
         for (int hop = 0; hop < kMaxHops && next != nullptr; ++hop) {
@@ -356,6 +380,21 @@ void SayAll::lineReached(a11y::ObjectPtr object, text::Bookmark bookmark,
 }
 
 void SayAll::moveCursorTo(const a11y::ObjectPtr& object, const text::Bookmark& bookmark) {
+    if (inDocument_) {
+        // Browse mode's caret follows the speech, so that a key press stops
+        // the reading where it is (NVDA moves the virtual caret the same way).
+        if (BrowseMode* document = documentForFocus()) {
+            text::TextRangePtr position = document->makeTextRange(text::Position::First);
+            if (position != nullptr && position->moveToBookmark(bookmark)) {
+                position->collapse();
+                document->cursor().setCaret(*position);
+                if (Review* review = service_.review()) {
+                    review->handleCaretMove(*position, object);
+                }
+            }
+        }
+        return;
+    }
     if (object == nullptr) {
         return;
     }

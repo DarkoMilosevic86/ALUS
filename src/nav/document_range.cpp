@@ -1425,6 +1425,15 @@ int DocumentTextRange::move(text::TextUnit unit, int direction,
     // read as the start of the next line.
     const bool byScreenLine =
         resolved == text::TextUnit::Line && endPoint != text::EndPoint::End;
+    // A collapsed range at the very end of a leaf, extended into the next
+    // one: its start belongs at that leaf's start, or the chunk say-all reads
+    // begins in the leaf before and the caret lands there (N144).
+    const bool collapsedAtLeafEnd = endPoint == text::EndPoint::End && forwards &&
+                                    start_.valid() && end_.valid() &&
+                                    start_.leaf->sameAs(*end_.leaf) &&
+                                    start_.offset == end_.offset &&
+                                    start_.offset >= leafLength(start_.leaf);
+    std::optional<DocumentPosition> firstCrossing;
     if (byScreenLine) {
         moved = moveByLine(position, wanted, forwards);
     }
@@ -1448,7 +1457,17 @@ int DocumentTextRange::move(text::TextUnit unit, int direction,
                     // which is exactly what T6.2 and the leaf-crossing test
                     // caught.
                     if (forwards && landed >= leafLength(position.leaf)) {
-                        stepped = false;
+                        // An END point is the one thing that may stand on the
+                        // exclusive end: it is where the last unit of the leaf
+                        // finishes. Refused, say-all never read a document's
+                        // last paragraph (N144).
+                        if (endPoint == text::EndPoint::End &&
+                            position.offset < leafLength(position.leaf)) {
+                            position.offset = leafLength(position.leaf);
+                            stepped = true;
+                        } else {
+                            stepped = false;
+                        }
                     } else {
                         position.offset = landed;
                         stepped = true;
@@ -1463,6 +1482,20 @@ int DocumentTextRange::move(text::TextUnit unit, int direction,
             // "no more text".
             if (!stepLeaf(position, forwards)) {
                 break;
+            }
+            if (moved == 0 && !firstCrossing.has_value()) {
+                firstCrossing = DocumentPosition{position.leaf, 0};
+            }
+            // An end point crossing into a leaf goes to the end of its first
+            // unit: stopping on the leaf's start made every crossing an empty
+            // chunk for say-all (N144).
+            if (forwards && endPoint == text::EndPoint::End) {
+                if (DocumentLeaves::isEmbeddedLeaf(*position.leaf)) {
+                    position.offset = leafLength(position.leaf);
+                } else if (text::TextRangePtr inLeaf = rangeFor(position.leaf, 0, 0);
+                           inLeaf != nullptr && inLeaf->expand(resolved)) {
+                    position.offset = static_cast<int>(inLeaf->bookmark().end);
+                }
             }
             // Landing on a leaf edge counts as the move; landing past it would
             // skip the first unit of the new leaf.
@@ -1488,6 +1521,9 @@ int DocumentTextRange::move(text::TextUnit unit, int direction,
     }
     if (endPoint == text::EndPoint::End) {
         end_ = position;
+        if (collapsedAtLeafEnd && firstCrossing.has_value()) {
+            start_ = *firstCrossing;
+        }
     } else if (endPoint == text::EndPoint::Start) {
         start_ = position;
     } else {

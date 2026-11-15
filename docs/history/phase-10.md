@@ -1234,3 +1234,33 @@ press Tab".
 Tests: `tests/config/test_config.cpp` ("N143 a save of ALUS's own is told
 from a change made elsewhere"), `tests/nav/test_browse_mode.cpp` ("N143
 with the screen layout off, the separator between links is not a line").
+
+**N144 — Thunderbird: say all read nothing, and Escape did not close the
+message.** Log `alus-measure-20261115-134011.log`.
+
+- *Say all.* 13:40:34, ALUS+Down Arrow in an open message: three
+  `lineReached` marks and no text, then the end. Say-all took its range from
+  the FOCUS OBJECT (`Object::makeTextRange`), never from browse mode, so in a
+  document it read the document object's own text -- in Gecko one U+FFFC per
+  child. NVDA's `script_sayAll` reads the tree interceptor's caret when there
+  is one and it is not passing keys through; ALUS now does the same
+  (`SayAll::documentForFocus`), browse mode's caret follows the speech, and
+  the end of the document is the end (no hop to a next object). Two defects
+  in `DocumentTextRange::move` for an END point showed at once: it was not
+  allowed onto a leaf's exclusive end, so the last paragraph of a document
+  was never read, and crossing into the next leaf stopped on its start, so
+  every crossing was an empty chunk whose caret landed in the leaf before.
+  Chrome documents had the same say-all defect; the user had not tried it
+  there.
+- *Escape.* 13:41:03: Escape ran browse mode's `disablePassThrough` in
+  browse mode, which does nothing outside focus mode -- and the key, grabbed,
+  never reached Thunderbird. NVDA sends it on (`gesture.send()`); ALUS cannot
+  hand a grabbed key on (N18), so outside focus mode `alternativeScript` now
+  answers nothing for it and the key is not grabbed. And the script lacked
+  NVDA's `ignoreTreeInterceptorPassThrough`, so in focus mode, the one place
+  it is for, the lookup dropped it: Escape never left focus mode either. Both
+  fixed; the command coverage test now also resolves keys in focus mode.
+
+Tests: `tests/nav/test_browse_mode.cpp` ("N144 say all in browse mode reads
+the document from browse mode's caret", "N144 Escape is the application's
+in browse mode and ALUS's in focus mode").

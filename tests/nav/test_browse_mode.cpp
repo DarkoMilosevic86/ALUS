@@ -17,6 +17,7 @@
 #include "alus/nav/document_range.hpp"
 #include "alus/input/gesture.hpp"
 #include "alus/nav/quick_nav.hpp"
+#include "alus/nav/say_all.hpp"
 #include "alus/script/script.hpp"
 
 #include <catch2/catch_test_macros.hpp>
@@ -2099,4 +2100,79 @@ TEST_CASE("N143 with the screen layout off, the separator between links is not a
     CHECK(lines[1].find("books") != std::string::npos);
     CHECK(lines[2].find("The end.") != std::string::npos);
     std::filesystem::remove_all(dir);
+}
+
+TEST_CASE("N144 say all in browse mode reads the document from browse mode's caret",
+          "[browsemode][sayall]") {
+    // Log 13:40:34, Thunderbird: alus+downArrow in an open message said
+    // nothing. Say-all read the focus object's own text, which in Gecko is
+    // one U+FFFC per child, so three empty chunks and the end.
+    NavFixture fixture;
+    MockBackend& backend = fixture.backend;
+    const Ref application = backend.addApplication("Mail", "Gecko");
+    const Ref window = backend.add(application, PlatformRole::Frame, "Message");
+    backend.addState(window, PlatformState::Active);
+    const Ref document = backend.add(window, PlatformRole::DocumentWeb, "Re: the book app");
+    backend.addInterface(document, a11y::Interface::Collection);
+    backend.addState(document, PlatformState::Focusable);
+    backend.addState(document, PlatformState::ReadOnly);
+    addTextLeaf(backend, document, PlatformRole::Paragraph, "Pozdrav,");
+    addTextLeaf(backend, document, PlatformRole::Paragraph, "Veoma interesantno.");
+    addTextLeaf(backend, document, PlatformRole::Paragraph, "Darko");
+    makeContainer(backend, document, 3);
+
+    backend.addState(document, PlatformState::Focused);
+    backend.emit("object:state-changed:focused", document, 1);
+    fixture.pumpOnce();
+    REQUIRE(fixture.registry.api().focus() != nullptr);
+    REQUIRE(fixture.registry.api().focus()->ref() == document);
+    nav::TreeInterceptorRegistry* interceptors = fixture.nav().interceptors();
+    REQUIRE(interceptors != nullptr);
+    auto* browse = dynamic_cast<nav::BrowseMode*>(interceptors->current());
+    REQUIRE(browse != nullptr);
+    REQUIRE_FALSE(browse->passThrough());
+    fixture.drainSpeech();
+    fixture.clearSpeech();
+
+    REQUIRE(fixture.sayAll().readText(nav::SayAllCursor::Caret));
+    for (int cycle = 0; cycle < 4000 && fixture.sayAll().isRunning(); ++cycle) {
+        fixture.loop().iterateUntilIdle();
+    }
+    fixture.drainSpeech();
+    const std::string spoken = fixture.spokenJoined();
+    INFO(spoken);
+    CHECK(spoken.find("Pozdrav") != std::string::npos);
+    CHECK(spoken.find("Veoma interesantno") != std::string::npos);
+    CHECK(spoken.find("Darko") != std::string::npos);
+    // And browse mode's caret followed: it is on the last paragraph.
+    const a11y::ObjectPtr atCaret = [&] {
+        text::TextRangePtr caret = browse->cursor().caretRange();
+        auto* range = dynamic_cast<nav::DocumentTextRange*>(caret.get());
+        return range != nullptr ? range->objectAtStart() : nullptr;
+    }();
+    REQUIRE(atCaret != nullptr);
+    CHECK(atCaret->name().empty());
+    CHECK(atCaret->textRange(0, -1) == "Darko");
+}
+
+TEST_CASE("N144 Escape is the application's in browse mode and ALUS's in focus mode",
+          "[browsemode][passthrough]") {
+    // Log 13:41:03, Thunderbird: Escape ran disablePassThrough in browse
+    // mode, did nothing, and the message never closed. NVDA sends it on; ALUS
+    // cannot, so it must not take it.
+    NavFixture fixture;
+    WebDocumentTree tree{fixture.backend};
+    nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(
+        fixture.registry.objectFor(tree.document), fixture.nav());
+    auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+    REQUIRE(browse != nullptr);
+    const script::Script* escape = browse->scriptByName("disablePassThrough");
+    REQUIRE(escape != nullptr);
+    input::KeyboardGesture::Init init;
+    const input::KeyboardGesture gesture{init};
+
+    REQUIRE_FALSE(browse->passThrough());
+    CHECK(browse->alternativeScript(gesture, escape) == nullptr);
+    browse->setPassThrough(true, /*announce=*/false);
+    CHECK(browse->alternativeScript(gesture, escape) == escape);
 }

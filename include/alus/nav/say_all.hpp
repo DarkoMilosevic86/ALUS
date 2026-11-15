@@ -52,6 +52,8 @@ class SentenceBuffer;
 
 namespace alus::nav {
 
+class BrowseMode;
+
 class Service;
 
 // NVDA: `sayAll.CURSOR`. Which cursor say-all moves as it reads.
@@ -136,6 +138,12 @@ private:
     // The text reader's state.
     text::TextRangePtr reader_;
     a11y::ObjectPtr readerObject_;
+    // N144: reading a browse mode document, from browse mode's own caret.
+    // The caret that follows the speech is then browse mode's, and the end of
+    // the document is the end: there is no next object to go on into.
+    bool inDocument_ = false;
+    // The browse mode the focus is in, when it is not passing keys through.
+    BrowseMode* documentForFocus() const;
     a11y::TextRangeSpeechState state_;
     SayAllCursor cursor_ = SayAllCursor::Caret;
     std::size_t bufferedLines_ = 0;

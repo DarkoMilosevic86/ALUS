@@ -1083,13 +1083,22 @@ void BrowseMode::bindDocumentScripts() {
         passThroughWasAutomatic_ = false;
         setPassThrough(!passThrough());
     });
-    bindScript("disablePassThrough", [this](input::Gesture&) {
-        if (!passThrough()) {
-            return;
-        }
-        passThroughWasAutomatic_ = false;
-        setPassThrough(false);
-    });
+    // NVDA sets ignoreTreeInterceptorPassThrough on this one script: it is
+    // the way OUT of focus mode, so it must be found while keys pass through.
+    // Without the flag Escape never left focus mode; outside focus mode
+    // alternativeScript releases the key to the application (N144).
+    script::ScriptSpec escapeSpec;
+    escapeSpec.ignoreTreeInterceptorPassThrough = true;
+    bindScript(
+        "disablePassThrough",
+        [this](input::Gesture&) {
+            if (!passThrough()) {
+                return;
+            }
+            passThroughWasAutomatic_ = false;
+            setPassThrough(false);
+        },
+        escapeSpec);
     bindScript("activatePosition", [this](input::Gesture&) { activatePosition(); });
     bindScript("elementsList", [this](input::Gesture&) { showElementsList(); });
     bindScript("moveToStartOfContainer", [this](input::Gesture&) {
@@ -1305,6 +1314,15 @@ const script::Script* BrowseMode::alternativeScript(const input::Gesture& gestur
     //   * in focus mode every key is the application's anyway,
     //   * a key that types no character is a command key and never affected,
     //   * and only then does the switch apply.
+    // N144: Escape leaves focus mode, and in browse mode it is the
+    // application's -- NVDA sends it on (`gesture.send()`), so Escape closes a
+    // Thunderbird message or a dialog. ALUS cannot hand a grabbed key on
+    // (N18), so outside focus mode the script is simply not there and the key
+    // is not grabbed at all; the grab set follows setPassThrough.
+    if (found != nullptr && found->info != nullptr &&
+        found->info->name == "disablePassThrough" && !passThrough()) {
+        return nullptr;
+    }
     if (passThrough() || !gesture.isCharacter()) {
         return found;
     }
