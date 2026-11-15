@@ -1734,3 +1734,105 @@ TEST_CASE("N137 the elements list's nesting check makes no Object of an ancestor
     CHECK(count("attributes") - attributesBefore <= kLinks);
     CHECK(count("parent") - parentBefore <= 2 * kLinks + 1);
 }
+
+TEST_CASE("N141 a password field inside its label is read as a password field",
+          "[browsemode][forms]") {
+    // Live, Chrome: <label>Password <input type=password></label> was read
+    // as "Password" by line and by f, the field itself never said: ALUS's
+    // PASSWORDEDIT role fell outside every editable-text rule ported from
+    // NVDA, whose buffers call a password field EDITABLETEXT + PROTECTED.
+    NavFixture fixture;
+    const Ref application = fixture.backend.addApplication("Browser", "Chromium");
+    const Ref window = fixture.backend.add(application, PlatformRole::Frame, "Page");
+    fixture.backend.addState(window, PlatformState::Active);
+    const Ref document = fixture.backend.add(window, PlatformRole::DocumentWeb, "Page");
+    fixture.backend.addInterface(document, a11y::Interface::Collection);
+    const Ref before = addTextLeaf(fixture.backend, document, PlatformRole::Paragraph, "Before.");
+    const Ref paragraph = fixture.backend.add(document, PlatformRole::Paragraph, "");
+    const Ref label = fixture.backend.add(paragraph, PlatformRole::Label, "");
+    addTextLeaf(fixture.backend, label, PlatformRole::Static, "Password ");
+    const Ref field = fixture.backend.add(label, PlatformRole::PasswordText, "Password");
+    fixture.backend.addInterface(field, a11y::Interface::Text);
+    fixture.backend.addState(field, PlatformState::Focusable);
+    fixture.backend.addState(field, PlatformState::Editable);
+    fixture.backend.addState(field, PlatformState::InvalidEntry);
+    makeContainer(fixture.backend, label, 2);
+    makeContainer(fixture.backend, paragraph, 1);
+    addTextLeaf(fixture.backend, document, PlatformRole::Paragraph, "After.");
+    makeContainer(fixture.backend, document, 3);
+    const a11y::ObjectPtr root = fixture.registry.objectFor(document);
+    nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(root, fixture.nav());
+    auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+    REQUIRE(browse != nullptr);
+
+    SECTION("by line: the label, then the field") {
+        REQUIRE(browse->moveTo(fixture.registry.objectFor(before), a11y::OutputReason::QuickNav));
+        std::string heard;
+        for (int i = 0; i < 2; ++i) {
+            fixture.clearSpeech();
+            input::KeyboardGesture::Init init;
+            input::KeyboardGesture gesture{init};
+            browse->scriptByName("moveByLine_forward")->function(gesture);
+            fixture.drainSpeech();
+            heard += fixture.spokenJoined() + " / ";
+        }
+        INFO(heard);
+        CHECK(heard.find("password edit") != std::string::npos);
+        CHECK(heard.find("invalid entry") != std::string::npos);
+        // Its role says it is protected; the word is not said again.
+        CHECK(heard.find("protected") == std::string::npos);
+    }
+    SECTION("by f: the field, its role and its name") {
+        fixture.clearSpeech();
+        REQUIRE(browse->moveToElement(nav::ElementType::FormField, true));
+        fixture.drainSpeech();
+        const std::string heard = fixture.spokenJoined();
+        INFO(heard);
+        CHECK(heard.find("password edit") != std::string::npos);
+        CHECK(heard.find("Password") != std::string::npos);
+    }
+}
+
+TEST_CASE("N141 a collapsed select is one line with its chosen option",
+          "[browsemode][forms]") {
+    // Live, Chrome: the options hang under the box as a hidden menu, and the
+    // arrows read "combo box collapsed menu item Serbia", then "... Croatia".
+    NavFixture fixture;
+    const Ref application = fixture.backend.addApplication("Browser", "Chromium");
+    const Ref window = fixture.backend.add(application, PlatformRole::Frame, "Page");
+    fixture.backend.addState(window, PlatformState::Active);
+    const Ref document = fixture.backend.add(window, PlatformRole::DocumentWeb, "Page");
+    fixture.backend.addInterface(document, a11y::Interface::Collection);
+    const Ref before = addTextLeaf(fixture.backend, document, PlatformRole::Paragraph, "Before.");
+    const Ref combo = fixture.backend.add(document, PlatformRole::ComboBox, "Country");
+    fixture.backend.addState(combo, PlatformState::Focusable);
+    const Ref menu = fixture.backend.add(combo, PlatformRole::Menu, "");
+    const Ref serbia = fixture.backend.add(menu, PlatformRole::MenuItem, "Serbia");
+    fixture.backend.add(menu, PlatformRole::MenuItem, "Croatia");
+    fixture.backend.node(menu).selected = {serbia};
+    makeContainer(fixture.backend, combo, 1);  // Chrome: one U+FFFC, the menu
+    addTextLeaf(fixture.backend, document, PlatformRole::Paragraph, "After.");
+    makeContainer(fixture.backend, document, 3);
+    const a11y::ObjectPtr root = fixture.registry.objectFor(document);
+    nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(root, fixture.nav());
+    auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+    REQUIRE(browse != nullptr);
+    REQUIRE(browse->moveTo(fixture.registry.objectFor(before), a11y::OutputReason::QuickNav));
+
+    std::vector<std::string> lines;
+    for (int i = 0; i < 2; ++i) {
+        fixture.clearSpeech();
+        input::KeyboardGesture::Init init;
+        input::KeyboardGesture gesture{init};
+        browse->scriptByName("moveByLine_forward")->function(gesture);
+        fixture.drainSpeech();
+        lines.push_back(fixture.spokenJoined());
+    }
+    INFO(lines[0] << " / " << lines[1]);
+    CHECK(lines[0].find("combo box") != std::string::npos);
+    CHECK(lines[0].find("Serbia") != std::string::npos);
+    CHECK(lines[0].find("menu item") == std::string::npos);
+    // The next line is the paragraph after it, not the second option.
+    CHECK(lines[1].find("After.") != std::string::npos);
+    CHECK(lines[1].find("Croatia") == std::string::npos);
+}

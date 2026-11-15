@@ -197,8 +197,14 @@ PresentationCategory ControlField::getPresentationCategory(
         Role::ProgressBar,    Role::BusyIndicator,   Role::ToggleButton,
         Role::MenuButton,     Role::TreeView,        Role::CheckMenuItem,
         Role::RadioMenuItem};
+    // N141: a password field is an edit field. NVDA never needed to say so,
+    // because its buffers give a password field EDITABLETEXT plus PROTECTED;
+    // ALUS keeps AT-SPI's own role (it says "password edit"), and without
+    // this the field was layout: a page's password box was read as "blank",
+    // with neither its role nor its label.
+    const bool editableRole = role == Role::EditableText || role == Role::PasswordEdit;
     const bool singleLineEditable =
-        role == Role::EditableText && !states.has(State::MultiLine) &&
+        editableRole && !states.has(State::MultiLine) &&
         (!states.has(State::ReadOnly) || states.has(State::Focusable));
     if (isOneOf(role, kSingleLineRoles) || singleLineEditable ||
         (role == Role::List && !states.has(State::ReadOnly))) {
@@ -230,7 +236,7 @@ PresentationCategory ControlField::getPresentationCategory(
         Role::MenuBar,    Role::PopupMenu,     Role::Table,    Role::Article,
         Role::MarkedContent};
     const bool multiLineEditable =
-        role == Role::EditableText &&
+        editableRole &&
         (!states.has(State::ReadOnly) || states.has(State::Focusable)) &&
         states.has(State::MultiLine);
     if (isOneOf(role, kContainerRoles) || multiLineEditable ||

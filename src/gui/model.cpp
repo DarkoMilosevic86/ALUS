@@ -482,6 +482,8 @@ std::vector<Page> build() {
                           N_("Ignore blank lines when reporting indentation")},
                       Row{RowKind::Toggle, "documentFormatting", "reportLineSpacing",
                           N_("Line spacing")},
+                      Row{RowKind::Toggle, "documentFormatting",
+                          "reportParagraphIndentation", N_("Paragraph indentation")},
                       Row{RowKind::Toggle, "documentFormatting", "reportAlignment",
                           N_("Alignment")},
                   }},

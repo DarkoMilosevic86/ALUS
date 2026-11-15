@@ -107,6 +107,11 @@ StateSet processPositiveStates(Role role, const StateSet& states, OutputReason r
         // A combo box inherently has a popup.
         positive.remove(State::HasPopup);
     }
+    if (role == Role::PasswordEdit) {
+        // ALUS adds PROTECTED to every password field (state_map.cpp), for
+        // the typing echo; "password edit protected" says the same twice.
+        positive.remove(State::Protected);
+    }
     if (!settings.reportClickable || isClickableRole(role)) {
         positive.remove(State::Clickable);
     }

@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alus 0.1.0\n"
 "Report-Msgid-Bugs-To: daremc86@gmail.com\n"
-"POT-Creation-Date: 2026-11-14 21:22+0000\n"
-"PO-Revision-Date: 2026-11-14 21:22+0000\n"
+"POT-Creation-Date: 2026-11-15 09:46+0000\n"
+"PO-Revision-Date: 2026-11-15 09:46+0000\n"
 "Last-Translator: tools/import-nvda-po.py\n"
 "Language-Team: Serbian (Latin)\n"
 "Language: sr_RS@latin\n"
@@ -268,7 +268,7 @@ msgstr "ima %s"
 #. Translators: the position of an item in a group, brailled; the
 #. first %s is the item's number and the second how many there are, so
 #. the result reads "3 of 7".
-#: src/a11y/object_speech.cpp:406 src/braille/properties.cpp:178
+#: src/a11y/object_speech.cpp:406 src/braille/properties.cpp:181
 msgid "%s of %s"
 msgstr "%s od %s"
 
@@ -1160,7 +1160,7 @@ msgstr[2] "sa %s stavki"
 
 #. Translators: Indicates the end of something; %s is what is being
 #. left, so the result reads "out of list".
-#: src/a11y/text_speech.cpp:889
+#: src/a11y/text_speech.cpp:894
 msgid "out of %s"
 msgstr "van %s"
 
@@ -1169,14 +1169,14 @@ msgstr "van %s"
 #. Translators: spoken when a paragraph is blank.
 #. Translators: spoken when a line or a field is empty.
 #. Translators: spoken when the review cursor reaches an empty line.
-#: src/a11y/text_speech.cpp:1377 src/nav/browse_mode.cpp:987 src/nav/paragraph_nav.cpp:231
+#: src/a11y/text_speech.cpp:1382 src/nav/browse_mode.cpp:1159 src/nav/paragraph_nav.cpp:231
 #: src/speech/presenter.cpp:291 src/speech/spelling.cpp:149 src/speech/spelling.cpp:157
 msgid "blank"
 msgstr "prazno"
 
 #. Translators: a large selection is reported by its size; %s is the
 #. number of characters.
-#: src/a11y/text_speech.cpp:1451
+#: src/a11y/text_speech.cpp:1456
 msgid "%s character"
 msgid_plural "%s characters"
 msgstr[0] "%s znak"
@@ -1186,28 +1186,28 @@ msgstr[2] "%s znakova"
 #. Translators: text that was ALREADY selected when the control got the
 #. focus. "selected" comes FIRST on purpose: the user may be about to
 #. overwrite it.
-#: src/a11y/text_speech.cpp:1492
+#: src/a11y/text_speech.cpp:1497
 msgid "selected %s"
 msgstr "izabrano %s"
 
 #. Translators: what has just been selected: "hello world selected".
 #. Translators: what is selected, e.g. "hello world selected".
-#: src/a11y/text_speech.cpp:1568 src/nav/text_commands.cpp:614
+#: src/a11y/text_speech.cpp:1573 src/nav/text_commands.cpp:614
 msgid "%s selected"
 msgstr "%s izabrano"
 
 #. Translators: what has just been unselected.
-#: src/a11y/text_speech.cpp:1578
+#: src/a11y/text_speech.cpp:1583
 msgid "%s unselected"
 msgstr "%s neizabrano"
 
 #. Translators: the previous selection was replaced by a new one.
-#: src/a11y/text_speech.cpp:1583
+#: src/a11y/text_speech.cpp:1588
 msgid "%s selected instead"
 msgstr "%s izabrano umesto"
 
 #. Translators: the selection was removed.
-#: src/a11y/text_speech.cpp:1586
+#: src/a11y/text_speech.cpp:1591
 msgid "selection removed"
 msgstr "izbor uklonjen"
 
@@ -1581,7 +1581,7 @@ msgid "hlght"
 msgstr "obel"
 
 #. Translators: brailled when text contains a comment.
-#: src/braille/labels.cpp:131 src/braille/labels.cpp:197 src/braille/properties.cpp:468
+#: src/braille/labels.cpp:131 src/braille/labels.cpp:197 src/braille/properties.cpp:471
 msgid "cmnt"
 msgstr "kom"
 
@@ -1723,50 +1723,50 @@ msgstr "detalji"
 #. level, so the result reads "h2".
 #. Translators: brailled for a heading with a level; %s is
 #. the level, so the result reads "h2".
-#: src/braille/properties.cpp:118 src/braille/properties.cpp:442
+#: src/braille/properties.cpp:121 src/braille/properties.cpp:445
 msgid "h%s"
 msgstr "n%s"
 
 #. Translators: brailled for a link which has been visited.
-#: src/braille/properties.cpp:123
+#: src/braille/properties.cpp:126
 msgid "vlnk"
 msgstr "poslnk"
 
 #. Translators: brailled for a multi select list.
-#: src/braille/properties.cpp:129
+#: src/braille/properties.cpp:132
 msgid "mslst"
 msgstr "vils"
 
 #. Translators: brailled when an object has a hierarchical level; %s
 #. is the level.
-#: src/braille/properties.cpp:184
+#: src/braille/properties.cpp:187
 msgid "lv %s"
 msgstr "nv %s"
 
 #. Translators: a table cell's row number, brailled; %s is the number
 #. or the range of numbers, so the result reads "r3" or "r3-4".
-#: src/braille/properties.cpp:191
+#: src/braille/properties.cpp:194
 msgid "r%s"
 msgstr "r%s"
 
 #. Translators: a table cell's column number, brailled; %s is the
 #. number or the range of numbers, so the result reads "c2".
-#: src/braille/properties.cpp:200
+#: src/braille/properties.cpp:203
 msgid "c%s"
 msgstr "k%s"
 
 #. Translators: brailled when text contains a draft comment.
-#: src/braille/properties.cpp:462
+#: src/braille/properties.cpp:465
 msgid "drft cmnt"
 msgstr "ncrt kmnt"
 
 #. Translators: brailled when text contains a resolved comment.
-#: src/braille/properties.cpp:465
+#: src/braille/properties.cpp:468
 msgid "rslvd cmnt"
 msgstr "reš kmt"
 
 #. Translators: brailled when text contains a bookmark.
-#: src/braille/properties.cpp:477
+#: src/braille/properties.cpp:480
 msgid "bkmk"
 msgstr "mark"
 
@@ -1923,61 +1923,61 @@ msgid "Keyboard input is not available: %s"
 msgstr "Ulaz sa tastature nije dostupan: %s"
 
 #. Translators: an element type in the elements list (alus+f7).
-#: src/gui/elements_main.cpp:64
+#: src/gui/elements_main.cpp:71
 msgid "Lin_ks"
 msgstr "Lin_kovi"
 
 #. Translators: an element type in the elements list (alus+f7).
-#: src/gui/elements_main.cpp:66
+#: src/gui/elements_main.cpp:73
 msgid "_Headings"
 msgstr "_Naslovi"
 
 #. Translators: an element type in the elements list (alus+f7).
-#: src/gui/elements_main.cpp:68
+#: src/gui/elements_main.cpp:75
 msgid "_Form fields"
 msgstr "Polja za _unos"
 
 #. Translators: an element type in the elements list (alus+f7).
-#: src/gui/elements_main.cpp:70
+#: src/gui/elements_main.cpp:77
 msgid "_Buttons"
 msgstr "_Dugmad"
 
 #. Translators: an element type in the elements list (alus+f7).
-#: src/gui/elements_main.cpp:72
+#: src/gui/elements_main.cpp:79
 msgid "Lan_dmarks"
 msgstr "_Orijentiri"
 
 #. Translators: the title of the browse mode elements list (alus+f7).
-#: src/gui/elements_main.cpp:190
+#: src/gui/elements_main.cpp:222
 msgid "Elements List"
 msgstr "Lista elemenata"
 
 #. Translators: the label of the element type radio buttons in the
 #. elements list.
-#: src/gui/elements_main.cpp:203 src/gui/elements_main.cpp:208
+#: src/gui/elements_main.cpp:235 src/gui/elements_main.cpp:240
 msgid "Type:"
 msgstr "Vrsta:"
 
 #. Translators: the label of the filter field in the elements list.
-#: src/gui/elements_main.cpp:251
+#: src/gui/elements_main.cpp:290
 msgid "Filter b_y:"
 msgstr "_Izdvoji po:"
 
 #. Translators: a button in the elements list: activates the element (a
 #. link is followed, a button pressed). Enter does the same.
-#: src/gui/elements_main.cpp:272
+#: src/gui/elements_main.cpp:311
 msgid "_Activate"
 msgstr "_Aktiviraj"
 
 #. Translators: a button in the elements list: moves the browse mode caret
 #. to the element and closes the list.
-#: src/gui/elements_main.cpp:275
+#: src/gui/elements_main.cpp:314
 msgid "_Move to"
 msgstr "_Pomeri se"
 
 #. Translators: a button in the elements list: closes it; Escape does the
 #. same.
-#: src/gui/elements_main.cpp:278
+#: src/gui/elements_main.cpp:317
 msgid "_Cancel"
 msgstr "_Otkaži"
 
@@ -2036,7 +2036,7 @@ msgid "%s is now unbound for you; the default is kept in place for everything el
 msgstr "%s je za vas odvezan; podrazumevano vezivanje ostaje za sve ostalo"
 
 #. Translators: the title of the gesture dialog.
-#: src/gui/gesture_dialog.cpp:334 src/gui/model.cpp:560
+#: src/gui/gesture_dialog.cpp:334 src/gui/model.cpp:562
 msgid "Gestures"
 msgstr "Gestovi"
 
@@ -2102,7 +2102,7 @@ msgid "This is how this voice sounds."
 msgstr "Ovako zvuči ovaj glas."
 
 #: src/gui/model.cpp:26 src/gui/model.cpp:59 src/gui/model.cpp:235
-#: src/gui/model.cpp:473 src/gui/model.cpp:496 src/input/commands.cpp:39
+#: src/gui/model.cpp:473 src/gui/model.cpp:498 src/input/commands.cpp:39
 #: src/input/commands.cpp:48
 msgid "Off"
 msgstr "Isključeno"
@@ -2331,7 +2331,7 @@ msgstr "Normalizuj Unicode pre izgovaranja"
 msgid "Makes mathematical and styled letters readable: ℂ is spoken as C."
 msgstr "Čini matematička i stilizovana slova čitljivim: ℂ se izgovara kao C."
 
-#: src/gui/model.cpp:147 src/gui/model.cpp:543 src/i18n/data_strings.cpp:33
+#: src/gui/model.cpp:147 src/gui/model.cpp:545 src/i18n/data_strings.cpp:33
 msgid "Braille"
 msgstr "Brajev red"
 
@@ -2904,130 +2904,134 @@ msgid "Line spacing"
 msgstr "Prored"
 
 #: src/gui/model.cpp:486
+msgid "Paragraph indentation"
+msgstr "Uvlačenje pasusa"
+
+#: src/gui/model.cpp:488
 msgid "Alignment"
 msgstr "Poravnanje"
 
-#: src/gui/model.cpp:488 src/gui/model.cpp:491
+#: src/gui/model.cpp:490 src/gui/model.cpp:493
 msgid "Tables"
 msgstr "Tabele"
 
-#: src/gui/model.cpp:493
+#: src/gui/model.cpp:495
 msgid "Cell coordinates"
 msgstr "Koordinate ćelije"
 
-#: src/gui/model.cpp:495
+#: src/gui/model.cpp:497
 msgid "Table headers"
 msgstr "Zaglavlja tabele"
 
-#: src/gui/model.cpp:497
+#: src/gui/model.cpp:499
 msgid "Rows and columns"
 msgstr "Redovi i kolone"
 
-#: src/gui/model.cpp:498
+#: src/gui/model.cpp:500
 msgid "Rows only"
 msgstr "Samo redovi"
 
-#: src/gui/model.cpp:499
+#: src/gui/model.cpp:501
 msgid "Columns only"
 msgstr "Samo kolone"
 
-#: src/gui/model.cpp:501
+#: src/gui/model.cpp:503
 msgid "Cell borders"
 msgstr "Ivice ćelija"
 
-#: src/gui/model.cpp:503
+#: src/gui/model.cpp:505
 msgid "Tables used only for layout"
 msgstr "Tabele koje služe samo za raspored"
 
-#: src/gui/model.cpp:504
+#: src/gui/model.cpp:506
 msgid "`alus+shift+f` reports the formatting at the caret; this decides whether a table that only arranges a page counts as a table at all."
 msgstr "`alus+shift+f` najavljuje formatiranje na kareti; ovo odlučuje da li tabela koja samo raspoređuje stranu uopšte važi za tabelu."
 
-#: src/gui/model.cpp:508
+#: src/gui/model.cpp:510
 msgid "Elements"
 msgstr "Elementi"
 
-#: src/gui/model.cpp:511
+#: src/gui/model.cpp:513
 msgid "Headings"
 msgstr "Naslovi"
 
-#: src/gui/model.cpp:513
+#: src/gui/model.cpp:515
 msgid "Links"
 msgstr "Veze"
 
-#: src/gui/model.cpp:515
+#: src/gui/model.cpp:517
 msgid "Whether a link has been visited"
 msgstr "Da li je veza posećena"
 
-#: src/gui/model.cpp:517
+#: src/gui/model.cpp:519
 msgid "Graphics"
 msgstr "Grafika"
 
-#: src/gui/model.cpp:519
+#: src/gui/model.cpp:521
 msgid "Lists"
 msgstr "Liste"
 
-#: src/gui/model.cpp:521
+#: src/gui/model.cpp:523
 msgid "Block quotes"
 msgstr "Blokovski citati"
 
-#: src/gui/model.cpp:523
+#: src/gui/model.cpp:525
 msgid "Groupings"
 msgstr "Grupisanja"
 
-#: src/gui/model.cpp:525
+#: src/gui/model.cpp:527
 msgid "Landmarks and regions"
 msgstr "Orijentiri i regioni"
 
-#: src/gui/model.cpp:527
+#: src/gui/model.cpp:529
 msgid "Articles"
 msgstr "Članci"
 
-#: src/gui/model.cpp:529
+#: src/gui/model.cpp:531
 msgid "Frames"
 msgstr "Okviri"
 
-#: src/gui/model.cpp:531
+#: src/gui/model.cpp:533
 msgid "Figures and captions"
 msgstr "Slike i natpisi"
 
-#: src/gui/model.cpp:533
+#: src/gui/model.cpp:535
 msgid "Clickable elements"
 msgstr "Elementi na koje se može kliknuti"
 
-#: src/gui/model.cpp:535
+#: src/gui/model.cpp:537
 msgid "When formatting is reported"
 msgstr "Kada se formatiranje najavljuje"
 
-#: src/gui/model.cpp:539
+#: src/gui/model.cpp:541
 msgid "Report formatting changes after the cursor"
 msgstr "Najavljuj promene formatiranja posle kursora"
 
-#: src/gui/model.cpp:540
+#: src/gui/model.cpp:542
 msgid "Costs a call per line; off by default for that reason."
 msgstr "Košta jedan poziv po liniji; zato je podrazumevano isključeno."
 
-#: src/gui/model.cpp:547
+#: src/gui/model.cpp:549
 msgid "Bold, italic and underline on the display"
 msgstr "Podebljano, kurziv i podvučeno na redu"
 
-#: src/gui/model.cpp:550
+#: src/gui/model.cpp:552
 msgid "Spelling errors on the display"
 msgstr "Pravopisne greške na redu"
 
-#: src/gui/model.cpp:562
+#: src/gui/model.cpp:564
 msgid "Commands and keys"
 msgstr "Komande i tasteri"
 
-#: src/gui/model.cpp:563
+#: src/gui/model.cpp:565
 msgid "Every command ALUS knows, with the keys bound to it. A command with no description is not shown, because a command that cannot be explained cannot be rebound sensibly."
 msgstr "Svaka komanda koju ALUS zna, sa tasterima vezanim za nju. Komanda bez opisa se ne prikazuje, jer komanda koja se ne može objasniti ne može se ni razumno prevezati."
 
-#: src/gui/model.cpp:567
+#: src/gui/model.cpp:569
 msgid "Edit gestures"
 msgstr "Uredi gestove"
 
-#: src/gui/model.cpp:652
+#: src/gui/model.cpp:654
 msgid "%s (not offered by the synthesizer)"
 msgstr "%s (sintetizator ga ne nudi)"
 
@@ -4762,93 +4766,93 @@ msgstr "izlazim"
 
 #. Translators: spoken when a movement command reaches the edge of the
 #. document.
-#: src/nav/browse_mode.cpp:464 src/nav/browse_mode.cpp:846
+#: src/nav/browse_mode.cpp:465 src/nav/browse_mode.cpp:1018
 msgid "edge of document"
 msgstr "ivica dokumenta"
 
-#: src/nav/browse_mode.cpp:484
+#: src/nav/browse_mode.cpp:485
 msgid "no next %s"
 msgstr "nema sledećeg elementa: %s"
 
-#: src/nav/browse_mode.cpp:484
+#: src/nav/browse_mode.cpp:485
 msgid "no previous %s"
 msgstr "nema prethodnog elementa: %s"
 
 #. Translators: spoken when alus+f7 cannot show the elements list
 #. (alus-elements is not installed, or there is no display).
-#: src/nav/browse_mode.cpp:599
+#: src/nav/browse_mode.cpp:674
 msgid "the elements list is not available"
 msgstr "lista elemenata nije dostupna"
 
 #. Translators: spoken when the whole document is selected.
-#: src/nav/browse_mode.cpp:761
+#: src/nav/browse_mode.cpp:933
 msgid "selected all"
 msgstr "sve izabrano"
 
 #. Translators: spoken when there is nothing selected to copy.
-#: src/nav/browse_mode.cpp:768
+#: src/nav/browse_mode.cpp:940
 msgid "no selection"
 msgstr "nema selekcije"
 
-#: src/nav/browse_mode.cpp:774
+#: src/nav/browse_mode.cpp:946
 msgid "copied"
 msgstr "kopirano"
 
 #. Translators: spoken when a search finds nothing.
-#: src/nav/browse_mode.cpp:781 src/nav/browse_mode.cpp:790
+#: src/nav/browse_mode.cpp:953 src/nav/browse_mode.cpp:962
 msgid "text not found"
 msgstr "tekst nije nađen"
 
 #. Translators: spoken when a feature is not available yet.
-#: src/nav/browse_mode.cpp:802
+#: src/nav/browse_mode.cpp:974
 msgid "find dialog not available yet"
 msgstr "dijalog za pretragu još nije dostupan"
 
 #. Translators: spoken when the caret is not inside a container.
-#: src/nav/browse_mode.cpp:828 src/nav/browse_mode.cpp:840
+#: src/nav/browse_mode.cpp:1000 src/nav/browse_mode.cpp:1012
 msgid "not in a container"
 msgstr "nije u kontejneru"
 
 #. Translators: spoken when a table command is used outside a table.
-#: src/nav/browse_mode.cpp:887 src/nav/browse_mode.cpp:892 src/nav/browse_mode.cpp:945
+#: src/nav/browse_mode.cpp:1059 src/nav/browse_mode.cpp:1064 src/nav/browse_mode.cpp:1117
 msgid "not in a table"
 msgstr "nije u tabeli"
 
 #. Translators: spoken when a table movement reaches the table's edge.
-#: src/nav/browse_mode.cpp:916 src/nav/browse_mode.cpp:928
+#: src/nav/browse_mode.cpp:1088 src/nav/browse_mode.cpp:1100
 msgid "edge of table"
 msgstr "ivica tabele"
 
 #. Translators: spoken when layout table reporting is turned on or off.
-#: src/nav/browse_mode.cpp:1010
+#: src/nav/browse_mode.cpp:1182
 msgid "layout tables on"
 msgstr "uključene tabele za izgled"
 
-#: src/nav/browse_mode.cpp:1011
+#: src/nav/browse_mode.cpp:1183
 msgid "layout tables off"
 msgstr "isključene tabele za izgled"
 
 #. Translators: reported when the single letters of
 #. browse mode jump between elements again.
-#: src/nav/browse_mode.cpp:1040
+#: src/nav/browse_mode.cpp:1212
 msgid "Single letter navigation on"
 msgstr "Uključena navigacija pomoću jednog slova"
 
 #. Translators: reported when the single letters of
 #. browse mode are handed to the application instead.
-#: src/nav/browse_mode.cpp:1043
+#: src/nav/browse_mode.cpp:1215
 msgid "Single letter navigation off"
 msgstr "Isključena navigacija pomoću jednog slova"
 
 #. Translators: reported when there is no next text
 #. paragraph in the document (`p`).
-#: src/nav/browse_mode.cpp:1136
+#: src/nav/browse_mode.cpp:1308
 msgid "no next text paragraph"
 msgstr "nema narednog pasusa teksta"
 
 #. Translators: reported when there is no previous
 #. text paragraph in the document (`shift+p`).
-#: src/nav/browse_mode.cpp:1139
+#: src/nav/browse_mode.cpp:1311
 msgid "no previous text paragraph"
 msgstr "nema prethodnog pasusa teksta"
 

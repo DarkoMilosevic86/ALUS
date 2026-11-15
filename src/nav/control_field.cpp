@@ -99,7 +99,7 @@ bool hasText(const a11y::Object& object) {
 
 bool isObjectEditableText(const a11y::Object& object) {
     const Role role = object.role();
-    return role == Role::Paragraph || role == Role::EditableText;
+    return role == Role::Paragraph || role == Role::EditableText || role == Role::PasswordEdit;
 }
 
 bool isNamedLinkDestination(const a11y::Object& object) {

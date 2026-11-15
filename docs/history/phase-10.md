@@ -1102,3 +1102,47 @@ Test: `tests/a11y/test_behaviors.cpp` ("N139 a nameless GTK list item is
 named from the labels inside it"): labels in order, once each, icons and
 hidden labels left out; its own name wins; a Chromium list item stays
 nameless. Without the behaviour the first section fails.
+
+**N140 — the formatting settings, as asked for earlier.** The request
+(phase 10, Writer): no "paragraph" style spoken all the time, and a switch
+per item -- paragraph style, font, alignment -- for what is spoken. The
+Document formatting page already had almost all of it, with the style name
+off by default. One setting the speech reads, `reportParagraphIndentation`,
+had no row, so the user could not reach it; it now has one ("Paragraph
+indentation", Serbian in `po/overrides.po`). `config::Manager::defaultKeys`
+lists a section's registered keys, and a test now fails for any
+documentFormatting setting without a row.
+
+Test: `tests/gui/test_model.cpp` ("N140 every document formatting setting
+has a row"). Without the row it names `reportParagraphIndentation`.
+
+**N141 — forms on the web: a password field and a select.** A local page of
+common form and table patterns, walked live in Chrome with `alus-cli
+browse-walk` (which now takes a line count and runs `f` and `t` too):
+
+- `<label>Password <input type=password></label>` was read as "Password",
+  by line and by `f`; the field was never said. NVDA's buffers give a
+  password field EDITABLETEXT plus PROTECTED, so every editable rule ported
+  from NVDA tests EDITABLETEXT; ALUS keeps AT-SPI's PASSWORDEDIT role (it
+  says "password edit"), which fell outside all of them and was layout. The
+  presentation category, content-first and editable-text checks now include
+  it, and "protected", which ALUS adds to every password field for the
+  typing echo, is not said after "password edit". Now: "Password, password
+  edit, invalid entry".
+- A collapsed `<select>`: Chrome hangs the options under the box as a hidden
+  menu, and the arrows read each option as a line ("combo box collapsed menu
+  item Serbia", then "... Croatia"). A combo box is now a leaf, as in NVDA's
+  buffers, and its value comes from the selection of its popup when the box
+  has none (Chrome). Now one line: "combo box collapsed Serbia Country".
+
+Seen and left as it is: a label and its field on one visual line are two
+lines (ALUS's lines are leaf-based); `f` reads the whole line, so a field
+with a visible label says the label and then its name ("Clear Clear
+button", "Message edit Message"); NVDA speaks only the field. Changing what
+quick navigation reads affects every element type, so it waits for a
+decision. Tables read correctly: caption, size, headers, coordinates, a
+spanned cell ("column 1 through 2"), and a layout table is not a table.
+
+Tests: `tests/nav/test_browse_mode.cpp` ("N141 a password field inside its
+label is read as a password field", "N141 a collapsed select is one line
+with its chosen option"). Both fail without the fix.

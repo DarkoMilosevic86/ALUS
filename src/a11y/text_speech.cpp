@@ -473,6 +473,7 @@ bool shouldSpeakContentFirst(OutputReason reason, Role role,
                              const StateSet& states) {
     switch (role) {
         case Role::EditableText:
+        case Role::PasswordEdit:
         case Role::ComboBox:
         case Role::TreeView:
         case Role::List:

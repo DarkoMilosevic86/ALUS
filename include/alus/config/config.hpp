@@ -79,6 +79,10 @@ public:
 
     // ---- values ----
     bool has(std::string_view section, std::string_view key) const;
+    // The keys of a section that have a factory default, sorted: every
+    // setting ALUS knows of there. The settings window's test uses it to find
+    // a setting with no row (N140).
+    std::vector<std::string> defaultKeys(std::string_view section) const;
     std::string getString(std::string_view section, std::string_view key,
                           std::string_view fallback = {}) const;
     bool getBool(std::string_view section, std::string_view key, bool fallback = false) const;

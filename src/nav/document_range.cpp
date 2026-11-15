@@ -103,6 +103,13 @@ bool DocumentLeaves::isNamedControlLeaf(const Object& object) {
 }
 
 bool DocumentLeaves::isEmbeddedLeaf(const Object& object) {
+    if (isComboBoxLeaf(object)) {
+        // Its value is what it says; real characters are the typed text of
+        // an editable one, and that is a text leaf instead. Chrome's
+        // <select> answers one U+FFFC (its popup menu): not words.
+        return !hasText(object) || object.characterCount() == 0 ||
+               textIsAllPlaceholders(object.textRange(0, -1));
+    }
     if (object.childCount() > 0) {
         return isNamedControlLeaf(object);
     }
@@ -133,9 +140,20 @@ bool DocumentLeaves::isBlankLeaf(const Object& object) {
     return !hasText(object) || object.characterCount() == 0;
 }
 
+bool DocumentLeaves::isComboBoxLeaf(const Object& object) {
+    // N141: a combo box is one place, as in NVDA's buffers. Chrome hangs a
+    // <select>'s options under it as a hidden menu, and walking into it read
+    // every option as a line of its own -- "combo box collapsed menu item
+    // Serbia", then "... Croatia" -- with the box closed.
+    return object.role() == a11y::Role::ComboBox;
+}
+
 bool DocumentLeaves::isLeaf(const Object& object) {
     if (!object.isAlive()) {
         return false;
+    }
+    if (isComboBoxLeaf(object)) {
+        return true;
     }
     if (object.childCount() == 0) {
         // Nothing below it: either it holds characters or it is an embedded

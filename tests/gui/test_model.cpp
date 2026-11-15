@@ -406,3 +406,27 @@ TEST_CASE("eSpeak's voices: languages in one row, variants in the other",
         CHECK(alus::gui::voiceCatalog(offered()).hasVariants() == false);
     }
 }
+
+TEST_CASE("N140 every document formatting setting has a row", "[gui]") {
+    // reportParagraphIndentation was read by the speech and registered, but
+    // no row showed it: a setting the user could not reach.
+    const std::filesystem::path dir =
+        std::filesystem::temp_directory_path() / "alus-gui-formatting-test";
+    std::filesystem::remove_all(dir);
+    std::filesystem::create_directories(dir);
+    const std::unique_ptr<alus::config::Manager> manager = withDefaults(dir);
+
+    std::set<std::string> rows;
+    for (const auto& [section, key] : alus::gui::allSettingKeys()) {
+        if (section == "documentFormatting") {
+            rows.insert(key);
+        }
+    }
+    const std::vector<std::string> keys = manager->defaultKeys("documentFormatting");
+    CHECK(keys.size() > 30);
+    for (const std::string& key : keys) {
+        INFO("documentFormatting." << key << " has no row in the settings window");
+        CHECK(rows.count(key) == 1);
+    }
+    std::filesystem::remove_all(dir);
+}

@@ -208,6 +208,16 @@ Manager::Layer* Manager::topWritableLayer(std::string_view section) {
     return base_.get();
 }
 
+std::vector<std::string> Manager::defaultKeys(std::string_view section) const {
+    std::vector<std::string> keys;
+    const std::string prefix = std::format("{}/", section);
+    for (auto it = defaults_.lower_bound(prefix);
+         it != defaults_.end() && it->first.starts_with(prefix); ++it) {
+        keys.push_back(it->first.substr(prefix.size()));
+    }
+    return keys;
+}
+
 bool Manager::has(std::string_view section, std::string_view key) const {
     if (findLayerWith(section, key) != nullptr) {
         return true;

@@ -294,6 +294,21 @@ Object::Object(Registry& registry, Ref ref)
                      }
                  }
                  if (currentRole == Role::ComboBox) {
+                     // Chrome's <select>: the box has no Selection, its popup
+                     // menu does, collapsed or not (phase-10.md N141).
+                     constexpr int kPopupsChecked = 2;
+                     int checked = 0;
+                     for (const ObjectPtr& child : children()) {
+                         if (child == nullptr || ++checked > kPopupsChecked) {
+                             break;
+                         }
+                         if (backend().selectedChildCount(child->ref()) > 0) {
+                             if (const ObjectPtr selected =
+                                     objectFrom(backend().selectedChildAt(child->ref(), 0))) {
+                                 return selected->name();
+                             }
+                         }
+                     }
                      // GTK 4 (AdwComboRow, GtkDropDown) implements neither
                      // Value nor Selection: the shown choice is the one
                      // `list item` inside it, measured as

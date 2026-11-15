@@ -124,8 +124,10 @@ void usage() {
         "                      depth 3; app limits it to one application)\n"
         "  text-info           what the text layer sees: units, formatting, screen review\n"
         "  browse-info         whether browse mode works here, and what quick nav costs\n"
-        "  browse-walk [title] run h, the arrows and the character keys over a live\n"
-        "                      page and print what would be said (no keys taken)\n"
+        "  browse-walk [title] [lines]\n"
+        "                      run h, the arrows, f, t and the character keys over\n"
+        "                      a live page and print what would be said (no keys\n"
+        "                      taken); lines: how far down to walk (default 8)\n"
         "  braille-info        whether braille works here: liblouis, the tables, brltty\n"
         "  app-info            which app module every running application would get,\n"
         "                      and which plugins are installed\n"
@@ -795,7 +797,20 @@ alus::a11y::ObjectPtr documentNamed(alus::a11y::Registry& registry, const std::s
 // diagnosed by asking a blind user to press keys and then reading a log. This
 // reproduces them with no keyboard, no grab and no sound: the synthesizer at
 // the bottom is a NullSynth that records.
-int commandBrowseWalk(Loop& loop, const std::string& title) {
+int commandBrowseWalk(Loop& loop, const std::string& titleAndLines) {
+    // A trailing number is how many lines to walk down (default 8): a form
+    // or a table needs more than the first screen.
+    std::string title = titleAndLines;
+    int lines = 8;
+    if (const std::size_t space = title.find_last_of(' ');
+        !title.empty() && title.find_first_not_of("0123456789", space == std::string::npos
+                                                                     ? 0
+                                                                     : space + 1) ==
+                              std::string::npos) {
+        const std::size_t start = space == std::string::npos ? 0 : space + 1;
+        lines = std::max(1, std::atoi(title.c_str() + start));
+        title = space == std::string::npos ? std::string{} : title.substr(0, space);
+    }
     alus::a11y::AtspiBackend::Options backendOptions;
     backendOptions.mainContext = loop.context();
     alus::a11y::AtspiBackend backend{backendOptions};
@@ -887,8 +902,13 @@ int commandBrowseWalk(Loop& loop, const std::string& title) {
     run("previousHeading", 2);
     std::puts("\n-- by line, from the top --");
     run("topOfDocument", 1);
-    run("moveByLine_forward", 8);
+    run("moveByLine_forward", lines);
     run("moveByLine_back", 3);
+    std::puts("\n-- form fields and tables, from the top --");
+    run("topOfDocument", 1);
+    run("nextFormField", 12);
+    run("topOfDocument", 1);
+    run("nextTable", 3);
     std::puts("\n-- by character --");
     run("moveByCharacter_forward", 5);
     run("moveByCharacter_back", 3);

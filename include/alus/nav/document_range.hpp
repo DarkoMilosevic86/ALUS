@@ -76,6 +76,8 @@ public:
     // a button holding only an icon. It is ONE leaf, and its name is what it
     // says (N131).
     static bool isNamedControlLeaf(const a11y::Object& object);
+    // A combo box: a leaf whatever is under it (its popup's options).
+    static bool isComboBoxLeaf(const a11y::Object& object);
     // An empty, unnamed layout container (an empty <div>): a leaf with nothing
     // to say. Line movement steps over it (N131).
     static bool isBlankLeaf(const a11y::Object& object);
