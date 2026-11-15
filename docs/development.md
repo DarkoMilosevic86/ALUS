@@ -143,12 +143,17 @@ To see what a focus announcement costs without running the daemon:
 ```bash
 ./build/tests/measure-focus            # the current focus, all layers
 ./build/tests/measure-focus noapp      # the same without app modules (also nonav, nobraille)
+./build/tests/measure-focus elements   # the elements list (alus+f7) of an open browser page
+./build/tests/measure-focus webfocus   # a focus replay on a link of that page
 ```
 
 It assembles the daemon's layers silently against the live accessibility bus
 and replays a focus event for whatever has the focus, printing the AT-SPI
 calls by name. It takes no keys, speaks nothing and moves no focus, so it is
-safe while another screen reader runs. It is how N129 was found.
+safe while another screen reader runs. It is how N129 was found. `elements`
+and `webfocus` find the first showing web document of a running Chrome or
+Firefox rather than using the focus, so they can be run from a terminal while
+the page is open (N137).
 
 `alus-cli` has read-only diagnostics for every layer (`input-info`,
 `a11y-info`, `a11y-tree`, `text-info`, `browse-info`, `browse-walk`,

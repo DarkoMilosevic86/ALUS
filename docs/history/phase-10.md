@@ -1034,3 +1034,47 @@ Test: `tests/a11y/test_events.cpp` ("N136 window:activate after the
 window's focus does not cut its announcement"): no cancel and nothing more
 said after the focus; an activation that comes first still cancels. Without
 the fix the first section fails.
+
+**N137 — the elements list asks Chrome a quarter less.** Measured with the new
+`measure-focus elements` mode against a local page of 300 links, 60 headings,
+240 buttons and a few forms, in a separate Chrome profile: alus+f7 made 5156
+AT-SPI calls in 318 ms, all but nothing of it waiting for Chrome (about 60 µs
+a call). Two things were waste:
+
+- the N134 nesting check walked up through `Object::parent()`, which makes an
+  Object of each ancestor and so reads its role, states and attributes: 634
+  calls of each for 300 links. It now walks raw references and compares
+  paths, which cost no call, with each parent asked once and remembered for
+  the whole list (`BrowseMode::ParentMemo`). The raw walk without the memo
+  was worse (1199 parent calls), because siblings no longer shared their
+  list item and list;
+- `QuickNav::all` checked `isAlive()` on every match, which reads the state
+  set the object had just read; it now looks for DEFUNCT in those states.
+  Doing the same inside `Object::isAlive` broke T4.9: states cached when an
+  event arrives are stale once the object dies before the pump, so the
+  general check stays fresh.
+
+Now 3816 calls, 240 ms (the dialog's own run is a little lower, as one memo
+serves all five types). The rest is four calls an entry -- role, states,
+attributes, name -- that every new Object reads; fetching them in bulk is a
+larger change, left for when a page shows the need. A focus move inside the
+page (`measure-focus webfocus`) costs 270 calls, 15 ms: not worth touching.
+An optimised build gains only 18% (196 ms), because the time is Chrome's.
+
+YouTube could not be measured: the clean profile stops at the cookie consent
+page, and accepting it on the user's behalf was not done.
+
+Test: `tests/nav/test_browse_mode.cpp` ("N137 the elements list's nesting
+check makes no Object of an ancestor"): ten links in list items read
+attributes ten times, and parents at most 21 times. Without the fix: 21
+attributes reads.
+
+**N138 — the release build did not compile.** `docs/installing.md` says
+`--buildtype=release`, and GCC 14 at -O2/-O3 warns "may be used
+uninitialized" for two copied `std::optional<int>` (`braille/properties.cpp`,
+`a11y/text_speech.cpp`) and "array bounds" for copying a one-element vector
+in `test_louis.cpp`; `-Werror` made each a failure. All three are false
+positives, rewritten so the compiler can follow them (an int with 0 for none,
+a flag and an int, a vector built rather than copied). The debug build, which
+is what `build/` and `alus-switch.sh` use, never showed them. Checked:
+debugoptimized and release both build with -Werror and pass every test.

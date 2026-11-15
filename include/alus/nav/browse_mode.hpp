@@ -58,6 +58,8 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace alus::input {
@@ -178,6 +180,29 @@ private:
     static constexpr int kNestingDepth = 4;
     static constexpr int kMaxNestedSkips = 3;
     bool isNestedIn(const a11y::Object& inner, const a11y::Object& outer) const;
+    // Whether an ancestor of `object` (kNestingDepth at most, below the
+    // document) has one of these paths.
+    //
+    // N137: walked by raw references and paths, with each parent asked once
+    // and remembered: Object::parent() would make an Object of every
+    // ancestor, which reads its role, states and attributes. One memo serves
+    // the whole elements list, so the list items around a link and its
+    // "More" button are asked about once.
+    struct ParentMemo {
+        explicit ParentMemo(a11y::Backend& owner) : backend(owner) {}
+        ~ParentMemo();
+        ParentMemo(const ParentMemo&) = delete;
+        ParentMemo& operator=(const ParentMemo&) = delete;
+        a11y::Backend& backend;
+        // An object's path -> its parent's path ("" for none).
+        std::unordered_map<std::string, std::string> parentOf;
+        // The references held for the ancestors met, released at the end.
+        std::unordered_map<std::string, a11y::Ref> refOf;
+    };
+    bool hasAncestorIn(const a11y::Object& object, const std::unordered_set<std::string>& paths,
+                       ParentMemo& memo) const;
+    std::vector<ElementListItem> elementsList(ElementType type, int limit,
+                                              ParentMemo& memo) const;
     static bool nestingIsSamePlace(ElementType type);
     static ElementListItem makeElementListItem(const a11y::ObjectPtr& object);
 

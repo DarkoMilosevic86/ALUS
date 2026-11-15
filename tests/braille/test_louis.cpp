@@ -150,7 +150,9 @@ TEST_CASE("T7.2 the typeform vector is not modified in place",
         // whatever was handed over, so a short vector must be padded on ALUS's
         // side and not on liblouis's stack.
         std::vector<Typeform> shortForm{Typeform::Bold};
-        const std::vector<Typeform> shortBefore = shortForm;
+        // Built, not copied: GCC 14 at -O2 misreads copying a one-element
+        // vector as a memmove out of bounds (-Warray-bounds).
+        const std::vector<Typeform> shortBefore{Typeform::Bold};
         const Translation second =
             shared.translate({"en-ueb-g2.ctb", "braille-patterns.cti"}, text, shortForm);
         CHECK(second.ok);

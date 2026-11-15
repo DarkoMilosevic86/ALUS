@@ -1690,3 +1690,47 @@ TEST_CASE("N135 the elements list opens on the element at the caret", "[browsemo
         CHECK(browse->initialElementIndex(nav::ElementType::Link, {}) == -1);
     }
 }
+
+TEST_CASE("N137 the elements list's nesting check makes no Object of an ancestor",
+          "[browsemode][elements]") {
+    // Measured on 300 links: walking up through Object::parent() read the
+    // role, states and attributes of every ancestor, four calls a level.
+    NavFixture fixture;
+    const Ref application = fixture.backend.addApplication("Browser", "Chromium");
+    const Ref window = fixture.backend.add(application, PlatformRole::Frame, "Page");
+    fixture.backend.addState(window, PlatformState::Active);
+    const Ref document = fixture.backend.add(window, PlatformRole::DocumentWeb, "Page");
+    fixture.backend.addInterface(document, a11y::Interface::Collection);
+    const Ref list = fixture.backend.add(document, PlatformRole::List, "");
+    constexpr int kLinks = 10;
+    for (int index = 0; index < kLinks; ++index) {
+        const Ref item = fixture.backend.add(list, PlatformRole::ListItem, "");
+        const std::string name = "Video " + std::to_string(index);
+        addTextLeaf(fixture.backend, item, PlatformRole::Link, name, name);
+        makeContainer(fixture.backend, item, 1);
+    }
+    makeContainer(fixture.backend, list, kLinks);
+    makeContainer(fixture.backend, document, 1);
+
+    const a11y::ObjectPtr root = fixture.registry.objectFor(document);
+    nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(root, fixture.nav());
+    auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+    REQUIRE(browse != nullptr);
+
+    const auto count = [&](const std::string& call) {
+        for (const auto& [name, calls] : fixture.backend.callsByName()) {
+            if (name == call) {
+                return calls;
+            }
+        }
+        return std::uint64_t{0};
+    };
+    const std::uint64_t attributesBefore = count("attributes");
+    const std::uint64_t parentBefore = count("parent");
+    REQUIRE(browse->elementsList(nav::ElementType::Link).size() == kLinks);
+    // One attributes read per link (the link itself), none for its list item
+    // or the list; and the shared list is asked for its parent once, not
+    // once per link: a parent call for each list item, plus the list's.
+    CHECK(count("attributes") - attributesBefore <= kLinks);
+    CHECK(count("parent") - parentBefore <= 2 * kLinks + 1);
+}

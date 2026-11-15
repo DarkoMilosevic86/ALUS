@@ -616,8 +616,13 @@ SpeechSequence getControlFieldSpeech(const text::ControlField& field,
 
     // A layout field carries no table identity: that is what stops a layout
     // table from announcing coordinates.
-    const std::optional<int> tableId =
-        category != text::PresentationCategory::Layout ? values.tableId : std::nullopt;
+    //
+    // A flag and an int rather than an optional: GCC 14 at -O2 warns that a
+    // copied optional "may be used uninitialized", which -Werror makes a
+    // failed release build.
+    const bool hasTable =
+        category != text::PresentationCategory::Layout && values.tableId.has_value();
+    const int tableId = hasTable ? values.tableId.value_or(0) : 0;
 
     // ---- the property sequences, each built once ----
     PropertyValues base;
@@ -749,7 +754,7 @@ SpeechSequence getControlFieldSpeech(const text::ControlField& field,
     }
 
     const bool speakContentFirst = shouldSpeakContentFirst(
-        reason, values.role, category, tableId.has_value(), values.states);
+        reason, values.role, category, hasTable, values.states);
     // A link says its states before its role: "visited link", not "link
     // visited".
     const bool speakStatesFirst = values.role == Role::Link;
@@ -766,14 +771,14 @@ SpeechSequence getControlFieldSpeech(const text::ControlField& field,
         values.states.has(State::ReadOnly)) {
         containerContainsText = itemCountText(*values.childControlCount);
     } else if (fieldType == ControlFieldType::StartAddedToStack &&
-               values.role == Role::Table && tableId.has_value()) {
+               values.role == Role::Table && hasTable) {
         // A table announces its size, and nothing else: entering a table is
         // the one moment the user needs the shape before the content.
         SpeechSequence out = nameSequence;
         extend(out, roleTextSequence);
         extend(out, stateTextSequence);
         PropertyValues tableValues = base;
-        tableValues.tableId = static_cast<Ref>(*tableId);
+        tableValues.tableId = static_cast<Ref>(tableId);
         tableValues.rowCount = values.rowCount;
         tableValues.columnCount = values.columnCount;
         extend(out, getPropertiesSpeech(tableValues, reason));
@@ -793,11 +798,11 @@ SpeechSequence getControlFieldSpeech(const text::ControlField& field,
         return out;
     } else if ((fieldType == ControlFieldType::StartAddedToStack ||
                 fieldType == ControlFieldType::StartRelative) &&
-               isTableCellField(field) && tableId.has_value()) {
+               isTableCellField(field) && hasTable) {
         // A table cell: its coordinates, its headers, its states. NOT its
         // role -- "row 2 column 1" already says it is a cell.
         PropertyValues cellValues = base;
-        cellValues.tableId = static_cast<Ref>(*tableId);
+        cellValues.tableId = static_cast<Ref>(tableId);
         cellValues.rowNumber = values.rowNumber;
         cellValues.columnNumber = values.columnNumber;
         cellValues.rowSpan = values.rowSpan;

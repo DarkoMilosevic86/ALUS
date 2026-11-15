@@ -497,7 +497,12 @@ std::vector<a11y::ObjectPtr> QuickNav::all(ElementType type, int limit,
     for (const a11y::Ref ref : refs) {
         a11y::ObjectPtr candidate = registry.objectFor(ref);
         registry.backend().release(ref);
-        if (candidate == nullptr || !candidate->isAlive()) {
+        // DEFUNCT in the states, not isAlive(): the object was made just now,
+        // its states are already read, and isAlive() reads the same state set
+        // again -- one call more for every entry of the elements list (N137).
+        // The collection has only just answered, so it is the dead object's
+        // DEFUNCT flag that matters, not a death since its states were read.
+        if (candidate == nullptr || candidate->states().has(a11y::State::Defunct)) {
             continue;
         }
         if (!passesExtraConditions(type, *candidate)) {

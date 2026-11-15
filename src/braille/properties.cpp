@@ -107,16 +107,19 @@ std::string getPropertiesBraille(const PropertyValues& values) {
     // again. NVDA does the same thing in the same order.
     std::string roleText = values.roleText;
     a11y::StateSet states = values.states.value_or(a11y::StateSet{});
-    std::optional<int> level = values.level;
+    // A plain int, 0 for none: GCC 14 at -O2 cannot follow an optional
+    // through the reset below and warns "may be used uninitialized", which
+    // -Werror makes a failed release build.
+    int level = values.level.value_or(0);
     std::optional<int> childControlCount = values.childControlCount;
     const a11y::Role role = values.role.value_or(values.realRole);
 
     if (values.role.has_value() && roleText.empty()) {
-        if (role == a11y::Role::Heading && level.has_value() && *level > 0) {
+        if (role == a11y::Role::Heading && level > 0) {
             // Translators: brailled for a heading with a level; %s is the
             // level, so the result reads "h2".
-            roleText = i18n::substitute(_("h%s"), std::to_string(*level));
-            level.reset();
+            roleText = i18n::substitute(_("h%s"), std::to_string(level));
+            level = 0;
         } else if (role == a11y::Role::Link && states.has(a11y::State::Visited)) {
             states.remove(a11y::State::Visited);
             // Translators: brailled for a link which has been visited.
@@ -178,10 +181,10 @@ std::string getPropertiesBraille(const PropertyValues& values) {
         append(pieces, i18n::substitute(_("%s of %s"), std::to_string(*values.indexInGroup),
                                         std::to_string(*values.similarItemsInGroup)));
     }
-    if (level.has_value() && *level > 0) {
+    if (level > 0) {
         // Translators: brailled when an object has a hierarchical level; %s
         // is the level.
-        append(pieces, i18n::substitute(_("lv %s"), std::to_string(*level)));
+        append(pieces, i18n::substitute(_("lv %s"), std::to_string(level)));
     }
 
     if (values.rowNumber.has_value() && *values.rowNumber > 0 &&

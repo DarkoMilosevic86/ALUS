@@ -526,15 +526,56 @@ bool BrowseMode::moveTo(const a11y::ObjectPtr& object, OutputReason reason) {
 }
 
 bool BrowseMode::isNestedIn(const a11y::Object& inner, const a11y::Object& outer) const {
-    a11y::ObjectPtr ancestor = inner.parent();
-    for (int depth = 0; depth < kNestingDepth && ancestor != nullptr; ++depth) {
-        if (ancestor->sameAs(outer)) {
-            return true;
+    ParentMemo memo{root_->registry().backend()};
+    return hasAncestorIn(inner, {outer.path()}, memo);
+}
+
+BrowseMode::ParentMemo::~ParentMemo() {
+    for (const auto& [path, ref] : refOf) {
+        backend.release(ref);
+    }
+}
+
+bool BrowseMode::hasAncestorIn(const a11y::Object& object,
+                               const std::unordered_set<std::string>& paths,
+                               ParentMemo& memo) const {
+    // N137: see ParentMemo. Measured on 300 links: the Object walk made 634
+    // calls each of parent, role, states and attributes; a raw walk without
+    // the memo made 1199 parent calls, because siblings no longer shared
+    // their ancestors. A path costs no call at all.
+    a11y::Backend& backend = memo.backend;
+    const std::string& rootPath = root_->path();
+    std::string path = object.path();
+    a11y::Ref ref = object.ref();  // borrowed; the memo's after the first step
+    for (int depth = 0; depth < kNestingDepth; ++depth) {
+        std::string up;
+        if (const auto known = memo.parentOf.find(path); known != memo.parentOf.end()) {
+            up = known->second;
+        } else {
+            if (ref == 0) {
+                const auto held = memo.refOf.find(path);
+                ref = held != memo.refOf.end() ? held->second : 0;
+            }
+            if (ref == 0) {
+                return false;
+            }
+            const a11y::Ref parentRef = backend.parent(ref);
+            if (parentRef != 0) {
+                up = backend.path(parentRef);
+                if (!memo.refOf.emplace(up, parentRef).second) {
+                    backend.release(parentRef);
+                }
+            }
+            memo.parentOf.emplace(path, up);
         }
-        if (ancestor->sameAs(*root_)) {
+        if (up.empty() || up == rootPath) {
             return false;
         }
-        ancestor = ancestor->parent();
+        if (paths.count(up) != 0) {
+            return true;
+        }
+        path = std::move(up);
+        ref = 0;
     }
     return false;
 }
@@ -594,9 +635,10 @@ constexpr std::array<ElementKind, 5> kElementKinds{{
 void BrowseMode::showElementsList() {
     std::vector<ElementsDialogEntry> entries;
     elementObjects_.clear();
+    ParentMemo memo{root_->registry().backend()};
     for (const ElementKind& kind : kElementKinds) {
         std::vector<a11y::ObjectPtr>& objects = elementObjects_[kind.id];
-        for (ElementListItem& item : elementsList(kind.type, 0)) {
+        for (ElementListItem& item : elementsList(kind.type, 0, memo)) {
             std::string label = std::move(item.label);
             if (kind.type == ElementType::FormField || kind.type == ElementType::Button ||
                 kind.type == ElementType::Landmark) {
@@ -694,6 +736,12 @@ bool BrowseMode::performPendingElement() {
 }
 
 std::vector<ElementListItem> BrowseMode::elementsList(ElementType type, int limit) const {
+    ParentMemo memo{root_->registry().backend()};
+    return elementsList(type, limit, memo);
+}
+
+std::vector<ElementListItem> BrowseMode::elementsList(ElementType type, int limit,
+                                                      ParentMemo& memo) const {
     std::vector<ElementListItem> out;
     // N134: an element inside one already listed (YouTube nests a link in a
     // link) is the same entry; listing it made every menu item appear twice.
@@ -707,18 +755,7 @@ std::vector<ElementListItem> BrowseMode::elementsList(ElementType type, int limi
             out.push_back(makeElementListItem(object));
             continue;
         }
-        bool nested = false;
-        a11y::ObjectPtr ancestor = object->parent();
-        for (int depth = 0; depth < kNestingDepth && ancestor != nullptr; ++depth) {
-            if (ancestor->sameAs(*root_)) {
-                break;
-            }
-            if (listed.count(ancestor->path()) != 0) {
-                nested = true;
-                break;
-            }
-            ancestor = ancestor->parent();
-        }
+        const bool nested = !listed.empty() && hasAncestorIn(*object, listed, memo);
         listed.insert(object->path());
         if (nested) {
             continue;
