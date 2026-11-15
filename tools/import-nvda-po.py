@@ -346,7 +346,7 @@ def main() -> int:
                         type=Path, help="upstream's Serbian catalogue")
     parser.add_argument("--commit", default="84756356c")
     parser.add_argument("--out-dir", default="po", type=Path)
-    parser.add_argument("--version", default="0.1.0")
+    parser.add_argument("--version", default="2026.1.0")
     parser.add_argument("--quiet", action="store_true")
     args = parser.parse_args()
 

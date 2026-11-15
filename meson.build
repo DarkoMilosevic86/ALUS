@@ -9,7 +9,7 @@
 # compiler and one header" a property of the build rather than a claim in a
 # comment. No ALUS code is written in C.
 project('alus', 'cpp', 'c',
-  version: '0.1.0',
+  version: '2026.1.0',
   license: 'GPL-2.0-or-later',
   meson_version: '>=1.3.0',
   default_options: [

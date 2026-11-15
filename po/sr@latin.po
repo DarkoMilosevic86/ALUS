@@ -13,10 +13,10 @@
 # Copyright (C) NV Access Limited and contributors, GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: alus 0.1.0\n"
+"Project-Id-Version: alus 2026.1.0\n"
 "Report-Msgid-Bugs-To: daremc86@gmail.com\n"
-"POT-Creation-Date: 2026-11-15 13:12+0000\n"
-"PO-Revision-Date: 2026-11-15 13:12+0000\n"
+"POT-Creation-Date: 2026-11-15 13:20+0000\n"
+"PO-Revision-Date: 2026-11-15 13:20+0000\n"
 "Last-Translator: tools/import-nvda-po.py\n"
 "Language-Team: Serbian (Latin)\n"
 "Language: sr_RS@latin\n"

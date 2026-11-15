@@ -21,6 +21,7 @@
 #      one you had than neither.
 #
 #     tools/alus-switch.sh alus          # ALUS takes the keyboard
+#     tools/alus-switch.sh alus nolog    # the same, writing no log at all
 #     tools/alus-switch.sh other         # give it back to the other reader
 #     tools/alus-switch.sh status        # who has it now
 #     tools/alus-switch.sh measure [S]   # ALUS for S seconds (default 300),
@@ -365,10 +366,17 @@ measure() {
 }
 
 case "${1:-status}" in
-  alus)         to_alus ;;
+  alus)
+    # `nolog`: everyday use, nothing written -- the log level is off and the
+    # file is /dev/null, so not even a start-up line lands on disk.
+    if [ "${2:-}" = "nolog" ]; then
+      LOG=/dev/null
+      DAEMON_ARGS=(--log-level off)
+    fi
+    to_alus ;;
   other|orca)   to_other ;;
   status)       status ;;
   measure)      measure "${2:-300}" ;;
   __guard)      guard "${2:-300}" ;;
-  *) printf 'usage: %s [alus|other|status|measure [seconds]]\n' "$(basename "$0")" >&2; exit 2 ;;
+  *) printf 'usage: %s [alus [nolog]|other|status|measure [seconds]]\n' "$(basename "$0")" >&2; exit 2 ;;
 esac

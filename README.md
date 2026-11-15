@@ -12,10 +12,11 @@ module). It reads the desktop through **AT-SPI**, gets the keyboard through
 the Wayland accessibility keyboard monitor, and drives braille displays
 through **brltty** and **liblouis**.
 
-> **Status: beta (0.1.0).** ALUS is in daily use on GNOME 48 / Wayland
+> **Status: beta (2026.1.0).** ALUS is in daily use on GNOME 48 / Wayland
 > (Debian 13). The desktop, Nautilus, LibreOffice Writer, Firefox, Chromium
 > and terminals work. Expect rough edges; please report them (see
-> [Reporting a problem](#reporting-a-problem)).
+> [Reporting a problem](#reporting-a-problem)). Versions are numbered
+> year.release.patch: 2026.1.0 is the first release of 2026.
 
 ## Features
 

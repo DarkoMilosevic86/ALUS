@@ -23,7 +23,7 @@ static int init(AlusHost* host, const AlusHostApi* api) {
 static const AlusPluginV1 kPlugin = {
     ALUS_PLUGIN_ABI_V1,
     "toonew",
-    "99.0.0", /* no ALUS will be this old */
+    "9999.0.0", /* newer than any ALUS: versions are year.release.patch */
     &init,
     NULL,
     NULL,

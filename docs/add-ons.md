@@ -58,7 +58,7 @@ static int init(AlusHost* h, const AlusHostApi* a) {
 static const AlusPluginV1 plugin = {
     .abi_version = ALUS_PLUGIN_ABI_V1,
     .name = "hello",
-    .min_alus_version = "0.1.0",
+    .min_alus_version = "2026.1.0",
     .init = init,
     .terminate = NULL,
     .choose_overlays = NULL,

@@ -112,7 +112,7 @@ TEST_CASE("[T8.5] a plugin from another ABI is refused, uncalled", "[app][plugin
     CHECK_FALSE(host.load(builtPlugin("toonew"), &error));
     // The second half of the criterion: the right ABI is not enough, because
     // a call added in a later ALUS is a null pointer in this one.
-    CHECK(error.find("99.0.0") != std::string::npos);
+    CHECK(error.find("9999.0.0") != std::string::npos);
 }
 
 TEST_CASE("[T8.5] a plugin that refuses to start takes its registrations with it",

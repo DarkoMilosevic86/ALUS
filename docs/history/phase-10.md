@@ -1301,3 +1301,10 @@ Tests: `tests/a11y/test_commands.cpp` ("N145 the mouse keys click the
 navigator object"), `tests/coverage/test_command_coverage.cpp` ("N145 a
 command ALUS does not have says why"). The helper itself was run live:
 `--set` then `--get` returned the text.
+
+**Version 2026.1.0 beta.** The first stable release is numbered by year:
+year.release.patch (meson.build, README, the catalogues' headers, the add-on
+example). Add-ons compare versions numerically, so one asking for at least
+0.1.0 still loads; the test add-on that asks for a newer ALUS now asks for
+9999.0.0. `tools/alus-switch.sh alus nolog` runs ALUS for everyday use with
+no log at all (`--log-level off`, file /dev/null).
