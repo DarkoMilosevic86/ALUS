@@ -23,6 +23,9 @@ struct ElementsDialogEntry {
     std::string kind;
     int level = 0;
     std::string label;
+    // The entry the list opens on for its kind: the last one that starts at
+    // or before the browse mode caret, as NVDA's dialog opens.
+    bool atCaret = false;
 };
 
 struct ElementsDialogChoice {

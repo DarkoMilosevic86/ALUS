@@ -610,6 +610,13 @@ void BrowseMode::showElementsList() {
             entries.push_back(ElementsDialogEntry{kind.id, item.level, std::move(label)});
             objects.push_back(std::move(item.object));
         }
+        // The list opens on the element at the caret, as NVDA's does, rather
+        // than on the first one of the page.
+        const int initial = initialElementIndex(kind.type, objects);
+        if (initial >= 0) {
+            const std::size_t first = entries.size() - objects.size();
+            entries[first + static_cast<std::size_t>(initial)].atCaret = true;
+        }
     }
     const std::weak_ptr<int> alive = lifetime_;
     const bool opened = openElementsDialog(
@@ -719,6 +726,53 @@ std::vector<ElementListItem> BrowseMode::elementsList(ElementType type, int limi
         out.push_back(makeElementListItem(object));
     }
     return out;
+}
+
+int BrowseMode::initialElementIndex(ElementType type,
+                                    const std::vector<a11y::ObjectPtr>& listed) const {
+    if (listed.empty()) {
+        return -1;
+    }
+    const a11y::ObjectPtr at = objectAtCaret();
+    if (at == nullptr) {
+        return 0;
+    }
+    const auto indexOf = [&listed](const a11y::Object& object) {
+        for (std::size_t index = 0; index < listed.size(); ++index) {
+            if (listed[index] != nullptr && listed[index]->sameAs(object)) {
+                return static_cast<int>(index);
+            }
+        }
+        return -1;
+    };
+    // The innermost listed element `from` is, or is inside; -1 for none.
+    const auto listedAround = [this, &indexOf](a11y::ObjectPtr from) {
+        constexpr int kMaxDepth = 64;
+        for (int depth = 0; depth < kMaxDepth && from != nullptr; ++depth) {
+            if (from->sameAs(*root_)) {
+                break;
+            }
+            if (const int index = indexOf(*from); index >= 0) {
+                return index;
+            }
+            from = from->parent();
+        }
+        return -1;
+    };
+    // On a link, in a heading or a landmark: that one.
+    if (const int around = listedAround(at); around >= 0) {
+        return around;
+    }
+    // Otherwise the one before the next: the next is the quick-nav key's own
+    // search, which already answers in reading order, so no position is
+    // compared per element (that walks the document's leaves). A nested
+    // match that is not listed itself counts as the entry around it.
+    const a11y::ObjectPtr next = quickNav_.find(type, at, true, includeLayoutTables_);
+    if (next == nullptr) {
+        return static_cast<int>(listed.size()) - 1;
+    }
+    const int nextIndex = listedAround(next);
+    return nextIndex > 0 ? nextIndex - 1 : 0;
 }
 
 ElementListItem BrowseMode::makeElementListItem(const a11y::ObjectPtr& object) {

@@ -1499,9 +1499,9 @@ TEST_CASE("alus+f7: the elements list's choice is performed when the focus comes
     // line, and the choice waits for the browser to have the focus again.
     SECTION("the protocol") {
         const std::vector<nav::ElementsDialogEntry> entries{
-            {"link", 0, "Home\tpage"}, {"heading", 2, "News\nToday"}};
+            {"link", 0, "Home\tpage"}, {"heading", 2, "News\nToday", true}};
         CHECK(nav::formatElementsDialogEntries(entries) ==
-              "link\t0\tHome page\nheading\t2\tNews Today\n");
+              "link\t0\t0\tHome page\nheading\t2\t1\tNews Today\n");
         const nav::ElementsDialogChoice move = nav::parseElementsDialogChoice("move\tlink\t3");
         CHECK(move.action == "move");
         CHECK(move.kind == "link");
@@ -1619,4 +1619,74 @@ TEST_CASE("N134 a link nested in a link is one entry, in the list and for k",
     CHECK(fixture.spokenJoined().find("Home") != std::string::npos);
     fixture.clearSpeech();
     CHECK_FALSE(browse->moveToElement(nav::ElementType::Link, false));
+}
+
+TEST_CASE("N135 the elements list opens on the element at the caret", "[browsemode][elements]") {
+    // NVDA's dialog selects the element nearest the caret; ALUS's opened on
+    // the first of the page.
+    NavFixture fixture;
+    const Ref application = fixture.backend.addApplication("Browser", "Chromium");
+    const Ref window = fixture.backend.add(application, PlatformRole::Frame, "Page");
+    fixture.backend.addState(window, PlatformState::Active);
+    const Ref document = fixture.backend.add(window, PlatformRole::DocumentWeb, "Page");
+    fixture.backend.addInterface(document, a11y::Interface::Collection);
+    const Ref intro = addTextLeaf(fixture.backend, document, PlatformRole::Heading, "Intro");
+    fixture.backend.node(intro).attributes["level"] = "1";
+    const Ref start = addTextLeaf(fixture.backend, document, PlatformRole::Paragraph, "Start.");
+    const Ref home = fixture.backend.add(document, PlatformRole::Link, "Home");
+    const Ref homeItem = addTextLeaf(fixture.backend, home, PlatformRole::Link, "Home", "Home");
+    makeContainer(fixture.backend, home, 1);
+    const Ref between = addTextLeaf(fixture.backend, document, PlatformRole::Paragraph, "Between.");
+    const Ref shorts = addTextLeaf(fixture.backend, document, PlatformRole::Link, "Shorts", "Shorts");
+    const Ref news = addTextLeaf(fixture.backend, document, PlatformRole::Heading, "News");
+    fixture.backend.node(news).attributes["level"] = "2";
+    const Ref end = addTextLeaf(fixture.backend, document, PlatformRole::Paragraph, "End.");
+    makeContainer(fixture.backend, document, 7);
+
+    const a11y::ObjectPtr root = fixture.registry.objectFor(document);
+    nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(root, fixture.nav());
+    auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+    REQUIRE(browse != nullptr);
+
+    const auto objects = [&](nav::ElementType type) {
+        std::vector<a11y::ObjectPtr> out;
+        for (nav::ElementListItem& item : browse->elementsList(type)) {
+            out.push_back(std::move(item.object));
+        }
+        return out;
+    };
+    const std::vector<a11y::ObjectPtr> links = objects(nav::ElementType::Link);
+    const std::vector<a11y::ObjectPtr> headings = objects(nav::ElementType::Heading);
+    REQUIRE(links.size() == 2);
+    REQUIRE(headings.size() == 2);
+    const auto caretOn = [&](Ref ref) {
+        REQUIRE(browse->moveTo(fixture.registry.objectFor(ref), a11y::OutputReason::QuickNav));
+    };
+
+    SECTION("before every link: the first") {
+        caretOn(start);
+        CHECK(browse->initialElementIndex(nav::ElementType::Link, links) == 0);
+        // And in a heading: that heading.
+        caretOn(intro);
+        CHECK(browse->initialElementIndex(nav::ElementType::Heading, headings) == 0);
+    }
+    SECTION("on a link, or inside the link inside it: that link") {
+        caretOn(shorts);
+        CHECK(browse->initialElementIndex(nav::ElementType::Link, links) == 1);
+        caretOn(homeItem);
+        CHECK(browse->initialElementIndex(nav::ElementType::Link, links) == 0);
+    }
+    SECTION("between two: the one before the caret") {
+        caretOn(between);
+        CHECK(browse->initialElementIndex(nav::ElementType::Link, links) == 0);
+        CHECK(browse->initialElementIndex(nav::ElementType::Heading, headings) == 0);
+    }
+    SECTION("after the last: the last") {
+        caretOn(end);
+        CHECK(browse->initialElementIndex(nav::ElementType::Link, links) == 1);
+        CHECK(browse->initialElementIndex(nav::ElementType::Heading, headings) == 1);
+    }
+    SECTION("an empty list has none") {
+        CHECK(browse->initialElementIndex(nav::ElementType::Link, {}) == -1);
+    }
 }

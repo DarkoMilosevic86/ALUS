@@ -207,7 +207,9 @@ buttons or landmarks, chosen with the **Type** radio buttons, and narrowed by
 typing in **Filter by**. **Activate** (or Enter on an element) follows the link
 or presses the button; **Move to** closes the list and puts the browse mode
 caret on the element; **Cancel** or Escape closes it without doing anything.
-The list opens on the type you used last.
+The list opens on the type you used last, on the element where you are on
+the page: the link or heading the caret is on, or else the last one before it.
+Headings are read with their level when it changes ("level 2"), as in a tree.
 
 In an edit field ALUS switches to **focus mode** automatically, so typing
 goes to the application; **ALUS+Space** switches between the two modes by

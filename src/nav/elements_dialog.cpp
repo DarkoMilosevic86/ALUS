@@ -94,6 +94,8 @@ std::string formatElementsDialogEntries(const std::vector<ElementsDialogEntry>& 
         out += '\t';
         out += std::to_string(entry.level);
         out += '\t';
+        out += entry.atCaret ? '1' : '0';
+        out += '\t';
         out += clean(entry.label);
         out += '\n';
     }

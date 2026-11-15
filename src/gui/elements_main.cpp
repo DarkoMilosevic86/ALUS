@@ -13,10 +13,12 @@
 //
 // The protocol is two files' worth of text, nothing more:
 //
-//   in   --items FILE: one element per line, "kind<TAB>level<TAB>label", in
-//        document order. The kinds are link, heading, formField, button and
-//        landmark. The daemon writes the file; this process deletes it once
-//        read.
+//   in   --items FILE: one element per line,
+//        "kind<TAB>level<TAB>caret<TAB>label", in document order. The kinds
+//        are link, heading, formField, button and landmark; caret is 1 on the
+//        one element per kind the list opens on (the one at the browse mode
+//        caret) and 0 elsewhere. The daemon writes the file; this process
+//        deletes it once read.
 //   out  stdout, one line when the user chooses: "activate<TAB>kind<TAB>index"
 //        or "move<TAB>kind<TAB>index", the index counting that kind's lines in
 //        the file. Nothing at all for Cancel, Escape or closing the window.
@@ -24,7 +26,10 @@
 // The daemon keeps the objects; this process only ever sees their labels.
 //
 // The dialog is NVDA's: the element type as radio buttons, the list, a filter,
-// and Activate (the default: Enter), Move to, and Cancel (Escape).
+// and Activate (the default: Enter), Move to, and Cancel (Escape). The list
+// is a tree, as NVDA's is: a heading's row carries its level, which is read
+// when it changes ("level 2"), and is indented by it. Every row is a top
+// level row, though; nothing folds.
 
 #include "alus/core/log.hpp"
 #include "alus/i18n/gettext.hpp"
@@ -51,6 +56,8 @@ struct Element {
     std::string label;
     // Its index among the elements of its own kind: what the daemon is told.
     int index = 0;
+    // The one of its kind the list opens on: the element at the caret.
+    bool atCaret = false;
 };
 
 struct Kind {
@@ -107,6 +114,7 @@ void fillList(Dialog& dialog) {
     gtk_list_box_remove_all(list);
     dialog.shown.clear();
     const std::string needle = folded(gtk_editable_get_text(GTK_EDITABLE(dialog.filter)));
+    GtkListBoxRow* selected = nullptr;
     for (const Element& element : dialog.elements) {
         if (element.kind != dialog.kind) {
             continue;
@@ -122,19 +130,35 @@ void fillList(Dialog& dialog) {
             gtk_widget_set_margin_start(label, 16 * (element.level - 1));
         }
         // The row is named by hand: GTK does not name a list row from the
-        // label inside it, and a nameless row is read as just "list".
-        GtkWidget* row = gtk_list_box_row_new();
+        // label inside it, and a nameless row is read as just "list". A tree
+        // item, so that the heading level below is exported (the "level"
+        // attribute) and read like any tree's; the role itself is silent on
+        // focus, as a list item's is.
+        GtkWidget* row = GTK_WIDGET(g_object_new(GTK_TYPE_LIST_BOX_ROW, "accessible-role",
+                                                 GTK_ACCESSIBLE_ROLE_TREE_ITEM, nullptr));
         gtk_list_box_row_set_child(GTK_LIST_BOX_ROW(row), label);
         gtk_accessible_update_property(GTK_ACCESSIBLE(row), GTK_ACCESSIBLE_PROPERTY_LABEL,
                                        element.label.c_str(), -1);
+        if (element.kind == "heading" && element.level > 0) {
+            gtk_accessible_update_property(GTK_ACCESSIBLE(row), GTK_ACCESSIBLE_PROPERTY_LEVEL,
+                                           element.level, -1);
+        }
         gtk_list_box_append(list, row);
+        if (selected == nullptr && needle.empty() && element.atCaret) {
+            selected = GTK_LIST_BOX_ROW(row);
+        }
         dialog.shown.push_back(&element);
     }
     // The list is named after what it lists, so arriving in it says "Links".
     gtk_accessible_update_property(GTK_ACCESSIBLE(dialog.list), GTK_ACCESSIBLE_PROPERTY_LABEL,
                                    kindLabel(dialog.kind).c_str(), -1);
-    if (GtkListBoxRow* first = gtk_list_box_get_row_at_index(list, 0)) {
-        gtk_list_box_select_row(list, first);
+    // The element at the caret, as NVDA opens; while filtering, the first
+    // match, which is what the typed text is looking for.
+    if (selected == nullptr) {
+        selected = gtk_list_box_get_row_at_index(list, 0);
+    }
+    if (selected != nullptr) {
+        gtk_list_box_select_row(list, selected);
     }
 }
 
@@ -165,13 +189,15 @@ bool readItems(const std::string& path, Dialog& dialog) {
     while (std::getline(in, line)) {
         const std::size_t first = line.find('\t');
         const std::size_t second = first == std::string::npos ? first : line.find('\t', first + 1);
-        if (second == std::string::npos) {
+        const std::size_t third = second == std::string::npos ? second : line.find('\t', second + 1);
+        if (third == std::string::npos) {
             continue;
         }
         Element element;
         element.kind = line.substr(0, first);
         element.level = std::atoi(line.substr(first + 1, second - first - 1).c_str());
-        element.label = line.substr(second + 1);
+        element.atCaret = line.substr(second + 1, third - second - 1) == "1";
+        element.label = line.substr(third + 1);
         int index = 0;
         for (const Element& before : dialog.elements) {
             if (before.kind == element.kind) {
@@ -242,7 +268,9 @@ void build(Dialog& dialog) {
     gtk_box_append(GTK_BOX(box), types);
 
     // The list.
-    dialog.list = gtk_list_box_new();
+    // A tree, for the heading levels; see fillList.
+    dialog.list = GTK_WIDGET(
+        g_object_new(GTK_TYPE_LIST_BOX, "accessible-role", GTK_ACCESSIBLE_ROLE_TREE, nullptr));
     gtk_list_box_set_selection_mode(GTK_LIST_BOX(dialog.list), GTK_SELECTION_BROWSE);
     // Tab leaves the list for the next control; the arrows move in it.
     gtk_list_box_set_tab_behavior(GTK_LIST_BOX(dialog.list), GTK_LIST_TAB_ITEM);
@@ -322,7 +350,7 @@ void build(Dialog& dialog) {
 
     fillList(dialog);
     gtk_window_present(GTK_WINDOW(dialog.window));
-    // The list has the focus, on its first element, as in NVDA.
+    // The list has the focus, on the element at the caret, as in NVDA.
     if (GtkListBoxRow* row = gtk_list_box_get_selected_row(GTK_LIST_BOX(dialog.list))) {
         gtk_widget_grab_focus(GTK_WIDGET(row));
     } else {

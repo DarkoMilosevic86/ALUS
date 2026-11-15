@@ -985,3 +985,31 @@ for real and are not affected (`BrowseMode::nestingIsSamePlace`).
 
 Test: `tests/nav/test_browse_mode.cpp` ("N134 a link nested in a link is one
 entry, in the list and for k").
+
+**N135 — the elements list opens where the user is, and headings have
+levels.** NVDA's dialog selects the element nearest the caret; ALUS's always
+started on the first one of the page, so on YouTube the link under the caret
+was dozens of arrows away. The daemon now marks one entry per type, the one
+the list opens on (`BrowseMode::initialElementIndex`, NVDA's
+`_initialElement`): the element the caret is on or inside (the innermost one,
+for nested landmarks), otherwise the last one before the caret, otherwise the
+first. "Before the caret" is not a position comparison per element, which
+walks the document's leaves (`DocumentTextRange::comparePositions`); it is
+one quick-nav search forwards from the caret, the one `k` makes, and the entry
+before what it finds. The file gains a column for it:
+`kind<TAB>level<TAB>caret<TAB>label`. While filtering, the first match is
+selected instead, as that is what the typed text is looking for.
+
+The list is now a tree, as NVDA's is: the list box is created with the
+`tree` role and each row as a `tree item`, and a heading's row carries
+`GTK_ACCESSIBLE_PROPERTY_LEVEL`. Checked over AT-SPI before writing it:
+GTK 4.18 exports the roles and a `level` attribute (only when set), which
+ALUS already reads for tree items and announces when it changes, and the
+tree item role is silent on focus. Nothing folds: every heading is a top
+level row, indented by its level.
+
+Test: `tests/nav/test_browse_mode.cpp` ("N135 the elements list opens on the
+element at the caret"): before every link, on a link, inside a link nested in
+a link, between two, after the last, and an empty list. Without the fix three
+checks fail. The dialog itself was run with a sample file and read over
+AT-SPI: the marked row is focused and selected, headings have `level`.

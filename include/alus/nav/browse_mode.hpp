@@ -112,6 +112,10 @@ public:
     // NVDA: `script_elementsList`'s data. Returned rather than shown: the
     // dialog is phase 9, and the list is the part that can be measured now.
     std::vector<ElementListItem> elementsList(ElementType type, int limit = 0) const;
+    // Where the elements list opens among `listed` (that type's entries, in
+    // order): the element the caret is on or in, else the last one before
+    // the caret, else the first. NVDA's `_initialElement`. -1 when empty.
+    int initialElementIndex(ElementType type, const std::vector<a11y::ObjectPtr>& listed) const;
     // What the elements list dialog answered. The choice is kept until the
     // focus comes back to the document (or a moment passes) and only then
     // performed: the browser's own focus event on returning would otherwise
