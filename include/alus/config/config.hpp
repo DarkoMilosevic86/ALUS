@@ -73,6 +73,10 @@ public:
     bool load(std::string* error = nullptr);
     // Writes every file that changed.
     bool save(std::string* error = nullptr);
+    // Whether the main file on disk is exactly what this manager last wrote:
+    // the daemon's file monitor sees its own save too, and must not answer it
+    // by restarting every subsystem (N143: alus+v lost the focus that way).
+    bool isOwnWrite() const;
     // NVDA: conf.reset(). Rereads from disk, or returns to the factory
     // defaults, and drops every activated profile.
     void reset(bool factoryDefaults = false);

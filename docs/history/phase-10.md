@@ -1202,3 +1202,35 @@ Tests: `tests/nav/test_browse_mode.cpp`: "N142 the screen layout decides
 what a line is" (on and off over the same page), "N142 a quick-nav jump
 reads the element, not its line", "N142 alus+v switches the screen layout
 and keeps the choice" (a fresh configuration reads it back).
+
+**N143 — ALUS+V lost the focus, and where the screen layout is heard.**
+First live test of N142 (log `alus-measure-20261115-132727.log`): "it
+sounds the same on and off, and ALUS+V throws the focus somewhere until I
+press Tab".
+
+- *The focus.* 13:27:44.975 the toggle saved the configuration (as asked,
+  so the choice survives a restart); 13:27:45.041 the daemon's file monitor
+  saw the file change and did what it does for the settings window or a
+  hand edit: `resetConfiguration`, every subsystem terminated and started
+  again. Browse mode, the caret and the focus went with it, and the arrows
+  said nothing until Tab gave the browser a focus event. `config::Manager`
+  now keeps the text of its last save, and the monitor skips a change when
+  the file is exactly that (`Manager::isOwnWrite`). The settings window is
+  another process with another manager, so its saves still reload.
+- *Same on and off.* On the part of YouTube the log covers (the banner,
+  "Skip navigation", the search form), every element is a block box of its
+  own, so it is one line either way -- as in NVDA, whose rule is the same
+  (inline boxes share a line). The difference is where links sit inside
+  text. Measured on en.wikipedia.org/wiki/Screen_reader with `browse-walk`:
+  on, "This article needs link more citations Please help link improve this
+  article by link adding citations ..." is one line; off, every link is a
+  line. Two defects showed there and are fixed: a link that wraps on screen
+  is one U+FFFC that Chrome puts on both lines, so with the layout on it was
+  read again at the start of the next line (`leafLineAt` gives it to the
+  line before); and with it off, the " · " between "news · books" was a
+  line that said nothing (separators -- spaces, no-break spaces, middle
+  dot, bullet, dashes, ASCII punctuation -- go with the link before).
+
+Tests: `tests/config/test_config.cpp` ("N143 a save of ALUS's own is told
+from a change made elsewhere"), `tests/nav/test_browse_mode.cpp` ("N143
+with the screen layout off, the separator between links is not a line").

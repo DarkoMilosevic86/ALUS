@@ -795,6 +795,14 @@ int main(int argc, char* argv[]) {
                     return;
                 }
                 auto* reload = static_cast<ReloadContext*>(data);
+                // ALUS's own save (alus+v, alus+control+c): the running
+                // settings already ARE the file. Re-reading meant restarting
+                // speech, input, browse mode -- and losing the focus and the
+                // place in the page (N143).
+                if (reload->manager->isOwnWrite()) {
+                    ALUS_DEBUG("the configuration file changed by ALUS's own save; not re-read");
+                    return;
+                }
                 ALUS_INFO("the configuration file changed; re-reading it");
                 // The whole thing, in the NVDA way: terminate in reverse
                 // order, reload, bring everything back. Narrower reloads are

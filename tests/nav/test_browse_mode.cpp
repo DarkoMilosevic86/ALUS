@@ -2054,3 +2054,49 @@ TEST_CASE("N142 alus+v switches the screen layout and keeps the choice", "[brows
     CHECK_FALSE(reread.getBool("virtualBuffers", "useScreenLayout", true));
     std::filesystem::remove_all(dir);
 }
+
+TEST_CASE("N143 with the screen layout off, the separator between links is not a line",
+          "[browsemode][layout]") {
+    // Wikipedia's "Find sources: news · books": each " · " was a line that
+    // said nothing.
+    const std::filesystem::path dir =
+        std::filesystem::temp_directory_path() / "alus-test-screen-layout-separators";
+    g_setenv("ALUS_CONFIG_DIR", dir.c_str(), TRUE);
+    NavFixture fixture;
+    MockBackend& backend = fixture.backend;
+    const Ref application = backend.addApplication("Browser", "Chromium");
+    const Ref window = backend.add(application, PlatformRole::Frame, "Page");
+    backend.addState(window, PlatformState::Active);
+    const Ref document = backend.add(window, PlatformRole::DocumentWeb, "Page");
+    backend.addInterface(document, a11y::Interface::Collection);
+    const Ref top = addTextLeaf(backend, document, PlatformRole::Heading, "Sources");
+    const Ref line = backend.add(document, PlatformRole::Paragraph, "");
+    backend.node(line).interfaces |= a11y::Interface::Text;
+    backend.addState(line, PlatformState::Showing);
+    std::vector<Ref> links;
+    for (const char* name : {"news", "books"}) {
+        const Ref link = addTextLeaf(backend, line, PlatformRole::Link, name, name);
+        backend.node(link).actionNames.push_back("jump");
+        backend.addState(link, PlatformState::Focusable);
+        links.push_back(link);
+    }
+    backend.node(line).text = "\xEF\xBF\xBC \xC2\xB7 \xEF\xBF\xBC";
+    backend.node(line).links.push_back(a11y::LinkInfo{0, 1, links[0], "#"});
+    backend.node(line).links.push_back(a11y::LinkInfo{4, 5, links[1], "#"});
+    addTextLeaf(backend, document, PlatformRole::Paragraph, "The end.");
+    makeContainer(backend, document, 3);
+
+    fixture.config().setString("virtualBuffers", "useScreenLayout", "false");
+    fixture.nav().applyConfiguration();
+    nav::TreeInterceptorPtr interceptor =
+        nav::BrowseMode::chooseForDocument(fixture.registry.objectFor(document), fixture.nav());
+    auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+    REQUIRE(browse != nullptr);
+    REQUIRE(browse->moveTo(fixture.registry.objectFor(top), a11y::OutputReason::QuickNav));
+    const std::vector<std::string> lines = readLines(fixture, *browse, 3);
+    INFO(lines[0] << " / " << lines[1] << " / " << lines[2]);
+    CHECK(lines[0].find("news") != std::string::npos);
+    CHECK(lines[1].find("books") != std::string::npos);
+    CHECK(lines[2].find("The end.") != std::string::npos);
+    std::filesystem::remove_all(dir);
+}

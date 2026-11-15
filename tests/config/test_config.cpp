@@ -394,3 +394,28 @@ TEST_CASE("ALUS_CONFIG_DIR decides where the configuration lives",
     REQUIRE(paths.mainFile == temp.dir() / "alus.ini");
     REQUIRE(paths.profilesDir == temp.dir() / "profiles");
 }
+
+TEST_CASE("N143 a save of ALUS's own is told from a change made elsewhere", "[config]") {
+    // alus+v saves at once; the daemon's file monitor saw that save and
+    // restarted every subsystem, which lost the focus in the browser.
+    const std::filesystem::path dir =
+        std::filesystem::temp_directory_path() / "alus-config-own-write";
+    std::filesystem::remove_all(dir);
+    std::filesystem::create_directories(dir);
+    alus::config::Manager manager{alus::config::Paths::forDirectory(dir)};
+    manager.setDefault("virtualBuffers", "useScreenLayout", "true");
+    REQUIRE(manager.load(nullptr));
+    CHECK_FALSE(manager.isOwnWrite());  // nothing written yet
+
+    manager.setString("virtualBuffers", "useScreenLayout", "false");
+    REQUIRE(manager.save(nullptr));
+    CHECK(manager.isOwnWrite());
+
+    // The settings window (another process) or an editor writes the file.
+    {
+        std::ofstream out(manager.paths().mainFile, std::ios::app);
+        out << "\n[speech]\nrate = 60\n";
+    }
+    CHECK_FALSE(manager.isOwnWrite());
+    std::filesystem::remove_all(dir);
+}

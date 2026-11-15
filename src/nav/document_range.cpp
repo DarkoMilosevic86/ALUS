@@ -1113,6 +1113,43 @@ bool isBlankText(std::string_view text) {
     });
 }
 
+// The text between two links that is not worth a line of its own with the
+// screen layout off: spaces (a no-break space too) and the separators pages
+// put between links -- Wikipedia's " · ", a bar, a bullet, a dash. Measured
+// on Wikipedia: each of them was an empty-sounding line (N143).
+bool isSeparatorText(std::string_view text) {
+    for (std::size_t at = 0; at < text.size();) {
+        const auto lead = static_cast<unsigned char>(text[at]);
+        if (lead < 0x80) {
+            if (std::isalnum(lead) != 0) {
+                return false;
+            }
+            ++at;
+            continue;
+        }
+        static constexpr std::string_view kAllowed[] = {
+            "\xC2\xA0",      // no-break space
+            "\xC2\xB7",      // middle dot
+            "\xE2\x80\xA2",  // bullet
+            "\xE2\x80\x93",  // en dash
+            "\xE2\x80\x94",  // em dash
+            "\xE2\x80\xAF",  // narrow no-break space
+        };
+        bool known = false;
+        for (const std::string_view allowed : kAllowed) {
+            if (text.compare(at, allowed.size(), allowed) == 0) {
+                at += allowed.size();
+                known = true;
+                break;
+            }
+        }
+        if (!known) {
+            return false;
+        }
+    }
+    return true;
+}
+
 }  // namespace
 
 bool DocumentTextRange::sameScreenLine(const ObjectPtr& before, const ObjectPtr& after) const {
@@ -1159,7 +1196,23 @@ std::optional<DocumentTextRange::Line> DocumentTextRange::leafLineAt(
         return std::nullopt;
     }
     const text::Bookmark mark = inLeaf->bookmark();
-    return Line{DocumentPosition{position.leaf, static_cast<int>(mark.start)},
+    int start = static_cast<int>(mark.start);
+    // A link that wraps on screen is one U+FFFC in its parent, and Chrome
+    // puts that one character on BOTH lines: the line after it starts on it
+    // too, and the link was read again at the start of the next line
+    // (measured on Wikipedia, N143). When the line begins on a placeholder
+    // behind the position asked about, and the line before ends just after
+    // it, the placeholder belongs to the line before.
+    if (start < position.offset &&
+        position.leaf->textRange(start, start + 1) == kObjectReplacement) {
+        if (text::TextRangePtr before = rangeFor(position.leaf, start, start);
+            before != nullptr && before->expand(text::TextUnit::Line) &&
+            static_cast<int>(before->bookmark().start) < start &&
+            static_cast<int>(before->bookmark().end) == start + 1) {
+            start = start + 1;
+        }
+    }
+    return Line{DocumentPosition{position.leaf, start},
                 DocumentPosition{position.leaf, static_cast<int>(mark.end)}};
 }
 
@@ -1294,7 +1347,7 @@ std::optional<DocumentTextRange::Line> DocumentTextRange::lineAt(
                 std::clamp(offset - from, 0, static_cast<int>(byteAt.size()) - 1))];
         };
         const std::size_t begin = index(segment.start);
-        return isBlankText(std::string_view{text}.substr(begin, index(segment.end) - begin));
+        return isSeparatorText(std::string_view{text}.substr(begin, index(segment.end) - begin));
     };
     std::vector<Segment> merged;
     for (const Segment& segment : segments) {

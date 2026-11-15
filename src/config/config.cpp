@@ -108,8 +108,18 @@ struct Manager::Layer {
             return false;
         }
         dirty = false;
+        // What went to disk, so a file monitor can tell its own write from
+        // somebody else's (N143).
+        gsize length = 0;
+        if (gchar* data = g_key_file_to_data(file, &length, nullptr)) {
+            lastSaved.assign(data, length);
+            g_free(data);
+        }
         return true;
     }
+
+    // The text of the last successful save, empty before one.
+    std::string lastSaved;
 
     bool hasKey(std::string_view section, std::string_view key) const {
         return g_key_file_has_key(file, zero(section).c_str(), zero(key).c_str(), nullptr) != FALSE;
@@ -151,6 +161,20 @@ void Manager::setDefault(std::string section, std::string key, std::string value
 
 bool Manager::load(std::string* error) {
     return base_->loadFromDisk(error);
+}
+
+bool Manager::isOwnWrite() const {
+    if (base_ == nullptr || base_->lastSaved.empty()) {
+        return false;
+    }
+    gchar* contents = nullptr;
+    gsize length = 0;
+    if (g_file_get_contents(base_->path.c_str(), &contents, &length, nullptr) == FALSE) {
+        return false;
+    }
+    const bool same = base_->lastSaved == std::string_view{contents, length};
+    g_free(contents);
+    return same;
 }
 
 bool Manager::save(std::string* error) {
