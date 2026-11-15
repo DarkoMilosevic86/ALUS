@@ -21,6 +21,8 @@ constexpr const char* kAnnotations = "annotations";
 constexpr const char* kReview = "reviewCursor";
 constexpr const char* kNavigation = "objectNavigation";
 constexpr const char* kDocumentNavigation = "documentNavigation";
+// NVDA's own section for it; alus+v writes here (N142).
+constexpr const char* kVirtualBuffers = "virtualBuffers";
 constexpr const char* kEditableText = "editableText";
 
 std::string boolText(bool value) { return value ? "true" : "false"; }
@@ -160,6 +162,7 @@ void registerSettingDefaults(config::Manager& manager) {
     manager.setDefault(kFormatting, "reportGraphics", boolText(format.reportGraphics));
     manager.setDefault(kFormatting, "includeLayoutTables",
                        boolText(format.includeLayoutTables));
+    manager.setDefault(kVirtualBuffers, "useScreenLayout", boolText(format.useScreenLayout));
     manager.setDefault(kFormatting, "detectFormatAfterCursor",
                        boolText(format.detectFormatAfterCursor));
     manager.setDefault(kFormatting, "reportLineIndentation",
@@ -282,6 +285,8 @@ Settings settingsFrom(const config::Manager& manager) {
         manager.getBool(kFormatting, "reportGraphics", formatDefaults.reportGraphics);
     format.includeLayoutTables =
         manager.getBool(kFormatting, "includeLayoutTables", formatDefaults.includeLayoutTables);
+    format.useScreenLayout =
+        manager.getBool(kVirtualBuffers, "useScreenLayout", formatDefaults.useScreenLayout);
     format.detectFormatAfterCursor = manager.getBool(kFormatting, "detectFormatAfterCursor",
                                                      formatDefaults.detectFormatAfterCursor);
     format.reportLineIndentation = parseLineIndentation(

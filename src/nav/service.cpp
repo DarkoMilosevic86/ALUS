@@ -417,6 +417,17 @@ void Service::cycleParagraphStyle() {
     message(std::string(paragraphStyleLabel(next)));
 }
 
+bool Service::toggleScreenLayout() {
+    const bool on = !settings_.format.useScreenLayout;
+    settings_.format.useScreenLayout = on;
+    config_.setString("virtualBuffers", "useScreenLayout", on ? "true" : "false");
+    std::string error;
+    if (!config_.save(&error)) {
+        ALUS_WARNING("screen layout: could not save the configuration: {}", error);
+    }
+    return on;
+}
+
 void Service::cycleLineIndentationReporting() {
     using LineIndentation = text::FormatReportSettings::LineIndentation;
     LineIndentation next = LineIndentation::Off;

@@ -838,6 +838,9 @@ int commandBrowseWalk(Loop& loop, const std::string& titleAndLines) {
     Manager config{alus::config::Paths::fromEnvironment()};
     alus::a11y::Service::registerDefaults(config);
     alus::nav::Service::registerDefaults(config);
+    // The user's own settings, so that what is printed is what ALUS would say
+    // -- the screen layout above all (N142).
+    config.load(nullptr);
     alus::text::SymbolRegistry symbols{Service::resolveDataDirectory() / "symbols"};
     alus::speech::Dictionaries dictionaries;
     alus::speech::NullSynth synth{true};
@@ -894,6 +897,26 @@ int commandBrowseWalk(Loop& loop, const std::string& titleAndLines) {
                 said.replace(at, 3, "<U+FFFC>");
             }
             std::printf("  %-22s %s\n", script, said.empty() ? "(silence)" : said.c_str());
+            // ALUS_WALK_POSITIONS=1: where the caret landed, leaf and offset,
+            // for telling a wrong line from a wrong announcement.
+            if (g_getenv("ALUS_WALK_POSITIONS") != nullptr) {
+                const auto describe = [](const alus::nav::DocumentPosition& at) {
+                    if (!at.valid()) {
+                        return std::string{"-"};
+                    }
+                    return std::string{alus::a11y::roleName(at.leaf->role())} + " \"" +
+                           at.leaf->name().substr(0, 20) + "\" @" + std::to_string(at.offset);
+                };
+                alus::text::TextRangePtr caret = browse->cursor().caretRange();
+                if (auto* document = dynamic_cast<alus::nav::DocumentTextRange*>(caret.get())) {
+                    alus::text::TextRangePtr line = document->copy();
+                    line->expand(alus::text::TextUnit::Line);
+                    const auto* lineRange = dynamic_cast<alus::nav::DocumentTextRange*>(line.get());
+                    std::printf("  %-22s   at %s; line %s .. %s\n", "", describe(document->start()).c_str(),
+                                describe(lineRange->start()).c_str(),
+                                describe(lineRange->end()).c_str());
+                }
+            }
         }
     };
 

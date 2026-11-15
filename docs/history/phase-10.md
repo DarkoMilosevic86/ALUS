@@ -1146,3 +1146,59 @@ spanned cell ("column 1 through 2"), and a layout table is not a table.
 Tests: `tests/nav/test_browse_mode.cpp` ("N141 a password field inside its
 label is read as a password field", "N141 a collapsed select is one line
 with its chosen option"). Both fail without the fix.
+
+**N142 — the screen layout (ALUS+V), and a jump reads the element.** Asked
+for after N141: make it as NVDA has it. Two things NVDA does and ALUS did
+not:
+
+- *What a line is.* ALUS's lines were leaf-based: every leaf at least one
+  line, so `<p><label>User name</label> <input></p>` was two lines, while a
+  link inside a sentence stayed in it. NVDA's `useScreenLayout`
+  (virtualBuffers, on by default) decides this, and ALUS+V toggles it. ALUS
+  had the key answering "not in this version" (phase-10.md, the four kinds
+  of missing command) because there was no layout to switch. Now
+  `DocumentTextRange::lineAt` is the one definition of a line: on, a leaf's
+  line goes on into its neighbours while no block box separates them --
+  CSS `display`, which Chrome and Firefox both send as an attribute
+  (measured: label inline, input inline-block, p block, li list-item, text
+  nodes none, which counts as inline) -- capped at 16 leaves and 240
+  characters, and stopping after a `<br>` (a text node holding "\n"). Off, a
+  leaf's line is cut at every U+FFFC, so a link or a field is a line of its
+  own, and a `<br>` still belongs to the line it closes. `move(Line)` is made
+  of `lineAt`, so the arrows and the reading agree. A toolkit that sends no
+  `display` keeps the old leaf-per-line layout.
+- *What a jump reads.* NVDA's `TextInfoQuickNavItem.report` speaks the
+  element's own range, and one line of it for a table, list, edit, frame,
+  not-link block, landmark or clickable. ALUS read the line the element
+  starts on, so `f` on a labelled field said the label and then the name,
+  and `b` on the second of two buttons read both. `BrowseMode::moveTo` takes
+  the element type now and reads `elementRange`; the elements list's Move to
+  does the same.
+
+Found on the way, live: the label in `<p><label>Message</label><br>
+<textarea></p>` was read as "blank" -- the paragraph is one leaf ("U+FFFC \n
+U+FFFC"), the label's text travels as the `content` of its field, and a
+label's field is layout, which said nothing. A layout field with content now
+says the content. And a field labelled by text on the page no longer gets its
+name as its content as well ("User name edit required User name"); a field
+named only by aria-label keeps it, since nothing on screen says it. A button
+whose explicit name is its own text says it once ("Clear Clear button").
+
+The setting is `[virtualBuffers] useScreenLayout`, NVDA's own section and
+key, with a row in the settings window (Review cursor, Document navigation).
+The user asked that the key's choice stay as it was left: ALUS has no save on
+exit, so `nav::Service::toggleScreenLayout` saves the configuration at once.
+Another open document takes the new value when it gets the focus back.
+`alus-cli browse-walk` now loads the user's configuration (it printed the
+defaults), and `ALUS_WALK_POSITIONS=1` prints where each line starts and
+ends. The browse mode tests got their own `ALUS_CONFIG_DIR`, as ALUS+V saves.
+
+Live, Chrome, a form page: on -- "User name edit required", "Sign in button
+Clear button", "Read the link terms and the link privacy policy before you
+go."; off -- "User name" / "edit required", "Sign in button" / "Clear
+button", "Read the" / "link terms" / ...
+
+Tests: `tests/nav/test_browse_mode.cpp`: "N142 the screen layout decides
+what a line is" (on and off over the same page), "N142 a quick-nav jump
+reads the element, not its line", "N142 alus+v switches the screen layout
+and keeps the choice" (a fresh configuration reads it back).

@@ -242,7 +242,11 @@ std::optional<text::ControlField> ControlFieldSynth::forObject(const a11y::Objec
     if (!field.name.empty() && hasText(object)) {
         const auto& attributes = object.attributes();
         const auto explicitName = attributes.find("explicit-name");
-        if (explicitName == attributes.end() || explicitName->second != "true") {
+        // A button whose author-given name IS its text says it once either
+        // way: Chrome marks <input type=reset value=Clear> explicit, and f
+        // read "Clear Clear button" (N142).
+        const bool isButton = field.role == Role::Button || field.role == Role::ToggleButton;
+        if (isButton || explicitName == attributes.end() || explicitName->second != "true") {
             const auto trimmed = [](std::string_view value) {
                 const std::size_t first = value.find_first_not_of(" \t\n\r");
                 if (first == std::string_view::npos) {

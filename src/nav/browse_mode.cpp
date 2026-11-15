@@ -320,6 +320,9 @@ bool BrowseMode::setPassThrough(bool value, bool announce) {
 }
 
 void BrowseMode::onGainFocus(const a11y::ObjectPtr& object) {
+    // alus+v pressed in another document: this one lays out its lines the
+    // same way from the moment it is back (N142).
+    settings_.useScreenLayout = service_.formatSettings().useScreenLayout;
     if (performPendingElement()) {
         return;
     }
@@ -496,7 +499,8 @@ a11y::ObjectPtr BrowseMode::objectAtCaret() const {
     return nullptr;
 }
 
-bool BrowseMode::moveTo(const a11y::ObjectPtr& object, OutputReason reason) {
+bool BrowseMode::moveTo(const a11y::ObjectPtr& object, OutputReason reason,
+                        std::optional<ElementType> type) {
     if (object == nullptr) {
         return false;
     }
@@ -518,11 +522,104 @@ bool BrowseMode::moveTo(const a11y::ObjectPtr& object, OutputReason reason) {
     if (a11y::Registry* registry = service_.registry()) {
         registry->api().setNavigatorObject(object, /*isFocus=*/false);
     }
+    if (type.has_value()) {
+        if (text::TextRangePtr element = elementRange(*at, object, *type)) {
+            service_.speakRange(*element, std::nullopt, reason, root_);
+            return true;
+        }
+    }
     text::TextRangePtr line = at->copy();
     if (line->expand(text::TextUnit::Line)) {
         service_.speakRange(*line, text::TextUnit::Line, reason, root_);
     }
     return true;
+}
+
+namespace {
+
+// NVDA's quick-nav types that read one line rather than the whole element
+// (browseMode.py, `readUnit=textInfos.UNIT_LINE`): a table or a landmark read
+// whole would be the page.
+bool readsOneLine(ElementType type) {
+    switch (type) {
+        case ElementType::Table:
+        case ElementType::List:
+        case ElementType::Edit:
+        case ElementType::Frame:
+        case ElementType::NotLinkBlock:
+        case ElementType::Landmark:
+        case ElementType::Clickable:
+            return true;
+        default:
+            return false;
+    }
+}
+
+}  // namespace
+
+bool BrowseMode::leafInside(const a11y::ObjectPtr& leaf, const a11y::Object& object) const {
+    if (leaf->sameAs(object)) {
+        return true;
+    }
+    for (const a11y::ObjectPtr& ancestor : DocumentLeaves::ancestorChain(root_, leaf)) {
+        if (ancestor != nullptr && ancestor->sameAs(object)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+text::TextRangePtr BrowseMode::elementRange(const text::TextRange& at,
+                                            const a11y::ObjectPtr& object,
+                                            ElementType type) const {
+    // N142, NVDA's TextInfoQuickNavItem.report: the element, not the line it
+    // is on. A field with a label in front of it said the label and then its
+    // name ("Clear Clear button"); a link in a sentence read the sentence.
+    const auto* start = dynamic_cast<const DocumentTextRange*>(&at);
+    if (start == nullptr || !start->start().valid()) {
+        return nullptr;
+    }
+    // An editable field reads a line of itself, never its whole text.
+    const a11y::Role role = object->role();
+    const bool editable = type == ElementType::FormField &&
+                          (role == a11y::Role::EditableText || role == a11y::Role::PasswordEdit);
+    // The element's own end: its last leaf, walked from its first.
+    constexpr int kMaxElementLeaves = 64;
+    DocumentPosition end = start->start();
+    bool whole = true;
+    if (DocumentLeaves::isLeaf(*object) || end.leaf->sameAs(*object)) {
+        end = DocumentPosition{end.leaf, DocumentTextRange::leafLengthOf(end.leaf)};
+    } else {
+        a11y::ObjectPtr leaf = end.leaf;
+        int walked = 0;
+        for (; walked < kMaxElementLeaves; ++walked) {
+            end = DocumentPosition{leaf, DocumentTextRange::leafLengthOf(leaf)};
+            const a11y::ObjectPtr next = DocumentLeaves::next(root_, leaf);
+            if (next == nullptr || !leafInside(next, *object)) {
+                break;
+            }
+            leaf = next;
+        }
+        whole = walked < kMaxElementLeaves;
+    }
+    text::TextRangePtr range =
+        DocumentTextRange::makeAt(root_, settings_, start->start(), end);
+    if (range == nullptr) {
+        return nullptr;
+    }
+    if (whole && !readsOneLine(type) && !editable) {
+        return range;
+    }
+    // One line from the element's start, and no further than the element.
+    text::TextRangePtr line = at.copy();
+    if (!line->expand(text::TextUnit::Line)) {
+        return range;
+    }
+    line->setEndPoint(at, text::EndPointPair::StartToStart);
+    if (line->compareEndPoints(*range, text::EndPointPair::EndToEnd) > 0) {
+        line->setEndPoint(*range, text::EndPointPair::EndToEnd);
+    }
+    return line;
 }
 
 bool BrowseMode::isNestedIn(const a11y::Object& inner, const a11y::Object& outer) const {
@@ -607,7 +704,7 @@ bool BrowseMode::moveToElement(ElementType type, bool forwards) {
     // QUICKNAV, not CARET: #2591, hearing "out of list" on every jump makes
     // navigation slower rather than clearer, and the reason is what switches
     // that off (see getTextRangeSpeech).
-    return moveTo(found, OutputReason::QuickNav);
+    return moveTo(found, OutputReason::QuickNav, type);
 }
 
 // ---------------------------------------------------------------------------
@@ -682,8 +779,14 @@ void BrowseMode::chooseElement(const ElementsDialogChoice& choice) {
         return;
     }
     lastElementKind_ = choice.kind;
+    std::optional<ElementType> type;
+    for (const ElementKind& kind : kElementKinds) {
+        if (choice.kind == kind.id) {
+            type = kind.type;
+        }
+    }
     pendingElement_ = PendingElement{found->second[static_cast<std::size_t>(choice.index)],
-                                     choice.action == "activate"};
+                                     choice.action == "activate", type};
     elementObjects_.clear();
     // Done when the focus comes back to the document, which is when the
     // browser is listening again and when a focus event can no longer move
@@ -710,7 +813,7 @@ bool BrowseMode::performPendingElement() {
     }
     if (!pending.activate) {
         // Move to: the caret goes there and the element is read, as a jump.
-        moveTo(pending.object, OutputReason::QuickNav);
+        moveTo(pending.object, OutputReason::QuickNav, pending.type);
         return true;
     }
     // Activate: on the element first, so activatePosition acts on it and the
@@ -1176,6 +1279,17 @@ void BrowseMode::bindTableScripts() {
     bindScript("speakColumn", [this](input::Gesture&) { speakAxis(/*column=*/true); });
     bindScript("sayAllRow", [this](input::Gesture&) { speakAxis(false); });
     bindScript("sayAllColumn", [this](input::Gesture&) { speakAxis(true); });
+    // NVDA: script_toggleScreenLayout (virtualBuffers._toggleScreenLayout).
+    bindScript("toggleScreenLayout", [this](input::Gesture&) {
+        settings_.useScreenLayout = service_.toggleScreenLayout();
+        service_.message(settings_.useScreenLayout
+                             // Translators: Presented when use screen layout
+                             // option is toggled.
+                             ? _("Use screen layout on")
+                             // Translators: Presented when use screen layout
+                             // option is toggled.
+                             : _("Use screen layout off"));
+    });
     bindScript("toggleIncludeLayoutTables", [this](input::Gesture&) {
         includeLayoutTables_ = !includeLayoutTables_;
         // Translators: spoken when layout table reporting is turned on or off.

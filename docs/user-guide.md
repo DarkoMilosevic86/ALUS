@@ -94,6 +94,7 @@ with both layouts.
 | ALUS+Control+Up/Down Arrow | change the chosen voice setting |
 | ALUS+Space | switch between browse mode and focus mode |
 | ALUS+F7 | elements list (links, headings, landmarks…) in browse mode |
+| ALUS+V | screen layout on or off in browse mode (the choice is kept) |
 | ALUS+Shift+S | sleep mode for the current application |
 | Numpad 7 / 8 / 9 | review cursor: previous / current / next line |
 | ALUS+Numpad 5 | report the navigator object |
@@ -210,6 +211,17 @@ caret on the element; **Cancel** or Escape closes it without doing anything.
 The list opens on the type you used last, on the element where you are on
 the page: the link or heading the caret is on, or else the last one before it.
 Headings are read with their level when it changes ("level 2"), as in a tree.
+
+**ALUS+V** switches the **screen layout**. On (the default), a line of a page
+is what the screen shows on one line: a label beside its field, two buttons
+side by side, a link inside a sentence. Off, every link and every field is a
+line of its own. ALUS says "Use screen layout on" or "off" and saves the
+choice at once, so it is the same after a restart; the same switch is in the
+settings window under Review cursor, Document navigation.
+
+A quick navigation key (`h`, `k`, `f`, `b`…) reads the element it lands on,
+not the whole line around it: `b` on the second of two buttons says only that
+button. A table, a list, a landmark or an edit field reads its first line.
 
 In an edit field ALUS switches to **focus mode** automatically, so typing
 goes to the application; **ALUS+Space** switches between the two modes by

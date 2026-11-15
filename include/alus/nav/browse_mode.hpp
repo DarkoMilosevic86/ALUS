@@ -133,7 +133,12 @@ public:
     // which is also announced.
     bool moveToElement(ElementType type, bool forwards);
     // Puts the caret on an object and reads it: what every jump ends with.
-    bool moveTo(const a11y::ObjectPtr& object, a11y::OutputReason reason);
+    // With a type, what is read is the element itself, as NVDA's quick-nav
+    // `report` reads it (N142): the whole of a heading, a link or a field, and
+    // only the first line of a table, a list or a landmark. Without one, the
+    // line it starts on.
+    bool moveTo(const a11y::ObjectPtr& object, a11y::OutputReason reason,
+                std::optional<ElementType> type = std::nullopt);
     // NVDA: `script_activatePosition`. Activates what the caret is on, and
     // switches to focus mode when that object is one the user must then type
     // into.
@@ -206,6 +211,11 @@ private:
     static bool nestingIsSamePlace(ElementType type);
     static ElementListItem makeElementListItem(const a11y::ObjectPtr& object);
 
+    // N142: the range a quick-nav jump reads; null to read the line instead.
+    text::TextRangePtr elementRange(const text::TextRange& at, const a11y::ObjectPtr& object,
+                                    ElementType type) const;
+    bool leafInside(const a11y::ObjectPtr& leaf, const a11y::Object& object) const;
+
     // ---- the elements list (alus+f7) ----
     void showElementsList();
     // Runs the choice that is waiting, if one is. True when it did.
@@ -239,6 +249,8 @@ private:
     struct PendingElement {
         a11y::ObjectPtr object;
         bool activate = false;
+        // What it is, so Move to reads the element as a quick-nav jump does.
+        std::optional<ElementType> type;
     };
     static constexpr std::chrono::milliseconds kPendingElementWait{600};
     std::map<std::string, std::vector<a11y::ObjectPtr>> elementObjects_;

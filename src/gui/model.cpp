@@ -420,6 +420,12 @@ std::vector<Page> build() {
                       Row{RowKind::Choice, "documentNavigation", "sayAllReadingUnit",
                           N_("Say all reads by"), nullptr,
                           {{"paragraph", N_("Paragraph")}, {"line", N_("Line")}}},
+                      Row{RowKind::Toggle, "virtualBuffers", "useScreenLayout",
+                          N_("Use screen layout"),
+                          N_("On, a web page's line is what the screen shows on one "
+                             "line, a label beside its field. Off, every link and "
+                             "field is a line of its own. `alus+v` switches it, and "
+                             "the choice is kept.")},
                   }},
         }});
 

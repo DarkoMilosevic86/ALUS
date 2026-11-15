@@ -11,7 +11,7 @@ gestures dialog (Settings → Gestures) or in `~/.config/alus/gestures.ini`.
 
 Commands: **316** in 17 categories, **178** of them bound to keys.
 
-**16** are not in this version and are marked so in the *Description* column: **16** have a key that **says** the command is missing, and **0** are deliberately left unbound because the key belongs to the application (N18). The source is `data/commands-status.ini`.
+**15** are not in this version and are marked so in the *Description* column: **15** have a key that **says** the command is missing, and **0** are deliberately left unbound because the key belongs to the application (N18). The source is `data/commands-status.ini`.
 
 ## Audio
 
@@ -77,7 +77,7 @@ Commands: **316** in 17 categories, **178** of them bound to keys.
 | `previousHeading9` | shift+9 | shift+9 | Moves to the previous heading at level 9 |
 | `toggleVirtualBufferPassThrough` | ALUS+space | ALUS+space | Toggles between browse mode and focus mode. When in focus mode, keys will pass straight through to the application, allowing you to interact directly with a control. When in browse mode, you can navigate the document with the cursor, quick navigation keys, etc. |
 | `toggleNativeAppSelectionMode` | ALUS+shift+f10 | ALUS+shift+f10 | **NOT IN THIS VERSION** (the key says so when pressed) — Toggles native selection mode on and off |
-| `toggleScreenLayout` | ALUS+v | ALUS+v | **NOT IN THIS VERSION** (the key says so when pressed) — Toggles on and off if the screen layout is preserved while rendering the document content |
+| `toggleScreenLayout` | ALUS+v | ALUS+v | Toggles on and off if the screen layout is preserved while rendering the document content |
 | `findNext` | ALUS+f3 | ALUS+f3 | find the next occurrence of the previously entered text string from the current cursor's position |
 | `findPrevious` | ALUS+shift+f3 | ALUS+shift+f3 | find the previous occurrence of the previously entered text string from the current cursor's position |
 | `nextAnnotation` | a | a | moves to the next annotation |
@@ -426,4 +426,4 @@ a user coming from Windows has nothing new to learn (H1).
 The descriptions are translated through gettext; `alus-cli --language sr list-commands`
 shows them in Serbian.
 
-Generated 2026-11-14.
+Generated 2026-11-15.

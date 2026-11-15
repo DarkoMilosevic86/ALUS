@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alus 0.1.0\n"
 "Report-Msgid-Bugs-To: daremc86@gmail.com\n"
-"POT-Creation-Date: 2026-11-15 10:45+0100\n"
+"POT-Creation-Date: 2026-11-15 12:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -225,36 +225,36 @@ msgstr ""
 #. Translators: a state of an object is negated; %s is the state's own
 #. label (e.g. "selected"). NVDA keeps separate strings for the states that
 #. are commonly negated and falls back to this one for the rest.
-#: src/a11y/object_speech.cpp:211
+#: src/a11y/object_speech.cpp:216
 #, c-format
 msgid "not %s"
 msgstr ""
 
 #. Translators: the current row number, e.g. "row 3".
-#: src/a11y/object_speech.cpp:337
+#: src/a11y/object_speech.cpp:342
 #, c-format
 msgid "row %s"
 msgstr ""
 
 #. Translators: the row span, e.g. "through 5".
-#: src/a11y/object_speech.cpp:340 src/a11y/object_speech.cpp:356
+#: src/a11y/object_speech.cpp:345 src/a11y/object_speech.cpp:361
 #, c-format
 msgid "through %s"
 msgstr ""
 
 #. Translators: the current column number, e.g. "column 3".
-#: src/a11y/object_speech.cpp:352
+#: src/a11y/object_speech.cpp:357
 #, c-format
 msgid "column %s"
 msgstr ""
 
-#: src/a11y/object_speech.cpp:366
+#: src/a11y/object_speech.cpp:371
 #, c-format
 msgid "through row %s column %s"
 msgstr ""
 
 #. Translators: there are further details that can be fetched.
-#: src/a11y/object_speech.cpp:389
+#: src/a11y/object_speech.cpp:394
 msgid "has details"
 msgstr ""
 
@@ -262,7 +262,7 @@ msgstr ""
 #. of detail.
 #. Translators: brailled when there are details of a known kind; %s is
 #. the abbreviation of the kind, e.g. "cmnt".
-#: src/a11y/object_speech.cpp:394 src/braille/properties.cpp:75
+#: src/a11y/object_speech.cpp:399 src/braille/properties.cpp:75
 #, c-format
 msgid "has %s"
 msgstr ""
@@ -272,18 +272,18 @@ msgstr ""
 #. Translators: the position of an item in a group, brailled; the
 #. first %s is the item's number and the second how many there are, so
 #. the result reads "3 of 7".
-#: src/a11y/object_speech.cpp:406 src/braille/properties.cpp:181
+#: src/a11y/object_speech.cpp:411 src/braille/properties.cpp:181
 #, c-format
 msgid "%s of %s"
 msgstr ""
 
 #. Translators: the item level in a tree, e.g. "level 2".
-#: src/a11y/object_speech.cpp:411
+#: src/a11y/object_speech.cpp:416
 #, c-format
 msgid "level %s"
 msgstr ""
 
-#: src/a11y/object_speech.cpp:859
+#: src/a11y/object_speech.cpp:864
 #, c-format
 msgid "%s percent"
 msgstr ""
@@ -1164,7 +1164,7 @@ msgstr ""
 
 #. Translators: Number of items in a list (example output: list with 5
 #. items); %s is the count.
-#: src/a11y/text_speech.cpp:570
+#: src/a11y/text_speech.cpp:571
 #, c-format
 msgid "with %s item"
 msgid_plural "with %s items"
@@ -1173,7 +1173,7 @@ msgstr[1] ""
 
 #. Translators: Indicates the end of something; %s is what is being
 #. left, so the result reads "out of list".
-#: src/a11y/text_speech.cpp:894
+#: src/a11y/text_speech.cpp:904
 #, c-format
 msgid "out of %s"
 msgstr ""
@@ -1183,7 +1183,7 @@ msgstr ""
 #. Translators: spoken when a paragraph is blank.
 #. Translators: spoken when a line or a field is empty.
 #. Translators: spoken when the review cursor reaches an empty line.
-#: src/a11y/text_speech.cpp:1382 src/nav/browse_mode.cpp:1159
+#: src/a11y/text_speech.cpp:1392 src/nav/browse_mode.cpp:1262
 #: src/nav/paragraph_nav.cpp:231 src/speech/presenter.cpp:291
 #: src/speech/spelling.cpp:149 src/speech/spelling.cpp:157
 msgid "blank"
@@ -1191,7 +1191,7 @@ msgstr ""
 
 #. Translators: a large selection is reported by its size; %s is the
 #. number of characters.
-#: src/a11y/text_speech.cpp:1456
+#: src/a11y/text_speech.cpp:1466
 #, c-format
 msgid "%s character"
 msgid_plural "%s characters"
@@ -1201,32 +1201,32 @@ msgstr[1] ""
 #. Translators: text that was ALREADY selected when the control got the
 #. focus. "selected" comes FIRST on purpose: the user may be about to
 #. overwrite it.
-#: src/a11y/text_speech.cpp:1497
+#: src/a11y/text_speech.cpp:1507
 #, c-format
 msgid "selected %s"
 msgstr ""
 
 #. Translators: what has just been selected: "hello world selected".
 #. Translators: what is selected, e.g. "hello world selected".
-#: src/a11y/text_speech.cpp:1573 src/nav/text_commands.cpp:614
+#: src/a11y/text_speech.cpp:1583 src/nav/text_commands.cpp:614
 #, c-format
 msgid "%s selected"
 msgstr ""
 
 #. Translators: what has just been unselected.
-#: src/a11y/text_speech.cpp:1583
+#: src/a11y/text_speech.cpp:1593
 #, c-format
 msgid "%s unselected"
 msgstr ""
 
 #. Translators: the previous selection was replaced by a new one.
-#: src/a11y/text_speech.cpp:1588
+#: src/a11y/text_speech.cpp:1598
 #, c-format
 msgid "%s selected instead"
 msgstr ""
 
 #. Translators: the selection was removed.
-#: src/a11y/text_speech.cpp:1591
+#: src/a11y/text_speech.cpp:1601
 msgid "selection removed"
 msgstr ""
 
@@ -1943,16 +1943,16 @@ msgstr ""
 
 #. Translators: spoken as the screen reader finishes starting.
 #. "ALUS" is the product name and is NOT translated.
-#: src/daemon/main.cpp:727
+#: src/daemon/main.cpp:728
 msgid "ALUS started"
 msgstr ""
 
-#: src/daemon/main.cpp:735
+#: src/daemon/main.cpp:736
 #, c-format
 msgid "The object model is not available: %s"
 msgstr ""
 
-#: src/daemon/main.cpp:749
+#: src/daemon/main.cpp:750
 #, c-format
 msgid "Keyboard input is not available: %s"
 msgstr ""
@@ -2081,7 +2081,7 @@ msgid ""
 msgstr ""
 
 #. Translators: the title of the gesture dialog.
-#: src/gui/gesture_dialog.cpp:334 src/gui/model.cpp:562
+#: src/gui/gesture_dialog.cpp:334 src/gui/model.cpp:568
 msgid "Gestures"
 msgstr ""
 
@@ -2147,7 +2147,7 @@ msgid "This is how this voice sounds."
 msgstr ""
 
 #: src/gui/model.cpp:26 src/gui/model.cpp:59 src/gui/model.cpp:235
-#: src/gui/model.cpp:473 src/gui/model.cpp:498 src/input/commands.cpp:39
+#: src/gui/model.cpp:479 src/gui/model.cpp:504 src/input/commands.cpp:39
 #: src/input/commands.cpp:48
 msgid "Off"
 msgstr ""
@@ -2394,7 +2394,7 @@ msgstr ""
 msgid "Makes mathematical and styled letters readable: ℂ is spoken as C."
 msgstr ""
 
-#: src/gui/model.cpp:147 src/gui/model.cpp:545 src/i18n/data_strings.cpp:33
+#: src/gui/model.cpp:147 src/gui/model.cpp:551 src/i18n/data_strings.cpp:33
 msgid "Braille"
 msgstr ""
 
@@ -2763,7 +2763,7 @@ msgstr ""
 msgid "A beep"
 msgstr ""
 
-#: src/gui/model.cpp:351 src/gui/model.cpp:474
+#: src/gui/model.cpp:351 src/gui/model.cpp:480
 msgid "Speech only"
 msgstr ""
 
@@ -2895,240 +2895,251 @@ msgstr ""
 msgid "Paragraph"
 msgstr ""
 
-#: src/gui/model.cpp:430 src/i18n/data_strings.cpp:44
+#: src/gui/model.cpp:424
+msgid "Use screen layout"
+msgstr ""
+
+#: src/gui/model.cpp:425
+msgid ""
+"On, a web page's line is what the screen shows on one line, a label beside "
+"its field. Off, every link and field is a line of its own. `alus+v` switches "
+"it, and the choice is kept."
+msgstr ""
+
+#: src/gui/model.cpp:436 src/i18n/data_strings.cpp:44
 msgid "Document formatting"
 msgstr ""
 
-#: src/gui/model.cpp:432
+#: src/gui/model.cpp:438
 msgid "Font"
 msgstr ""
 
-#: src/gui/model.cpp:435
+#: src/gui/model.cpp:441
 msgid "Font name"
 msgstr ""
 
-#: src/gui/model.cpp:437
+#: src/gui/model.cpp:443
 msgid "Font size"
 msgstr ""
 
-#: src/gui/model.cpp:439
+#: src/gui/model.cpp:445
 msgid "Bold, italic and underline"
 msgstr ""
 
-#: src/gui/model.cpp:442
+#: src/gui/model.cpp:448
 msgid "Superscripts and subscripts"
 msgstr ""
 
-#: src/gui/model.cpp:444
+#: src/gui/model.cpp:450
 msgid "Emphasis"
 msgstr ""
 
-#: src/gui/model.cpp:446
+#: src/gui/model.cpp:452
 msgid "Highlighted text"
 msgstr ""
 
-#: src/gui/model.cpp:448
+#: src/gui/model.cpp:454
 msgid "Style name"
 msgstr ""
 
-#: src/gui/model.cpp:450
+#: src/gui/model.cpp:456
 msgid "Colours"
 msgstr ""
 
-#: src/gui/model.cpp:452
+#: src/gui/model.cpp:458
 msgid "Document information"
 msgstr ""
 
-#: src/gui/model.cpp:455
+#: src/gui/model.cpp:461
 msgid "Comments"
 msgstr ""
 
-#: src/gui/model.cpp:457
+#: src/gui/model.cpp:463
 msgid "Bookmarks"
 msgstr ""
 
-#: src/gui/model.cpp:459
+#: src/gui/model.cpp:465
 msgid "Editor revisions"
 msgstr ""
 
-#: src/gui/model.cpp:461
+#: src/gui/model.cpp:467
 msgid "Spelling errors"
 msgstr ""
 
-#: src/gui/model.cpp:463
+#: src/gui/model.cpp:469
 msgid "Grammar errors"
 msgstr ""
 
-#: src/gui/model.cpp:465
+#: src/gui/model.cpp:471
 msgid "Pages and spacing"
 msgstr ""
 
-#: src/gui/model.cpp:468
+#: src/gui/model.cpp:474
 msgid "Page numbers"
 msgstr ""
 
-#: src/gui/model.cpp:470
+#: src/gui/model.cpp:476
 msgid "Line numbers"
 msgstr ""
 
-#: src/gui/model.cpp:472
+#: src/gui/model.cpp:478
 msgid "Line indentation"
 msgstr ""
 
-#: src/gui/model.cpp:475
+#: src/gui/model.cpp:481
 msgid "Tones"
 msgstr ""
 
-#: src/gui/model.cpp:476
+#: src/gui/model.cpp:482
 msgid "Speech and tones"
 msgstr ""
 
-#: src/gui/model.cpp:478
+#: src/gui/model.cpp:484
 msgid "How long an indentation tone lasts, in milliseconds"
 msgstr ""
 
-#: src/gui/model.cpp:482
+#: src/gui/model.cpp:488
 msgid "Ignore blank lines when reporting indentation"
 msgstr ""
 
-#: src/gui/model.cpp:484
+#: src/gui/model.cpp:490
 msgid "Line spacing"
 msgstr ""
 
-#: src/gui/model.cpp:486
+#: src/gui/model.cpp:492
 msgid "Paragraph indentation"
 msgstr ""
 
-#: src/gui/model.cpp:488
+#: src/gui/model.cpp:494
 msgid "Alignment"
 msgstr ""
 
-#: src/gui/model.cpp:490 src/gui/model.cpp:493
+#: src/gui/model.cpp:496 src/gui/model.cpp:499
 msgid "Tables"
 msgstr ""
 
-#: src/gui/model.cpp:495
+#: src/gui/model.cpp:501
 msgid "Cell coordinates"
 msgstr ""
 
-#: src/gui/model.cpp:497
+#: src/gui/model.cpp:503
 msgid "Table headers"
 msgstr ""
 
-#: src/gui/model.cpp:499
+#: src/gui/model.cpp:505
 msgid "Rows and columns"
 msgstr ""
 
-#: src/gui/model.cpp:500
+#: src/gui/model.cpp:506
 msgid "Rows only"
 msgstr ""
 
-#: src/gui/model.cpp:501
+#: src/gui/model.cpp:507
 msgid "Columns only"
 msgstr ""
 
-#: src/gui/model.cpp:503
+#: src/gui/model.cpp:509
 msgid "Cell borders"
 msgstr ""
 
-#: src/gui/model.cpp:505
+#: src/gui/model.cpp:511
 msgid "Tables used only for layout"
 msgstr ""
 
-#: src/gui/model.cpp:506
+#: src/gui/model.cpp:512
 msgid ""
 "`alus+shift+f` reports the formatting at the caret; this decides whether a "
 "table that only arranges a page counts as a table at all."
 msgstr ""
 
-#: src/gui/model.cpp:510
+#: src/gui/model.cpp:516
 msgid "Elements"
 msgstr ""
 
-#: src/gui/model.cpp:513
+#: src/gui/model.cpp:519
 msgid "Headings"
 msgstr ""
 
-#: src/gui/model.cpp:515
+#: src/gui/model.cpp:521
 msgid "Links"
 msgstr ""
 
-#: src/gui/model.cpp:517
+#: src/gui/model.cpp:523
 msgid "Whether a link has been visited"
 msgstr ""
 
-#: src/gui/model.cpp:519
+#: src/gui/model.cpp:525
 msgid "Graphics"
 msgstr ""
 
-#: src/gui/model.cpp:521
+#: src/gui/model.cpp:527
 msgid "Lists"
 msgstr ""
 
-#: src/gui/model.cpp:523
+#: src/gui/model.cpp:529
 msgid "Block quotes"
 msgstr ""
 
-#: src/gui/model.cpp:525
+#: src/gui/model.cpp:531
 msgid "Groupings"
 msgstr ""
 
-#: src/gui/model.cpp:527
+#: src/gui/model.cpp:533
 msgid "Landmarks and regions"
 msgstr ""
 
-#: src/gui/model.cpp:529
+#: src/gui/model.cpp:535
 msgid "Articles"
 msgstr ""
 
-#: src/gui/model.cpp:531
+#: src/gui/model.cpp:537
 msgid "Frames"
 msgstr ""
 
-#: src/gui/model.cpp:533
+#: src/gui/model.cpp:539
 msgid "Figures and captions"
 msgstr ""
 
-#: src/gui/model.cpp:535
+#: src/gui/model.cpp:541
 msgid "Clickable elements"
 msgstr ""
 
-#: src/gui/model.cpp:537
+#: src/gui/model.cpp:543
 msgid "When formatting is reported"
 msgstr ""
 
-#: src/gui/model.cpp:541
+#: src/gui/model.cpp:547
 msgid "Report formatting changes after the cursor"
 msgstr ""
 
-#: src/gui/model.cpp:542
+#: src/gui/model.cpp:548
 msgid "Costs a call per line; off by default for that reason."
 msgstr ""
 
-#: src/gui/model.cpp:549
+#: src/gui/model.cpp:555
 msgid "Bold, italic and underline on the display"
 msgstr ""
 
-#: src/gui/model.cpp:552
+#: src/gui/model.cpp:558
 msgid "Spelling errors on the display"
 msgstr ""
 
-#: src/gui/model.cpp:564
+#: src/gui/model.cpp:570
 msgid "Commands and keys"
 msgstr ""
 
-#: src/gui/model.cpp:565
+#: src/gui/model.cpp:571
 msgid ""
 "Every command ALUS knows, with the keys bound to it. A command with no "
 "description is not shown, because a command that cannot be explained cannot "
 "be rebound sensibly."
 msgstr ""
 
-#: src/gui/model.cpp:569
+#: src/gui/model.cpp:575
 msgid "Edit gestures"
 msgstr ""
 
-#: src/gui/model.cpp:654
+#: src/gui/model.cpp:660
 #, c-format
 msgid "%s (not offered by the synthesizer)"
 msgstr ""
@@ -5057,96 +5068,108 @@ msgstr ""
 
 #. Translators: spoken when a movement command reaches the edge of the
 #. document.
-#: src/nav/browse_mode.cpp:465 src/nav/browse_mode.cpp:1018
+#: src/nav/browse_mode.cpp:468 src/nav/browse_mode.cpp:1121
 msgid "edge of document"
 msgstr ""
 
-#: src/nav/browse_mode.cpp:485
+#: src/nav/browse_mode.cpp:488
 #, c-format
 msgid "no next %s"
 msgstr ""
 
-#: src/nav/browse_mode.cpp:485
+#: src/nav/browse_mode.cpp:488
 #, c-format
 msgid "no previous %s"
 msgstr ""
 
 #. Translators: spoken when alus+f7 cannot show the elements list
 #. (alus-elements is not installed, or there is no display).
-#: src/nav/browse_mode.cpp:674
+#: src/nav/browse_mode.cpp:771
 msgid "the elements list is not available"
 msgstr ""
 
 #. Translators: spoken when the whole document is selected.
-#: src/nav/browse_mode.cpp:933
+#: src/nav/browse_mode.cpp:1036
 msgid "selected all"
 msgstr ""
 
 #. Translators: spoken when there is nothing selected to copy.
-#: src/nav/browse_mode.cpp:940
+#: src/nav/browse_mode.cpp:1043
 msgid "no selection"
 msgstr ""
 
-#: src/nav/browse_mode.cpp:946
+#: src/nav/browse_mode.cpp:1049
 msgid "copied"
 msgstr ""
 
 #. Translators: spoken when a search finds nothing.
-#: src/nav/browse_mode.cpp:953 src/nav/browse_mode.cpp:962
+#: src/nav/browse_mode.cpp:1056 src/nav/browse_mode.cpp:1065
 msgid "text not found"
 msgstr ""
 
 #. Translators: spoken when a feature is not available yet.
-#: src/nav/browse_mode.cpp:974
+#: src/nav/browse_mode.cpp:1077
 msgid "find dialog not available yet"
 msgstr ""
 
 #. Translators: spoken when the caret is not inside a container.
-#: src/nav/browse_mode.cpp:1000 src/nav/browse_mode.cpp:1012
+#: src/nav/browse_mode.cpp:1103 src/nav/browse_mode.cpp:1115
 msgid "not in a container"
 msgstr ""
 
 #. Translators: spoken when a table command is used outside a table.
-#: src/nav/browse_mode.cpp:1059 src/nav/browse_mode.cpp:1064
-#: src/nav/browse_mode.cpp:1117
+#: src/nav/browse_mode.cpp:1162 src/nav/browse_mode.cpp:1167
+#: src/nav/browse_mode.cpp:1220
 msgid "not in a table"
 msgstr ""
 
 #. Translators: spoken when a table movement reaches the table's edge.
-#: src/nav/browse_mode.cpp:1088 src/nav/browse_mode.cpp:1100
+#: src/nav/browse_mode.cpp:1191 src/nav/browse_mode.cpp:1203
 msgid "edge of table"
 msgstr ""
 
+#. Translators: Presented when use screen layout
+#. option is toggled.
+#: src/nav/browse_mode.cpp:1288
+msgid "Use screen layout on"
+msgstr ""
+
+#. Translators: Presented when use screen layout
+#. option is toggled.
+#: src/nav/browse_mode.cpp:1291
+msgid "Use screen layout off"
+msgstr ""
+
 #. Translators: spoken when layout table reporting is turned on or off.
-#: src/nav/browse_mode.cpp:1182
+#: src/nav/browse_mode.cpp:1296
 msgid "layout tables on"
 msgstr ""
 
-#: src/nav/browse_mode.cpp:1183
+#: src/nav/browse_mode.cpp:1297
 msgid "layout tables off"
 msgstr ""
 
 #. Translators: reported when the single letters of
 #. browse mode jump between elements again.
-#: src/nav/browse_mode.cpp:1212
+#: src/nav/browse_mode.cpp:1326
 msgid "Single letter navigation on"
 msgstr ""
 
 #. Translators: reported when the single letters of
 #. browse mode are handed to the application instead.
-#: src/nav/browse_mode.cpp:1215
+#: src/nav/browse_mode.cpp:1329
 msgid "Single letter navigation off"
 msgstr ""
 
 #. Translators: reported when there is no next text
 #. paragraph in the document (`p`).
-#: src/nav/browse_mode.cpp:1308
+#: src/nav/browse_mode.cpp:1422
 msgid "no next text paragraph"
 msgstr ""
 
 #. Translators: reported when there is no previous
 #. text paragraph in the document (`shift+p`).
-#: src/nav/browse_mode.cpp:1311
+#: src/nav/browse_mode.cpp:1425
 msgid "no previous text paragraph"
 msgstr ""
 
@@ -5154,7 +5177,7 @@ msgstr ""
 #. line number and the second the number of lines. ONE pattern rather than
 #. three concatenated pieces, because the word order is not English's in
 #. every language.
-#: src/nav/document_range.cpp:1421
+#: src/nav/document_range.cpp:1724
 #, c-format
 msgid "line %s of %s"
 msgstr ""

@@ -177,6 +177,9 @@ public:
                                                    text::Position position);
     // At an explicit position, which is how a bookmark and a quick-nav match
     // become a range.
+    // A leaf's length in document positions: its characters, or 1 for an
+    // embedded object.
+    static int leafLengthOf(const a11y::ObjectPtr& leaf);
     static std::unique_ptr<DocumentTextRange> makeAt(a11y::ObjectPtr root,
                                                      const text::FormatReportSettings& settings,
                                                      DocumentPosition start,
@@ -282,6 +285,29 @@ private:
     // could not be made inside the current leaf and the caller has to cross
     // into the next one.
     bool stepUnit(DocumentPosition& position, text::TextUnit unit, bool forwards) const;
+
+    // ---- lines and the screen layout (phase-10.md N142) ----
+    //
+    // The line `position` is on, in the leaf coordinates of its parent when
+    // it is inside a link. With the screen layout on, a leaf's line goes on
+    // into the next leaf while no block element separates them (a label and
+    // its field); off, a line inside a leaf is cut at every embedded object,
+    // so a link or a field is a line of its own.
+    struct Line {
+        DocumentPosition start;
+        DocumentPosition end;
+    };
+    std::optional<Line> lineAt(const DocumentPosition& position) const;
+    // The leaf's own line at `position`: the toolkit's line, or the whole of
+    // an embedded leaf.
+    std::optional<Line> leafLineAt(const DocumentPosition& position) const;
+    // Whether two neighbouring leaves share a line on screen: nothing between
+    // them is a block box. CSS `display` decides, as Chrome and Firefox both
+    // send it; a text node has none and is inline.
+    bool sameScreenLine(const a11y::ObjectPtr& before, const a11y::ObjectPtr& after) const;
+    // A line move, made of lineAt: what move(Line) is when the lines are not
+    // simply the leaves' own.
+    int moveByLine(DocumentPosition& position, int wanted, bool forwards) const;
 
     a11y::ObjectPtr root_;
     text::FormatReportSettings settings_;

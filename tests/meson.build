@@ -258,6 +258,8 @@ test('browsemode', test_browsemode,
   suite: ['browsemode', 'nav'],
   protocol: 'tap',
   args: ['--reporter', 'tap'],
+  # alus+v saves the configuration (N142): never the developer's own.
+  env: {'ALUS_CONFIG_DIR': meson.current_build_dir() / 'browsemode-test-config'},
   timeout: 180)
 
 # ---------------------------------------------------------------------------

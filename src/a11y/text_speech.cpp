@@ -751,6 +751,15 @@ SpeechSequence getControlFieldSpeech(const text::ControlField& field,
             speakExitForOther = true;
             break;
         case text::PresentationCategory::Layout:
+            // A label or a span inside a line, resolved from its U+FFFC: it is
+            // not a control, but its text is the line's text (N142). Without
+            // this "Message" in <p><label>Message</label><br><textarea> was
+            // read as "blank".
+            if (!values.content.empty() &&
+                (fieldType == ControlFieldType::StartAddedToStack ||
+                 fieldType == ControlFieldType::StartRelative)) {
+                return SpeechSequence{SpeechItem{values.content}};
+            }
             break;
     }
 

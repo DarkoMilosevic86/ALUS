@@ -114,6 +114,12 @@ const char* presentationCategoryName(PresentationCategory category);
 // therefore testable one rule at a time.
 struct FormatReportSettings {
     bool includeLayoutTables = false;
+    // NVDA: virtualBuffers.useScreenLayout, alus+v (N142). On, a document's
+    // line is what the screen shows on one line: a label and its field, a
+    // link inside a sentence. Off, every link and field is a line of its own.
+    // Not a formatting setting, but it is how a document is laid out into
+    // lines, and this is the struct every document range already carries.
+    bool useScreenLayout = true;
     bool reportTables = true;
     bool reportTableHeaders = true;
     bool reportTableCellCoords = true;

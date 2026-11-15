@@ -159,6 +159,10 @@ public:
     // rather than in the command group because they change the SERVICE's own
     // settings and write them back to the configuration.
     void cycleParagraphStyle();
+    // alus+v (N142): flips virtualBuffers.useScreenLayout and SAVES the
+    // configuration at once, so the choice is the same after a restart --
+    // the user asked for it to stay as it was left. The new value.
+    bool toggleScreenLayout();
     void cycleLineIndentationReporting();
 
     // The per-object speech state (NVDA's `obj._speakTextInfoState`), kept

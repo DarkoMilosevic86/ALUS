@@ -21,8 +21,11 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+#include <glib.h>
+
 #include <algorithm>
 #include <chrono>
+#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -1835,4 +1838,219 @@ TEST_CASE("N141 a collapsed select is one line with its chosen option",
     // The next line is the paragraph after it, not the second option.
     CHECK(lines[1].find("After.") != std::string::npos);
     CHECK(lines[1].find("Croatia") == std::string::npos);
+}
+
+namespace {
+
+// N142's page: a paragraph with a label and its field, a <br> before a text
+// area, two buttons side by side, and a sentence with a link -- with CSS
+// display as Chrome sends it.
+struct ScreenLayoutPage {
+    explicit ScreenLayoutPage(NavFixture& fixture) {
+        MockBackend& backend = fixture.backend;
+        const Ref application = backend.addApplication("Browser", "Chromium");
+        const Ref window = backend.add(application, PlatformRole::Frame, "Page");
+        backend.addState(window, PlatformState::Active);
+        document = backend.add(window, PlatformRole::DocumentWeb, "Page");
+        backend.addInterface(document, a11y::Interface::Collection);
+        const auto display = [&backend](Ref ref, const char* value) {
+            backend.node(ref).attributes["display"] = value;
+        };
+        top = addTextLeaf(backend, document, PlatformRole::Heading, "Sign in");
+        display(top, "block");
+        // <p><label>User name</label> <input></p>
+        const Ref userP = backend.add(document, PlatformRole::Paragraph, "");
+        display(userP, "block");
+        const Ref label = backend.add(userP, PlatformRole::Label, "");
+        display(label, "inline");
+        addTextLeaf(backend, label, PlatformRole::Static, "User name");
+        makeContainer(backend, label, 1);
+        userField = backend.add(userP, PlatformRole::Entry, "User name");
+        display(userField, "inline-block");
+        backend.addInterface(userField, a11y::Interface::Text);
+        backend.addState(userField, PlatformState::Focusable);
+        backend.addState(userField, PlatformState::Editable);
+        backend.node(userField).relations[a11y::PlatformRelation::LabelledBy] = {label};
+        makeContainer(backend, userP, 2);
+        // <p><label>Message</label><br><textarea></p>
+        const Ref messageP = backend.add(document, PlatformRole::Paragraph, "");
+        display(messageP, "block");
+        const Ref messageLabel = backend.add(messageP, PlatformRole::Label, "");
+        display(messageLabel, "inline");
+        addTextLeaf(backend, messageLabel, PlatformRole::Static, "Message");
+        makeContainer(backend, messageLabel, 1);
+        addTextLeaf(backend, messageP, PlatformRole::Static, "\n");
+        const Ref area = backend.add(messageP, PlatformRole::Entry, "Message");
+        display(area, "inline-block");
+        backend.addInterface(area, a11y::Interface::Text);
+        backend.addState(area, PlatformState::Focusable);
+        backend.addState(area, PlatformState::Editable);
+        backend.node(area).relations[a11y::PlatformRelation::LabelledBy] = {messageLabel};
+        makeContainer(backend, messageP, 3);
+        // <p><button>Sign in</button> <button>Clear</button></p>
+        const Ref buttons = backend.add(document, PlatformRole::Paragraph, "");
+        display(buttons, "block");
+        signIn = addTextLeaf(backend, buttons, PlatformRole::Button, "Sign in", "Sign in");
+        display(signIn, "inline-block");
+        clear = addTextLeaf(backend, buttons, PlatformRole::Button, "Clear", "Clear");
+        display(clear, "inline-block");
+        makeContainer(backend, buttons, 2);
+        // <p>Read the <a>terms</a> now.</p>: one leaf, the link inline in it.
+        sentence = backend.add(document, PlatformRole::Paragraph, "");
+        display(sentence, "block");
+        backend.node(sentence).interfaces |= a11y::Interface::Text;
+        backend.addState(sentence, PlatformState::Showing);
+        link = addTextLeaf(backend, sentence, PlatformRole::Link, "terms", "terms");
+        display(link, "inline");
+        // A real link, not a named anchor: it can be followed.
+        backend.node(link).actionNames.push_back("jump");
+        backend.addState(link, PlatformState::Focusable);
+        // Fetched again: adding the link may move the node storage.
+        backend.node(sentence).text = "Read the \xEF\xBF\xBC now.";
+        backend.node(sentence).links.push_back(a11y::LinkInfo{9, 10, link, "#"});
+        end = addTextLeaf(backend, document, PlatformRole::Paragraph, "The end.");
+        display(end, "block");
+        makeContainer(backend, document, 6);
+    }
+    Ref document = 0, top = 0, userField = 0, signIn = 0, clear = 0, sentence = 0, link = 0,
+        end = 0;
+};
+
+std::vector<std::string> readLines(NavFixture& fixture, nav::BrowseMode& browse, int count) {
+    std::vector<std::string> lines;
+    for (int i = 0; i < count; ++i) {
+        fixture.clearSpeech();
+        input::KeyboardGesture::Init init;
+        input::KeyboardGesture gesture{init};
+        browse.scriptByName("moveByLine_forward")->function(gesture);
+        fixture.drainSpeech();
+        lines.push_back(fixture.spokenJoined());
+    }
+    return lines;
+}
+
+}  // namespace
+
+TEST_CASE("N142 the screen layout decides what a line is", "[browsemode][layout]") {
+    const std::filesystem::path dir =
+        std::filesystem::temp_directory_path() / "alus-test-screen-layout";
+    g_setenv("ALUS_CONFIG_DIR", dir.c_str(), TRUE);
+    NavFixture fixture;
+    const ScreenLayoutPage page{fixture};
+    const a11y::ObjectPtr root = fixture.registry.objectFor(page.document);
+
+    SECTION("on: a label and its field, and two buttons, are one line each; a <br> breaks") {
+        fixture.config().setString("virtualBuffers", "useScreenLayout", "true");
+        fixture.nav().applyConfiguration();
+        nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(root, fixture.nav());
+        auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+        REQUIRE(browse != nullptr);
+        REQUIRE(browse->moveTo(fixture.registry.objectFor(page.top), a11y::OutputReason::QuickNav));
+        const std::vector<std::string> lines = readLines(fixture, *browse, 6);
+        INFO(lines[0] << " / " << lines[1] << " / " << lines[2] << " / " << lines[3] << " / "
+                      << lines[4] << " / " << lines[5]);
+        // "User name edit": the label and the field together, the name once.
+        CHECK(lines[0].find("User name") != std::string::npos);
+        CHECK(lines[0].find("edit") != std::string::npos);
+        CHECK(lines[0].find("User name") == lines[0].rfind("User name"));
+        CHECK(lines[1].find("Message") != std::string::npos);
+        CHECK(lines[1].find("edit") == std::string::npos);
+        CHECK(lines[2].find("edit") != std::string::npos);
+        CHECK(lines[3].find("Sign in") != std::string::npos);
+        CHECK(lines[3].find("Clear") != std::string::npos);
+        CHECK(lines[4].find("Read the") != std::string::npos);
+        CHECK(lines[4].find("terms") != std::string::npos);
+        CHECK(lines[5].find("The end.") != std::string::npos);
+    }
+    SECTION("off: every field and link is a line of its own") {
+        fixture.config().setString("virtualBuffers", "useScreenLayout", "false");
+        fixture.nav().applyConfiguration();
+        nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(root, fixture.nav());
+        auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+        REQUIRE(browse != nullptr);
+        REQUIRE(browse->moveTo(fixture.registry.objectFor(page.top), a11y::OutputReason::QuickNav));
+        const std::vector<std::string> lines = readLines(fixture, *browse, 9);
+        std::string all;
+        for (const std::string& line : lines) {
+            all += line + " / ";
+        }
+        INFO(all);
+        CHECK(lines[0].find("User name") != std::string::npos);
+        CHECK(lines[0].find("edit") == std::string::npos);
+        CHECK(lines[1].find("edit") != std::string::npos);
+        // ... Message, its edit, Sign in, Clear, then the sentence in three.
+        CHECK(lines[4].find("Sign in") != std::string::npos);
+        CHECK(lines[4].find("Clear") == std::string::npos);
+        CHECK(lines[5].find("Clear") != std::string::npos);
+        CHECK(lines[6].find("Read the") != std::string::npos);
+        CHECK(lines[6].find("terms") == std::string::npos);
+        CHECK(lines[7].find("terms") != std::string::npos);
+        CHECK(lines[8].find("now.") != std::string::npos);
+    }
+    std::filesystem::remove_all(dir);
+}
+
+TEST_CASE("N142 a quick-nav jump reads the element, not its line", "[browsemode][layout]") {
+    const std::filesystem::path dir =
+        std::filesystem::temp_directory_path() / "alus-test-screen-layout-jump";
+    g_setenv("ALUS_CONFIG_DIR", dir.c_str(), TRUE);
+    NavFixture fixture;
+    const ScreenLayoutPage page{fixture};
+    const a11y::ObjectPtr root = fixture.registry.objectFor(page.document);
+    nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(root, fixture.nav());
+    auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+    REQUIRE(browse != nullptr);
+
+    // b to Clear: "Clear button", not "Sign in button Clear button".
+    REQUIRE(browse->moveTo(fixture.registry.objectFor(page.signIn), a11y::OutputReason::QuickNav));
+    fixture.clearSpeech();
+    REQUIRE(browse->moveToElement(nav::ElementType::Button, true));
+    fixture.drainSpeech();
+    std::string heard = fixture.spokenJoined();
+    INFO(heard);
+    CHECK(heard.find("Clear") != std::string::npos);
+    CHECK(heard.find("Sign in") == std::string::npos);
+    CHECK(heard.find("Clear") == heard.rfind("Clear"));
+
+    // k to the link: the link, not the sentence around it.
+    fixture.clearSpeech();
+    REQUIRE(browse->moveToElement(nav::ElementType::Link, true));
+    fixture.drainSpeech();
+    heard = fixture.spokenJoined();
+    INFO(heard);
+    CHECK(heard.find("terms") != std::string::npos);
+    CHECK(heard.find("Read the") == std::string::npos);
+    std::filesystem::remove_all(dir);
+}
+
+TEST_CASE("N142 alus+v switches the screen layout and keeps the choice", "[browsemode][layout]") {
+    const std::filesystem::path dir =
+        std::filesystem::temp_directory_path() / "alus-test-screen-layout-toggle";
+    std::filesystem::remove_all(dir);
+    std::filesystem::create_directories(dir);
+    g_setenv("ALUS_CONFIG_DIR", dir.c_str(), TRUE);
+    {
+        NavFixture fixture;
+        const ScreenLayoutPage page{fixture};
+        nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(
+            fixture.registry.objectFor(page.document), fixture.nav());
+        auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+        REQUIRE(browse != nullptr);
+        CHECK(fixture.nav().formatSettings().useScreenLayout);  // NVDA's default
+        const script::Script* toggle = browse->scriptByName("toggleScreenLayout");
+        REQUIRE(toggle != nullptr);
+        fixture.clearSpeech();
+        input::KeyboardGesture::Init init;
+        input::KeyboardGesture gesture{init};
+        toggle->function(gesture);
+        fixture.drainSpeech();
+        CHECK(fixture.spokenJoined().find("Use screen layout off") != std::string::npos);
+        CHECK_FALSE(fixture.nav().formatSettings().useScreenLayout);
+    }
+    // A new start reads it back: saved at once, not on a clean exit.
+    config::Manager reread{config::Paths::fromEnvironment()};
+    a11y::Service::registerDefaults(reread);
+    REQUIRE(reread.load(nullptr));
+    CHECK_FALSE(reread.getBool("virtualBuffers", "useScreenLayout", true));
+    std::filesystem::remove_all(dir);
 }

@@ -1407,3 +1407,11 @@ msgstr "lista elemenata nije dostupna"
 # Translators: a document formatting setting (N140).
 msgid "Paragraph indentation"
 msgstr "Uvlačenje pasusa"
+
+# Translators: a browse mode setting (N142); upstream's wording is
+# "Use &screen layout (when supported)".
+msgid "Use screen layout"
+msgstr "Koristi raspored ekrana"
+
+msgid "On, a web page's line is what the screen shows on one line, a label beside its field. Off, every link and field is a line of its own. `alus+v` switches it, and the choice is kept."
+msgstr "Uključeno, red na veb stranici je ono što ekran prikazuje u jednom redu, natpis pored svog polja. Isključeno, svaki link i svako polje su poseban red. `alus+v` ga menja, i izbor se pamti."

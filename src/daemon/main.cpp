@@ -629,7 +629,8 @@ int main(int argc, char* argv[]) {
             a11y.applyConfiguration();
         }
         if (section == "reviewCursor" || section == "documentNavigation" ||
-            section == "editableText" || section == "documentFormatting") {
+            section == "editableText" || section == "documentFormatting" ||
+            section == "virtualBuffers") {
             nav.applyConfiguration();
         }
         if (section == "braille" || section == "documentFormatting" ||
