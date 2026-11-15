@@ -396,3 +396,36 @@ TEST_CASE("a behaviour that handles an event stops the chain", "[a11y][behavior]
         CHECK(spoken.ref != button);
     }
 }
+
+TEST_CASE("N139 a nameless GTK list item is named from the labels inside it",
+          "[a11y][behavior]") {
+    A11yFixture fixture;
+    MockBackend& backend = fixture.backend;
+    const Ref application = backend.addApplication("Some App", "GTK");
+    const Ref window = backend.add(application, PlatformRole::Frame, "Some App");
+    const Ref list = backend.add(window, PlatformRole::List, "");
+
+    SECTION("the labels, once each, in order; icons and hidden labels left out") {
+        const Ref row = backend.add(list, PlatformRole::ListItem, "");
+        const Ref box = backend.add(row, PlatformRole::Panel, "");
+        backend.add(box, PlatformRole::Icon, "network-wireless");
+        backend.add(box, PlatformRole::Label, "Wi-Fi");
+        backend.add(box, PlatformRole::Label, "Wi-Fi");
+        const Ref hidden = backend.add(box, PlatformRole::Label, "Secret");
+        backend.removeState(hidden, PlatformState::Visible);
+        backend.add(row, PlatformRole::Label, "Connected");
+        CHECK(fixture.registry.objectFor(row)->name() == "Wi-Fi Connected");
+    }
+    SECTION("a name of its own wins") {
+        const Ref row = backend.add(list, PlatformRole::ListItem, "Bluetooth");
+        backend.add(row, PlatformRole::Label, "Off");
+        CHECK(fixture.registry.objectFor(row)->name() == "Bluetooth");
+    }
+    SECTION("a web page's list item is not named: its text is read as text") {
+        const Ref browser = backend.addApplication("Chrome", "Chromium");
+        const Ref document = backend.add(browser, PlatformRole::DocumentWeb, "Page");
+        const Ref item = backend.add(document, PlatformRole::ListItem, "");
+        backend.add(item, PlatformRole::Label, "Not a name");
+        CHECK(fixture.registry.objectFor(item)->name().empty());
+    }
+}

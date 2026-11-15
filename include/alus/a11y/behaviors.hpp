@@ -55,6 +55,22 @@ public:
     static std::string dialogText(const Object& object, bool allowFocusedDescendants = true);
 };
 
+// ALUS's own (N139): a GTK list item, tree item or table row with no name
+// takes one from the labels inside it. GTK names neither a `GtkListBoxRow`
+// nor a `GtkListItem` from its child, so a row an application filled with
+// labels of its own is read as just "list item" (the elements list's rows
+// were, N133). GNOME's own applications name their rows; this is for the
+// rest. GTK only: a web page's list item has no name either, but its text is
+// read as text, and naming it would say everything twice.
+class NamelessItemBehavior final : public Behavior {
+public:
+    std::string_view className() const override { return "alus.behaviors.NamelessItem"; }
+    std::optional<std::string> name(const Object& object) const override;
+
+    // The labels inside `object`, a few levels down, joined by spaces.
+    static std::string labelText(const Object& object);
+};
+
 // NVDA: behaviors.FocusableUnfocusableContainer. A container the author forgot
 // to make focusable, focused through its first focusable descendant.
 class FocusableUnfocusableContainerBehavior final : public Behavior {

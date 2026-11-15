@@ -14,6 +14,7 @@
 #include <cmath>
 #include <map>
 #include <string>
+#include <vector>
 
 namespace alus::a11y {
 namespace {
@@ -329,6 +330,85 @@ bool NotificationBehavior::handleEvent(Object& object, const core::Event& event)
 }
 
 // ---------------------------------------------------------------------------
+// NamelessItem
+// ---------------------------------------------------------------------------
+
+namespace {
+
+constexpr int kLabelDepth = 4;
+constexpr std::size_t kMaxLabels = 8;
+constexpr int kMaxChildrenPerLevel = 16;
+
+void collectLabels(const Object& object, int depth, std::vector<std::string>& out) {
+    if (depth > kLabelDepth || out.size() >= kMaxLabels) {
+        return;
+    }
+    const std::vector<ObjectPtr>& children = object.children();
+    int seen = 0;
+    for (const ObjectPtr& child : children) {
+        if (child == nullptr || ++seen > kMaxChildrenPerLevel || out.size() >= kMaxLabels) {
+            break;
+        }
+        if (child->states().has(State::Invisible)) {
+            continue;
+        }
+        const Role role = child->role();
+        if (role == Role::Label || role == Role::StaticText) {
+            const std::string& text = child->name();
+            // Nautilus puts an icon and a label of the same name side by
+            // side; a label repeated is said once.
+            if (!text.empty() && std::find(out.begin(), out.end(), text) == out.end()) {
+                out.push_back(text);
+            }
+            continue;
+        }
+        collectLabels(*child, depth + 1, out);
+    }
+}
+
+bool isGtk(const Object& object) {
+    const std::string& toolkit = object.appInfo().toolkitName;
+    return toolkit.size() >= 3 && (toolkit[0] == 'G' || toolkit[0] == 'g') &&
+           (toolkit[1] == 'T' || toolkit[1] == 't') && (toolkit[2] == 'K' || toolkit[2] == 'k');
+}
+
+}  // namespace
+
+std::string NamelessItemBehavior::labelText(const Object& object) {
+    std::vector<std::string> labels;
+    collectLabels(object, 1, labels);
+    std::string out;
+    for (const std::string& label : labels) {
+        if (!out.empty()) {
+            out += ' ';
+        }
+        out += label;
+    }
+    return out;
+}
+
+std::optional<std::string> NamelessItemBehavior::name(const Object& object) const {
+    // Only when the item has nothing of its own: no name, and no label
+    // pointing at it (the platform answer handles LABELLED_BY).
+    if (!object.platformName().empty() || !isGtk(object)) {
+        return std::nullopt;
+    }
+    Backend& backend = object.registry().backend();
+    const std::vector<Ref> labels = backend.relation(object.ref(), PlatformRelation::LabelledBy);
+    for (const Ref label : labels) {
+        backend.release(label);
+    }
+    if (!labels.empty()) {
+        return std::nullopt;
+    }
+    std::string text = labelText(object);
+    if (text.empty()) {
+        return std::nullopt;
+    }
+    return text;
+}
+
+// ---------------------------------------------------------------------------
 // The Api-stage chooser
 // ---------------------------------------------------------------------------
 
@@ -358,6 +438,11 @@ void chooseDefaultBehaviors(Object& object, BehaviorList& list) {
         case Role::ToolTip:
         case Role::HelpBalloon:
             list.push_back(behaviorEntry<ToolTipBehavior>("NVDAObjects.behaviors.ToolTip"));
+            break;
+        case Role::ListItem:
+        case Role::TreeViewItem:
+        case Role::TableRow:
+            list.push_back(behaviorEntry<NamelessItemBehavior>("alus.behaviors.NamelessItem"));
             break;
         default:
             break;

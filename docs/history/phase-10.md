@@ -1078,3 +1078,27 @@ positives, rewritten so the compiler can follow them (an int with 0 for none,
 a flag and an int, a vector built rather than copied). The debug build, which
 is what `build/` and `alus-switch.sh` use, never showed them. Checked:
 debugoptimized and release both build with -Werror and pass every test.
+
+**N139 — a nameless GTK row takes its name from its labels.** The plan said
+GTK 4 applications probably have list items with no name (seen in the
+elements list's own rows, N133). Measured first, on the live desktop: every
+focusable object without a name in Files, Settings, Text Editor, System
+Monitor and Calculator was listed. Not one list item, tree item or row was
+nameless -- only containers (scroll panes, lists) and the main text areas,
+which is right. GNOME's own applications name their rows; the problem is an
+application that fills a plain `GtkListBoxRow` with labels, as ALUS's dialog
+did.
+
+For those, `NamelessItemBehavior` (ALUS's own, `alus.behaviors.NamelessItem`,
+attached to list items, tree items and table rows): when the item has no
+name and no LABELLED_BY, and the application's toolkit is GTK, the name is
+the visible labels inside it, four levels down at most, eight labels at
+most, a repeated label once. Not for the web: a page's list item has no
+name either, but its text is read as text, and naming it would say it
+twice. Checked live with a GTK 4 list box of unnamed rows: `alus-cli
+a11y-tree` reads them as "Wi-Fi Connected" and "Bluetooth Off".
+
+Test: `tests/a11y/test_behaviors.cpp` ("N139 a nameless GTK list item is
+named from the labels inside it"): labels in order, once each, icons and
+hidden labels left out; its own name wins; a Chromium list item stays
+nameless. Without the behaviour the first section fails.
