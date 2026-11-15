@@ -13,6 +13,8 @@
 #include "alus/i18n/i18n.hpp"
 #include "alus/script/dispatch.hpp"
 
+#include <algorithm>
+#include <cctype>
 #include <utility>
 
 namespace alus::a11y {
@@ -34,6 +36,8 @@ ObjectCommands::ObjectCommands(Registry& registry, const script::Catalog* catalo
     // here: the catalogue row for (globalCommands.GlobalCommands, <name>) is
     // NVDA's own.
     ALUS_SCRIPT(reportCurrentFocus);
+    ALUS_SCRIPT(leftMouseClick);
+    ALUS_SCRIPT(rightMouseClick);
     ALUS_SCRIPT(navigatorObject_current);
     ALUS_SCRIPT(navigatorObject_parent);
     ALUS_SCRIPT(navigatorObject_firstChild);
@@ -91,6 +95,70 @@ void ObjectCommands::sayOrSpell(const std::string& text) const {
 
 int ObjectCommands::repeatCount() const {
     return dispatcher_ != nullptr ? dispatcher_->lastScriptRepeatCount() : 0;
+}
+
+int ObjectCommands::actionNamed(const Object& object,
+                                std::initializer_list<std::string_view> names) {
+    const int count = object.actionCount();
+    for (const std::string_view wanted : names) {
+        for (int index = 0; index < count; ++index) {
+            std::string name = object.actionName(index);
+            std::transform(name.begin(), name.end(), name.begin(),
+                           [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+            if (name == wanted) {
+                return index;
+            }
+        }
+    }
+    return -1;
+}
+
+void ObjectCommands::leftMouseClick(input::Gesture& /*gesture*/) {
+    const ObjectPtr navigator = navigatorOrComplain();
+    if (navigator == nullptr) {
+        return;
+    }
+    // The click a toolkit names, then its default action: GTK says "click",
+    // Chrome and Firefox "click", "press" or "jump", Qt "Press".
+    int action = actionNamed(*navigator, {"click", "press", "activate", "jump", "toggle",
+                                          "open", "select"});
+    if (action < 0 && navigator->actionCount() > 0) {
+        action = 0;
+    }
+    if (action < 0) {
+        // No action at all: focusing it is the nearest a click comes to.
+        if (!navigator->setFocus()) {
+            // Translators: spoken when alus+numpad slash finds nothing the
+            // navigator object can do when clicked.
+            say(_("cannot click this object"));
+            return;
+        }
+    } else if (!navigator->doAction(action)) {
+        say(_("cannot click this object"));
+        return;
+    }
+    // Translators: Reported when left mouse button is clicked.
+    say(_("Left click"));
+}
+
+void ObjectCommands::rightMouseClick(input::Gesture& /*gesture*/) {
+    const ObjectPtr navigator = navigatorOrComplain();
+    if (navigator == nullptr) {
+        return;
+    }
+    // A right click opens the context menu; the toolkits that can open one
+    // through accessibility call the action so.
+    const int action = actionNamed(*navigator, {"showmenu", "show menu", "menu",
+                                                "context menu", "contextmenu", "popup"});
+    if (action < 0 || !navigator->doAction(action)) {
+        // Translators: spoken when alus+numpad star cannot open a context
+        // menu for the navigator object; shift+F10 or the menu key opens it
+        // from the keyboard in most applications.
+        say(_("no context menu for this object; try shift+F10 or the menu key"));
+        return;
+    }
+    // Translators: Reported when right mouse button is clicked.
+    say(_("Right click"));
 }
 
 ObjectPtr ObjectCommands::navigatorOrComplain() const {

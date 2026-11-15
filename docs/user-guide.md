@@ -100,13 +100,29 @@ with both layouts.
 | ALUS+Numpad 5 | report the navigator object |
 | ALUS+Numpad 8 / 2 / 4 / 6 | navigator: parent / first child / previous / next object |
 | Numpad Plus | say all from the review cursor |
+| ALUS+C | read the text on the clipboard (twice: spell it) |
+| ALUS+Control+X | copy what ALUS said last to the clipboard |
+| Numpad Slash / Numpad Star | left / right click on the navigator object |
+| ALUS+F5 | refresh the document in browse mode |
 
 Pressing a reporting command twice usually spells what it said; three times
 spells it with character descriptions ("a, Avala").
 
-Commands that ALUS does not have yet are still bound to their keys and
-**say** that they are not in this version, so a key never silently does
-nothing. The reference marks them.
+Commands that ALUS does not have are still bound to their keys and **say
+why**, so a key never silently does nothing: the mouse pointer cannot be
+moved or held on Wayland, ALUS has no Python console, and so on. The
+reference marks them.
+
+The **click keys** act on the navigator object, not on a mouse pointer:
+Wayland lets ALUS neither move the pointer nor click. Left click does what
+clicking the object would (press a button, follow a link, toggle a check
+box); right click opens its context menu when the application offers one
+through accessibility, and otherwise says to use Shift+F10 or the menu key.
+
+The **clipboard** commands work through the small helper `alus-clipboard`,
+which reaches the clipboard through Xwayland (ALUS has no window, and
+Wayland gives the clipboard only to the focused window). Without Xwayland
+they say that the clipboard cannot be reached.
 
 ## Settings
 

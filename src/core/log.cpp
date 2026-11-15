@@ -138,6 +138,11 @@ bool Log::isEnabledFor(LogLevel level) const {
     return static_cast<int>(level) >= static_cast<int>(level_) && level_ != LogLevel::Off;
 }
 
+std::string Log::filePath() const {
+    const std::lock_guard lock{mutex_};
+    return filePath_;
+}
+
 bool Log::openFile(const std::string& path, std::string* error) {
     const std::lock_guard lock{mutex_};
     if (file_ != nullptr) {

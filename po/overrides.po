@@ -1415,3 +1415,41 @@ msgstr "Koristi raspored ekrana"
 
 msgid "On, a web page's line is what the screen shows on one line, a label beside its field. Off, every link and field is a line of its own. `alus+v` switches it, and the choice is kept."
 msgstr "Uključeno, red na veb stranici je ono što ekran prikazuje u jednom redu, natpis pored svog polja. Isključeno, svaki link i svako polje su poseban red. `alus+v` ga menja, i izbor se pamti."
+
+# N145: the mouse keys on the navigator object, the clipboard, and the reasons
+# the remaining commands give.
+msgid "cannot click this object"
+msgstr "ovaj objekat ne može da se klikne"
+
+msgid "no context menu for this object; try shift+F10 or the menu key"
+msgstr "ovaj objekat nema kontekstni meni; probajte shift+F10 ili taster za meni"
+
+msgid "ALUS has no Python console"
+msgstr "ALUS nema Python konzolu"
+
+msgid "ALUS does not lower other applications' audio"
+msgstr "ALUS ne utišava zvuk drugih programa"
+
+msgid "sound split is not available"
+msgstr "deljenje zvuka nije dostupno"
+
+msgid "ALUS cannot move the mouse pointer; the click keys act on the navigator object"
+msgstr "ALUS ne može da pomeri pokazivač miša; tasteri za klik deluju na objekat za navigaciju"
+
+msgid "ALUS cannot know where the mouse pointer is"
+msgstr "ALUS ne može da zna gde je pokazivač miša"
+
+msgid "ALUS cannot hold a mouse button down"
+msgstr "ALUS ne može da drži pritisnut taster miša"
+
+msgid "add-ons are loaded when ALUS starts; restart ALUS to reload them"
+msgstr "dodaci se učitavaju pri pokretanju ALUS-a; ponovo pokrenite ALUS da biste ih učitali"
+
+msgid "ALUS has no display model"
+msgstr "ALUS nema model ekrana"
+
+msgid "native selection mode is not available"
+msgstr "režim izvornog izbora nije dostupan"
+
+msgid "Copied to clipboard: %s"
+msgstr "Kopirano u privremenu memoriju: %s"

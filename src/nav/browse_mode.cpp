@@ -12,6 +12,7 @@
 
 #include "alus/a11y/registry.hpp"
 #include "alus/a11y/text_range.hpp"
+#include "alus/core/cached.hpp"
 #include "alus/core/log.hpp"
 #include "alus/i18n/i18n.hpp"
 #include "alus/input/gesture.hpp"
@@ -1099,6 +1100,23 @@ void BrowseMode::bindDocumentScripts() {
             setPassThrough(false);
         },
         escapeSpec);
+    // NVDA: script_refreshBuffer, which unloads and reloads the buffer and
+    // then says "Refreshed". ALUS reads the live tree and has no buffer; what
+    // can be stale is its caches of names, states and text, so those are
+    // dropped and the line at the caret is read again from the application
+    // (N145). Before, the key said "not in this version".
+    bindScript("refreshBuffer", [this](input::Gesture&) {
+        core::invalidateAllCaches();
+        // Translators: Reported when a page reloads (example: after
+        // refreshing a webpage).
+        service_.message(_("Refreshed"));
+        if (text::TextRangePtr caret = cursor_.caretRange()) {
+            text::TextRangePtr line = caret->copy();
+            if (line->expand(text::TextUnit::Line)) {
+                service_.speakRange(*line, text::TextUnit::Line, OutputReason::Caret, root_);
+            }
+        }
+    });
     bindScript("activatePosition", [this](input::Gesture&) { activatePosition(); });
     bindScript("elementsList", [this](input::Gesture&) { showElementsList(); });
     bindScript("moveToStartOfContainer", [this](input::Gesture&) {

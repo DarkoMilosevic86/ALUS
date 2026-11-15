@@ -5,6 +5,7 @@
 #include "alus/speech/global_commands.hpp"
 
 #include "alus/config/config.hpp"
+#include "alus/core/clipboard.hpp"
 #include "alus/core/log.hpp"
 #include "alus/i18n/gettext.hpp"
 #include "alus/i18n/i18n.hpp"
@@ -16,6 +17,9 @@
 #include "alus/ui/message.hpp"
 
 #include <array>
+#include <filesystem>
+#include <fstream>
+#include <iterator>
 #include <utility>
 
 namespace alus::speech {
@@ -118,6 +122,173 @@ GlobalCommands::GlobalCommands(Context context, const script::Catalog* catalog)
     ALUS_SCRIPT(decreaseSynthSetting);
     ALUS_SCRIPT(increaseLargeSynthSetting);
     ALUS_SCRIPT(decreaseLargeSynthSetting);
+    ALUS_SCRIPT(copyLastSpokenInformation);
+    ALUS_SCRIPT(reportClipboardText);
+    ALUS_SCRIPT(log_markStartThenCopy);
+}
+
+// ---------------------------------------------------------------------------
+// The clipboard (N145)
+// ---------------------------------------------------------------------------
+
+namespace {
+
+// NVDA: the length past which a text is counted rather than read (#11843).
+constexpr std::size_t kLongText = 1024;
+
+std::size_t characterCount(const std::string& text) {
+    // Code points, as NVDA's len() counts them: every byte that does not
+    // continue a UTF-8 sequence starts a character.
+    std::size_t count = 0;
+    for (const char c : text) {
+        if ((static_cast<unsigned char>(c) & 0xC0U) != 0x80U) {
+            ++count;
+        }
+    }
+    return count;
+}
+
+}  // namespace
+
+void GlobalCommands::reportCopied(const std::string& text, bool ok) const {
+    if (!ok || text.empty()) {
+        // Translators: Presented when unable to copy to the clipboard because
+        // of an error or the clipboard content did not match what was just
+        // copied.
+        say(_("Unable to copy"));
+        return;
+    }
+    const std::size_t length = characterCount(text);
+    const std::string spoken =
+        length < kLongText
+            ? text
+            // Translators: Spoken instead of a lengthy text when copied to
+            // clipboard; %s is the number of characters.
+            : i18n::substitute(i18n::translatePlural("%s character", "%s characters", length),
+                               std::to_string(length));
+    // Translators: Announced when a text has been copied to clipboard. %s is
+    // the copied text.
+    say(i18n::substitute(_("Copied to clipboard: %s"), spoken));
+}
+
+void GlobalCommands::copyLastSpokenInformation(input::Gesture& /*gesture*/) {
+    Presenter* presenter = context_.presenter ? context_.presenter() : nullptr;
+    const std::optional<Presenter::LastSpeech>* last =
+        presenter != nullptr ? &presenter->lastSpeech() : nullptr;
+    std::string text;
+    if (last != nullptr && last->has_value()) {
+        for (const SpeechItem& item : (*last)->sequence) {
+            if (item.isText() && !item.text().empty()) {
+                // NVDA's CHUNK_SEPARATOR.
+                text += text.empty() ? "" : "  ";
+                text += item.text();
+            }
+        }
+    }
+    if (text.empty()) {
+        // Translators: Reported when there is no last spoken information to
+        // copy.
+        say(_("Nothing to copy"));
+        return;
+    }
+    const std::weak_ptr<int> alive = lifetime_;
+    const bool started = core::writeClipboard(text, [this, alive, text](bool ok) {
+        if (!alive.expired()) {
+            reportCopied(text, ok);
+        }
+    });
+    if (!started) {
+        reportCopied(text, false);
+    }
+}
+
+void GlobalCommands::reportClipboardText(input::Gesture& /*gesture*/) {
+    // The repeat count of THIS press, taken now: the answer comes later.
+    const int repeats = repeatsOf(context_.dispatcher);
+    const std::weak_ptr<int> alive = lifetime_;
+    const auto answer = [this, alive, repeats](std::optional<std::string> text) {
+        if (alive.expired()) {
+            return;
+        }
+        const bool blank = !text.has_value() ||
+                           text->find_first_not_of(" \t\r\n") == std::string::npos;
+        if (blank) {
+            // Translators: Presented when there is no text on the clipboard.
+            say(_("There is no text on the clipboard"));
+            return;
+        }
+        const std::size_t length = characterCount(*text);
+        if (length >= kLongText) {
+            // Translators: If the number of characters on the clipboard is
+            // greater than about 1000, it reports this message and gives the
+            // number of characters on the clipboard.
+            say(i18n::substitute(
+                i18n::translatePlural(
+                    "The clipboard contains a large amount of text. It is %s character long",
+                    "The clipboard contains a large amount of text. It is %s characters long",
+                    length),
+                std::to_string(length)));
+            return;
+        }
+        Presenter* presenter = context_.presenter ? context_.presenter() : nullptr;
+        if (repeats == 0 || presenter == nullptr) {
+            say(*text);
+            return;
+        }
+        presenter->speakSpelling(*text, {}, /*useCharacterDescriptions=*/repeats > 1);
+    };
+    if (!core::readClipboard(answer)) {
+        answer(std::nullopt);
+    }
+}
+
+void GlobalCommands::log_markStartThenCopy(input::Gesture& /*gesture*/) {
+    const std::string path = core::Log::instance().filePath();
+    std::error_code code;
+    if (!logMark_.has_value()) {
+        const std::uintmax_t size = path.empty() ? 0 : std::filesystem::file_size(path, code);
+        if (path.empty() || code) {
+            // Translators: Message when failed to mark the start of a fragment
+            // of the log file for later copy to clipboard.
+            say(_("Unable to mark log position"));
+            return;
+        }
+        logMark_ = size;
+        // Translators: Message when marking the start of a fragment of the log
+        // file for later copy to clipboard.
+        say(_("Log fragment start position marked, press again to copy to clipboard"));
+        return;
+    }
+    const std::uintmax_t from = *logMark_;
+    logMark_.reset();
+    std::ifstream in(path, std::ios::binary);
+    std::string fragment;
+    if (in) {
+        in.seekg(static_cast<std::streamoff>(from));
+        fragment.assign(std::istreambuf_iterator<char>(in), std::istreambuf_iterator<char>());
+    }
+    if (fragment.empty()) {
+        // Translators: Message when attempting to copy an empty fragment of
+        // the log file.
+        say(_("No new log entry to copy"));
+        return;
+    }
+    const std::weak_ptr<int> alive = lifetime_;
+    const bool started = core::writeClipboard(fragment, [this, alive](bool ok) {
+        if (alive.expired()) {
+            return;
+        }
+        say(ok
+                // Translators: Message when a fragment of the log file has
+                // been copied to clipboard.
+                ? _("Log fragment copied to clipboard")
+                // Translators: Presented when unable to copy to the clipboard
+                // because of an error.
+                : _("Unable to copy"));
+    });
+    if (!started) {
+        say(_("Unable to copy"));
+    }
 }
 
 void GlobalCommands::say(const std::string& text) const {

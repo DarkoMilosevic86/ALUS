@@ -25,6 +25,8 @@
 #include "alus/script/script.hpp"
 #include "support.hpp"
 
+#include "alus/core/cached.hpp"
+
 #include <catch2/catch_test_macros.hpp>
 
 #include <filesystem>
@@ -387,5 +389,37 @@ TEST_CASE("every object command complains when there is no navigator object",
         fixture.run(name);
         REQUIRE(fixture.messages.size() == 1);
         CHECK(fixture.messages.front() == "No navigator object");
+    }
+}
+
+TEST_CASE("N145 the mouse keys click the navigator object", "[a11y][commands]") {
+    // Wayland lets ALUS neither move the pointer nor send a click, so the
+    // click keys used to say "not in this version". They now do what the
+    // click would have done, through the object's own actions.
+    CommandFixture fixture;
+    const NavigationTree tree{fixture.backend};
+    fixture.backend.node(tree.back).actionNames = {"press", "showmenu"};
+    fixture.registry.api().setNavigatorObject(fixture.registry.objectFor(tree.back), false);
+    fixture.clearRecords();
+
+    fixture.run("leftMouseClick");
+    REQUIRE(fixture.backend.performed.size() == 1);
+    CHECK(fixture.backend.performed.back().index == 0);  // "press"
+    REQUIRE_FALSE(fixture.messages.empty());
+    CHECK(fixture.messages.back() == "Left click");
+
+    fixture.clearRecords();
+    fixture.run("rightMouseClick");
+    REQUIRE(fixture.backend.performed.size() == 2);
+    CHECK(fixture.backend.performed.back().index == 1);  // "showmenu"
+    CHECK(fixture.messages.back() == "Right click");
+
+    SECTION("an object with no context menu says how to get one") {
+        fixture.backend.node(tree.back).actionNames = {"press"};
+        alus::core::invalidateAllCaches();
+        fixture.clearRecords();
+        fixture.run("rightMouseClick");
+        REQUIRE_FALSE(fixture.messages.empty());
+        CHECK(fixture.messages.back().find("shift+F10") != std::string::npos);
     }
 }

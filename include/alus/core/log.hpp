@@ -80,6 +80,8 @@ public:
     // fills `error` if the file cannot be opened; the caller then keeps stderr
     // as its only sink.
     bool openFile(const std::string& path, std::string* error = nullptr);
+    // The file being logged to; empty when the log goes to stderr only.
+    std::string filePath() const;
     void closeFile();
 
     void setStderrEnabled(bool enabled);

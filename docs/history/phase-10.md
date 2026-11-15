@@ -1264,3 +1264,40 @@ message.** Log `alus-measure-20261115-134011.log`.
 Tests: `tests/nav/test_browse_mode.cpp` ("N144 say all in browse mode reads
 the document from browse mode's caret", "N144 Escape is the application's
 in browse mode and ALUS's in focus mode").
+
+**N145 — the commands that said "not in this version".** Seventeen were
+left. Each was looked at again against what the platform allows:
+
+- *The clipboard* (`reportClipboardText` ALUS+C, `copyLastSpokenInformation`
+  ALUS+Control+X, `log_markStartThenCopy`). Phase 9's O10 said Wayland gives
+  the clipboard only to the focused client, and ALUS has no window: measured,
+  a GTK client on Wayland reads "empty clipboard". But GNOME bridges the
+  clipboard to Xwayland, and an X11 client may own and read the CLIPBOARD
+  selection with no focused window (measured: set by one X11 process, read
+  by another, 20 characters back). `alus-clipboard` (src/gui/clipboard_main.cpp)
+  forces GDK's X11 backend; `--get` prints the text, `--set` reads it from
+  stdin and stays alive owning the selection until somebody else copies
+  (an X11 selection dies with its owner). The daemon spawns it without
+  waiting (`core/clipboard.cpp`), as it does `alus-elements`. The messages
+  are NVDA's ("Copied to clipboard: …", "There is no text on the clipboard",
+  the count above 1024 characters). Whether a Wayland application pastes
+  what ALUS copied is the one step only a live test can show.
+- *The mouse* (`leftMouseClick`, `rightMouseClick`). ALUS can neither move
+  the pointer nor inject a click (N18), but the click an NVDA user makes
+  after routing the mouse to the navigator object is the object's own
+  action: left click runs its click/press/activate/jump action (or focuses
+  it), right click its show-menu action, and says to use Shift+F10 or the
+  menu key when there is none.
+- *`refreshBuffer`* (ALUS+F5). No buffer, but ALUS caches names, states and
+  text per object; the key now drops the caches and reads the line again,
+  saying NVDA's "Refreshed".
+- *The rest* cannot be done here and now say why instead of "not in this
+  version" (`script::bindAnnouncements`, a table of translated reasons):
+  moving or holding the pointer, knowing where it is, a Python console,
+  ducking, sound split, reloading add-ons (restart ALUS), the display model,
+  native selection mode.
+
+Tests: `tests/a11y/test_commands.cpp` ("N145 the mouse keys click the
+navigator object"), `tests/coverage/test_command_coverage.cpp` ("N145 a
+command ALUS does not have says why"). The helper itself was run live:
+`--set` then `--get` returned the text.

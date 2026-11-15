@@ -48,6 +48,8 @@
 #include "alus/script/scriptable.hpp"
 
 #include <cstddef>
+#include <initializer_list>
+#include <string_view>
 #include <memory>
 #include <string>
 
@@ -78,6 +80,13 @@ private:
     // ---- the scripts (the method names are NVDA's script names) ----
     void reportCurrentFocus(input::Gesture& gesture);
     void navigatorObject_current(input::Gesture& gesture);
+    // N145: the mouse buttons, on the navigator object. On Wayland ALUS can
+    // neither move the pointer nor send a click (N18); the navigator object's
+    // own actions are what a click would have done there.
+    void leftMouseClick(input::Gesture& gesture);
+    void rightMouseClick(input::Gesture& gesture);
+    // The index of the first action whose name is one of `names`, or -1.
+    static int actionNamed(const Object& object, std::initializer_list<std::string_view> names);
     void navigatorObject_parent(input::Gesture& gesture);
     void navigatorObject_firstChild(input::Gesture& gesture);
     void navigatorObject_next(input::Gesture& gesture);

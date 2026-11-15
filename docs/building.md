@@ -88,6 +88,7 @@ did not find. The three programs end up in `build/src/`:
 | `alus-daemon` | the screen reader |
 | `alus-settings` | the settings window and gestures dialog (a separate process; see [architecture §1](design/architecture.md#1-technology-stack)) |
 | `alus-elements` | the browse mode elements list (ALUS+F7), started by the daemon with the page's elements; also a separate process |
+| `alus-clipboard` | reads and sets the system clipboard for ALUS+C and ALUS+Control+X, through Xwayland; started by the daemon |
 | `alus-cli` | diagnostics and one-shot tools: speak a text, list voices, inspect the accessible tree, check the keyboard, enable autostart |
 
 ### Build types and options

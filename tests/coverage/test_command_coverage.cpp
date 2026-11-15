@@ -699,3 +699,30 @@ TEST_CASE("T9.6 the status file and the command inventory do not rot",
         }
     }
 }
+
+TEST_CASE("N145 a command ALUS does not have says why, not just that it is missing",
+          "[commands]") {
+    testing::QuietLog quiet;
+    script::Catalog catalog;
+    REQUIRE(catalog.loadFromDataDirectory(kDataDir));
+    script::ScriptableObject commands({"globalCommands.GlobalCommands"}, &catalog);
+    std::vector<std::string> said;
+    REQUIRE(script::bindAnnouncements(commands, catalog,
+                                      [&said](const std::string& text) { said.push_back(text); }) >
+            0);
+    const auto press = [&](const char* name) {
+        const script::Script* found = commands.scriptByName(name);
+        REQUIRE(found != nullptr);
+        input::KeyboardGesture::Init init;
+        input::KeyboardGesture gesture{init};
+        found->function(gesture);
+        REQUIRE_FALSE(said.empty());
+        return said.back();
+    };
+    CHECK(press("toggleLeftMouseButton") == "ALUS cannot hold a mouse button down");
+    CHECK(press("moveMouseToNavigatorObject").find("the click keys") != std::string::npos);
+    CHECK(press("activatePythonConsole") == "ALUS has no Python console");
+    // And the commands that do exist now are no longer stubs.
+    CHECK(commands.scriptByName("copyLastSpokenInformation") == nullptr);
+    CHECK(commands.scriptByName("leftMouseClick") == nullptr);
+}

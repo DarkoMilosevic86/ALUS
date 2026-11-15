@@ -10,6 +10,7 @@ alus_core_sources = files(
   'i18n/service.cpp',
   'core/event_dispatcher.cpp',
   'core/event_limiter.cpp',
+  'core/clipboard.cpp',
   'core/log.cpp',
   'core/loop.cpp',
   'core/paths.cpp',
@@ -429,6 +430,15 @@ endif
 # `alus-elements`: the browse mode elements list (alus+f7), in its own process
 # for the same reason as `alus-settings`. It only needs the labels, which the
 # daemon hands it in a file; the objects stay in the daemon.
+# `alus-clipboard`: the system clipboard on X11 through Xwayland, which a
+# windowless screen reader cannot reach through Wayland (phase-10.md N145).
+if have_gui
+  alus_clipboard = executable('alus-clipboard',
+    files('gui/clipboard_main.cpp'),
+    dependencies: [gtk_dep],
+    install: true)
+endif
+
 if have_gui
   alus_elements = executable('alus-elements',
     files('gui/elements_main.cpp'),

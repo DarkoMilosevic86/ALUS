@@ -11,7 +11,7 @@ gestures dialog (Settings → Gestures) or in `~/.config/alus/gestures.ini`.
 
 Commands: **316** in 17 categories, **178** of them bound to keys.
 
-**15** are not in this version and are marked so in the *Description* column: **15** have a key that **says** the command is missing, and **0** are deliberately left unbound because the key belongs to the application (N18). The source is `data/commands-status.ini`.
+**10** are not in this version and are marked so in the *Description* column: **10** have a key that **says** the command is missing, and **0** are deliberately left unbound because the key belongs to the application (N18). The source is `data/commands-status.ini`.
 
 ## Audio
 
@@ -266,8 +266,8 @@ Commands: **316** in 17 categories, **178** of them bound to keys.
 
 | Command | Desktop | Laptop | Description |
 |---|---|---|---|
-| `leftMouseClick` | numpadDivide | numpadDivide, ALUS+[ | **NOT IN THIS VERSION** (the key says so when pressed) — Clicks the left mouse button once at the current mouse position |
-| `rightMouseClick` | numpadMultiply | numpadMultiply, ALUS+] | **NOT IN THIS VERSION** (the key says so when pressed) — Clicks the right mouse button once at the current mouse position |
+| `leftMouseClick` | numpadDivide | numpadDivide, ALUS+[ | Clicks the left mouse button once at the current mouse position |
+| `rightMouseClick` | numpadMultiply | numpadMultiply, ALUS+] | Clicks the right mouse button once at the current mouse position |
 | `toggleLeftMouseButton` | shift+numpadDivide | shift+numpadDivide, ALUS+control+[ | **NOT IN THIS VERSION** (the key says so when pressed) — Locks or unlocks the left mouse button |
 | `toggleRightMouseButton` | shift+numpadMultiply | shift+numpadMultiply, ALUS+control+] | **NOT IN THIS VERSION** (the key says so when pressed) — Locks or unlocks the right mouse button |
 | `moveMouseToNavigatorObject` | ALUS+numpadDivide | ALUS+numpadDivide, ALUS+shift+m | **NOT IN THIS VERSION** (the key says so when pressed) — Moves the mouse pointer to the current navigator object |
@@ -305,7 +305,7 @@ Commands: **316** in 17 categories, **178** of them bound to keys.
 
 | Command | Desktop | Laptop | Description |
 |---|---|---|---|
-| `copyLastSpokenInformation` | ALUS+control+x | ALUS+control+x | **NOT IN THIS VERSION** (the key says so when pressed) — Copies the last spoken information to the clipboard. |
+| `copyLastSpokenInformation` | ALUS+control+x | ALUS+control+x | Copies the last spoken information to the clipboard. |
 | `speech_cycleUnicodeNormalization` | — | — | Cycle through the speech Unicode normalization states |
 | `speechMode` | ALUS+s | ALUS+s | Cycles between speech modes. |
 | `toggleSpeakTypedCharacters` | ALUS+2 | ALUS+2 | Cycles through options for when to speak typed characters. |
@@ -364,7 +364,7 @@ Commands: **316** in 17 categories, **178** of them bound to keys.
 |---|---|---|---|
 | `dateTime` | ALUS+f12 | ALUS+f12 | If pressed once, reports the current time. If pressed twice, reports the current date |
 | `say_battery_status` | ALUS+shift+b | ALUS+shift+b | Reports battery status and time remaining if AC is not plugged in |
-| `reportClipboardText` | ALUS+c | ALUS+c | **NOT IN THIS VERSION** (the key says so when pressed) — Reports the text on the system clipboard. Pressing twice spells this information. Pressing three times spells it using character descriptions. |
+| `reportClipboardText` | ALUS+c | ALUS+c | Reports the text on the system clipboard. Pressing twice spells this information. Pressing three times spells it using character descriptions. |
 
 ## Text review
 
@@ -407,7 +407,7 @@ Commands: **316** in 17 categories, **178** of them bound to keys.
 | `activateAddonsManager` | — | — | Activates the Add-on Store to browse and manage add-on packages for ALUS |
 | `reportLinkDestinationInWindow` | — | — | Displays the destination URL of the link at the position of caret or focus in a window, instead of just speaking it. May be preferred by braille users. |
 | `navigatorObject_devInfo` | ALUS+f1 | ALUS+f1 | Logs information about the current navigator object which is useful to developers and activates the log viewer so the information can be examined. |
-| `log_markStartThenCopy` | ALUS+control+shift+f1 | ALUS+control+shift+f1 | **NOT IN THIS VERSION** (the key says so when pressed) — Mark the current end of the log as the start of the fragment to be copied to clipboard by pressing again. |
+| `log_markStartThenCopy` | ALUS+control+shift+f1 | ALUS+control+shift+f1 | Mark the current end of the log as the start of the fragment to be copied to clipboard by pressing again. |
 | `openUserConfigurationDirectory` | — | — | Opens ALUS configuration directory for the current user. |
 | `startWxInspectionTool` | — | — | Opens the WX GUI inspection tool. Used to get more information about the state of GUI components. |
 | `reloadPlugins` | ALUS+control+f3 | ALUS+control+f3 | **NOT IN THIS VERSION** (the key says so when pressed) — Reloads app modules and global plugins without restarting ALUS, which can be Useful for developers |

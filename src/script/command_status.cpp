@@ -125,6 +125,59 @@ std::string_view CommandStatus::reasonFor(std::string_view script) const {
     return {};
 }
 
+namespace {
+
+// N145: what each command that ALUS does not have says when its key is
+// pressed. "Not in this version" told the user nothing they could act on, and
+// for most of these it was not even true -- they are missing because of the
+// platform, and will be missing in the next version too. Each line says why,
+// and where there is a way round it, which one.
+struct Explanation {
+    const char* script;
+    const char* message;  // N_()-marked; translated when spoken
+};
+
+constexpr Explanation kExplanations[] = {
+    // Translators: spoken for the key that opens a Python console in other
+    // screen readers; ALUS is not written in Python.
+    {"activatePythonConsole", N_("ALUS has no Python console")},
+    // Translators: spoken for the audio ducking key.
+    {"cycleAudioDuckingMode", N_("ALUS does not lower other applications' audio")},
+    // Translators: spoken for the sound split key.
+    {"cycleSoundSplit", N_("sound split is not available")},
+    // Translators: spoken for the key that moves the mouse to the navigator
+    // object; Wayland does not let ALUS move the pointer, and the click keys
+    // act on the navigator object instead.
+    {"moveMouseToNavigatorObject",
+     N_("ALUS cannot move the mouse pointer; the click keys act on the navigator object")},
+    // Translators: spoken for the key that moves the navigator object to the
+    // mouse; Wayland does not tell ALUS where the pointer is.
+    {"moveNavigatorObjectToMouse", N_("ALUS cannot know where the mouse pointer is")},
+    // Translators: spoken for the mouse tracking key, for the same reason.
+    {"toggleMouseTracking", N_("ALUS cannot know where the mouse pointer is")},
+    // Translators: spoken for the keys that hold a mouse button down.
+    {"toggleLeftMouseButton", N_("ALUS cannot hold a mouse button down")},
+    {"toggleRightMouseButton", N_("ALUS cannot hold a mouse button down")},
+    // Translators: spoken for the reload plugins key.
+    {"reloadPlugins", N_("add-ons are loaded when ALUS starts; restart ALUS to reload them")},
+    // Translators: spoken for a developer key about a screen model that
+    // ALUS does not have.
+    {"test_navigatorDisplayModelText", N_("ALUS has no display model")},
+    // Translators: spoken for the native selection mode key in browse mode.
+    {"toggleNativeAppSelectionMode", N_("native selection mode is not available")},
+};
+
+const char* explanationFor(const std::string& script) {
+    for (const Explanation& entry : kExplanations) {
+        if (script == entry.script) {
+            return entry.message;
+        }
+    }
+    return nullptr;
+}
+
+}  // namespace
+
 std::size_t bindAnnouncements(ScriptableObject& object, const Catalog& catalog,
                               std::function<void(const std::string&)> say) {
     const CommandStatus& status = catalog.status();
@@ -147,10 +200,14 @@ std::size_t bindAnnouncements(ScriptableObject& object, const Catalog& catalog,
             ALUS_INFO("'{}' is not implemented in this version (data/commands-status.ini)",
                       name);
             if (say) {
-                // Translators: spoken when a key runs a command that this
-                // version of ALUS does not have yet. Short on purpose: what
-                // matters is that the key is not silent.
-                say(_("not in this version"));
+                if (const char* why = explanationFor(name)) {
+                    say(i18n::translate(why));
+                } else {
+                    // Translators: spoken when a key runs a command that this
+                    // version of ALUS does not have yet. Short on purpose:
+                    // what matters is that the key is not silent.
+                    say(_("not in this version"));
+                }
             }
         });
         ++bound;

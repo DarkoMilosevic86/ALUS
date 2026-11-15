@@ -27,7 +27,10 @@
 
 #include "alus/script/scriptable.hpp"
 
+#include <cstdint>
 #include <functional>
+#include <memory>
+#include <optional>
 #include <string>
 
 namespace alus::config {
@@ -82,8 +85,19 @@ private:
     void decreaseSynthSetting(input::Gesture& gesture);
     void increaseLargeSynthSetting(input::Gesture& gesture);
     void decreaseLargeSynthSetting(input::Gesture& gesture);
+    // N145: the clipboard, through alus-clipboard (core/clipboard.hpp).
+    void copyLastSpokenInformation(input::Gesture& gesture);
+    void reportClipboardText(input::Gesture& gesture);
+    void log_markStartThenCopy(input::Gesture& gesture);
+    // Says the outcome of a copy, as NVDA's ui.reportTextCopiedToClipboard.
+    void reportCopied(const std::string& text, bool ok) const;
 
     void say(const std::string& text) const;
+    // Answers from alus-clipboard arrive later, on the main loop; this tells
+    // them whether the commands object is still there.
+    std::shared_ptr<int> lifetime_ = std::make_shared<int>(0);
+    // Where log_markStartThenCopy marked the log, in bytes.
+    std::optional<std::uintmax_t> logMark_;
     // NVDA: NO_SETTINGS_MSG. Said when the driver has nothing to step.
     void sayNoSettings() const;
     // The four ring adjustments differ only in which call they make, and the

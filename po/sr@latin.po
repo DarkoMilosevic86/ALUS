@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alus 0.1.0\n"
 "Report-Msgid-Bugs-To: daremc86@gmail.com\n"
-"POT-Creation-Date: 2026-11-15 11:08+0000\n"
-"PO-Revision-Date: 2026-11-15 11:08+0000\n"
+"POT-Creation-Date: 2026-11-15 13:12+0000\n"
+"PO-Revision-Date: 2026-11-15 13:12+0000\n"
 "Last-Translator: tools/import-nvda-po.py\n"
 "Language-Team: Serbian (Latin)\n"
 "Language: sr_RS@latin\n"
@@ -25,173 +25,196 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
+#. Translators: spoken when alus+numpad slash finds nothing the
+#. navigator object can do when clicked.
+#: src/a11y/commands.cpp:133 src/a11y/commands.cpp:137
+msgid "cannot click this object"
+msgstr "ovaj objekat ne može da se klikne"
+
+#. Translators: Reported when left mouse button is clicked.
+#: src/a11y/commands.cpp:141
+msgid "Left click"
+msgstr "Levi klik"
+
+#. Translators: spoken when alus+numpad star cannot open a context
+#. menu for the navigator object; shift+F10 or the menu key opens it
+#. from the keyboard in most applications.
+#: src/a11y/commands.cpp:157
+msgid "no context menu for this object; try shift+F10 or the menu key"
+msgstr "ovaj objekat nema kontekstni meni; probajte shift+F10 ili taster za meni"
+
+#. Translators: Reported when right mouse button is clicked.
+#: src/a11y/commands.cpp:161
+msgid "Right click"
+msgstr "Desni klik"
+
 #. Translators: the user asked about the navigator object and there is
 #. none.
 #. Translators: reported when there is nothing under the cursor to ask
 #. about.
-#: src/a11y/commands.cpp:101 src/a11y/commands.cpp:535
+#: src/a11y/commands.cpp:169 src/a11y/commands.cpp:603
 msgid "No navigator object"
 msgstr "Nema navigacionog objekta"
 
 #. Translators: there is no focused object.
-#: src/a11y/commands.cpp:126 src/a11y/commands.cpp:238 src/a11y/commands.cpp:242
+#: src/a11y/commands.cpp:194 src/a11y/commands.cpp:306 src/a11y/commands.cpp:310
 #: src/nav/text_commands.cpp:568 src/nav/text_commands.cpp:599 src/nav/text_commands.cpp:624
 #: src/nav/text_commands.cpp:646 src/nav/text_commands.cpp:698 src/nav/text_commands.cpp:793
 msgid "No focus"
 msgstr "Nema fokusa"
 
 #. Translators: there is no object containing this one.
-#: src/a11y/commands.cpp:159
+#: src/a11y/commands.cpp:227
 msgid "No containing object"
 msgstr "Nema sadržavajućeg objekta"
 
 #. Translators: there is nothing inside this object.
-#: src/a11y/commands.cpp:168
+#: src/a11y/commands.cpp:236
 msgid "No objects inside"
 msgstr "Nema unutrašnjih objekata"
 
 #. Translators: this is the last object.
-#: src/a11y/commands.cpp:177
+#: src/a11y/commands.cpp:245
 msgid "No next"
 msgstr "Nema narednog"
 
 #. Translators: this is the first object.
-#: src/a11y/commands.cpp:186
+#: src/a11y/commands.cpp:254
 msgid "No previous"
 msgstr "Nema prethodnog"
 
 #. Translators: the review cursor was moved to the object with focus.
-#: src/a11y/commands.cpp:246
+#: src/a11y/commands.cpp:314
 msgid "Move to focus"
 msgstr "Premesti na fokus"
 
 #. Translators: the keyboard focus was moved to the navigator object.
-#: src/a11y/commands.cpp:258
+#: src/a11y/commands.cpp:326
 msgid "Move focus"
 msgstr "Premesti fokus"
 
 #. Translators: the object could not take the keyboard focus.
-#: src/a11y/commands.cpp:263
+#: src/a11y/commands.cpp:331
 msgid "Cannot focus this object"
 msgstr "Ovaj objekat ne može da dobije fokus"
 
 #. Translators: the object has no position on the screen.
 #. Translators: the caret has no position on the screen -- a terminal
 #. that reports no geometry, or a control scrolled out of view.
-#: src/a11y/commands.cpp:275 src/nav/text_commands.cpp:659 src/nav/text_commands.cpp:666
+#: src/a11y/commands.cpp:343 src/nav/text_commands.cpp:659 src/nav/text_commands.cpp:666
 msgid "No location information"
 msgstr "Nema informacija o lokaciji"
 
 #. Translators: the action at the navigator object was
 #. performed. The toolkit's own word for it is used when it has
 #. one ("click", "press"), and "Activate" otherwise.
-#: src/a11y/commands.cpp:300
+#: src/a11y/commands.cpp:368
 msgid "Activate"
 msgstr "Aktiviraj"
 
 #. Translators: nothing at the navigator object could be activated.
-#: src/a11y/commands.cpp:307
+#: src/a11y/commands.cpp:375
 msgid "No action"
 msgstr "Nema radnje"
 
 #. Translators: the active window has no title.
-#: src/a11y/commands.cpp:318
+#: src/a11y/commands.cpp:386
 msgid "No title"
 msgstr "Nema naslova"
 
 #. Translators: reported when the review cursor is set to follow
 #. the system caret (alus+6).
-#: src/a11y/commands.cpp:354
+#: src/a11y/commands.cpp:422
 msgid "caret moves review cursor on"
 msgstr "uključeno pomeranje preglednog kursora sistemskim kursorom"
 
 #. Translators: reported when the review cursor no longer follows
 #. the system caret.
-#: src/a11y/commands.cpp:357
+#: src/a11y/commands.cpp:425
 msgid "caret moves review cursor off"
 msgstr "isključeno pomeranje preglednog kursora sistemskim kursorom"
 
 #. Translators: reported when the navigator object is set to
 #. follow the focus (alus+7).
-#: src/a11y/commands.cpp:369
+#: src/a11y/commands.cpp:437
 msgid "focus moves navigator object on"
 msgstr "uključeno pomeranje navigacionog objekta fokusom"
 
 #. Translators: reported when the navigator object no longer
 #. follows the focus.
-#: src/a11y/commands.cpp:372
+#: src/a11y/commands.cpp:440
 msgid "focus moves navigator object off"
 msgstr "isključeno pomeranje navigacionog objekta fokusom"
 
 #. Translators: reported when text that changes by itself -- a
 #. terminal, a chat window, a log -- is announced again (alus+5).
-#: src/a11y/commands.cpp:385
+#: src/a11y/commands.cpp:453
 msgid "report dynamic content changes on"
 msgstr "uključeno prijavljivanje dinamičkih promena sadržaja"
 
 #. Translators: reported when text that changes by itself is no
 #. longer announced.
-#: src/a11y/commands.cpp:388
+#: src/a11y/commands.cpp:456
 msgid "report dynamic content changes off"
 msgstr "isključeno prijavljivanje dinamičkih promena sadržaja"
 
 #. Translators: a progress bar reporting mode (alus+u): nothing is
 #. reported.
-#: src/a11y/commands.cpp:402
+#: src/a11y/commands.cpp:470
 msgid "No progress bar updates"
 msgstr "Bez ažuriranja traka napredovanja"
 
 #. Translators: a progress bar reporting mode: the percentage is
 #. spoken.
-#: src/a11y/commands.cpp:408
+#: src/a11y/commands.cpp:476
 msgid "Speak progress bar updates"
 msgstr "Izgovaraj ažuriranja traka napredovanja"
 
 #. Translators: a progress bar reporting mode: a beep that rises
 #. in pitch as the bar fills.
-#: src/a11y/commands.cpp:414
+#: src/a11y/commands.cpp:482
 msgid "Beep for progress bar updates"
 msgstr "Pišti za ažuriranja traka napredovanja"
 
 #. Translators: a progress bar reporting mode: both the beep and
 #. the spoken percentage.
-#: src/a11y/commands.cpp:420
+#: src/a11y/commands.cpp:488
 msgid "Beep and speak progress bar updates"
 msgstr "Pišti i izgovaraj ažuriranja traka napredovanja"
 
 #. Translators: reported when the focused control has no keyboard
 #. shortcut of its own (shift+numpad2).
-#: src/a11y/commands.cpp:440
+#: src/a11y/commands.cpp:508
 msgid "No shortcut key"
 msgstr "Nema tasterske prečice"
 
 #. Translators: reported when the focused control points at no
 #. additional details (alus+d).
-#: src/a11y/commands.cpp:462
+#: src/a11y/commands.cpp:530
 msgid "No additional details"
 msgstr "Nema dodatnih detalja"
 
 #. Translators: reported when the details a control points at exist
 #. but carry no readable text.
-#: src/a11y/commands.cpp:493
+#: src/a11y/commands.cpp:561
 msgid "No details summary"
 msgstr "Nema sažetka detalja"
 
 #. Translators: reported when the developer information about an object has
 #. been written to the log (alus+f1).
-#: src/a11y/commands.cpp:517
+#: src/a11y/commands.cpp:585
 msgid "Developer info written to the log"
 msgstr "Razvojne informacije su upisane u dnevnik"
 
 #. Translators: reported when the thing under the cursor is a link but
 #. the application does not say where it points.
-#: src/a11y/commands.cpp:548
+#: src/a11y/commands.cpp:616
 msgid "Link has no apparent destination"
 msgstr "Link nema prepoznatljivo odretište"
 
 #. Translators: reported when the thing under the cursor is not a link at
 #. all (alus+k).
-#: src/a11y/commands.cpp:553
+#: src/a11y/commands.cpp:621
 msgid "Not a link."
 msgstr "Nije link."
 
@@ -1169,7 +1192,7 @@ msgstr "van %s"
 #. Translators: spoken when a paragraph is blank.
 #. Translators: spoken when a line or a field is empty.
 #. Translators: spoken when the review cursor reaches an empty line.
-#: src/a11y/text_speech.cpp:1392 src/nav/browse_mode.cpp:1262 src/nav/paragraph_nav.cpp:231
+#: src/a11y/text_speech.cpp:1392 src/nav/browse_mode.cpp:1289 src/nav/paragraph_nav.cpp:231
 #: src/speech/presenter.cpp:291 src/speech/spelling.cpp:149 src/speech/spelling.cpp:157
 msgid "blank"
 msgstr "prazno"
@@ -4774,105 +4797,111 @@ msgstr "izlazim"
 
 #. Translators: spoken when a movement command reaches the edge of the
 #. document.
-#: src/nav/browse_mode.cpp:468 src/nav/browse_mode.cpp:1121
+#: src/nav/browse_mode.cpp:469 src/nav/browse_mode.cpp:1148
 msgid "edge of document"
 msgstr "ivica dokumenta"
 
-#: src/nav/browse_mode.cpp:488
+#: src/nav/browse_mode.cpp:489
 msgid "no next %s"
 msgstr "nema sledećeg elementa: %s"
 
-#: src/nav/browse_mode.cpp:488
+#: src/nav/browse_mode.cpp:489
 msgid "no previous %s"
 msgstr "nema prethodnog elementa: %s"
 
 #. Translators: spoken when alus+f7 cannot show the elements list
 #. (alus-elements is not installed, or there is no display).
-#: src/nav/browse_mode.cpp:771
+#: src/nav/browse_mode.cpp:772
 msgid "the elements list is not available"
 msgstr "lista elemenata nije dostupna"
 
 #. Translators: spoken when the whole document is selected.
-#: src/nav/browse_mode.cpp:1036
+#: src/nav/browse_mode.cpp:1037
 msgid "selected all"
 msgstr "sve izabrano"
 
 #. Translators: spoken when there is nothing selected to copy.
-#: src/nav/browse_mode.cpp:1043
+#: src/nav/browse_mode.cpp:1044
 msgid "no selection"
 msgstr "nema selekcije"
 
-#: src/nav/browse_mode.cpp:1049
+#: src/nav/browse_mode.cpp:1050
 msgid "copied"
 msgstr "kopirano"
 
 #. Translators: spoken when a search finds nothing.
-#: src/nav/browse_mode.cpp:1056 src/nav/browse_mode.cpp:1065
+#: src/nav/browse_mode.cpp:1057 src/nav/browse_mode.cpp:1066
 msgid "text not found"
 msgstr "tekst nije nađen"
 
 #. Translators: spoken when a feature is not available yet.
-#: src/nav/browse_mode.cpp:1077
+#: src/nav/browse_mode.cpp:1078
 msgid "find dialog not available yet"
 msgstr "dijalog za pretragu još nije dostupan"
 
+#. Translators: Reported when a page reloads (example: after
+#. refreshing a webpage).
+#: src/nav/browse_mode.cpp:1112
+msgid "Refreshed"
+msgstr "Osveženo"
+
 #. Translators: spoken when the caret is not inside a container.
-#: src/nav/browse_mode.cpp:1103 src/nav/browse_mode.cpp:1115
+#: src/nav/browse_mode.cpp:1130 src/nav/browse_mode.cpp:1142
 msgid "not in a container"
 msgstr "nije u kontejneru"
 
 #. Translators: spoken when a table command is used outside a table.
-#: src/nav/browse_mode.cpp:1162 src/nav/browse_mode.cpp:1167 src/nav/browse_mode.cpp:1220
+#: src/nav/browse_mode.cpp:1189 src/nav/browse_mode.cpp:1194 src/nav/browse_mode.cpp:1247
 msgid "not in a table"
 msgstr "nije u tabeli"
 
 #. Translators: spoken when a table movement reaches the table's edge.
-#: src/nav/browse_mode.cpp:1191 src/nav/browse_mode.cpp:1203
+#: src/nav/browse_mode.cpp:1218 src/nav/browse_mode.cpp:1230
 msgid "edge of table"
 msgstr "ivica tabele"
 
 #. Translators: Presented when use screen layout
 #. option is toggled.
-#: src/nav/browse_mode.cpp:1288
+#: src/nav/browse_mode.cpp:1315
 msgid "Use screen layout on"
 msgstr "Uključeno korišćenje rasporeda ekrana"
 
 #. Translators: Presented when use screen layout
 #. option is toggled.
-#: src/nav/browse_mode.cpp:1291
+#: src/nav/browse_mode.cpp:1318
 msgid "Use screen layout off"
 msgstr "Isključeno korišćenje rasporeda ekrana"
 
 #. Translators: spoken when layout table reporting is turned on or off.
-#: src/nav/browse_mode.cpp:1296
+#: src/nav/browse_mode.cpp:1323
 msgid "layout tables on"
 msgstr "uključene tabele za izgled"
 
-#: src/nav/browse_mode.cpp:1297
+#: src/nav/browse_mode.cpp:1324
 msgid "layout tables off"
 msgstr "isključene tabele za izgled"
 
 #. Translators: reported when the single letters of
 #. browse mode jump between elements again.
-#: src/nav/browse_mode.cpp:1326
+#: src/nav/browse_mode.cpp:1362
 msgid "Single letter navigation on"
 msgstr "Uključena navigacija pomoću jednog slova"
 
 #. Translators: reported when the single letters of
 #. browse mode are handed to the application instead.
-#: src/nav/browse_mode.cpp:1329
+#: src/nav/browse_mode.cpp:1365
 msgid "Single letter navigation off"
 msgstr "Isključena navigacija pomoću jednog slova"
 
 #. Translators: reported when there is no next text
 #. paragraph in the document (`p`).
-#: src/nav/browse_mode.cpp:1422
+#: src/nav/browse_mode.cpp:1458
 msgid "no next text paragraph"
 msgstr "nema narednog pasusa teksta"
 
 #. Translators: reported when there is no previous
 #. text paragraph in the document (`shift+p`).
-#: src/nav/browse_mode.cpp:1425
+#: src/nav/browse_mode.cpp:1461
 msgid "no previous text paragraph"
 msgstr "nema prethodnog pasusa teksta"
 
@@ -4880,7 +4909,7 @@ msgstr "nema prethodnog pasusa teksta"
 #. line number and the second the number of lines. ONE pattern rather than
 #. three concatenated pieces, because the word order is not English's in
 #. every language.
-#: src/nav/document_range.cpp:1724
+#: src/nav/document_range.cpp:1841
 msgid "line %s of %s"
 msgstr "linija %s od %s"
 
@@ -5106,10 +5135,58 @@ msgstr "Jezik nije podržan"
 msgid "Focus mode"
 msgstr "Režim fokusiranja"
 
+#. Translators: spoken for the key that opens a Python console in other
+#. screen readers; ALUS is not written in Python.
+#: src/script/command_status.cpp:143
+msgid "ALUS has no Python console"
+msgstr "ALUS nema Python konzolu"
+
+#. Translators: spoken for the audio ducking key.
+#: src/script/command_status.cpp:145
+msgid "ALUS does not lower other applications' audio"
+msgstr "ALUS ne utišava zvuk drugih programa"
+
+#. Translators: spoken for the sound split key.
+#: src/script/command_status.cpp:147
+msgid "sound split is not available"
+msgstr "deljenje zvuka nije dostupno"
+
+#: src/script/command_status.cpp:152
+msgid "ALUS cannot move the mouse pointer; the click keys act on the navigator object"
+msgstr "ALUS ne može da pomeri pokazivač miša; tasteri za klik deluju na objekat za navigaciju"
+
+#. Translators: spoken for the key that moves the navigator object to the
+#. mouse; Wayland does not tell ALUS where the pointer is.
+#. Translators: spoken for the mouse tracking key, for the same reason.
+#: src/script/command_status.cpp:155 src/script/command_status.cpp:157
+msgid "ALUS cannot know where the mouse pointer is"
+msgstr "ALUS ne može da zna gde je pokazivač miša"
+
+#. Translators: spoken for the keys that hold a mouse button down.
+#: src/script/command_status.cpp:159 src/script/command_status.cpp:160
+msgid "ALUS cannot hold a mouse button down"
+msgstr "ALUS ne može da drži pritisnut taster miša"
+
+#. Translators: spoken for the reload plugins key.
+#: src/script/command_status.cpp:162
+msgid "add-ons are loaded when ALUS starts; restart ALUS to reload them"
+msgstr "dodaci se učitavaju pri pokretanju ALUS-a; ponovo pokrenite ALUS da biste ih učitali"
+
+#. Translators: spoken for a developer key about a screen model that
+#. ALUS does not have.
+#: src/script/command_status.cpp:165
+msgid "ALUS has no display model"
+msgstr "ALUS nema model ekrana"
+
+#. Translators: spoken for the native selection mode key in browse mode.
+#: src/script/command_status.cpp:167
+msgid "native selection mode is not available"
+msgstr "režim izvornog izbora nije dostupan"
+
 #. Translators: spoken when a key runs a command that this
-#. version of ALUS does not have yet. Short on purpose: what
-#. matters is that the key is not silent.
-#: src/script/command_status.cpp:153
+#. version of ALUS does not have yet. Short on purpose:
+#. what matters is that the key is not silent.
+#: src/script/command_status.cpp:209
 msgid "not in this version"
 msgstr "nema u ovoj verziji"
 
@@ -5117,61 +5194,111 @@ msgstr "nema u ovoj verziji"
 msgid "Emulates pressing %s on the system keyboard"
 msgstr "Emulira pritiskanje tastera %s na sistemskoj tastaturi"
 
-#: src/speech/global_commands.cpp:44
+#: src/speech/global_commands.cpp:48
 msgctxt "speechModes"
 msgid "off"
 msgstr "isključen"
 
-#: src/speech/global_commands.cpp:48
+#: src/speech/global_commands.cpp:52
 msgctxt "speechModes"
 msgid "beeps"
 msgstr "sa pištanjem"
 
-#: src/speech/global_commands.cpp:51
+#: src/speech/global_commands.cpp:55
 msgctxt "speechModes"
 msgid "talk"
 msgstr "sa pričom"
 
-#: src/speech/global_commands.cpp:55
+#: src/speech/global_commands.cpp:59
 msgctxt "speechModes"
 msgid "on-demand"
 msgstr "na zahtev"
 
-#: src/speech/global_commands.cpp:70
+#: src/speech/global_commands.cpp:74
 msgctxt "symbolLevel"
 msgid "none"
 msgstr "nijedan"
 
-#: src/speech/global_commands.cpp:73
+#: src/speech/global_commands.cpp:77
 msgctxt "symbolLevel"
 msgid "some"
 msgstr "neki"
 
-#: src/speech/global_commands.cpp:76
+#: src/speech/global_commands.cpp:80
 msgctxt "symbolLevel"
 msgid "most"
 msgstr "većina"
 
-#: src/speech/global_commands.cpp:80
+#: src/speech/global_commands.cpp:84
 msgctxt "symbolLevel"
 msgid "all"
 msgstr "svi"
 
-#: src/speech/global_commands.cpp:84
+#: src/speech/global_commands.cpp:88
 msgctxt "symbolLevel"
 msgid "character"
 msgstr "znak"
 
+#. Translators: Presented when unable to copy to the clipboard because
+#. of an error or the clipboard content did not match what was just
+#. copied.
+#. Translators: Presented when unable to copy to the clipboard
+#. because of an error.
+#: src/speech/global_commands.cpp:158 src/speech/global_commands.cpp:287 src/speech/global_commands.cpp:290
+msgid "Unable to copy"
+msgstr "Nemoguće kopirati"
+
+#. Translators: Announced when a text has been copied to clipboard. %s is
+#. the copied text.
+#: src/speech/global_commands.cpp:171
+msgid "Copied to clipboard: %s"
+msgstr "Kopirano u privremenu memoriju: %s"
+
+#. Translators: Reported when there is no last spoken information to
+#. copy.
+#: src/speech/global_commands.cpp:191
+msgid "Nothing to copy"
+msgstr "Nema ničega za kopiranje"
+
+#. Translators: Presented when there is no text on the clipboard.
+#: src/speech/global_commands.cpp:217
+msgid "There is no text on the clipboard"
+msgstr "Nema teksta u privremenoj memoriji"
+
+#. Translators: Message when failed to mark the start of a fragment
+#. of the log file for later copy to clipboard.
+#: src/speech/global_commands.cpp:253
+msgid "Unable to mark log position"
+msgstr "Nemoguće obeležiti poziciju dnevnika"
+
+#. Translators: Message when marking the start of a fragment of the log
+#. file for later copy to clipboard.
+#: src/speech/global_commands.cpp:259
+msgid "Log fragment start position marked, press again to copy to clipboard"
+msgstr "Početak fragmenta dnevnika je obeležen, pritisnite ponovo za kopiranje u privremenu memoriju"
+
+#. Translators: Message when attempting to copy an empty fragment of
+#. the log file.
+#: src/speech/global_commands.cpp:273
+msgid "No new log entry to copy"
+msgstr "Nema novih događaja u dnevniku za kopiranje"
+
+#. Translators: Message when a fragment of the log file has
+#. been copied to clipboard.
+#: src/speech/global_commands.cpp:284
+msgid "Log fragment copied to clipboard"
+msgstr "Fragment dnevnika kopiran u privremenu memoriju"
+
 #. Translators: spoken when the synthesizer settings ring
 #. (alus+control+arrows) has nothing in it, because the synthesizer
 #. reports no setting that can be stepped.
-#: src/speech/global_commands.cpp:138
+#: src/speech/global_commands.cpp:309
 msgid "No settings"
 msgstr "Nema podešavanja"
 
 #. Translators: spoken when a command that needs the speech pipeline is
 #. run where there is none, e.g. under `alus-daemon --no-speech`.
-#: src/speech/global_commands.cpp:146 src/speech/global_commands.cpp:173 src/speech/global_commands.cpp:191
+#: src/speech/global_commands.cpp:317 src/speech/global_commands.cpp:344 src/speech/global_commands.cpp:362
 msgid "speech is not available"
 msgstr "govor nije dostupan"
 
@@ -5181,19 +5308,19 @@ msgstr "govor nije dostupan"
 #. The brace is upstream's, and it is copied exactly: the msgid is the key
 #. into upstream's Serbian catalogue, so a pattern rewritten to "%s" would
 #. be an untranslated string (i18n::substituteNamed says more).
-#: src/speech/global_commands.cpp:162
+#: src/speech/global_commands.cpp:333
 msgid "Speech mode {mode}"
 msgstr "Režim govora {mode}"
 
 #. Translators: reported when the punctuation and symbol level is cycled;
 #. %s is the new level ("none", "some", "most", "all").
-#: src/speech/global_commands.cpp:185
+#: src/speech/global_commands.cpp:356
 msgid "Symbol level %s"
 msgstr "Nivo simbola %s"
 
 #. Translators: reported when `alus+x` is pressed before ALUS has said
 #. anything there is to repeat.
-#: src/speech/global_commands.cpp:202
+#: src/speech/global_commands.cpp:373
 msgid "Nothing to repeat"
 msgstr "Nema šta da se ponovi"
 
