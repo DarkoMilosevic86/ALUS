@@ -16,6 +16,7 @@
 
 #include <cstddef>
 #include <functional>
+#include <memory>
 #include <optional>
 #include <utility>
 #include <vector>
@@ -57,6 +58,13 @@ public:
 
     std::size_t size() const noexcept { return entries_.size(); }
 
+    // What keeps the scope's OWNER alive while its entries are flushed. An
+    // object caches its children, a child caches its parent: flushing the
+    // children can drop the last reference to the parent whose scope is
+    // being walked, and the walk then runs on freed memory (N149, a pure
+    // virtual call in a test). The owner pins itself for the duration.
+    void setPin(std::function<std::shared_ptr<const void>()> pin) { pin_ = std::move(pin); }
+
 private:
     friend class CachedBase;
 
@@ -65,6 +73,7 @@ private:
 
     std::vector<CachedBase*> entries_;
     std::size_t indexInRegistry_;
+    std::function<std::shared_ptr<const void>()> pin_;
 };
 
 // Called by `Loop::tick()` at the END of every cycle. The single point that

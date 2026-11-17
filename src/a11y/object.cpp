@@ -544,7 +544,11 @@ Object::Object(Registry& registry, Ref ref)
       table_(scope_, [this] { return objectFrom(backend().tableOf(ref_)); }),
       details_(scope_, [this] {
           return objectsFrom(backend().relation(ref_, PlatformRelation::Details));
-      }) {}
+      }) {
+    // See CacheScope::setPin: flushing this object's caches may drop the
+    // last reference to it (its children hold it as their parent).
+    scope_.setPin([this]() -> std::shared_ptr<const void> { return weak_from_this().lock(); });
+}
 
 Object::~Object() { registry_.backend().release(ref_); }
 

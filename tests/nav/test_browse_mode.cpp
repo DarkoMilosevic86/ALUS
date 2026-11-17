@@ -2300,3 +2300,58 @@ TEST_CASE("N147 the focus becomes ready with its document, and the keys follow i
     fixture.pumpOnce();
     CHECK(fixture.registry.api().focus()->treeInterceptorReady());
 }
+
+TEST_CASE("N149 an article body with text and blocks is walked into", "[browsemode][layout]") {
+    // Wikipedia's article body holds the infobox table, the paragraphs and,
+    // directly, the text of a quotation. Read as one leaf, its inside was
+    // never walked: `t` put the caret in the table, Home and say-all could not
+    // find that place again and went to the end of the page.
+    NavFixture fixture;
+    MockBackend& backend = fixture.backend;
+    const Ref application = backend.addApplication("Browser", "Chromium");
+    const Ref window = backend.add(application, PlatformRole::Frame, "Article");
+    backend.addState(window, PlatformState::Active);
+    const Ref document = backend.add(window, PlatformRole::DocumentWeb, "Article");
+    backend.addInterface(document, a11y::Interface::Collection);
+    const Ref top = addTextLeaf(backend, document, PlatformRole::Heading, "Title");
+    const Ref body = backend.add(document, PlatformRole::Section, "");
+    backend.node(body).interfaces |= a11y::Interface::Text;
+    backend.addState(body, PlatformState::Showing);
+    backend.node(body).attributes["display"] = "block";
+    const Ref table = backend.add(body, PlatformRole::Table, "");
+    backend.node(table).attributes["display"] = "table";
+    const Ref cell = addTextLeaf(backend, table, PlatformRole::TableCell, "Infobox cell");
+    makeContainer(backend, table, 1);
+    const Ref first = addTextLeaf(backend, body, PlatformRole::Paragraph, "First paragraph.");
+    backend.node(first).attributes["display"] = "block";
+    addTextLeaf(backend, body, PlatformRole::Static, "Quoted text.");
+    const Ref last = addTextLeaf(backend, body, PlatformRole::Paragraph, "Last paragraph.");
+    backend.node(last).attributes["display"] = "block";
+    backend.node(body).text = "\xEF\xBF\xBC\xEF\xBF\xBCQuoted text.\xEF\xBF\xBC";
+    addTextLeaf(backend, document, PlatformRole::Paragraph, "Categories");
+    makeContainer(backend, document, 3);
+
+    const a11y::ObjectPtr root = fixture.registry.objectFor(document);
+    REQUIRE_FALSE(nav::DocumentLeaves::isLeaf(*fixture.registry.objectFor(body)));
+    bool reached = false;
+    for (a11y::ObjectPtr leaf = nav::DocumentLeaves::first(root); leaf != nullptr;
+         leaf = nav::DocumentLeaves::next(root, leaf)) {
+        if (leaf->ref() == cell) {
+            reached = true;
+        }
+    }
+    CHECK(reached);
+
+    nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(root, fixture.nav());
+    auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+    REQUIRE(browse != nullptr);
+    REQUIRE(browse->moveTo(fixture.registry.objectFor(top), a11y::OutputReason::QuickNav));
+    fixture.clearSpeech();
+    REQUIRE(browse->moveToElement(nav::ElementType::Table, true));
+    // From the table the article goes on in order, not at the page's end.
+    const std::vector<std::string> lines = readLines(fixture, *browse, 3);
+    INFO(lines[0] << " / " << lines[1] << " / " << lines[2]);
+    CHECK(lines[0].find("First paragraph.") != std::string::npos);
+    CHECK(lines[1].find("Quoted text.") != std::string::npos);
+    CHECK(lines[2].find("Last paragraph.") != std::string::npos);
+}

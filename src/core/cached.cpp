@@ -75,8 +75,11 @@ void CacheScope::remove(CachedBase* entry) noexcept {
 }
 
 void CacheScope::invalidate() noexcept {
-    for (CachedBase* entry : entries_) {
-        entry->invalidate();
+    // Held until the loop is over; released last, so that if this was the
+    // last reference the scope dies after its walk and not inside it.
+    const std::shared_ptr<const void> pinned = pin_ ? pin_() : nullptr;
+    for (std::size_t index = 0; index < entries_.size(); ++index) {
+        entries_[index]->invalidate();
     }
 }
 

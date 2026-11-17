@@ -1377,3 +1377,40 @@ so in focus mode turned on by hand it reaches the page.
 Tests: `tests/nav/test_browse_mode.cpp` (the N144 Escape test, with a
 section "N148 focus mode turned on with alus+space keeps Escape for the
 application").
+
+**N149 — Wikipedia: `t` onto the infobox, and then nothing worked.** Log
+`alus-measure-20261117-145610.log`, sr.wikipedia.org "Љубо Милош": `t`
+said the table correctly, then Home said "out of table, visited link
+Категорије" at the page's end, and say all from the table read only the
+footer. The user's question was fair: is it that hard to behave as NVDA?
+
+Diagnosed with a temporary probe in `browse-walk`: the leaf walk from the
+top of that page ended after 44 leaves and never reached the infobox. The
+article body (`mw-parser-output`) holds the table, the paragraphs and,
+directly, the text of a quotation, so its own text was real text and
+`DocumentLeaves::isLeaf` made the whole body ONE leaf whose children were
+inline placeholders. `t` found the table through the Collection interface
+and put the caret on a cell inside it; the caret is kept as a bookmark that
+is found again by walking the leaves, the walk never went into the body, the
+bookmark fell back to a neighbour, and every key after `t` started from the
+wrong place.
+
+- An object with real text is a container after all when it also holds
+  block children and Chrome gives its text as children of their own
+  (STATICTEXT) -- then nothing of its text is lost
+  (`DocumentLeaves::holdsBlocksAndTextChildren`). Without text children
+  (Gecko) it stays a leaf. Text that is only placeholders and the line
+  breaks Chrome puts between blocks also makes a container.
+- Making more Objects in that check exposed a use-after-free in the cache:
+  an object caches its children, a child its parent, and flushing the
+  children could free the parent whose scope was being walked (a pure
+  virtual call in a test). `core::CacheScope` now pins its owner for the
+  walk (`setPin`, `weak_from_this`).
+
+Live, the same page: the walk reaches the table after 28 leaves; Home stays
+on "Љубо Милош"; the arrows go through the infobox and on into the
+introduction, "Биографија", "Други светски рат" and the quotation.
+`browse-walk` now also runs Home and the arrows after `t`.
+
+Test: `tests/nav/test_browse_mode.cpp` ("N149 an article body with text and
+blocks is walked into"); fails without the fix.

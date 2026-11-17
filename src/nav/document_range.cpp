@@ -58,6 +58,34 @@ bool textIsAllPlaceholders(const std::string& text) {
     return true;
 }
 
+// N149: a container's text that is only its children and the line breaks
+// Chrome puts between block children ("U+FFFC\nU+FFFC\nU+FFFC"). Wikipedia's
+// whole article body answers like that; read as REAL text it made the body
+// one leaf, the leaf walk never went into it (44 leaves for the whole page),
+// and every position inside it -- where `t` puts the caret on the infobox --
+// could not be found again, so Home and say-all jumped to the page's end.
+// Spaces alone do not count: a bar of links separated by spaces stays one
+// line of text (N114).
+bool textIsPlaceholdersAndBreaks(const std::string& text) {
+    bool sawBreak = false;
+    bool sawPlaceholder = false;
+    for (std::size_t at = 0; at < text.size();) {
+        if (text.compare(at, kObjectReplacement.size(), kObjectReplacement) == 0) {
+            sawPlaceholder = true;
+            at += kObjectReplacement.size();
+            continue;
+        }
+        const char c = text[at];
+        if (c == '\n') {
+            sawBreak = true;
+        } else if (c != ' ' && c != '\t' && c != '\r') {
+            return false;
+        }
+        ++at;
+    }
+    return sawPlaceholder && sawBreak;
+}
+
 }  // namespace
 
 // ---------------------------------------------------------------------------
@@ -173,7 +201,43 @@ bool DocumentLeaves::isLeaf(const Object& object) {
     // link answers "see the docs" and is a leaf whose link is resolved inside
     // it by the hypertext path.
     const std::string own = object.textRange(0, -1);
-    return !textIsAllPlaceholders(own);
+    if (textIsAllPlaceholders(own) || textIsPlaceholdersAndBreaks(own)) {
+        return false;
+    }
+    // N149: real text AND block children. Wikipedia's article body holds the
+    // infobox table, every paragraph and, directly, the text of a quotation;
+    // as one leaf, everything in it was an inline child the walk never went
+    // into. Chrome exposes every text run as a child of its own (STATICTEXT),
+    // so such an object reads perfectly well as a container: its text comes
+    // from those children. Without them (Gecko keeps the text in the parent
+    // only) it has to stay a leaf, or its own words would belong to nobody.
+    return !holdsBlocksAndTextChildren(object);
+}
+
+bool DocumentLeaves::holdsBlocksAndTextChildren(const Object& object) {
+    constexpr int kMaxChildrenScanned = 64;
+    bool block = false;
+    bool textChild = false;
+    int scanned = 0;
+    for (const ObjectPtr& child : object.children()) {
+        if (child == nullptr || ++scanned > kMaxChildrenScanned) {
+            break;
+        }
+        if (child->role() == a11y::Role::StaticText) {
+            textChild = true;
+        } else if (!block && child->childCount() > 0) {
+            const a11y::Attributes& attributes = child->attributes();
+            const auto display = attributes.find("display");
+            if (display != attributes.end() && display->second.rfind("inline", 0) != 0 &&
+                display->second != "contents") {
+                block = true;
+            }
+        }
+        if (block && textChild) {
+            return true;
+        }
+    }
+    return false;
 }
 
 ObjectPtr DocumentLeaves::firstAny(const ObjectPtr& root) {

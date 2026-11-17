@@ -931,6 +931,12 @@ int commandBrowseWalk(Loop& loop, const std::string& titleAndLines) {
     run("topOfDocument", 1);
     run("nextFormField", 12);
     run("topOfDocument", 1);
+    run("nextTable", 1);
+    // From the table on, as a user reads an article after jumping past the
+    // page's chrome (N149): the line keys and Home must stay in the table.
+    run("startOfLine", 1);
+    run("moveByLine_forward", lines > 8 ? lines : 4);
+    run("topOfDocument", 1);
     run("nextTable", 3);
     std::puts("\n-- by character --");
     run("moveByCharacter_forward", 5);
