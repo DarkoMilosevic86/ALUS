@@ -241,7 +241,10 @@ button. A table, a list, a landmark or an edit field reads its first line.
 
 In an edit field ALUS switches to **focus mode** automatically, so typing
 goes to the application; **ALUS+Space** switches between the two modes by
-hand. Editable documents (a LibreOffice Writer document, a text editor) are
+hand. **Escape** leaves focus mode only when ALUS entered it by itself (in an
+edit field); focus mode you turned on with ALUS+Space is left with ALUS+Space
+again, and Escape goes to the page -- it leaves full screen on YouTube, for
+example. Editable documents (a LibreOffice Writer document, a text editor) are
 always in focus mode: the caret belongs to the application and ALUS follows
 it.
 

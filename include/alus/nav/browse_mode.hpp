@@ -137,6 +137,12 @@ public:
     // `report` reads it (N142): the whole of a heading, a link or a field, and
     // only the first line of a table, a list or a landmark. Without one, the
     // line it starts on.
+    // Focus mode as ALUS enters it by itself (the focus landed in a field):
+    // the one kind Escape leaves (N148). For the tests and the coverage stack.
+    void enterFocusModeAutomatically() {
+        passThroughWasAutomatic_ = true;
+        setPassThrough(true, /*announce=*/false);
+    }
     bool moveTo(const a11y::ObjectPtr& object, a11y::OutputReason reason,
                 std::optional<ElementType> type = std::nullopt);
     // NVDA: `script_activatePosition`. Activates what the caret is on, and

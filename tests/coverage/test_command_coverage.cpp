@@ -252,7 +252,14 @@ public:
         focus_ = std::move(focus);
         useBrowse_ = withBrowseMode;
         if (browse_ != nullptr && browse_->passThrough() != inFocusMode) {
-            browse_->setPassThrough(inFocusMode, /*announce=*/false);
+            auto* browse = dynamic_cast<nav::BrowseMode*>(browse_.get());
+            if (inFocusMode && browse != nullptr) {
+                // Focus mode as ALUS enters it in a field: Escape is ALUS's
+                // only then (N148).
+                browse->enterFocusModeAutomatically();
+            } else {
+                browse_->setPassThrough(inFocusMode, /*announce=*/false);
+            }
         }
     }
 

@@ -1080,10 +1080,19 @@ void BrowseMode::bindCursorScripts() {
 }
 
 void BrowseMode::bindDocumentScripts() {
-    bindScript("toggleVirtualBufferPassThrough", [this](input::Gesture&) {
-        passThroughWasAutomatic_ = false;
-        setPassThrough(!passThrough());
-    });
+    // N148: found in focus mode too, or alus+space could turn focus mode on
+    // and never off -- NVDA's script lives in globalCommands, which focus mode
+    // does not hide. Turned on by hand, focus mode is the user's: Escape then
+    // belongs to the application (NVDA: disableAutoPassThrough).
+    script::ScriptSpec toggleSpec;
+    toggleSpec.ignoreTreeInterceptorPassThrough = true;
+    bindScript(
+        "toggleVirtualBufferPassThrough",
+        [this](input::Gesture&) {
+            passThroughWasAutomatic_ = false;
+            setPassThrough(!passThrough());
+        },
+        toggleSpec);
     // NVDA sets ignoreTreeInterceptorPassThrough on this one script: it is
     // the way OUT of focus mode, so it must be found while keys pass through.
     // Without the flag Escape never left focus mode; outside focus mode
@@ -1093,7 +1102,7 @@ void BrowseMode::bindDocumentScripts() {
     bindScript(
         "disablePassThrough",
         [this](input::Gesture&) {
-            if (!passThrough()) {
+            if (!passThrough() || !passThroughWasAutomatic_) {
                 return;
             }
             passThroughWasAutomatic_ = false;
@@ -1337,8 +1346,13 @@ const script::Script* BrowseMode::alternativeScript(const input::Gesture& gestur
     // Thunderbird message or a dialog. ALUS cannot hand a grabbed key on
     // (N18), so outside focus mode the script is simply not there and the key
     // is not grabbed at all; the grab set follows setPassThrough.
+    // N148, NVDA's disableAutoPassThrough: focus mode turned on with
+    // alus+space is left with alus+space, and Escape goes to the application
+    // -- it leaves full screen, closes a menu. Only focus mode that ALUS
+    // entered by itself (the focus landed in a field) is left with Escape.
     if (found != nullptr && found->info != nullptr &&
-        found->info->name == "disablePassThrough" && !passThrough()) {
+        found->info->name == "disablePassThrough" &&
+        (!passThrough() || !passThroughWasAutomatic_)) {
         return nullptr;
     }
     if (passThrough() || !gesture.isCharacter()) {

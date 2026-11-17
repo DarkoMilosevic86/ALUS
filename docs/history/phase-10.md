@@ -1362,3 +1362,18 @@ Tests: `tests/input/test_manager.cpp` ("N147 a key that reached the
 application ungrabbed does not also run its script"),
 `tests/nav/test_browse_mode.cpp` ("N147 the focus becomes ready with its
 document, and the keys follow it"); the second fails without the fix.
+
+**N148 — ALUS+Space turned focus mode on but not off, and Escape took
+YouTube's full screen key.** `toggleVirtualBufferPassThrough` is bound on
+browse mode, and the lookup hides a tree interceptor's scripts in focus mode
+unless they say otherwise; NVDA's lives in globalCommands, which focus mode
+does not hide. It now carries `ignoreTreeInterceptorPassThrough`. And NVDA's
+toggle sets `disableAutoPassThrough` when it turns focus mode on, after
+which its `script_disablePassThrough` sends Escape to the application. ALUS
+already recorded the same thing (`passThroughWasAutomatic_` false after the
+toggle); Escape is now grabbed only in focus mode ALUS entered by itself,
+so in focus mode turned on by hand it reaches the page.
+
+Tests: `tests/nav/test_browse_mode.cpp` (the N144 Escape test, with a
+section "N148 focus mode turned on with alus+space keeps Escape for the
+application").

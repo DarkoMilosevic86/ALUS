@@ -2173,8 +2173,24 @@ TEST_CASE("N144 Escape is the application's in browse mode and ALUS's in focus m
 
     REQUIRE_FALSE(browse->passThrough());
     CHECK(browse->alternativeScript(gesture, escape) == nullptr);
-    browse->setPassThrough(true, /*announce=*/false);
+    browse->enterFocusModeAutomatically();
     CHECK(browse->alternativeScript(gesture, escape) == escape);
+
+    SECTION("N148 focus mode turned on with alus+space keeps Escape for the application") {
+        // Escape leaves full screen on YouTube; NVDA's disableAutoPassThrough.
+        browse->setPassThrough(false, false);
+        const script::Script* toggle = browse->scriptByName("toggleVirtualBufferPassThrough");
+        REQUIRE(toggle != nullptr);
+        input::KeyboardGesture::Init spaceInit;
+        input::KeyboardGesture space{spaceInit};
+        toggle->function(space);
+        REQUIRE(browse->passThrough());
+        CHECK(browse->alternativeScript(gesture, escape) == nullptr);
+        // And alus+space is found in focus mode, so it turns it off again.
+        CHECK(toggle->info->ignoreTreeInterceptorPassThrough);
+        toggle->function(space);
+        CHECK_FALSE(browse->passThrough());
+    }
 }
 
 TEST_CASE("N146 a line is NVDA's, not the screen's wrapping", "[browsemode][layout]") {
