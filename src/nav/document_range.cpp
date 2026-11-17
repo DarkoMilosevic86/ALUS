@@ -1091,7 +1091,11 @@ namespace {
 // run of inline boxes (a tag cloud, a footer of links) would otherwise be a
 // single line the length of the page.
 constexpr int kMaxJoinedLeaves = 16;
-constexpr int kMaxJoinedCharacters = 240;
+// NVDA's virtualBuffers.maxLineLength: the longest a line is allowed to be,
+// in characters, whether it is one leaf's text or leaves joined by the screen
+// layout (N146).
+constexpr int kMaxLineLength = 100;
+constexpr int kMaxJoinedCharacters = kMaxLineLength;
 
 bool isInlineBox(const Object& object) {
     const a11y::Attributes& attributes = object.attributes();
@@ -1191,42 +1195,191 @@ std::optional<DocumentTextRange::Line> DocumentTextRange::leafLineAt(
         return Line{DocumentPosition{position.leaf, 0},
                     DocumentPosition{position.leaf, leafLength(position.leaf)}};
     }
-    text::TextRangePtr inLeaf = rangeFor(position.leaf, position.offset, position.offset);
-    if (inLeaf == nullptr || !inLeaf->expand(text::TextUnit::Line)) {
-        return std::nullopt;
-    }
-    const text::Bookmark mark = inLeaf->bookmark();
-    int start = static_cast<int>(mark.start);
-    // A link that wraps on screen is one U+FFFC in its parent, and Chrome
-    // puts that one character on BOTH lines: the line after it starts on it
-    // too, and the link was read again at the start of the next line
-    // (measured on Wikipedia, N143). When the line begins on a placeholder
-    // behind the position asked about, and the line before ends just after
-    // it, the placeholder belongs to the line before.
-    if (start < position.offset &&
-        position.leaf->textRange(start, start + 1) == kObjectReplacement) {
-        if (text::TextRangePtr before = rangeFor(position.leaf, start, start);
-            before != nullptr && before->expand(text::TextUnit::Line) &&
-            static_cast<int>(before->bookmark().start) < start &&
-            static_cast<int>(before->bookmark().end) == start + 1) {
-            start = start + 1;
+    // N146: a line is NOT the screen's wrapped line. It was -- the toolkit's
+    // LINE boundary -- and a visually hidden skip link one pixel wide read as
+    // "Prijeđi" / "na" / "sadržaj", one word a line, while a long paragraph
+    // was as long as the window was wide. NVDA's buffer never looks at the
+    // screen's wrapping: a line ends at a line break or a block (the leaf),
+    // and a longer one is cut at the last space within kMaxLineLength
+    // characters (virtualBuffers.maxLineLength, 100 by default).
+    const std::string text = position.leaf->textRange(0, -1);
+    std::vector<std::size_t> starts;  // the byte where each character begins
+    starts.reserve(text.size());
+    for (std::size_t byte = 0; byte < text.size(); ++byte) {
+        if ((static_cast<unsigned char>(text[byte]) & 0xC0U) != 0x80U) {
+            starts.push_back(byte);
         }
     }
-    return Line{DocumentPosition{position.leaf, start},
-                DocumentPosition{position.leaf, static_cast<int>(mark.end)}};
+    const int length = static_cast<int>(starts.size());
+    if (length == 0) {
+        return Line{DocumentPosition{position.leaf, 0}, DocumentPosition{position.leaf, 0}};
+    }
+    const auto at = [&](int index) { return text[starts[static_cast<std::size_t>(index)]]; };
+    const int offset = std::clamp(position.offset, 0, length - 1);
+    // The logical line: from after the previous line break to after the next.
+    int from = offset;
+    while (from > 0 && at(from - 1) != '\n') {
+        --from;
+    }
+    int to = offset;
+    while (to < length && at(to) != '\n') {
+        ++to;
+    }
+    if (to < length) {
+        ++to;  // the line break belongs to the line it ends
+    }
+    // Cut at a space so that no line is longer than NVDA's.
+    int segment = from;
+    while (to - segment > kMaxLineLength) {
+        int cut = segment + kMaxLineLength;
+        while (cut > segment && at(cut - 1) != ' ') {
+            --cut;
+        }
+        if (cut == segment) {
+            cut = segment + kMaxLineLength;  // one word longer than a line
+        }
+        if (offset < cut) {
+            return Line{DocumentPosition{position.leaf, segment},
+                        DocumentPosition{position.leaf, cut}};
+        }
+        segment = cut;
+    }
+    return Line{DocumentPosition{position.leaf, segment}, DocumentPosition{position.leaf, to}};
+}
+
+std::optional<DocumentTextRange::Segment> DocumentTextRange::segmentAt(
+    const DocumentPosition& position) const {
+    const std::optional<Line> line = leafLineAt(position);
+    if (!line.has_value()) {
+        return std::nullopt;
+    }
+    Segment whole{*line, false, false};
+    const ObjectPtr& leaf = line->start.leaf;
+    if (DocumentLeaves::isEmbeddedLeaf(*leaf)) {
+        return whole;
+    }
+    const int from = line->start.offset;
+    const int to = line->end.offset;
+    const std::string text = leaf->textRange(from, to);
+    if (text.find(kObjectReplacement) == std::string::npos) {
+        return whole;
+    }
+    // Which embedded objects cut the line (N146): with the screen layout off,
+    // every one -- a link or a field is a line of its own; on, only a block
+    // box -- a heading, a paragraph, a <div> inside a link, as in a search
+    // result whose title, site and address are three lines on screen and were
+    // read as one.
+    text::TextRangePtr hypertext = rangeFor(leaf, from, to);
+    const auto* objects = dynamic_cast<a11y::ObjectTextRange*>(hypertext.get());
+    std::vector<std::size_t> byteAt;
+    std::vector<int> cuts;
+    std::vector<int> blanks;  // the placeholders of empty boxes
+    for (std::size_t byte = 0; byte < text.size();) {
+        const auto lead = static_cast<unsigned char>(text[byte]);
+        const std::size_t width = lead < 0x80 ? 1 : lead < 0xE0 ? 2 : lead < 0xF0 ? 3 : 4;
+        if (text.compare(byte, kObjectReplacement.size(), kObjectReplacement) == 0) {
+            const int offset = from + static_cast<int>(byteAt.size());
+            const ObjectPtr child =
+                objects != nullptr ? objects->objectAtOffset(offset) : nullptr;
+            const bool real = child != nullptr && !child->sameAs(*leaf);
+            // An empty box -- Wikipedia puts an empty <span> in every tab
+            // link -- shows nothing and is no line of its own; cut at, it
+            // was a line that said only "link".
+            const bool empty = real && DocumentLeaves::isBlankLeaf(*child);
+            if (empty) {
+                blanks.push_back(offset);
+            }
+            bool cut = !empty;
+            if (cut && settings_.useScreenLayout) {
+                // Only a box the toolkit SAYS is a block: an object inside a
+                // line of text with no display at all flows in it, as it
+                // always was read.
+                cut = real && child->attributes().count("display") != 0 &&
+                      !isInlineBox(*child);
+            }
+            if (cut) {
+                cuts.push_back(offset);
+            }
+        }
+        byteAt.push_back(byte);
+        byte += width;
+    }
+    byteAt.push_back(text.size());
+    if (cuts.empty()) {
+        return whole;
+    }
+    struct Piece {
+        int start;
+        int end;
+        bool object;
+    };
+    std::vector<Piece> pieces;
+    int cursor = from;
+    for (const int cut : cuts) {
+        if (cut > cursor) {
+            pieces.push_back({cursor, cut, false});
+        }
+        pieces.push_back({cut, cut + 1, true});
+        cursor = cut + 1;
+    }
+    if (cursor < to) {
+        pieces.push_back({cursor, to, false});
+    }
+    // The space between two links is not a line: it goes with the one before.
+    const auto separator = [&](const Piece& piece) {
+        if (piece.object) {
+            return false;
+        }
+        const auto index = [&](int offset) {
+            return byteAt[static_cast<std::size_t>(
+                std::clamp(offset - from, 0, static_cast<int>(byteAt.size()) - 1))];
+        };
+        // An empty box's placeholder says nothing, so it is no reason for a
+        // line either; a real object's is.
+        std::string rest;
+        for (int offset = piece.start; offset < piece.end; ++offset) {
+            if (std::find(blanks.begin(), blanks.end(), offset) != blanks.end()) {
+                continue;
+            }
+            const std::size_t begin = index(offset);
+            rest.append(text, begin, index(offset + 1) - begin);
+        }
+        return isSeparatorText(rest);
+    };
+    std::vector<Piece> merged;
+    for (const Piece& piece : pieces) {
+        if (separator(piece) && !merged.empty()) {
+            merged.back().end = piece.end;
+        } else if (merged.size() == 1 && separator(merged.back())) {
+            merged.back() = {merged.back().start, piece.end, piece.object};
+        } else {
+            merged.push_back(piece);
+        }
+    }
+    for (std::size_t index = 0; index < merged.size(); ++index) {
+        const Piece& piece = merged[index];
+        if (position.offset < piece.end || index + 1 == merged.size()) {
+            return Segment{Line{DocumentPosition{leaf, piece.start}, DocumentPosition{leaf, piece.end}},
+                           /*cutBefore=*/index > 0 || piece.object,
+                           /*cutAfter=*/index + 1 < merged.size() || piece.object};
+        }
+    }
+    return whole;
 }
 
 std::optional<DocumentTextRange::Line> DocumentTextRange::lineAt(
     const DocumentPosition& position) const {
-    std::optional<Line> line = leafLineAt(position);
-    if (!line.has_value()) {
+    std::optional<Segment> segment = segmentAt(position);
+    if (!segment.has_value()) {
         return std::nullopt;
     }
+    Line line = segment->line;
     if (settings_.useScreenLayout) {
         // On: the line goes on into the neighbouring leaves it shares the
-        // screen line with -- "User name" and its field are one line.
-        // A <br> is a text node holding a line break: the screen line ends
-        // there, so a leaf that ends with one is never joined onwards.
+        // screen line with -- "User name" and its field are one line -- but
+        // never across a block cut inside a leaf. A <br> is a text node
+        // holding a line break: a leaf that ends with one is never joined
+        // onwards.
         const auto endsWithBreak = [this](const ObjectPtr& leaf) {
             if (DocumentLeaves::isEmbeddedLeaf(*leaf)) {
                 return false;
@@ -1234,38 +1387,43 @@ std::optional<DocumentTextRange::Line> DocumentTextRange::lineAt(
             const int length = leafLength(leaf);
             return length > 0 && leaf->textRange(length - 1, length) == "\n";
         };
-        int characters = line->end.offset - line->start.offset;
-        for (int joined = 0; joined < kMaxJoinedLeaves && characters < kMaxJoinedCharacters &&
-                             line->end.offset >= leafLength(line->end.leaf) &&
-                             !endsWithBreak(line->end.leaf);
+        int characters = line.end.offset - line.start.offset;
+        bool open = !segment->cutAfter;
+        for (int joined = 0; open && joined < kMaxJoinedLeaves &&
+                             characters < kMaxJoinedCharacters &&
+                             line.end.offset >= leafLength(line.end.leaf) &&
+                             !endsWithBreak(line.end.leaf);
              ++joined) {
-            const ObjectPtr next = DocumentLeaves::next(root_, line->end.leaf);
-            if (next == nullptr || !sameScreenLine(line->end.leaf, next)) {
+            const ObjectPtr next = DocumentLeaves::next(root_, line.end.leaf);
+            if (next == nullptr || !sameScreenLine(line.end.leaf, next)) {
                 break;
             }
-            const std::optional<Line> more = leafLineAt(DocumentPosition{next, 0});
-            if (!more.has_value()) {
+            const std::optional<Segment> more = segmentAt(DocumentPosition{next, 0});
+            if (!more.has_value() || more->cutBefore) {
                 break;
             }
-            characters += more->end.offset - more->start.offset;
-            line->end = more->end;
+            characters += more->line.end.offset - more->line.start.offset;
+            line.end = more->line.end;
+            open = !more->cutAfter;
         }
-        for (int joined = 0; joined < kMaxJoinedLeaves && characters < kMaxJoinedCharacters &&
-                             line->start.offset == 0;
+        open = !segment->cutBefore;
+        for (int joined = 0; open && joined < kMaxJoinedLeaves &&
+                             characters < kMaxJoinedCharacters && line.start.offset == 0;
              ++joined) {
-            const ObjectPtr previous = DocumentLeaves::previous(root_, line->start.leaf);
+            const ObjectPtr previous = DocumentLeaves::previous(root_, line.start.leaf);
             if (previous == nullptr || endsWithBreak(previous) ||
-                !sameScreenLine(previous, line->start.leaf)) {
+                !sameScreenLine(previous, line.start.leaf)) {
                 break;
             }
             const int length = leafLength(previous);
-            const std::optional<Line> more =
-                leafLineAt(DocumentPosition{previous, std::max(0, length - 1)});
-            if (!more.has_value() || more->end.offset < length) {
+            const std::optional<Segment> more =
+                segmentAt(DocumentPosition{previous, std::max(0, length - 1)});
+            if (!more.has_value() || more->cutAfter || more->line.end.offset < length) {
                 break;
             }
-            characters += more->end.offset - more->start.offset;
-            line->start = more->start;
+            characters += more->line.end.offset - more->line.start.offset;
+            line.start = more->line.start;
+            open = !more->cutBefore;
         }
         return line;
     }
@@ -1281,87 +1439,21 @@ std::optional<DocumentTextRange::Line> DocumentTextRange::lineAt(
         return length > 0 && length <= 2 && isBlankText(leaf->textRange(0, length)) &&
                leaf->textRange(0, length).find('\n') != std::string::npos;
     };
-    if (onlyBreak(line->start.leaf)) {
-        const ObjectPtr previous = DocumentLeaves::previous(root_, line->start.leaf);
-        if (previous != nullptr && sameScreenLine(previous, line->start.leaf)) {
+    if (onlyBreak(line.start.leaf)) {
+        const ObjectPtr previous = DocumentLeaves::previous(root_, line.start.leaf);
+        if (previous != nullptr && sameScreenLine(previous, line.start.leaf)) {
             const int length = leafLength(previous);
             if (std::optional<Line> before =
                     lineAt(DocumentPosition{previous, std::max(0, length - 1)})) {
-                before->end = line->end;
+                before->end = line.end;
                 return before;
             }
         }
     }
-    if (line->end.offset >= leafLength(line->end.leaf)) {
-        const ObjectPtr next = DocumentLeaves::next(root_, line->end.leaf);
-        if (next != nullptr && onlyBreak(next) && sameScreenLine(line->end.leaf, next)) {
-            line->end = DocumentPosition{next, leafLength(next)};
-        }
-    }
-    // A link or a field inside a line is a line of its own, NVDA's "fields on
-    // their own lines". The cut is at every U+FFFC, which is where an
-    // embedded object sits in its parent's text.
-    const ObjectPtr& leaf = line->start.leaf;
-    if (DocumentLeaves::isEmbeddedLeaf(*leaf)) {
-        return line;
-    }
-    const int from = line->start.offset;
-    const int to = line->end.offset;
-    const std::string text = leaf->textRange(from, to);
-    if (text.find(kObjectReplacement) == std::string::npos) {
-        return line;
-    }
-    // Character offsets of each code point's first byte, and the placeholders.
-    std::vector<std::size_t> byteAt;
-    std::vector<int> placeholders;
-    for (std::size_t byte = 0; byte < text.size();) {
-        const auto lead = static_cast<unsigned char>(text[byte]);
-        const std::size_t length = lead < 0x80 ? 1 : lead < 0xE0 ? 2 : lead < 0xF0 ? 3 : 4;
-        if (text.compare(byte, kObjectReplacement.size(), kObjectReplacement) == 0) {
-            placeholders.push_back(from + static_cast<int>(byteAt.size()));
-        }
-        byteAt.push_back(byte);
-        byte += length;
-    }
-    byteAt.push_back(text.size());
-    struct Segment {
-        int start;
-        int end;
-    };
-    std::vector<Segment> segments;
-    int cursor = from;
-    for (const int placeholder : placeholders) {
-        if (placeholder > cursor) {
-            segments.push_back({cursor, placeholder});
-        }
-        segments.push_back({placeholder, placeholder + 1});
-        cursor = placeholder + 1;
-    }
-    if (cursor < to) {
-        segments.push_back({cursor, to});
-    }
-    // The space between two links is not a line: it goes with the one before.
-    const auto blank = [&](const Segment& segment) {
-        const auto index = [&](int offset) {
-            return byteAt[static_cast<std::size_t>(
-                std::clamp(offset - from, 0, static_cast<int>(byteAt.size()) - 1))];
-        };
-        const std::size_t begin = index(segment.start);
-        return isSeparatorText(std::string_view{text}.substr(begin, index(segment.end) - begin));
-    };
-    std::vector<Segment> merged;
-    for (const Segment& segment : segments) {
-        if (blank(segment) && !merged.empty()) {
-            merged.back().end = segment.end;
-        } else if (!merged.empty() && blank(merged.back()) && merged.size() == 1) {
-            merged.back().end = segment.end;
-        } else {
-            merged.push_back(segment);
-        }
-    }
-    for (const Segment& segment : merged) {
-        if (position.offset < segment.end || &segment == &merged.back()) {
-            return Line{DocumentPosition{leaf, segment.start}, DocumentPosition{leaf, segment.end}};
+    if (line.end.offset >= leafLength(line.end.leaf)) {
+        const ObjectPtr next = DocumentLeaves::next(root_, line.end.leaf);
+        if (next != nullptr && onlyBreak(next) && sameScreenLine(line.end.leaf, next)) {
+            line.end = DocumentPosition{next, leafLength(next)};
         }
     }
     return line;

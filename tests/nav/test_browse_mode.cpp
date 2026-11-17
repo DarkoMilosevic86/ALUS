@@ -2176,3 +2176,79 @@ TEST_CASE("N144 Escape is the application's in browse mode and ALUS's in focus m
     browse->setPassThrough(true, /*announce=*/false);
     CHECK(browse->alternativeScript(gesture, escape) == escape);
 }
+
+TEST_CASE("N146 a line is NVDA's, not the screen's wrapping", "[browsemode][layout]") {
+    const std::filesystem::path dir =
+        std::filesystem::temp_directory_path() / "alus-test-logical-lines";
+    g_setenv("ALUS_CONFIG_DIR", dir.c_str(), TRUE);
+    NavFixture fixture;
+    MockBackend& backend = fixture.backend;
+    const Ref application = backend.addApplication("Browser", "Chromium");
+    const Ref window = backend.add(application, PlatformRole::Frame, "Results");
+    backend.addState(window, PlatformState::Active);
+    const Ref document = backend.add(window, PlatformRole::DocumentWeb, "Results");
+    backend.addInterface(document, a11y::Interface::Collection);
+    const Ref top = addTextLeaf(backend, document, PlatformRole::Heading, "Results");
+    backend.node(top).attributes["display"] = "block";
+
+    // A search result: <a><h3>title</h3><span>site</span><div>address</div>
+    // <span class=icon></span></a>. Chrome makes the link one leaf whose
+    // text is "U+FFFC site U+FFFC U+FFFC"; the title and the address are
+    // blocks, the icon an empty box.
+    const Ref link = backend.add(document, PlatformRole::Link, "Ljubo Milos");
+    backend.node(link).interfaces |= a11y::Interface::Text;
+    backend.node(link).actionNames.push_back("jump");
+    backend.addState(link, PlatformState::Focusable);
+    backend.addState(link, PlatformState::Showing);
+    backend.node(link).attributes["display"] = "block";
+    const Ref title = addTextLeaf(backend, link, PlatformRole::Heading, "Ljubo Milos");
+    backend.node(title).attributes["display"] = "block";
+    const Ref address = addTextLeaf(backend, link, PlatformRole::Section, "https://example.org");
+    backend.node(address).attributes["display"] = "block";
+    const Ref icon = backend.add(link, PlatformRole::Section, "");
+    backend.node(icon).attributes["display"] = "inline-block";
+    backend.node(link).text = "\xEF\xBF\xBCWikipedia\xEF\xBF\xBC\xEF\xBF\xBC";
+    backend.node(link).links.push_back(a11y::LinkInfo{0, 1, title, ""});
+    backend.node(link).links.push_back(a11y::LinkInfo{10, 11, address, ""});
+    backend.node(link).links.push_back(a11y::LinkInfo{11, 12, icon, ""});
+
+    // A paragraph of 250 characters with no line break: the screen wraps it
+    // however wide the window is; NVDA cuts it at 100.
+    std::string words;
+    while (words.size() < 250) {
+        words += "abcdefghi ";
+    }
+    const Ref paragraph = addTextLeaf(backend, document, PlatformRole::Paragraph, words);
+    backend.node(paragraph).attributes["display"] = "block";
+    makeContainer(backend, document, 3);
+
+    for (const char* layout : {"true", "false"}) {
+        DYNAMIC_SECTION("screen layout " << layout) {
+            fixture.config().setString("virtualBuffers", "useScreenLayout", layout);
+            fixture.nav().applyConfiguration();
+            nav::TreeInterceptorPtr interceptor = nav::BrowseMode::chooseForDocument(
+                fixture.registry.objectFor(document), fixture.nav());
+            auto* browse = dynamic_cast<nav::BrowseMode*>(interceptor.get());
+            REQUIRE(browse != nullptr);
+            REQUIRE(browse->moveTo(fixture.registry.objectFor(top), a11y::OutputReason::QuickNav));
+            const std::vector<std::string> lines = readLines(fixture, *browse, 7);
+            std::string all;
+            for (const std::string& line : lines) {
+                all += line + " / ";
+            }
+            INFO(all);
+            // Title, site, address: three lines, and no line for the icon.
+            CHECK(lines[0].find("Ljubo Milos") != std::string::npos);
+            CHECK(lines[0].find("Wikipedia") == std::string::npos);
+            CHECK(lines[1].find("Wikipedia") != std::string::npos);
+            CHECK(lines[1].find("example.org") == std::string::npos);
+            CHECK(lines[2].find("example") != std::string::npos);
+            // Then the paragraph, in lines of at most 100 characters.
+            CHECK(lines[3].find("abcdefghi") != std::string::npos);
+            CHECK(lines[3].size() <= 110);
+            CHECK(lines[4].find("abcdefghi") != std::string::npos);
+            CHECK(lines[5].find("abcdefghi") != std::string::npos);
+        }
+    }
+    std::filesystem::remove_all(dir);
+}

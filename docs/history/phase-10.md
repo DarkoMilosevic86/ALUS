@@ -1308,3 +1308,30 @@ example). Add-ons compare versions numerically, so one asking for at least
 0.1.0 still loads; the test add-on that asks for a newer ALUS now asks for
 9999.0.0. `tools/alus-switch.sh alus nolog` runs ALUS for everyday use with
 no log at all (`--log-level off`, file /dev/null).
+
+**N146 — lines as NVDA makes them.** Reported after N143: "on Wikipedia
+nothing is right; with the screen layout off it still reads 'Ljubo Miloš
+Wikipedia https://…' as one line". That is a search result: a link holding
+the title (h3), the site name and the address. Reproduced with a page of the
+same structure, and on sh.wikipedia.org with `browse-walk`. Three defects:
+
+- *The screen's wrapping.* A line inside a leaf was the toolkit's LINE
+  boundary, i.e. where the window wraps the text. A visually hidden skip
+  link one pixel wide read "Prijeđi" / "na" / "sadržaj", one word a line,
+  and a paragraph was as long as the window was wide. NVDA's buffer never
+  looks at the screen: a line ends at a line break or a block, and a longer
+  one is cut at the last space within 100 characters
+  (`virtualBuffers.maxLineLength`). `leafLineAt` now does exactly that, and
+  the screen layout joins leaves only up to the same 100. (This also retires
+  N143's wrapped-link fix: there is no wrapping left to repeat a link.)
+- *Blocks inside a leaf.* Chrome makes such a link one leaf with the title
+  and the address as embedded objects, so the line went straight through
+  them. A line is now always cut at an embedded object whose `display` is a
+  block, with the screen layout on too (`segmentAt`); off, at every embedded
+  object, as before. The screen layout does not join across such a cut.
+- *Empty boxes.* Wikipedia puts an empty element in every tab link, and a
+  cut at it was a line that said only "link". An empty embedded object
+  (`DocumentLeaves::isBlankLeaf`) cuts nothing and counts as a separator.
+
+Tests: `tests/nav/test_browse_mode.cpp` ("N146 a line is NVDA's, not the
+screen's wrapping"), on and off.

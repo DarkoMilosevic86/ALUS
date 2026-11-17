@@ -298,6 +298,15 @@ private:
         DocumentPosition end;
     };
     std::optional<Line> lineAt(const DocumentPosition& position) const;
+    // One leaf's line, cut at the embedded objects that end a line: a block
+    // one always, any one with the screen layout off. `cutBefore`/`cutAfter`
+    // say a cut made that edge, so the screen layout must not join across it.
+    struct Segment {
+        Line line;
+        bool cutBefore = false;
+        bool cutAfter = false;
+    };
+    std::optional<Segment> segmentAt(const DocumentPosition& position) const;
     // The leaf's own line at `position`: the toolkit's line, or the whole of
     // an embedded leaf.
     std::optional<Line> leafLineAt(const DocumentPosition& position) const;
