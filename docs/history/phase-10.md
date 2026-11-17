@@ -1335,3 +1335,30 @@ same structure, and on sh.wikipedia.org with `browse-walk`. Three defects:
 
 Tests: `tests/nav/test_browse_mode.cpp` ("N146 a line is NVDA's, not the
 screen's wrapping"), on and off.
+
+**N147 — YouTube: the volume went down by itself, and Enter played and
+paused at once.** Log `alus-measure-20261117-142209.log`. ALUS never sets
+a volume. What happened is in the key events:
+
+- 14:22:36, the video link activated: the focus went to "YouTube video
+  player" while the page was still BUSY, and the grab set was computed
+  then -- 210 keys, without browse mode, because the key lookup only takes
+  the tree interceptor of a focus that is ready. When the page finished
+  loading, `handleInterceptorEvent` marked the EVENT's object ready and not
+  the focus, and the grabs were never recomputed. From 14:22:39 to 14:23:01
+  every down arrow arrived ungrabbed: the player got it (volume -5% a press;
+  the slider then read 0) while browse mode, now ready, ALSO ran
+  `moveByLine_forward` on it. Now the focus is marked with its document's
+  readiness and the grabs are refreshed when that changes.
+- 14:24:05, Enter on the play button: ungrabbed again (focus on the button,
+  stale grabs), so the page played, and browse mode's `activatePosition`
+  ran too and paused. As a rule, a backend that knows which keys it grabbed
+  (`IInputBackend::reportsGrabs`, the a11y-manager backend) now never runs a
+  script for a plain key that reached the application -- only a script that
+  merely watches its key (`needsKeyPassThrough`) does -- and the grab set
+  is recomputed, since it was stale.
+
+Tests: `tests/input/test_manager.cpp` ("N147 a key that reached the
+application ungrabbed does not also run its script"),
+`tests/nav/test_browse_mode.cpp` ("N147 the focus becomes ready with its
+document, and the keys follow it"); the second fails without the fix.

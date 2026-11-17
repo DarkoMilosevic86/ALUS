@@ -618,3 +618,27 @@ TEST_CASE("a double press with the ALUS key held counts as a repeat") {
     harness.press(keyUp(keysym::kKpInsert, 0, alusKeycode));
     CHECK(probe.counts == std::vector<int>{0, 1});
 }
+
+TEST_CASE("N147 a key that reached the application ungrabbed does not also run its script") {
+    // Log 14:24:05, YouTube: Enter on the play button was not grabbed (the
+    // grab set was stale), reached the page -- play -- and still ran browse
+    // mode's activatePosition -- pause again. One press, two actions.
+    Harness harness;
+    harness.bind("kb:enter", "activate");
+    harness.backend.setReportsGrabs(true);
+
+    KeyEvent grabbed = keyDown(keysym::kReturn, 0, 36);
+    grabbed.fromGrab = true;
+    harness.press(grabbed);
+    KeyEvent grabbedUp = keyUp(keysym::kReturn, 0, 36);
+    grabbedUp.fromGrab = true;
+    harness.press(grabbedUp);
+    harness.fixture.drain();
+    CHECK(harness.commands.ran == std::vector<std::string>{"activate"});
+
+    // The same key, delivered without a grab: the application has it.
+    harness.press(keyDown(keysym::kReturn, 0, 36));
+    harness.press(keyUp(keysym::kReturn, 0, 36));
+    harness.fixture.drain();
+    CHECK(harness.commands.ran == std::vector<std::string>{"activate"});
+}

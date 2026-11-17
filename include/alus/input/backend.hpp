@@ -99,6 +99,10 @@ public:
 
     // Whether this platform can inject a key press. False on Wayland (N18).
     virtual bool canSendKeys() const = 0;
+    // Whether KeyEvent::fromGrab is TRUE information: the key was consumed by
+    // a grab and the application did not get it. N147: when it is, a key that
+    // reached the application is never also run as an ALUS script.
+    virtual bool reportsGrabs() const { return false; }
     virtual bool sendKey(const KeyDefinition& key, std::string* error) = 0;
 
     // Whether the PLATFORM already gives the application a real key press when
@@ -157,6 +161,7 @@ public:
         return true;
     }
     bool canSendKeys() const override { return false; }
+    bool reportsGrabs() const override { return reportsGrabs_; }
     bool sendKey(const KeyDefinition& /*key*/, std::string* error) override {
         if (error != nullptr) {
             *error = "this backend cannot inject key presses";
@@ -179,6 +184,8 @@ public:
     void setModifierDoublePressReachesApplication(bool value) noexcept {
         doublePressReachesApplication_ = value;
     }
+    // A test that sets this must also set KeyEvent::fromGrab itself.
+    void setReportsGrabs(bool value) noexcept { reportsGrabs_ = value; }
     bool deliver(const KeyEvent& event) { return handler_ ? handler_(event) : false; }
     const std::vector<KeyDefinition>& grabs() const noexcept { return grabs_; }
     bool keyboardGrabbed() const noexcept { return keyboardGrabbed_; }
@@ -191,6 +198,7 @@ private:
     std::map<std::uint32_t, std::uint32_t> modifierMasks_;
     unsigned nextModifierIndex_ = 15;
     bool doublePressReachesApplication_ = false;
+    bool reportsGrabs_ = false;
 };
 
 }  // namespace alus::input

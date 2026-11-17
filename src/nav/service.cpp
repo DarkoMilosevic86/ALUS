@@ -346,7 +346,20 @@ void Service::handleInterceptorEvent(const core::Event& event) {
         // has to be told so that `shouldReportTextContent` and the review
         // cursor start believing in it.
         if (TreeInterceptor* current = interceptors_->current()) {
-            object->setTreeInterceptor(current, current->isReady());
+            const bool ready = current->isReady();
+            object->setTreeInterceptor(current, ready);
+            // N147: the FOCUS is what the key lookup asks, and the grab set
+            // was computed while the document was still busy -- without
+            // browse mode. On YouTube the focus was the player, the page went
+            // on loading, and for twenty seconds every arrow key reached the
+            // player (volume down 5% a press) while browse mode also read the
+            // line. When the focus becomes ready, the grabs follow it.
+            const a11y::ObjectPtr& focus = registry_->api().focus();
+            if (focus != nullptr && focus->treeInterceptor() == current &&
+                focus->treeInterceptorReady() != ready) {
+                focus->setTreeInterceptor(current, ready);
+                refreshGrabs();
+            }
         }
     }
 }

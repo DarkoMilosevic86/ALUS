@@ -2252,3 +2252,35 @@ TEST_CASE("N146 a line is NVDA's, not the screen's wrapping", "[browsemode][layo
     }
     std::filesystem::remove_all(dir);
 }
+
+TEST_CASE("N147 the focus becomes ready with its document, and the keys follow it",
+          "[browsemode][grabs]") {
+    // Log 14:22:36, YouTube: the focus went to the player while the page was
+    // still loading; the key lookup asks the focus whether its document is
+    // ready, and nothing told it once the page was.
+    NavFixture fixture;
+    MockBackend& backend = fixture.backend;
+    const Ref application = backend.addApplication("Browser", "Chromium");
+    const Ref window = backend.add(application, PlatformRole::Frame, "Video");
+    backend.addState(window, PlatformState::Active);
+    const Ref document = backend.add(window, PlatformRole::DocumentWeb, "Video");
+    backend.addInterface(document, a11y::Interface::Collection);
+    backend.addState(document, PlatformState::Busy);
+    const Ref player = addTextLeaf(backend, document, PlatformRole::Section, "Player", "Player");
+    backend.addState(player, PlatformState::Focusable);
+    makeContainer(backend, document, 1);
+
+    backend.addState(player, PlatformState::Focused);
+    backend.emit("object:state-changed:focused", player, 1);
+    fixture.pumpOnce();
+    const a11y::ObjectPtr focus = fixture.registry.api().focus();
+    REQUIRE(focus != nullptr);
+    REQUIRE(focus->ref() == player);
+    REQUIRE(focus->treeInterceptor() != nullptr);
+    CHECK_FALSE(focus->treeInterceptorReady());
+
+    backend.removeState(document, PlatformState::Busy);
+    backend.emit("object:state-changed:busy", document, 0);
+    fixture.pumpOnce();
+    CHECK(fixture.registry.api().focus()->treeInterceptorReady());
+}

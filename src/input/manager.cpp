@@ -549,6 +549,25 @@ GestureManager::Result GestureManager::executeGesture(const std::shared_ptr<Gest
     }
 
     std::optional<script::Script> script = dispatcher_.findScript(*gesture);
+    // N147: a key that was NOT grabbed has already reached the application.
+    // Running a script for it as well does the thing twice -- on YouTube,
+    // Enter on the play button reached the page (play) and ran browse mode's
+    // activatePosition (pause again), because the grab set had been computed
+    // for a context the lookup no longer saw. Only a script that merely
+    // watches its key (needsKeyPassThrough) runs on a key the application
+    // got; any other means the grab set is stale, so it is recomputed.
+    if (script.has_value() && backend_ != nullptr && backend_->reportsGrabs()) {
+        if (const auto* key = dynamic_cast<const KeyboardGesture*>(gesture.get());
+            key != nullptr && !key->event().fromGrab && !key->isAlusKey() &&
+            key->modifiers() == 0 &&
+            (script->info == nullptr || !script->info->needsKeyPassThrough)) {
+            ALUS_DEBUG("{} reached the application ungrabbed; its script is not run as well",
+                       key->identifiers().empty() ? std::string("?")
+                                                  : key->identifiers().front());
+            loop_.queueFunction([this] { refreshGrabs(); }, false, "staleGrabs");
+            script.reset();
+        }
+    }
     if (auto* keyboardGesture = dynamic_cast<KeyboardGesture*>(gesture.get())) {
         keyboardGesture->setHasScript(script.has_value());
     }

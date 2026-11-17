@@ -111,6 +111,8 @@ public:
     // is a no-op there, and the KeyboardMonitor interface has no injection
     // method at all. A privileged /dev/uinput helper is the v1.1 answer.
     bool canSendKeys() const override { return false; }
+    // fromGrab is matched against the grabs this backend installed.
+    bool reportsGrabs() const override { return true; }
     bool sendKey(const KeyDefinition& key, std::string* error) override;
 
     // The compositor's own contract (N34): "If any of the keys in @modifiers
