@@ -430,6 +430,21 @@ endif
 # `alus-elements`: the browse mode elements list (alus+f7), in its own process
 # for the same reason as `alus-settings`. It only needs the labels, which the
 # daemon hands it in a file; the objects stay in the daemon.
+# `alus-menu`: the ALUS menu (alus+a) -- settings, help, donate, the
+# configuration commands and exit -- in its own process like every window.
+# The help it opens is the HTML built from docs/ (help/<lang>/), installed
+# under <datadir>/doc/alus.
+if have_gui
+  alus_menu = executable('alus-menu',
+    files('gui/menu_main.cpp'),
+    cpp_args: [
+      '-DALUS_VERSION="' + meson.project_version() + '"',
+      '-DALUS_DOC_DIR="' + get_option('prefix') / get_option('datadir') / 'doc' / 'alus' + '"',
+    ],
+    dependencies: [alus_core_dep, gtk_dep],
+    install: true)
+endif
+
 # `alus-clipboard`: the system clipboard on X11 through Xwayland, which a
 # windowless screen reader cannot reach through Wayland (phase-10.md N145).
 if have_gui

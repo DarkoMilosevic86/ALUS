@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alus 2026.1.0\n"
 "Report-Msgid-Bugs-To: daremc86@gmail.com\n"
-"POT-Creation-Date: 2026-11-15 13:20+0000\n"
-"PO-Revision-Date: 2026-11-15 13:20+0000\n"
+"POT-Creation-Date: 2026-11-20 09:36+0000\n"
+"PO-Revision-Date: 2026-11-20 09:36+0000\n"
 "Last-Translator: tools/import-nvda-po.py\n"
 "Language-Team: Serbian (Cyrillic)\n"
 "Language: sr_RS\n"
@@ -1194,7 +1194,7 @@ msgstr "ван %s"
 #. Translators: spoken when a paragraph is blank.
 #. Translators: spoken when a line or a field is empty.
 #. Translators: spoken when the review cursor reaches an empty line.
-#: src/a11y/text_speech.cpp:1392 src/nav/browse_mode.cpp:1289 src/nav/paragraph_nav.cpp:231
+#: src/a11y/text_speech.cpp:1392 src/nav/browse_mode.cpp:1298 src/nav/paragraph_nav.cpp:231
 #: src/speech/presenter.cpp:291 src/speech/spelling.cpp:149 src/speech/spelling.cpp:157
 msgid "blank"
 msgstr "празно"
@@ -1906,12 +1906,12 @@ msgstr "одавде не могу да сачувам подешавања"
 #. a read-only home directory, a full disk. NOT silent: a user who
 #. believes a setting was kept and finds it gone after a restart has
 #. no way to know which of the two went wrong.
-#: src/config/commands.cpp:60
+#: src/config/commands.cpp:60 src/daemon/main.cpp:655
 msgid "Could not save configuration"
 msgstr "Не могу да сачувам подешавања"
 
 #. Translators: spoken when the configuration has been written to disk.
-#: src/config/commands.cpp:65
+#: src/config/commands.cpp:65 src/daemon/main.cpp:654
 msgid "Configuration saved"
 msgstr "Подешавања сачувана"
 
@@ -1923,27 +1923,32 @@ msgstr "одавде не могу да вратим подешавања"
 
 #. Translators: spoken when the configuration has been reloaded from
 #. disk, undoing every change made since it was last saved.
-#: src/config/commands.cpp:85
+#: src/config/commands.cpp:85 src/daemon/main.cpp:658
 msgid "Configuration applied"
 msgstr "Подешавања примењена"
 
 #. Translators: spoken when every setting has been returned to its
 #. factory value.
-#: src/config/commands.cpp:93
+#: src/config/commands.cpp:93 src/daemon/main.cpp:661
 msgid "Configuration restored to factory defaults"
 msgstr "Подешавања враћена на фабричке вредности"
 
+#. Translators: spoken as ALUS shuts down, on the user's own command.
+#: src/daemon/main.cpp:663 src/input/commands.cpp:186
+msgid "exiting"
+msgstr "излазим"
+
 #. Translators: spoken as the screen reader finishes starting.
 #. "ALUS" is the product name and is NOT translated.
-#: src/daemon/main.cpp:728
+#: src/daemon/main.cpp:750
 msgid "ALUS started"
 msgstr "ALUS покренут"
 
-#: src/daemon/main.cpp:736
+#: src/daemon/main.cpp:758
 msgid "The object model is not available: %s"
 msgstr "Објектни модел није доступан: %s"
 
-#: src/daemon/main.cpp:750
+#: src/daemon/main.cpp:772
 msgid "Keyboard input is not available: %s"
 msgstr "Улаз са тастатуре није доступан: %s"
 
@@ -2125,6 +2130,140 @@ msgstr "уграђен"
 #: src/gui/main.cpp:400
 msgid "This is how this voice sounds."
 msgstr "Овако звучи овај глас."
+
+#. Translators: closes the About and Donate dialogs of the ALUS menu.
+#: src/gui/menu_main.cpp:222
+msgid "_Close"
+msgstr "_Затвори"
+
+#. Translators: the text of the About dialog of the ALUS menu. %s is the
+#. version, e.g. "2026.1.0 beta".
+#: src/gui/menu_main.cpp:234
+msgid ""
+"ALUS (Access Linux Using Speech), version %s\n"
+"\n"
+"A screen reader for Linux: speech and braille for the GNOME desktop, the web, LibreOffice, mail and the terminal.\n"
+"\n"
+"Copyright (C) 2026 Darko Milošević.\n"
+"\n"
+"ALUS is free software, released under the GNU General Public License, version 2 or later. Its design follows the screen reader it was ported from, whose data and translations it builds on.\n"
+"\n"
+"Project page: https://github.com/DarkoMilosevic86/ALUS"
+msgstr ""
+"ALUS (Аццесс Linux Усинг Спеецх), верзија %s\n"
+"\n"
+"Читач екрана за Linux: говор и брајев ред за GNOME радну површину, веб, LibreOffice, пошту и терминал.\n"
+"\n"
+"Ауторска права (Ц) 2026 Дарко Милошевић.\n"
+"\n"
+"ALUS је слободан софтвер, објављен под GNU општом јавном лиценцом, верзија 2 или новија. Његов дизајн прати читач екрана из кога је пренесен и ослања се на његове податке и преводе.\n"
+"\n"
+"Страница пројекта: https://github.com/DarkoMilosevic86/ALUS"
+
+#. Translators: the title of the About dialog of the ALUS menu.
+#: src/gui/menu_main.cpp:244
+msgid "About ALUS"
+msgstr "О програму ALUS"
+
+#. Translators: the text of the Donate dialog of the ALUS menu. Both %s
+#. are the author's donation address.
+#: src/gui/menu_main.cpp:253
+msgid ""
+"ALUS is free, and it is made by one person. If it helps you, you can support its development with a donation.\n"
+"\n"
+"PayPal: %s\n"
+"Google Pay: %s\n"
+"\n"
+"Open PayPal opens the donation page in your browser. For Google Pay, copy the address and send the donation from the Google Pay app.\n"
+"\n"
+"Thank you."
+msgstr ""
+"ALUS је бесплатан, а прави га један човек. Ако вам помаже, његов развој можете подржати донацијом.\n"
+"\n"
+"PayPal: %s\n"
+"Google Pay: %s\n"
+"\n"
+"Дугме Отвори PayPal отвара страницу за донирање у прегледачу. За Google Pay копирајте адресу и пошаљите донацију из апликације Google Pay.\n"
+"\n"
+"Хвала."
+
+#. Translators: the title of the Donate dialog of the ALUS menu.
+#: src/gui/menu_main.cpp:262
+msgid "Donate"
+msgstr "Донирање"
+
+#: src/gui/menu_main.cpp:265
+msgid "Open _PayPal"
+msgstr "Отвори _PayPal"
+
+#. Translators: a button in the Donate dialog; copies the donation address
+#. for Google Pay.
+#: src/gui/menu_main.cpp:279
+msgid "Copy the _address"
+msgstr "Копирај _адресу"
+
+#. Translators: said by the Donate dialog after the address
+#. was copied.
+#: src/gui/menu_main.cpp:285
+msgid "Address copied"
+msgstr "Адреса је копирана"
+
+#: src/gui/menu_main.cpp:314
+msgid "_Settings…"
+msgstr "_Подешавања…"
+
+#: src/gui/menu_main.cpp:315
+msgid "_Input gestures…"
+msgstr "_Команде тастатуре…"
+
+#: src/gui/menu_main.cpp:316
+msgid "_Help"
+msgstr "По_моћ"
+
+#: src/gui/menu_main.cpp:317
+msgid "_Donate…"
+msgstr "_Донирај…"
+
+#: src/gui/menu_main.cpp:318
+msgid "Sa_ve configuration"
+msgstr "_Сачувај подешавања"
+
+#: src/gui/menu_main.cpp:319
+msgid "_Revert to saved configuration"
+msgstr "_Врати сачувана подешавања"
+
+#: src/gui/menu_main.cpp:320
+msgid "Reset configuration to _factory defaults"
+msgstr "Врати _фабричка подешавања"
+
+#: src/gui/menu_main.cpp:321
+msgid "E_xit"
+msgstr "_Излаз"
+
+#: src/gui/menu_main.cpp:326
+msgid "_User guide"
+msgstr "_Упутство за кориснике"
+
+#: src/gui/menu_main.cpp:327
+msgid "_Commands quick reference"
+msgstr "_Брзи преглед команди"
+
+#: src/gui/menu_main.cpp:328
+msgid "What's _new"
+msgstr "Шта је _ново"
+
+#: src/gui/menu_main.cpp:329
+msgid "_About…"
+msgstr "_О програму ALUS…"
+
+#. Translators: the title of the ALUS menu's window.
+#: src/gui/menu_main.cpp:387 src/gui/menu_main.cpp:420
+msgid "ALUS menu"
+msgstr "ALUS мени"
+
+#: src/gui/menu_main.cpp:387
+msgid "Help"
+msgstr "Помоћ"
 
 #: src/gui/model.cpp:26 src/gui/model.cpp:59 src/gui/model.cpp:235
 #: src/gui/model.cpp:479 src/gui/model.cpp:504 src/input/commands.cpp:39
@@ -3068,13 +3207,39 @@ msgstr "Уреди гестове"
 msgid "%s (not offered by the synthesizer)"
 msgstr "%s (синтетизатор га не нуди)"
 
+#. Translators: the title of the commands quick reference page that the
+#. ALUS menu opens.
+#: src/gui/service.cpp:421
+msgid "ALUS commands quick reference"
+msgstr "ALUS: брзи преглед команди"
+
+#: src/gui/service.cpp:432
+msgid "Every command ALUS has and the keys that run it now, including keys you assigned yourself. Commands with no key can be given one in the Input gestures dialog."
+msgstr "Све команде које ALUS има и тастери који их сада покрећу, укључујући тастере које сте сами доделили. Команди без тастера тастер можете доделити у прозору Команде тастатуре."
+
+#. Translators: a column of the commands quick reference.
+#: src/gui/service.cpp:443
+msgid "Command"
+msgstr "Команда"
+
+#. Translators: a column of the commands quick reference.
+#: src/gui/service.cpp:445
+msgid "Keys"
+msgstr "Тастери"
+
+#. Translators: the commands quick reference, for a command
+#. with no key.
+#: src/gui/service.cpp:454
+msgid "none"
+msgstr "ниједан"
+
 #. Translators: spoken when a settings shortcut names a settings
 #. panel this version of ALUS does not have.
-#: src/gui/service.cpp:315 src/gui/service.cpp:329
+#: src/gui/service.cpp:517 src/gui/service.cpp:531
 msgid "There are no such settings in this version"
 msgstr "У овој верзији нема таквих подешавања"
 
-#: src/gui/service.cpp:338
+#: src/gui/service.cpp:540
 msgid "The settings window is not available: %s"
 msgstr "Прозор подешавања није доступан: %s"
 
@@ -4792,14 +4957,9 @@ msgstr "искључен изговор командних тастера"
 msgid "cannot quit from here"
 msgstr "одавде не могу да изађем"
 
-#. Translators: spoken as ALUS shuts down, on the user's own command.
-#: src/input/commands.cpp:186
-msgid "exiting"
-msgstr "излазим"
-
 #. Translators: spoken when a movement command reaches the edge of the
 #. document.
-#: src/nav/browse_mode.cpp:469 src/nav/browse_mode.cpp:1148
+#: src/nav/browse_mode.cpp:469 src/nav/browse_mode.cpp:1157
 msgid "edge of document"
 msgstr "ивица документа"
 
@@ -4843,67 +5003,67 @@ msgstr "дијалог за претрагу још није доступан"
 
 #. Translators: Reported when a page reloads (example: after
 #. refreshing a webpage).
-#: src/nav/browse_mode.cpp:1112
+#: src/nav/browse_mode.cpp:1121
 msgid "Refreshed"
 msgstr "Освежено"
 
 #. Translators: spoken when the caret is not inside a container.
-#: src/nav/browse_mode.cpp:1130 src/nav/browse_mode.cpp:1142
+#: src/nav/browse_mode.cpp:1139 src/nav/browse_mode.cpp:1151
 msgid "not in a container"
 msgstr "није у контејнеру"
 
 #. Translators: spoken when a table command is used outside a table.
-#: src/nav/browse_mode.cpp:1189 src/nav/browse_mode.cpp:1194 src/nav/browse_mode.cpp:1247
+#: src/nav/browse_mode.cpp:1198 src/nav/browse_mode.cpp:1203 src/nav/browse_mode.cpp:1256
 msgid "not in a table"
 msgstr "није у табели"
 
 #. Translators: spoken when a table movement reaches the table's edge.
-#: src/nav/browse_mode.cpp:1218 src/nav/browse_mode.cpp:1230
+#: src/nav/browse_mode.cpp:1227 src/nav/browse_mode.cpp:1239
 msgid "edge of table"
 msgstr "ивица табеле"
 
 #. Translators: Presented when use screen layout
 #. option is toggled.
-#: src/nav/browse_mode.cpp:1315
+#: src/nav/browse_mode.cpp:1324
 msgid "Use screen layout on"
 msgstr "Укључено коришћење распореда екрана"
 
 #. Translators: Presented when use screen layout
 #. option is toggled.
-#: src/nav/browse_mode.cpp:1318
+#: src/nav/browse_mode.cpp:1327
 msgid "Use screen layout off"
 msgstr "Искључено коришћење распореда екрана"
 
 #. Translators: spoken when layout table reporting is turned on or off.
-#: src/nav/browse_mode.cpp:1323
+#: src/nav/browse_mode.cpp:1332
 msgid "layout tables on"
 msgstr "укључене табеле за изглед"
 
-#: src/nav/browse_mode.cpp:1324
+#: src/nav/browse_mode.cpp:1333
 msgid "layout tables off"
 msgstr "искључене табеле за изглед"
 
 #. Translators: reported when the single letters of
 #. browse mode jump between elements again.
-#: src/nav/browse_mode.cpp:1362
+#: src/nav/browse_mode.cpp:1376
 msgid "Single letter navigation on"
 msgstr "Укључена навигација помоћу једног слова"
 
 #. Translators: reported when the single letters of
 #. browse mode are handed to the application instead.
-#: src/nav/browse_mode.cpp:1365
+#: src/nav/browse_mode.cpp:1379
 msgid "Single letter navigation off"
 msgstr "Искључена навигација помоћу једног слова"
 
 #. Translators: reported when there is no next text
 #. paragraph in the document (`p`).
-#: src/nav/browse_mode.cpp:1458
+#: src/nav/browse_mode.cpp:1472
 msgid "no next text paragraph"
 msgstr "нема наредног пасуса текста"
 
 #. Translators: reported when there is no previous
 #. text paragraph in the document (`shift+p`).
-#: src/nav/browse_mode.cpp:1461
+#: src/nav/browse_mode.cpp:1475
 msgid "no previous text paragraph"
 msgstr "нема претходног пасуса текста"
 
@@ -4911,7 +5071,7 @@ msgstr "нема претходног пасуса текста"
 #. line number and the second the number of lines. ONE pattern rather than
 #. three concatenated pieces, because the word order is not English's in
 #. every language.
-#: src/nav/document_range.cpp:1841
+#: src/nav/document_range.cpp:2035
 msgid "line %s of %s"
 msgstr "линија %s од %s"
 

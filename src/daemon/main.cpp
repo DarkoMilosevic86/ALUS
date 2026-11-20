@@ -644,6 +644,28 @@ int main(int argc, char* argv[]) {
             i18nService.initialize();
         }
     };
+    // The ALUS menu's configuration items and Exit (N152): the same messages
+    // as the keys that do the same things, and Exit the same way as alus+q,
+    // which waits for the farewell to be spoken.
+    guiHooks.menuAction = [&manager, &subsystems,
+                           quit = inputHooks.quit](const std::string& action) {
+        if (action == "save") {
+            std::string saveError;
+            alus::ui::message(manager.save(&saveError) ? _("Configuration saved")
+                                                       : _("Could not save configuration"));
+        } else if (action == "revert") {
+            alus::config::resetConfiguration(manager, subsystems, /*factoryDefaults=*/false);
+            alus::ui::message(_("Configuration applied"));
+        } else if (action == "reset") {
+            alus::config::resetConfiguration(manager, subsystems, /*factoryDefaults=*/true);
+            alus::ui::message(_("Configuration restored to factory defaults"));
+        } else if (action == "exit") {
+            alus::ui::message(_("exiting"));
+            if (quit) {
+                quit();
+            }
+        }
+    };
     guiHooks.resetAll = [&manager, &subsystems] {
         // The real thing and not a narrower cousin: a factory reset has to
         // bring every subsystem back up, which is what resetConfiguration is.

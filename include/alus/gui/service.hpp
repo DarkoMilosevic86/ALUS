@@ -73,6 +73,9 @@ public:
         // braille.
         std::function<void(const std::string& section)> reloadSection;
         std::function<void()> resetAll;
+        // What the ALUS menu chose that only the daemon can do: "save",
+        // "revert", "reset" (to factory defaults) or "exit".
+        std::function<void(const std::string& action)> menuAction;
     };
 
     Service(config::Manager& manager, input::GestureManager* gestures,
@@ -117,7 +120,15 @@ public:
     // T9.1 through it without a display.
     void openByScript(std::string_view script);
 
+    // alus+a: starts `alus-menu` and acts on its answer, on the main loop.
+    // False when it could not be started (then the settings open instead).
+    bool openMenu();
+    // The commands quick reference as an HTML page, in the current language,
+    // from the catalogue and the live gesture maps -- what the keys really do.
+    std::string commandsReferenceHtml() const;
+
 private:
+    void onMenuChoice(const std::string& choice);
     class Commands;
 
     config::Manager& manager_;

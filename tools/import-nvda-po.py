@@ -205,7 +205,10 @@ KEEP = re.compile(
     r"%(?:\([^)]*\))?[-+ #0]*\d*(?:\.\d+)?[hlLqjzt]*[diouxXeEfgGcrsab%]"
     r"|\{[^}]*\}"
     r"|&[A-Za-z]+;"
-    r"|\b(?:ALUS|NVDA|Orca|GNOME|KDE|Linux|Windows|Wayland|X11|GTK|Qt|"
+    # Web and e-mail addresses are never words (the About and Donate dialogs).
+    r"|https?://[^\s\"]+"
+    r"|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
+    r"|\b(?:Google Pay|PayPal|Google|GitHub|GNU|ALUS|NVDA|Orca|GNOME|KDE|Linux|Windows|Wayland|X11|GTK|Qt|"
     r"LibreOffice|Writer|Calc|Impress|Firefox|Chromium|Chrome|Electron|"
     r"Nautilus|VS\s?Code|HTML|XHTML|XML|CSS|MathML|ARIA|URL|URI|PDF|CSV|INI|"
     r"UTF-8|Unicode|ASCII|D-Bus|AT-SPI|SSIP|BrlAPI|liblouis|libatspi|"

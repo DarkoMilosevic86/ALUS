@@ -8,6 +8,7 @@
 #include "alus/gui/service.hpp"
 
 #include "alus/core/log.hpp"
+#include "alus/gui/gesture_model.hpp"
 #include "alus/gui/model.hpp"
 #include "alus/i18n/i18n.hpp"
 #include "alus/input/gesture.hpp"
@@ -48,11 +49,10 @@ const std::vector<ScriptPage>& table() {
         {"activateReviewCursorDialog", "review"},
         {"activateDocumentFormattingDialog", "formatting"},
         {"activateInputGesturesDialog", "gestures"},
-        // Upstream's `showGui` opens its MENU, and ALUS has no menu: it has
-        // this window, which is the same thing one level down. So the key
-        // opens the window on its first page rather than saying there is no
-        // such panel -- the user asked for "the ALUS settings", and that is
-        // what they get. Its key is ALUS's own choice and not upstream's; see
+        // Upstream's `showGui` opens its MENU, and so does ALUS's now
+        // (alus-menu, N152). The page here is the fallback when the menu
+        // program cannot be started: the settings window on its first page.
+        // Its key is ALUS's own choice and not upstream's; see
         // data/gestures-alus.ini.
         {"showGui", "general"},
         // Bound keys with no page in v1.0. Listed rather than omitted, so the
@@ -128,7 +128,13 @@ private:
     void activateGeneralSettingsDialog(input::Gesture&) {
         open("activateGeneralSettingsDialog");
     }
-    void showGui(input::Gesture&) { open("showGui"); }
+    // N152: NVDA's alus+n menu. The settings window still opens when the
+    // menu program cannot be started.
+    void showGui(input::Gesture&) {
+        if (!service_.openMenu()) {
+            open("showGui");
+        }
+    }
     void activateAdvancedSettings(input::Gesture&) { open("activateAdvancedSettings"); }
     void activateSynthesizerDialog(input::Gesture&) { open("activateSynthesizerDialog"); }
     void activateVoiceDialog(input::Gesture&) { open("activateVoiceDialog"); }
@@ -257,6 +263,202 @@ std::string Service::unavailableReason() const {
         return "alus-settings is not installed";
     }
     return {};
+}
+
+// ---------------------------------------------------------------------------
+// The ALUS menu (N152)
+// ---------------------------------------------------------------------------
+
+namespace {
+
+std::string menuProgram() {
+    std::error_code code;
+    const std::filesystem::path self = std::filesystem::read_symlink("/proc/self/exe", code);
+    if (!code) {
+        for (const std::filesystem::path& candidate :
+             {self.parent_path() / "alus-menu",
+              self.parent_path().parent_path() / "src" / "alus-menu"}) {
+            if (std::filesystem::exists(candidate, code)) {
+                return candidate.string();
+            }
+        }
+    }
+    if (gchar* found = g_find_program_in_path("alus-menu")) {
+        std::string path = found;
+        g_free(found);
+        return path;
+    }
+    return {};
+}
+
+struct MenuWatch {
+    std::string output;
+    std::function<void(const std::string&)> done;
+};
+
+std::string escapeHtml(const std::string& text) {
+    std::string out;
+    out.reserve(text.size());
+    for (const char c : text) {
+        switch (c) {
+            case '&': out += "&amp;"; break;
+            case '<': out += "&lt;"; break;
+            case '>': out += "&gt;"; break;
+            case '"': out += "&quot;"; break;
+            default: out += c;
+        }
+    }
+    return out;
+}
+
+}  // namespace
+
+bool Service::openMenu() {
+    if (options_.noGui || !hasDisplay()) {
+        return false;
+    }
+    const std::string program = menuProgram();
+    if (program.empty()) {
+        ALUS_INFO("gui: alus-menu is not installed; opening the settings");
+        return false;
+    }
+    const std::string language = i18n::currentLanguage();
+    std::vector<const char*> argv{program.c_str()};
+    if (!language.empty()) {
+        argv.push_back("--language");
+        argv.push_back(language.c_str());
+    }
+    argv.push_back(nullptr);
+    gint out = -1;
+    GError* error = nullptr;
+    if (g_spawn_async_with_pipes(nullptr, const_cast<char**>(argv.data()), nullptr,
+                                 G_SPAWN_DEFAULT, nullptr, nullptr, nullptr, nullptr, &out,
+                                 nullptr, &error) == FALSE) {
+        ALUS_WARNING("gui: could not start {}: {}", program,
+                     error != nullptr ? error->message : "unknown error");
+        if (error != nullptr) {
+            g_error_free(error);
+        }
+        return false;
+    }
+    GIOChannel* channel = g_io_channel_unix_new(out);
+    g_io_channel_set_close_on_unref(channel, TRUE);
+    g_io_channel_set_encoding(channel, nullptr, nullptr);
+    g_io_channel_set_flags(channel, G_IO_FLAG_NONBLOCK, nullptr);
+    auto* watch = new MenuWatch{{}, [this](const std::string& choice) { onMenuChoice(choice); }};
+    g_io_add_watch_full(
+        channel, G_PRIORITY_DEFAULT, static_cast<GIOCondition>(G_IO_IN | G_IO_HUP | G_IO_ERR),
+        +[](GIOChannel* source, GIOCondition condition, gpointer data) -> gboolean {
+            auto* self = static_cast<MenuWatch*>(data);
+            if ((condition & G_IO_IN) != 0) {
+                gchar buffer[256];
+                gsize got = 0;
+                const GIOStatus status =
+                    g_io_channel_read_chars(source, buffer, sizeof buffer, &got, nullptr);
+                if (got > 0) {
+                    self->output.append(buffer, got);
+                }
+                if (status == G_IO_STATUS_NORMAL || status == G_IO_STATUS_AGAIN) {
+                    // One line is the whole answer; the child may still be
+                    // showing a dialog of its own, so do not wait for it.
+                    if (self->output.find('\n') == std::string::npos) {
+                        return TRUE;
+                    }
+                }
+            } else if ((condition & (G_IO_HUP | G_IO_ERR)) == 0) {
+                return TRUE;
+            }
+            const std::string choice = self->output.substr(0, self->output.find('\n'));
+            if (!choice.empty() && self->done) {
+                self->done(choice);
+            }
+            return FALSE;
+        },
+        watch, +[](gpointer data) { delete static_cast<MenuWatch*>(data); });
+    g_io_channel_unref(channel);
+    ALUS_INFO("gui: ALUS menu opened");
+    return true;
+}
+
+void Service::onMenuChoice(const std::string& choice) {
+    ALUS_INFO("gui: ALUS menu chose {}", choice);
+    if (choice == "settings") {
+        openPage("general");
+    } else if (choice == "gestures") {
+        openGestures();
+    } else if (choice == "commands") {
+        const std::string html = commandsReferenceHtml();
+        const char* runtime = g_get_user_runtime_dir();
+        const std::filesystem::path dir = std::filesystem::path{runtime} / "alus";
+        std::error_code code;
+        std::filesystem::create_directories(dir, code);
+        const std::filesystem::path file = dir / "commands.html";
+        if (g_file_set_contents(file.c_str(), html.data(), static_cast<gssize>(html.size()),
+                                nullptr) == FALSE) {
+            ALUS_WARNING("gui: could not write {}", file.string());
+            return;
+        }
+        gchar* uri = g_filename_to_uri(file.c_str(), nullptr, nullptr);
+        if (uri != nullptr) {
+            GError* error = nullptr;
+            if (g_app_info_launch_default_for_uri(uri, nullptr, &error) == FALSE) {
+                ALUS_WARNING("gui: could not open the commands reference: {}",
+                             error != nullptr ? error->message : "unknown error");
+                if (error != nullptr) {
+                    g_error_free(error);
+                }
+            }
+            g_free(uri);
+        }
+    } else if (hooks_.menuAction) {
+        hooks_.menuAction(choice);
+    }
+}
+
+std::string Service::commandsReferenceHtml() const {
+    // Translators: the title of the commands quick reference page that the
+    // ALUS menu opens.
+    const std::string title = _("ALUS commands quick reference");
+    std::string html = "<!doctype html>\n<html lang=\"" +
+                       escapeHtml(i18n::currentLanguage().substr(0, 2)) +
+                       "\">\n<head>\n<meta charset=\"utf-8\">\n<title>" + escapeHtml(title) +
+                       "</title>\n<style>body{font-family:sans-serif;max-width:60em;margin:auto;"
+                       "padding:1em;line-height:1.5}table{border-collapse:collapse;width:100%}"
+                       "th,td{border:1px solid #888;padding:.3em .5em;text-align:left;"
+                       "vertical-align:top}</style>\n</head>\n<body>\n<h1>" +
+                       escapeHtml(title) + "</h1>\n";
+    // Translators: the introduction of the commands quick reference page.
+    html += "<p>" +
+            escapeHtml(_("Every command ALUS has and the keys that run it now, including keys "
+                         "you assigned yourself. Commands with no key can be given one in the "
+                         "Input gestures dialog.")) +
+            "</p>\n";
+    if (catalog_ == nullptr || gestures_ == nullptr) {
+        return html + "</body>\n</html>\n";
+    }
+    const Model model = buildModel(*catalog_, *gestures_, keyNames_);
+    for (const std::string& category : model.categories) {
+        html += "<h2>" + escapeHtml(category) + "</h2>\n<table>\n<tr><th>" +
+                // Translators: a column of the commands quick reference.
+                escapeHtml(_("Command")) + "</th><th>" +
+                // Translators: a column of the commands quick reference.
+                escapeHtml(_("Keys")) + "</th></tr>\n";
+        for (const Command* command : model.inCategory(category)) {
+            std::string keys;
+            for (const Binding& binding : command->bindings) {
+                keys += (keys.empty() ? "" : ", ") + binding.display;
+            }
+            if (keys.empty()) {
+                // Translators: the commands quick reference, for a command
+                // with no key.
+                keys = _("none");
+            }
+            html += "<tr><td>" + escapeHtml(command->description) + "</td><td>" +
+                    escapeHtml(keys) + "</td></tr>\n";
+        }
+        html += "</table>\n";
+    }
+    return html + "</body>\n</html>\n";
 }
 
 Service::OpenResult Service::openPage(std::string_view pageId) {

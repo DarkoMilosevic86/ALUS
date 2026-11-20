@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alus 2026.1.0\n"
 "Report-Msgid-Bugs-To: daremc86@gmail.com\n"
-"POT-Creation-Date: 2026-11-15 14:20+0100\n"
+"POT-Creation-Date: 2026-11-20 10:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1206,7 +1206,7 @@ msgstr ""
 #. Translators: spoken when a paragraph is blank.
 #. Translators: spoken when a line or a field is empty.
 #. Translators: spoken when the review cursor reaches an empty line.
-#: src/a11y/text_speech.cpp:1392 src/nav/browse_mode.cpp:1289
+#: src/a11y/text_speech.cpp:1392 src/nav/browse_mode.cpp:1298
 #: src/nav/paragraph_nav.cpp:231 src/speech/presenter.cpp:291
 #: src/speech/spelling.cpp:149 src/speech/spelling.cpp:157
 msgid "blank"
@@ -1937,12 +1937,12 @@ msgstr ""
 #. a read-only home directory, a full disk. NOT silent: a user who
 #. believes a setting was kept and finds it gone after a restart has
 #. no way to know which of the two went wrong.
-#: src/config/commands.cpp:60
+#: src/config/commands.cpp:60 src/daemon/main.cpp:655
 msgid "Could not save configuration"
 msgstr ""
 
 #. Translators: spoken when the configuration has been written to disk.
-#: src/config/commands.cpp:65
+#: src/config/commands.cpp:65 src/daemon/main.cpp:654
 msgid "Configuration saved"
 msgstr ""
 
@@ -1954,28 +1954,33 @@ msgstr ""
 
 #. Translators: spoken when the configuration has been reloaded from
 #. disk, undoing every change made since it was last saved.
-#: src/config/commands.cpp:85
+#: src/config/commands.cpp:85 src/daemon/main.cpp:658
 msgid "Configuration applied"
 msgstr ""
 
 #. Translators: spoken when every setting has been returned to its
 #. factory value.
-#: src/config/commands.cpp:93
+#: src/config/commands.cpp:93 src/daemon/main.cpp:661
 msgid "Configuration restored to factory defaults"
+msgstr ""
+
+#. Translators: spoken as ALUS shuts down, on the user's own command.
+#: src/daemon/main.cpp:663 src/input/commands.cpp:186
+msgid "exiting"
 msgstr ""
 
 #. Translators: spoken as the screen reader finishes starting.
 #. "ALUS" is the product name and is NOT translated.
-#: src/daemon/main.cpp:728
+#: src/daemon/main.cpp:750
 msgid "ALUS started"
 msgstr ""
 
-#: src/daemon/main.cpp:736
+#: src/daemon/main.cpp:758
 #, c-format
 msgid "The object model is not available: %s"
 msgstr ""
 
-#: src/daemon/main.cpp:750
+#: src/daemon/main.cpp:772
 #, c-format
 msgid "Keyboard input is not available: %s"
 msgstr ""
@@ -2167,6 +2172,130 @@ msgstr ""
 #. the voice being tried.
 #: src/gui/main.cpp:400
 msgid "This is how this voice sounds."
+msgstr ""
+
+#. Translators: closes the About and Donate dialogs of the ALUS menu.
+#: src/gui/menu_main.cpp:222
+msgid "_Close"
+msgstr ""
+
+#. Translators: the text of the About dialog of the ALUS menu. %s is the
+#. version, e.g. "2026.1.0 beta".
+#: src/gui/menu_main.cpp:234
+#, c-format
+msgid ""
+"ALUS (Access Linux Using Speech), version %s\n"
+"\n"
+"A screen reader for Linux: speech and braille for the GNOME desktop, the "
+"web, LibreOffice, mail and the terminal.\n"
+"\n"
+"Copyright (C) 2026 Darko Milošević.\n"
+"\n"
+"ALUS is free software, released under the GNU General Public License, "
+"version 2 or later. Its design follows the screen reader it was ported from, "
+"whose data and translations it builds on.\n"
+"\n"
+"Project page: https://github.com/DarkoMilosevic86/ALUS"
+msgstr ""
+
+#. Translators: the title of the About dialog of the ALUS menu.
+#: src/gui/menu_main.cpp:244
+msgid "About ALUS"
+msgstr ""
+
+#. Translators: the text of the Donate dialog of the ALUS menu. Both %s
+#. are the author's donation address.
+#: src/gui/menu_main.cpp:253
+#, c-format
+msgid ""
+"ALUS is free, and it is made by one person. If it helps you, you can support "
+"its development with a donation.\n"
+"\n"
+"PayPal: %s\n"
+"Google Pay: %s\n"
+"\n"
+"Open PayPal opens the donation page in your browser. For Google Pay, copy "
+"the address and send the donation from the Google Pay app.\n"
+"\n"
+"Thank you."
+msgstr ""
+
+#. Translators: the title of the Donate dialog of the ALUS menu.
+#: src/gui/menu_main.cpp:262
+msgid "Donate"
+msgstr ""
+
+#: src/gui/menu_main.cpp:265
+msgid "Open _PayPal"
+msgstr ""
+
+#. Translators: a button in the Donate dialog; copies the donation address
+#. for Google Pay.
+#: src/gui/menu_main.cpp:279
+msgid "Copy the _address"
+msgstr ""
+
+#. Translators: said by the Donate dialog after the address
+#. was copied.
+#: src/gui/menu_main.cpp:285
+msgid "Address copied"
+msgstr ""
+
+#: src/gui/menu_main.cpp:314
+msgid "_Settings…"
+msgstr ""
+
+#: src/gui/menu_main.cpp:315
+msgid "_Input gestures…"
+msgstr ""
+
+#: src/gui/menu_main.cpp:316
+msgid "_Help"
+msgstr ""
+
+#: src/gui/menu_main.cpp:317
+msgid "_Donate…"
+msgstr ""
+
+#: src/gui/menu_main.cpp:318
+msgid "Sa_ve configuration"
+msgstr ""
+
+#: src/gui/menu_main.cpp:319
+msgid "_Revert to saved configuration"
+msgstr ""
+
+#: src/gui/menu_main.cpp:320
+msgid "Reset configuration to _factory defaults"
+msgstr ""
+
+#: src/gui/menu_main.cpp:321
+msgid "E_xit"
+msgstr ""
+
+#: src/gui/menu_main.cpp:326
+msgid "_User guide"
+msgstr ""
+
+#: src/gui/menu_main.cpp:327
+msgid "_Commands quick reference"
+msgstr ""
+
+#: src/gui/menu_main.cpp:328
+msgid "What's _new"
+msgstr ""
+
+#: src/gui/menu_main.cpp:329
+msgid "_About…"
+msgstr ""
+
+#. Translators: the title of the ALUS menu's window.
+#: src/gui/menu_main.cpp:387 src/gui/menu_main.cpp:420
+msgid "ALUS menu"
+msgstr ""
+
+#: src/gui/menu_main.cpp:387
+msgid "Help"
 msgstr ""
 
 #: src/gui/model.cpp:26 src/gui/model.cpp:59 src/gui/model.cpp:235
@@ -3167,13 +3296,42 @@ msgstr ""
 msgid "%s (not offered by the synthesizer)"
 msgstr ""
 
+#. Translators: the title of the commands quick reference page that the
+#. ALUS menu opens.
+#: src/gui/service.cpp:421
+msgid "ALUS commands quick reference"
+msgstr ""
+
+#: src/gui/service.cpp:432
+msgid ""
+"Every command ALUS has and the keys that run it now, including keys you "
+"assigned yourself. Commands with no key can be given one in the Input "
+"gestures dialog."
+msgstr ""
+
+#. Translators: a column of the commands quick reference.
+#: src/gui/service.cpp:443
+msgid "Command"
+msgstr ""
+
+#. Translators: a column of the commands quick reference.
+#: src/gui/service.cpp:445
+msgid "Keys"
+msgstr ""
+
+#. Translators: the commands quick reference, for a command
+#. with no key.
+#: src/gui/service.cpp:454
+msgid "none"
+msgstr ""
+
 #. Translators: spoken when a settings shortcut names a settings
 #. panel this version of ALUS does not have.
-#: src/gui/service.cpp:315 src/gui/service.cpp:329
+#: src/gui/service.cpp:517 src/gui/service.cpp:531
 msgid "There are no such settings in this version"
 msgstr ""
 
-#: src/gui/service.cpp:338
+#: src/gui/service.cpp:540
 #, c-format
 msgid "The settings window is not available: %s"
 msgstr ""
@@ -5084,14 +5242,9 @@ msgstr ""
 msgid "cannot quit from here"
 msgstr ""
 
-#. Translators: spoken as ALUS shuts down, on the user's own command.
-#: src/input/commands.cpp:186
-msgid "exiting"
-msgstr ""
-
 #. Translators: spoken when a movement command reaches the edge of the
 #. document.
-#: src/nav/browse_mode.cpp:469 src/nav/browse_mode.cpp:1148
+#: src/nav/browse_mode.cpp:469 src/nav/browse_mode.cpp:1157
 msgid "edge of document"
 msgstr ""
 
@@ -5137,68 +5290,68 @@ msgstr ""
 
 #. Translators: Reported when a page reloads (example: after
 #. refreshing a webpage).
-#: src/nav/browse_mode.cpp:1112
+#: src/nav/browse_mode.cpp:1121
 msgid "Refreshed"
 msgstr ""
 
 #. Translators: spoken when the caret is not inside a container.
-#: src/nav/browse_mode.cpp:1130 src/nav/browse_mode.cpp:1142
+#: src/nav/browse_mode.cpp:1139 src/nav/browse_mode.cpp:1151
 msgid "not in a container"
 msgstr ""
 
 #. Translators: spoken when a table command is used outside a table.
-#: src/nav/browse_mode.cpp:1189 src/nav/browse_mode.cpp:1194
-#: src/nav/browse_mode.cpp:1247
+#: src/nav/browse_mode.cpp:1198 src/nav/browse_mode.cpp:1203
+#: src/nav/browse_mode.cpp:1256
 msgid "not in a table"
 msgstr ""
 
 #. Translators: spoken when a table movement reaches the table's edge.
-#: src/nav/browse_mode.cpp:1218 src/nav/browse_mode.cpp:1230
+#: src/nav/browse_mode.cpp:1227 src/nav/browse_mode.cpp:1239
 msgid "edge of table"
 msgstr ""
 
 #. Translators: Presented when use screen layout
 #. option is toggled.
-#: src/nav/browse_mode.cpp:1315
+#: src/nav/browse_mode.cpp:1324
 msgid "Use screen layout on"
 msgstr ""
 
 #. Translators: Presented when use screen layout
 #. option is toggled.
-#: src/nav/browse_mode.cpp:1318
+#: src/nav/browse_mode.cpp:1327
 msgid "Use screen layout off"
 msgstr ""
 
 #. Translators: spoken when layout table reporting is turned on or off.
-#: src/nav/browse_mode.cpp:1323
+#: src/nav/browse_mode.cpp:1332
 msgid "layout tables on"
 msgstr ""
 
-#: src/nav/browse_mode.cpp:1324
+#: src/nav/browse_mode.cpp:1333
 msgid "layout tables off"
 msgstr ""
 
 #. Translators: reported when the single letters of
 #. browse mode jump between elements again.
-#: src/nav/browse_mode.cpp:1362
+#: src/nav/browse_mode.cpp:1376
 msgid "Single letter navigation on"
 msgstr ""
 
 #. Translators: reported when the single letters of
 #. browse mode are handed to the application instead.
-#: src/nav/browse_mode.cpp:1365
+#: src/nav/browse_mode.cpp:1379
 msgid "Single letter navigation off"
 msgstr ""
 
 #. Translators: reported when there is no next text
 #. paragraph in the document (`p`).
-#: src/nav/browse_mode.cpp:1458
+#: src/nav/browse_mode.cpp:1472
 msgid "no next text paragraph"
 msgstr ""
 
 #. Translators: reported when there is no previous
 #. text paragraph in the document (`shift+p`).
-#: src/nav/browse_mode.cpp:1461
+#: src/nav/browse_mode.cpp:1475
 msgid "no previous text paragraph"
 msgstr ""
 
@@ -5206,7 +5359,7 @@ msgstr ""
 #. line number and the second the number of lines. ONE pattern rather than
 #. three concatenated pieces, because the word order is not English's in
 #. every language.
-#: src/nav/document_range.cpp:1841
+#: src/nav/document_range.cpp:2035
 #, c-format
 msgid "line %s of %s"
 msgstr ""

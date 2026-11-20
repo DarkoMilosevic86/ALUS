@@ -26,6 +26,7 @@ src/gui/elements_main.cpp
 src/gui/gesture_dialog.cpp
 src/gui/gesture_model.cpp
 src/gui/main.cpp
+src/gui/menu_main.cpp
 src/gui/model.cpp
 src/gui/service.cpp
 src/gui/window.cpp

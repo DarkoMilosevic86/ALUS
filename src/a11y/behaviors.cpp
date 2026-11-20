@@ -465,6 +465,12 @@ void chooseDefaultBehaviors(Object& object, BehaviorList& list) {
         case Role::ListItem:
         case Role::TreeViewItem:
         case Role::TableRow:
+        // A GTK 4 popover menu's items have no name either: the label is two
+        // levels down (menu item > box > label). Found on ALUS's own menu
+        // (2026.1.0), and true of every GTK 4 application's menus.
+        case Role::MenuItem:
+        case Role::CheckMenuItem:
+        case Role::RadioMenuItem:
             list.push_back(behaviorEntry<NamelessItemBehavior>("alus.behaviors.NamelessItem"));
             break;
         default:

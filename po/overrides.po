@@ -1453,3 +1453,113 @@ msgstr "režim izvornog izbora nije dostupan"
 
 msgid "Copied to clipboard: %s"
 msgstr "Kopirano u privremenu memoriju: %s"
+
+# N152: the ALUS menu (alus+a), its dialogs and the commands quick reference.
+msgid "_Settings…"
+msgstr "_Podešavanja…"
+
+msgid "_Input gestures…"
+msgstr "_Komande tastature…"
+
+msgid "_Help"
+msgstr "Po_moć"
+
+msgid "_Donate…"
+msgstr "_Doniraj…"
+
+msgid "Sa_ve configuration"
+msgstr "_Sačuvaj podešavanja"
+
+msgid "_Revert to saved configuration"
+msgstr "_Vrati sačuvana podešavanja"
+
+msgid "Reset configuration to _factory defaults"
+msgstr "Vrati _fabrička podešavanja"
+
+msgid "E_xit"
+msgstr "_Izlaz"
+
+msgid "_User guide"
+msgstr "_Uputstvo za korisnike"
+
+msgid "_Commands quick reference"
+msgstr "_Brzi pregled komandi"
+
+msgid "What's _new"
+msgstr "Šta je _novo"
+
+msgid "_About…"
+msgstr "_O programu ALUS…"
+
+msgid "ALUS menu"
+msgstr "ALUS meni"
+
+msgid "About ALUS"
+msgstr "O programu ALUS"
+
+msgid "Donate"
+msgstr "Doniranje"
+
+msgid "_Close"
+msgstr "_Zatvori"
+
+msgid "Open _PayPal"
+msgstr "Otvori _PayPal"
+
+msgid "Copy the _address"
+msgstr "Kopiraj _adresu"
+
+msgid "Address copied"
+msgstr "Adresa je kopirana"
+
+msgid "ALUS commands quick reference"
+msgstr "ALUS: brzi pregled komandi"
+
+msgid "Every command ALUS has and the keys that run it now, including keys you assigned yourself. Commands with no key can be given one in the Input gestures dialog."
+msgstr "Sve komande koje ALUS ima i tasteri koji ih sada pokreću, uključujući tastere koje ste sami dodelili. Komandi bez tastera taster možete dodeliti u prozoru Komande tastature."
+
+msgid "Command"
+msgstr "Komanda"
+
+msgid "Keys"
+msgstr "Tasteri"
+
+msgid ""
+"ALUS (Access Linux Using Speech), version %s\n"
+"\n"
+"A screen reader for Linux: speech and braille for the GNOME desktop, the web, LibreOffice, mail and the terminal.\n"
+"\n"
+"Copyright (C) 2026 Darko Milošević.\n"
+"\n"
+"ALUS is free software, released under the GNU General Public License, version 2 or later. Its design follows the screen reader it was ported from, whose data and translations it builds on.\n"
+"\n"
+"Project page: https://github.com/DarkoMilosevic86/ALUS"
+msgstr ""
+"ALUS (Access Linux Using Speech), verzija %s\n"
+"\n"
+"Čitač ekrana za Linux: govor i brajev red za GNOME radnu površinu, veb, LibreOffice, poštu i terminal.\n"
+"\n"
+"Autorska prava (C) 2026 Darko Milošević.\n"
+"\n"
+"ALUS je slobodan softver, objavljen pod GNU opštom javnom licencom, verzija 2 ili novija. Njegov dizajn prati čitač ekrana iz koga je prenesen i oslanja se na njegove podatke i prevode.\n"
+"\n"
+"Stranica projekta: https://github.com/DarkoMilosevic86/ALUS"
+
+msgid ""
+"ALUS is free, and it is made by one person. If it helps you, you can support its development with a donation.\n"
+"\n"
+"PayPal: %s\n"
+"Google Pay: %s\n"
+"\n"
+"Open PayPal opens the donation page in your browser. For Google Pay, copy the address and send the donation from the Google Pay app.\n"
+"\n"
+"Thank you."
+msgstr ""
+"ALUS je besplatan, a pravi ga jedan čovek. Ako vam pomaže, njegov razvoj možete podržati donacijom.\n"
+"\n"
+"PayPal: %s\n"
+"Google Pay: %s\n"
+"\n"
+"Dugme Otvori PayPal otvara stranicu za doniranje u pregledaču. Za Google Pay kopirajte adresu i pošaljite donaciju iz aplikacije Google Pay.\n"
+"\n"
+"Hvala."

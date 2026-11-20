@@ -154,7 +154,7 @@ TEST_CASE("T9.1 — every settings shortcut names a page or says it has none",
     CHECK(alus::gui::pageForScript("activateObjectPresentationDialog") == "presentation");
     CHECK(alus::gui::pageForScript("activateDocumentFormattingDialog") == "formatting");
     CHECK(alus::gui::pageForScript("activateInputGesturesDialog") == "gestures");
-    // `showGui` is upstream's "open the menu", and ALUS has no menu: the key
+    // `showGui` opens the ALUS menu; when alus-menu cannot start, the key
     // opens this window instead of saying there is no such panel. Its key is
     // ALUS's own (data/gestures-alus.ini: ALUS+a in the desktop layout), so
     // this is the only test that says the key leads anywhere at all.
