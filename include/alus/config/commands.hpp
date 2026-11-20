@@ -52,6 +52,14 @@ struct CommandsContext {
     std::function<const script::Dispatcher*()> dispatcher;
     // ui::message by default; injected so the tests can read what was said.
     std::function<void(const std::string&)> message;
+    // N156: makes a changed section take effect at once (and saves it), as
+    // the settings window's OK does. Supplied by the daemon; null in tests
+    // that only read what was written.
+    std::function<void(const std::string& section)> apply;
+    // N156: `restart`. Supplied by the daemon, which re-executes itself once
+    // the farewell has been spoken; null elsewhere, and then the command says
+    // it cannot.
+    std::function<void()> restart;
 };
 
 class Commands final : public script::ScriptableObject {
@@ -63,6 +71,21 @@ public:
 private:
     void saveConfiguration(input::Gesture& gesture);
     void revertConfiguration(input::Gesture& gesture);
+    // N156: the commands that change one setting and say so.
+    void toggleKeyboardLayout(input::Gesture& gesture);
+    void cycleSpeechAutomaticLanguageSwitching(input::Gesture& gesture);
+    void speech_cycleUnicodeNormalization(input::Gesture& gesture);
+    void toggleReportTableHeaders(input::Gesture& gesture);
+    void toggleReportFontAttributes(input::Gesture& gesture);
+    void toggleReportLinkType(input::Gesture& gesture);
+    void toggleConfigProfileTriggers(input::Gesture& gesture);
+    void reportActiveConfigurationProfile(input::Gesture& gesture);
+    void openUserConfigurationDirectory(input::Gesture& gesture);
+    void restart(input::Gesture& gesture);
+    // The document formatting switches that are one boolean each, bound from
+    // a table (kFormattingToggles in commands.cpp).
+    void bindFormattingToggles();
+    void changed(const std::string& section);
 
     void say(const std::string& text) const;
     int repeatCount() const;

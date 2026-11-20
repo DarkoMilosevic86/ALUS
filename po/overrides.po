@@ -1565,3 +1565,31 @@ msgstr ""
 "Dugme Otvori PayPal otvara stranicu za doniranje u pregledaču. Za Google Pay kopirajte adresu i pošaljite donaciju iz aplikacije Google Pay.\n"
 "\n"
 "Hvala."
+
+# N156: the commands that were missing.
+msgid "{width} by {height} pixels at {x}, {y}"
+msgstr "{width} sa {height} piksela na {x}, {y}"
+
+msgid "report cell borders on"
+msgstr "prijavljivanje ivica ćelija uključeno"
+
+msgid "report cell borders off"
+msgstr "prijavljivanje ivica ćelija isključeno"
+
+msgid "report spelling errors on"
+msgstr "prijavljivanje pravopisnih grešaka uključeno"
+
+msgid "report spelling errors off"
+msgstr "prijavljivanje pravopisnih grešaka isključeno"
+
+msgid "enabled"
+msgstr "omogućeno"
+
+msgid "Could not open %s"
+msgstr "Ne mogu da otvorim %s"
+
+msgid "cannot restart from here"
+msgstr "odavde ne mogu ponovo da pokrenem ALUS"
+
+msgid "restarting"
+msgstr "ponovo pokrećem"

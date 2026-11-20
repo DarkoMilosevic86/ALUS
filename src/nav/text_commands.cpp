@@ -7,6 +7,7 @@
 
 #include "alus/nav/text_commands.hpp"
 
+#include "alus/a11y/commands.hpp"
 #include "alus/a11y/registry.hpp"
 #include "alus/a11y/text_speech.hpp"
 #include "alus/core/log.hpp"
@@ -672,8 +673,7 @@ void TextCommands::caretPos_currentDimensions(input::Gesture& /*gesture*/) {
     // answer it in two shapes. Pixels and not a percentage of the screen for
     // the reason given there -- there is no screen size to divide by until
     // phase 10.
-    say(std::to_string(rect.width) + " by " + std::to_string(rect.height) + " pixels at " +
-        std::to_string(rect.x) + ", " + std::to_string(rect.y));
+    say(a11y::ObjectCommands::describeLocation(rect));
 }
 
 void TextCommands::reportReviewCursorLocation(input::Gesture& /*gesture*/) {

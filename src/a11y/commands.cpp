@@ -48,6 +48,8 @@ ObjectCommands::ObjectCommands(Registry& registry, const script::Catalog* catalo
     ALUS_SCRIPT(navigatorObject_toFocus);
     ALUS_SCRIPT(navigatorObject_moveFocus);
     ALUS_SCRIPT(navigatorObject_currentDimensions);
+    ALUS_SCRIPT(reportCurrentNavigatorObjectLocation);
+    ALUS_SCRIPT(reportFocusObjectLocation);
     ALUS_SCRIPT(review_activate);
     ALUS_SCRIPT(title);
     ALUS_SCRIPT(toggleCaretMovesReviewCursor);
@@ -346,8 +348,41 @@ void ObjectCommands::navigatorObject_currentDimensions(input::Gesture& /*gesture
     // NVDA reports this as a percentage of the screen; until there is a screen
     // size to divide by (phase 10's screen review), the pixels are the honest
     // answer.
-    say(std::to_string(location.width) + " by " + std::to_string(location.height) +
-        " pixels at " + std::to_string(location.x) + ", " + std::to_string(location.y));
+    say(describeLocation(location));
+}
+
+std::string ObjectCommands::describeLocation(const Rect& location) {
+    // N156: translated. It was an English sentence built from pieces, and a
+    // Serbian ALUS said "100 by 20 pixels at 5, 10".
+    // Translators: an object's size and position on the screen, in pixels.
+    std::string text = _("{width} by {height} pixels at {x}, {y}");
+    text = i18n::substituteNamed(text, "width", std::to_string(location.width));
+    text = i18n::substituteNamed(text, "height", std::to_string(location.height));
+    text = i18n::substituteNamed(text, "x", std::to_string(location.x));
+    return i18n::substituteNamed(text, "y", std::to_string(location.y));
+}
+
+void ObjectCommands::reportLocationOf(const ObjectPtr& object) {
+    if (object == nullptr || object->location().empty()) {
+        say(_("No location information"));
+        return;
+    }
+    say(describeLocation(object->location()));
+}
+
+void ObjectCommands::reportCurrentNavigatorObjectLocation(input::Gesture& /*gesture*/) {
+    if (const ObjectPtr navigator = navigatorOrComplain()) {
+        reportLocationOf(navigator);
+    }
+}
+
+void ObjectCommands::reportFocusObjectLocation(input::Gesture& /*gesture*/) {
+    const ObjectPtr focus = registry_.api().focus();
+    if (focus == nullptr) {
+        say(_("No focus"));
+        return;
+    }
+    reportLocationOf(focus);
 }
 
 void ObjectCommands::review_activate(input::Gesture& /*gesture*/) {

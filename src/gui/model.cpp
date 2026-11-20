@@ -496,10 +496,15 @@ std::vector<Page> build() {
                           "reportTableCellCoords", N_("Cell coordinates")},
                       Row{RowKind::Choice, "documentFormatting", "reportTableHeaders",
                           N_("Table headers"), nullptr,
-                          {{"off", N_("Off")},
-                           {"rowsAndColumns", N_("Rows and columns")},
-                           {"rows", N_("Rows only")},
-                           {"columns", N_("Columns only")}}},
+                          // N156: numbers, as the configuration stores them
+                          // (a11y/settings.cpp reads an integer, the same as
+                          // an imported NVDA file). The names this row wrote
+                          // before were not numbers, so every choice fell back
+                          // to rows and columns.
+                          {{"0", N_("Off")},
+                           {"1", N_("Rows and columns")},
+                           {"2", N_("Rows only")},
+                           {"3", N_("Columns only")}}},
                       Row{RowKind::Toggle, "documentFormatting", "reportCellBorders",
                           N_("Cell borders")},
                       Row{RowKind::Toggle, "documentFormatting", "includeLayoutTables",

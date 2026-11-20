@@ -57,7 +57,7 @@ struct Row {
 // The order is the order of the elements list. The script names are the ones
 // `data/scripts.csv` already carries (`nextHeading`, `previousCheckBox`), so
 // nothing here is retyped from NVDA -- §5.4's rule, applied to phase 6.
-constexpr std::array<Row, 37> kRows{{
+constexpr std::array<Row, 41> kRows{{
     {ElementType::Heading, "Heading", N_("heading")},
     {ElementType::Heading1, "Heading1", N_("heading at level 1")},
     {ElementType::Heading2, "Heading2", N_("heading at level 2")},
@@ -94,6 +94,10 @@ constexpr std::array<Row, 37> kRows{{
     {ElementType::Figure, "Figure", N_("figure")},
     {ElementType::Clickable, "Clickable", N_("clickable element")},
     {ElementType::Tab, "Tab", N_("tab")},
+    {ElementType::ToggleButton, "ToggleButton", N_("toggle button")},
+    {ElementType::MenuItem, "MenuItem", N_("menu item")},
+    {ElementType::ProgressBar, "ProgressBar", N_("progress bar")},
+    {ElementType::Slider, "Slider", N_("slider")},
     {ElementType::NotLinkBlock, "NotLinkBlock", N_("more text")},
 }};
 
@@ -392,6 +396,18 @@ std::optional<MatchRule> QuickNav::ruleFor(ElementType type, bool includeLayoutT
 
         case ElementType::Tab:
             return byRoles({PlatformRole::PageTab});
+
+        // N156: role rules, as upstream's (a level bar is a progress bar
+        // in GTK's words).
+        case ElementType::ToggleButton:
+            return byRoles({PlatformRole::ToggleButton});
+        case ElementType::MenuItem:
+            return byRoles({PlatformRole::MenuItem, PlatformRole::CheckMenuItem,
+                            PlatformRole::RadioMenuItem});
+        case ElementType::ProgressBar:
+            return byRoles({PlatformRole::ProgressBar, PlatformRole::LevelBar});
+        case ElementType::Slider:
+            return byRoles({PlatformRole::Slider});
 
         case ElementType::NotLinkBlock:
             // Derived; see findNotLinkBlock.

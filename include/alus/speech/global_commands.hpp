@@ -84,6 +84,9 @@ private:
     void increaseSynthSetting(input::Gesture& gesture);
     void decreaseSynthSetting(input::Gesture& gesture);
     void increaseLargeSynthSetting(input::Gesture& gesture);
+    // N156: the first and the last value of the chosen ring setting.
+    void firstValueSynthRing(input::Gesture& gesture);
+    void lastValueSynthRing(input::Gesture& gesture);
     void decreaseLargeSynthSetting(input::Gesture& gesture);
     // N145: the clipboard, through alus-clipboard (core/clipboard.hpp).
     void copyLastSpokenInformation(input::Gesture& gesture);

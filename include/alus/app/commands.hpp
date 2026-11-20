@@ -24,6 +24,8 @@
 #include "alus/script/scriptable.hpp"
 
 #include <functional>
+#include <memory>
+#include <optional>
 #include <string>
 
 namespace alus::script {
@@ -57,11 +59,24 @@ private:
     // nothing about this application at all -- for a program that speaks for
     // itself.
     void toggleCurrentAppSleepMode(input::Gesture& gesture);
+    // N156: NVDA's separate status bar commands, which have no key of their
+    // own and can be given one in the Input gestures dialog.
+    void readStatusLine(input::Gesture& gesture);
+    void spellStatusLine(input::Gesture& gesture);
+    void copyStatusLine(input::Gesture& gesture);
+
+    // The focused application's status bar text, or nullopt after saying why
+    // there is none (no application, no status bar).
+    std::optional<std::string> statusText() const;
+    void copy(const std::string& text) const;
 
     Registry& modules_;
     std::function<void(const std::string&)> message_;
     std::function<void(const std::string&)> spell_;
     script::Dispatcher* dispatcher_;
+    // Lets a clipboard answer that arrives after this object is gone be
+    // dropped rather than used.
+    std::shared_ptr<int> lifetime_ = std::make_shared<int>(0);
 };
 
 }  // namespace alus::app

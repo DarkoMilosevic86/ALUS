@@ -45,6 +45,7 @@
 #pragma once
 
 #include "alus/core/event_dispatcher.hpp"
+#include "alus/core/geometry.hpp"
 #include "alus/script/scriptable.hpp"
 
 #include <cstddef>
@@ -96,6 +97,18 @@ private:
     void navigatorObject_toFocus(input::Gesture& gesture);
     void navigatorObject_moveFocus(input::Gesture& gesture);
     void navigatorObject_currentDimensions(input::Gesture& gesture);
+    // N156: where an object is on the screen, in pixels (see
+    // navigatorObject_currentDimensions for why not a percentage).
+    void reportCurrentNavigatorObjectLocation(input::Gesture& gesture);
+    void reportFocusObjectLocation(input::Gesture& gesture);
+    void reportLocationOf(const std::shared_ptr<Object>& object);
+
+public:
+    // "{width} by {height} pixels at {x}, {y}", translated. Public so the
+    // caret dimensions command says it in the same words.
+    static std::string describeLocation(const core::Rect& location);
+
+private:
     void review_activate(input::Gesture& gesture);
     void title(input::Gesture& gesture);
     void toggleCaretMovesReviewCursor(input::Gesture& gesture);

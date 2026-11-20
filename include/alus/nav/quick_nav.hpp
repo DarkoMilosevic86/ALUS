@@ -86,6 +86,11 @@ enum class ElementType {
     Figure,
     Clickable,
     Tab,
+    // N156: upstream's types that have no key, only a command.
+    ToggleButton,
+    MenuItem,
+    ProgressBar,
+    Slider,
     // Derived, not a match rule. See the file comment.
     NotLinkBlock,
 };

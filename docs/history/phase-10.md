@@ -1549,3 +1549,24 @@ back to the text of a LABELLED_BY target whose name is empty (at most 200
 characters, trimmed). Measured after the change: both menus read in full,
 "Discard Changes…" with its unavailable state. Test: `test_object.cpp` "N155
 a GTK 4 menu item takes its name from its label's text".
+
+**N156 — 56 of the missing commands written.** Of N154's 93: the 31
+document formatting switches (one table, upstream's words, so its Serbian
+catalogue translated 76 of the new messages), the table header, font
+attribute and link type cycles, the keyboard layout, automatic language
+switching, Unicode normalization, profile triggers and the active profile,
+opening the configuration folder, `restart` (the daemon releases its bus
+name and re-executes itself with its original arguments after the
+farewell), the separate status bar commands (read, spell, copy; the third
+press of `alus+end` now copies, the clipboard having worked since N148),
+the location of the focus and of the navigator object, the first and last
+value of the voice settings ring, and browse mode jumps to toggle buttons,
+menu items, progress bars and sliders. Each switch takes effect at once
+through the settings window's own reload path. 37 stay under `[missing]`:
+the other reader's add-on store and wxPython tool, mouse commands Wayland
+cannot do, dictionary dialogs, and browse mode searches by style.
+Found on the way: the settings window wrote the table header choice as a
+name ("rows") where the configuration holds a number, so every choice fell
+back to rows and columns; and the object dimensions were spoken as an
+English sentence in every language. Both fixed. Test: test_speech_commands
+"N156 the setting commands change the setting, apply it and say so".

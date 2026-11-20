@@ -28,6 +28,14 @@ The first public version of ALUS.
   example -- say why, instead of being silent.
 - **Clipboard commands**: read the clipboard (`ALUS+C`) and copy what ALUS
   said last (`ALUS+Control+X`).
+- **Menus of GNOME applications** (Calculator, Files, Text Editor…) are
+  read with the names of their items.
+- **More commands without a default key**, ready to be given one in Input
+  gestures: a switch for every kind of document formatting, reading,
+  spelling and copying the status bar, the keyboard layout, automatic
+  language switching, opening the configuration folder, restarting ALUS,
+  and browse mode jumps to toggle buttons, menu items, progress bars and
+  sliders.
 - **Safe switching**: `alus-switch alus` swaps Orca for ALUS and back, says
   every step, and brings Orca back if ALUS fails to start. ALUS turns on
   application accessibility by itself when the desktop switch is off.

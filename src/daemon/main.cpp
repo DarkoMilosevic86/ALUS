@@ -63,6 +63,9 @@
 #include <optional>
 #include <string>
 #include <string_view>
+#include <vector>
+
+#include <unistd.h>
 
 namespace {
 
@@ -201,7 +204,11 @@ public:
         return Result::Acquired;
     }
 
-    ~SingleInstance() {
+    ~SingleInstance() { release(); }
+
+    // Gives the name back now (restart: the program that exec() starts asks
+    // for it again, and must not find it still held).
+    void release() {
         if (bus_ != nullptr) {
             if (owned_) {
                 GVariant* reply = g_dbus_connection_call_sync(
@@ -213,6 +220,8 @@ public:
                 }
             }
             g_object_unref(bus_);
+            bus_ = nullptr;
+            owned_ = false;
         }
     }
 
@@ -260,6 +269,10 @@ void addSignalSource(int signalNumber, Loop& loop, GSourceFunc callback, void* d
 }  // namespace
 
 int main(int argc, char* argv[]) {
+    // N156: `restart` re-executes this program with the arguments it was
+    // started with, kept before option parsing can change argv.
+    const std::vector<std::string> originalArguments(argv, argv + argc);
+    bool restartRequested = false;
     // FIRST, before the options are even parsed. setlocale has to run before
     // any GTK call and before the first translated string, and --help itself
     // is text the user reads. The configuration is not loaded yet, so this
@@ -692,6 +705,13 @@ int main(int argc, char* argv[]) {
     configCommandContext.reset = [&manager, &subsystems](bool factoryDefaults) {
         alus::config::resetConfiguration(manager, subsystems, factoryDefaults);
     };
+    configCommandContext.apply = guiHooks.reloadSection;
+    configCommandContext.restart = [&restartRequested, quit = inputHooks.quit] {
+        restartRequested = true;
+        if (quit) {
+            quit();
+        }
+    };
     alus::config::Commands configCommands{std::move(configCommandContext), &input.catalog()};
 
     alus::commands::SystemCommands::Context systemCommandContext;
@@ -856,6 +876,20 @@ int main(int argc, char* argv[]) {
     alus::audio::terminate();
 
     freeOptions();
+    if (restartRequested) {
+        ALUS_INFO("restarting");
+        instance.release();
+        Log::instance().closeFile();
+        std::vector<char*> arguments;
+        for (const std::string& argument : originalArguments) {
+            arguments.push_back(const_cast<char*>(argument.c_str()));
+        }
+        arguments.push_back(nullptr);
+        execv("/proc/self/exe", arguments.data());
+        // Only reached when exec failed; nothing to restart into.
+        std::perror("alus-daemon: restart");
+        return 1;
+    }
     Log::instance().closeFile();
     return 0;
 }

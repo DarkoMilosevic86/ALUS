@@ -121,6 +121,8 @@ GlobalCommands::GlobalCommands(Context context, const script::Catalog* catalog)
     ALUS_SCRIPT(increaseSynthSetting);
     ALUS_SCRIPT(decreaseSynthSetting);
     ALUS_SCRIPT(increaseLargeSynthSetting);
+    ALUS_SCRIPT(firstValueSynthRing);
+    ALUS_SCRIPT(lastValueSynthRing);
     ALUS_SCRIPT(decreaseLargeSynthSetting);
     ALUS_SCRIPT(copyLastSpokenInformation);
     ALUS_SCRIPT(reportClipboardText);
@@ -460,6 +462,28 @@ void GlobalCommands::decreaseSynthSetting(input::Gesture& /*gesture*/) {
 void GlobalCommands::increaseLargeSynthSetting(input::Gesture& /*gesture*/) {
     adjust([](SettingsRing& ring, std::string* value) {
         const std::optional<std::string> result = ring.increaseLarge();
+        if (!result.has_value()) {
+            return false;
+        }
+        *value = *result;
+        return true;
+    });
+}
+
+void GlobalCommands::firstValueSynthRing(input::Gesture& /*gesture*/) {
+    adjust([](SettingsRing& ring, std::string* value) {
+        const std::optional<std::string> result = ring.first();
+        if (!result.has_value()) {
+            return false;
+        }
+        *value = *result;
+        return true;
+    });
+}
+
+void GlobalCommands::lastValueSynthRing(input::Gesture& /*gesture*/) {
+    adjust([](SettingsRing& ring, std::string* value) {
+        const std::optional<std::string> result = ring.last();
         if (!result.has_value()) {
             return false;
         }

@@ -7,6 +7,7 @@
 #include "alus/app/module.hpp"
 #include "alus/app/registry.hpp"
 #include "alus/i18n/gettext.hpp"
+#include "alus/core/clipboard.hpp"
 #include "alus/core/log.hpp"
 #include "alus/i18n/i18n.hpp"
 #include "alus/script/dispatch.hpp"
@@ -28,6 +29,9 @@ AppCommands::AppCommands(Registry& modules, std::function<void(const std::string
     ALUS_SCRIPT(reportStatusLine);
     ALUS_SCRIPT(reportAppModuleInfo);
     ALUS_SCRIPT(toggleCurrentAppSleepMode);
+    ALUS_SCRIPT(readStatusLine);
+    ALUS_SCRIPT(spellStatusLine);
+    ALUS_SCRIPT(copyStatusLine);
 }
 
 AppCommands::~AppCommands() = default;
@@ -59,13 +63,10 @@ void AppCommands::reportStatusLine(input::Gesture& /*gesture*/) {
         }
         return;
     }
-    // Twice: spell it. NVDA copies to the clipboard on the third press; the
-    // clipboard is phase 9's work (it needs a Wayland data source), and every
-    // other copy command in ALUS says so rather than doing nothing, so this
-    // one does too.
-    if (repeats >= 2 && message_) {
-        // Translators: copying to the clipboard is not available yet.
-        message_(_("Clipboard support is not available yet"));
+    // Twice: spell it. Three times: copy it, as NVDA does (N156: the
+    // clipboard works now, through alus-clipboard).
+    if (repeats >= 2) {
+        copy(text);
         return;
     }
     if (spell_) {
@@ -75,6 +76,65 @@ void AppCommands::reportStatusLine(input::Gesture& /*gesture*/) {
     }
 }
 
+
+std::optional<std::string> AppCommands::statusText() const {
+    Module* module = modules_.current();
+    if (module == nullptr) {
+        if (message_) {
+            message_(_("No focused application"));
+        }
+        return std::nullopt;
+    }
+    std::string text = module->statusBarText();
+    if (text.find_first_not_of(" \t\r\n") == std::string::npos) {
+        if (message_) {
+            message_(_("No status line found"));
+        }
+        return std::nullopt;
+    }
+    return text;
+}
+
+void AppCommands::copy(const std::string& text) const {
+    const std::weak_ptr<int> alive = lifetime_;
+    const auto report = [this, alive, text](bool ok) {
+        if (alive.expired() || !message_) {
+            return;
+        }
+        message_(ok
+                     // Translators: announced when a text has been copied to
+                     // the clipboard. %s is the copied text.
+                     ? i18n::substitute(_("Copied to clipboard: %s"), text)
+                     // Translators: Presented when unable to copy to the
+                     // clipboard because of an error.
+                     : std::string(_("Unable to copy")));
+    };
+    if (!core::writeClipboard(text, report)) {
+        report(false);
+    }
+}
+
+void AppCommands::readStatusLine(input::Gesture& /*gesture*/) {
+    if (const std::optional<std::string> text = statusText(); text && message_) {
+        message_(*text);
+    }
+}
+
+void AppCommands::spellStatusLine(input::Gesture& /*gesture*/) {
+    if (const std::optional<std::string> text = statusText()) {
+        if (spell_) {
+            spell_(*text);
+        } else if (message_) {
+            message_(*text);
+        }
+    }
+}
+
+void AppCommands::copyStatusLine(input::Gesture& /*gesture*/) {
+    if (const std::optional<std::string> text = statusText()) {
+        copy(*text);
+    }
+}
 
 void AppCommands::reportAppModuleInfo(input::Gesture& /*gesture*/) {
     Module* module = modules_.current();

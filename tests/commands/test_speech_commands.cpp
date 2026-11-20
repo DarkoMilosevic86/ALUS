@@ -450,3 +450,64 @@ TEST_CASE("a configuration command run with nothing to act on says so",
     runner.press("revertConfiguration");
     CHECK(said.last() == "cannot revert the configuration from here");
 }
+
+TEST_CASE("N156 the setting commands change the setting, apply it and say so",
+          "[commands][config]") {
+    testing::QuietLog quiet;
+    testing::LoopFixture fixture;
+    const std::filesystem::path dir =
+        std::filesystem::temp_directory_path() /
+        ("alus-n156-" + std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
+    config::Manager manager{config::Paths::forDirectory(dir)};
+    manager.setDefault("documentFormatting", "reportFontName", "false");
+    manager.setDefault("documentFormatting", "reportHeadings", "true");
+    manager.setDefault("documentFormatting", "reportTableHeaders", "1");
+    manager.setDefault("keyboard", "keyboardLayout", "desktop");
+    Said said;
+    std::vector<std::string> applied;
+
+    config::CommandsContext context;
+    context.manager = &manager;
+    context.message = said.sink();
+    context.apply = [&applied](const std::string& section) { applied.push_back(section); };
+    config::Commands commands{std::move(context), nullptr};
+    Runner runner{&fixture.loop(), &commands};
+    runner.bind("toggleReportFontName", "kb:alus+f");
+    runner.bind("toggleReportHeadings", "kb:alus+h");
+    runner.bind("toggleReportTableHeaders", "kb:alus+t");
+    runner.bind("toggleKeyboardLayout", "kb:alus+k");
+    runner.bind("restart", "kb:alus+r");
+
+    SECTION("a formatting switch starts from its default") {
+        runner.press("toggleReportFontName");
+        CHECK(manager.getBool("documentFormatting", "reportFontName", false));
+        CHECK(said.last() == "report font name on");
+        REQUIRE(applied.size() == 1);
+        CHECK(applied.front() == "documentFormatting");
+        runner.press("toggleReportHeadings");
+        CHECK_FALSE(manager.getBool("documentFormatting", "reportHeadings", true));
+        CHECK(said.last() == "report headings off");
+    }
+    SECTION("table headers cycle through upstream's four numbers") {
+        runner.press("toggleReportTableHeaders");
+        CHECK(manager.getInt("documentFormatting", "reportTableHeaders", -1) == 2);
+        CHECK(said.last() == "Report table headers Rows only");
+        runner.press("toggleReportTableHeaders");
+        runner.press("toggleReportTableHeaders");
+        CHECK(manager.getInt("documentFormatting", "reportTableHeaders", -1) == 0);
+        CHECK(said.last() == "Report table headers Off");
+    }
+    SECTION("the keyboard layout goes back and forth") {
+        runner.press("toggleKeyboardLayout");
+        CHECK(manager.getString("keyboard", "keyboardLayout") == "laptop");
+        CHECK(said.last() == "laptop layout");
+        CHECK(applied.back() == "keyboard");
+        runner.press("toggleKeyboardLayout");
+        CHECK(manager.getString("keyboard", "keyboardLayout") == "desktop");
+    }
+    SECTION("restart without the daemon says it cannot") {
+        runner.press("restart");
+        CHECK(said.last() == "cannot restart from here");
+    }
+    std::filesystem::remove_all(dir);
+}

@@ -30,6 +30,14 @@ Prva javna verzija programa ALUS.
   pokazivača miša -- kažu zašto, umesto da ćute.
 - **Komande za ostavu**: čitanje ostave (`ALUS+C`) i kopiranje onoga što je
   ALUS poslednje izgovorio (`ALUS+Control+X`).
+- **Meniji GNOME aplikacija** (Kalkulator, Datoteke, Uređivač teksta…)
+  čitaju se sa imenima stavki.
+- **Još komandi bez podrazumevanog tastera**, spremnih da im dodelite
+  taster u prozoru Komande tastature: prekidač za svaku vrstu formatiranja
+  dokumenta, čitanje, sricanje i kopiranje statusne trake, raspored
+  tastature, automatska promena jezika, otvaranje fascikle sa podešavanjima,
+  ponovno pokretanje programa ALUS, i skokovi u režimu pretraživanja na
+  dugmad-prekidače, stavke menija, trake napretka i klizače.
 - **Bezbedna zamena**: `alus-switch alus` menja Orcu programom ALUS i
   obrnuto, izgovara svaki korak i vraća Orcu ako ALUS ne uspe da se pokrene.
   ALUS sam uključuje pristupačnost aplikacija kada je prekidač radne površine

@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alus 2026.1.0\n"
 "Report-Msgid-Bugs-To: daremc86@gmail.com\n"
-"POT-Creation-Date: 2026-11-20 10:21+0000\n"
-"PO-Revision-Date: 2026-11-20 10:21+0000\n"
+"POT-Creation-Date: 2026-11-20 11:15+0000\n"
+"PO-Revision-Date: 2026-11-20 11:15+0000\n"
 "Last-Translator: tools/import-nvda-po.py\n"
 "Language-Team: Serbian (Cyrillic)\n"
 "Language: sr_RS\n"
@@ -29,24 +29,24 @@ msgstr ""
 
 #. Translators: spoken when alus+numpad slash finds nothing the
 #. navigator object can do when clicked.
-#: src/a11y/commands.cpp:133 src/a11y/commands.cpp:137
+#: src/a11y/commands.cpp:135 src/a11y/commands.cpp:139
 msgid "cannot click this object"
 msgstr "овај објекат не може да се кликне"
 
 #. Translators: Reported when left mouse button is clicked.
-#: src/a11y/commands.cpp:141
+#: src/a11y/commands.cpp:143
 msgid "Left click"
 msgstr "Леви клик"
 
 #. Translators: spoken when alus+numpad star cannot open a context
 #. menu for the navigator object; shift+F10 or the menu key opens it
 #. from the keyboard in most applications.
-#: src/a11y/commands.cpp:157
+#: src/a11y/commands.cpp:159
 msgid "no context menu for this object; try shift+F10 or the menu key"
 msgstr "овај објекат нема контекстни мени; пробајте схифт+Ф10 или тастер за мени"
 
 #. Translators: Reported when right mouse button is clicked.
-#: src/a11y/commands.cpp:161
+#: src/a11y/commands.cpp:163
 msgid "Right click"
 msgstr "Десни клик"
 
@@ -54,169 +54,176 @@ msgstr "Десни клик"
 #. none.
 #. Translators: reported when there is nothing under the cursor to ask
 #. about.
-#: src/a11y/commands.cpp:169 src/a11y/commands.cpp:603
+#: src/a11y/commands.cpp:171 src/a11y/commands.cpp:638
 msgid "No navigator object"
 msgstr "Нема навигационог објекта"
 
 #. Translators: there is no focused object.
-#: src/a11y/commands.cpp:194 src/a11y/commands.cpp:306 src/a11y/commands.cpp:310
-#: src/nav/text_commands.cpp:568 src/nav/text_commands.cpp:599 src/nav/text_commands.cpp:624
-#: src/nav/text_commands.cpp:646 src/nav/text_commands.cpp:698 src/nav/text_commands.cpp:793
+#: src/a11y/commands.cpp:196 src/a11y/commands.cpp:308 src/a11y/commands.cpp:312
+#: src/a11y/commands.cpp:382 src/nav/text_commands.cpp:569 src/nav/text_commands.cpp:600
+#: src/nav/text_commands.cpp:625 src/nav/text_commands.cpp:647 src/nav/text_commands.cpp:698
+#: src/nav/text_commands.cpp:793
 msgid "No focus"
 msgstr "Нема фокуса"
 
 #. Translators: there is no object containing this one.
-#: src/a11y/commands.cpp:227
+#: src/a11y/commands.cpp:229
 msgid "No containing object"
 msgstr "Нема садржавајућег објекта"
 
 #. Translators: there is nothing inside this object.
-#: src/a11y/commands.cpp:236
+#: src/a11y/commands.cpp:238
 msgid "No objects inside"
 msgstr "Нема унутрашњих објеката"
 
 #. Translators: this is the last object.
-#: src/a11y/commands.cpp:245 src/a11y/commands.cpp:278
+#: src/a11y/commands.cpp:247 src/a11y/commands.cpp:280
 msgid "No next"
 msgstr "Нема наредног"
 
 #. Translators: this is the first object.
-#: src/a11y/commands.cpp:254
+#: src/a11y/commands.cpp:256
 msgid "No previous"
 msgstr "Нема претходног"
 
 #. Translators: the review cursor was moved to the object with focus.
-#: src/a11y/commands.cpp:314
+#: src/a11y/commands.cpp:316
 msgid "Move to focus"
 msgstr "Премести на фокус"
 
 #. Translators: the keyboard focus was moved to the navigator object.
-#: src/a11y/commands.cpp:326
+#: src/a11y/commands.cpp:328
 msgid "Move focus"
 msgstr "Премести фокус"
 
 #. Translators: the object could not take the keyboard focus.
-#: src/a11y/commands.cpp:331
+#: src/a11y/commands.cpp:333
 msgid "Cannot focus this object"
 msgstr "Овај објекат не може да добије фокус"
 
 #. Translators: the object has no position on the screen.
 #. Translators: the caret has no position on the screen -- a terminal
 #. that reports no geometry, or a control scrolled out of view.
-#: src/a11y/commands.cpp:343 src/nav/text_commands.cpp:659 src/nav/text_commands.cpp:666
+#: src/a11y/commands.cpp:345 src/a11y/commands.cpp:367 src/nav/text_commands.cpp:660
+#: src/nav/text_commands.cpp:667
 msgid "No location information"
 msgstr "Нема информација о локацији"
+
+#. Translators: an object's size and position on the screen, in pixels.
+#: src/a11y/commands.cpp:358
+msgid "{width} by {height} pixels at {x}, {y}"
+msgstr "{width} са {height} пиксела на {x}, {y}"
 
 #. Translators: the action at the navigator object was
 #. performed. The toolkit's own word for it is used when it has
 #. one ("click", "press"), and "Activate" otherwise.
-#: src/a11y/commands.cpp:368
+#: src/a11y/commands.cpp:403
 msgid "Activate"
 msgstr "Активирај"
 
 #. Translators: nothing at the navigator object could be activated.
-#: src/a11y/commands.cpp:375
+#: src/a11y/commands.cpp:410
 msgid "No action"
 msgstr "Нема радње"
 
 #. Translators: the active window has no title.
-#: src/a11y/commands.cpp:386
+#: src/a11y/commands.cpp:421
 msgid "No title"
 msgstr "Нема наслова"
 
 #. Translators: reported when the review cursor is set to follow
 #. the system caret (alus+6).
-#: src/a11y/commands.cpp:422
+#: src/a11y/commands.cpp:457
 msgid "caret moves review cursor on"
 msgstr "укључено померање прегледног курсора системским курсором"
 
 #. Translators: reported when the review cursor no longer follows
 #. the system caret.
-#: src/a11y/commands.cpp:425
+#: src/a11y/commands.cpp:460
 msgid "caret moves review cursor off"
 msgstr "искључено померање прегледног курсора системским курсором"
 
 #. Translators: reported when the navigator object is set to
 #. follow the focus (alus+7).
-#: src/a11y/commands.cpp:437
+#: src/a11y/commands.cpp:472
 msgid "focus moves navigator object on"
 msgstr "укључено померање навигационог објекта фокусом"
 
 #. Translators: reported when the navigator object no longer
 #. follows the focus.
-#: src/a11y/commands.cpp:440
+#: src/a11y/commands.cpp:475
 msgid "focus moves navigator object off"
 msgstr "искључено померање навигационог објекта фокусом"
 
 #. Translators: reported when text that changes by itself -- a
 #. terminal, a chat window, a log -- is announced again (alus+5).
-#: src/a11y/commands.cpp:453
+#: src/a11y/commands.cpp:488
 msgid "report dynamic content changes on"
 msgstr "укључено пријављивање динамичких промена садржаја"
 
 #. Translators: reported when text that changes by itself is no
 #. longer announced.
-#: src/a11y/commands.cpp:456
+#: src/a11y/commands.cpp:491
 msgid "report dynamic content changes off"
 msgstr "искључено пријављивање динамичких промена садржаја"
 
 #. Translators: a progress bar reporting mode (alus+u): nothing is
 #. reported.
-#: src/a11y/commands.cpp:470
+#: src/a11y/commands.cpp:505
 msgid "No progress bar updates"
 msgstr "Без ажурирања трака напредовања"
 
 #. Translators: a progress bar reporting mode: the percentage is
 #. spoken.
-#: src/a11y/commands.cpp:476
+#: src/a11y/commands.cpp:511
 msgid "Speak progress bar updates"
 msgstr "Изговарај ажурирања трака напредовања"
 
 #. Translators: a progress bar reporting mode: a beep that rises
 #. in pitch as the bar fills.
-#: src/a11y/commands.cpp:482
+#: src/a11y/commands.cpp:517
 msgid "Beep for progress bar updates"
 msgstr "Пишти за ажурирања трака напредовања"
 
 #. Translators: a progress bar reporting mode: both the beep and
 #. the spoken percentage.
-#: src/a11y/commands.cpp:488
+#: src/a11y/commands.cpp:523
 msgid "Beep and speak progress bar updates"
 msgstr "Пишти и изговарај ажурирања трака напредовања"
 
 #. Translators: reported when the focused control has no keyboard
 #. shortcut of its own (shift+numpad2).
-#: src/a11y/commands.cpp:508
+#: src/a11y/commands.cpp:543
 msgid "No shortcut key"
 msgstr "Нема тастерске пречице"
 
 #. Translators: reported when the focused control points at no
 #. additional details (alus+d).
-#: src/a11y/commands.cpp:530
+#: src/a11y/commands.cpp:565
 msgid "No additional details"
 msgstr "Нема додатних детаља"
 
 #. Translators: reported when the details a control points at exist
 #. but carry no readable text.
-#: src/a11y/commands.cpp:561
+#: src/a11y/commands.cpp:596
 msgid "No details summary"
 msgstr "Нема сажетка детаља"
 
 #. Translators: reported when the developer information about an object has
 #. been written to the log (alus+f1).
-#: src/a11y/commands.cpp:585
+#: src/a11y/commands.cpp:620
 msgid "Developer info written to the log"
 msgstr "Развојне информације су уписане у дневник"
 
 #. Translators: reported when the thing under the cursor is a link but
 #. the application does not say where it points.
-#: src/a11y/commands.cpp:616
+#: src/a11y/commands.cpp:651
 msgid "Link has no apparent destination"
 msgstr "Линк нема препознатљиво одретиште"
 
 #. Translators: reported when the thing under the cursor is not a link at
 #. all (alus+k).
-#: src/a11y/commands.cpp:621
+#: src/a11y/commands.cpp:656
 msgid "Not a link."
 msgstr "Није линк."
 
@@ -350,7 +357,7 @@ msgstr "дугме"
 msgid "menu bar"
 msgstr "трака менија"
 
-#: src/a11y/role_tables.cpp:38
+#: src/a11y/role_tables.cpp:38 src/nav/quick_nav.cpp:98
 msgid "menu item"
 msgstr "ставка менија"
 
@@ -402,11 +409,11 @@ msgstr "језичак"
 msgid "tab control"
 msgstr "контрола картице"
 
-#: src/a11y/role_tables.cpp:51
+#: src/a11y/role_tables.cpp:51 src/nav/quick_nav.cpp:100
 msgid "slider"
 msgstr "клизач"
 
-#: src/a11y/role_tables.cpp:52
+#: src/a11y/role_tables.cpp:52 src/nav/quick_nav.cpp:99
 msgid "progress bar"
 msgstr "трака напредовања"
 
@@ -666,7 +673,7 @@ msgstr "одвојива ставка менија"
 msgid "text frame"
 msgstr "оквир текста"
 
-#: src/a11y/role_tables.cpp:117
+#: src/a11y/role_tables.cpp:117 src/nav/quick_nav.cpp:97
 msgid "toggle button"
 msgstr "дугме прекидача"
 
@@ -1217,7 +1224,7 @@ msgstr "изабрано %s"
 
 #. Translators: what has just been selected: "hello world selected".
 #. Translators: what is selected, e.g. "hello world selected".
-#: src/a11y/text_speech.cpp:1583 src/nav/text_commands.cpp:614
+#: src/a11y/text_speech.cpp:1583 src/nav/text_commands.cpp:615
 msgid "%s selected"
 msgstr "%s изабрано"
 
@@ -1237,40 +1244,56 @@ msgid "selection removed"
 msgstr "избор уклоњен"
 
 #. Translators: reported when no application has the focus.
-#: src/app/commands.cpp:42 src/app/commands.cpp:84 src/app/commands.cpp:110
+#: src/app/commands.cpp:46 src/app/commands.cpp:84 src/app/commands.cpp:144
+#: src/app/commands.cpp:170
 msgid "No focused application"
 msgstr "Нема фокусиране апликације"
 
 #. Translators: reported when the focused application has no status
 #. line, or when its status line is empty.
-#: src/app/commands.cpp:51
+#: src/app/commands.cpp:55 src/app/commands.cpp:91
 msgid "No status line found"
 msgstr "Није пронађена статусна трака"
 
-#. Translators: copying to the clipboard is not available yet.
-#: src/app/commands.cpp:68 src/nav/text_commands.cpp:422
-msgid "Clipboard support is not available yet"
-msgstr "Подршка за оставу још није доступна"
+#. Translators: announced when a text has been copied to
+#. the clipboard. %s is the copied text.
+#. Translators: Announced when a text has been copied to clipboard. %s is
+#. the copied text.
+#: src/app/commands.cpp:107 src/speech/global_commands.cpp:173
+msgid "Copied to clipboard: %s"
+msgstr "Копирано у привремену меморију: %s"
+
+#. Translators: Presented when unable to copy to the
+#. clipboard because of an error.
+#. Translators: Presented when unable to copy to the clipboard because
+#. of an error or the clipboard content did not match what was just
+#. copied.
+#. Translators: Presented when unable to copy to the clipboard
+#. because of an error.
+#: src/app/commands.cpp:110 src/speech/global_commands.cpp:160 src/speech/global_commands.cpp:289
+#: src/speech/global_commands.cpp:292
+msgid "Unable to copy"
+msgstr "Немогуће копирати"
 
 #. Translators: the app module loaded for the focused application.
-#: src/app/commands.cpp:96
+#: src/app/commands.cpp:156
 msgid " %s module is loaded. "
 msgstr " %s модул је учитан. "
 
 #. Translators: the program that is running, by its executable name.
-#: src/app/commands.cpp:99
+#: src/app/commands.cpp:159
 msgid " %s is currently running."
 msgstr " %s је тренутно покренут."
 
 #. Translators: reported when ALUS is told to say nothing
 #. about the focused application, which speaks for itself.
-#: src/app/commands.cpp:124
+#: src/app/commands.cpp:184
 msgid "Sleep mode on"
 msgstr "Укључен режим спавања"
 
 #. Translators: reported when ALUS goes back to announcing
 #. the focused application.
-#: src/app/commands.cpp:127
+#: src/app/commands.cpp:187
 msgid "Sleep mode off"
 msgstr "Искључен режим спавања"
 
@@ -1898,7 +1921,7 @@ msgstr "не могу да прочитам сат"
 
 #. Translators: spoken when the configuration cannot be saved because
 #. the command was run somewhere that has none, e.g. a diagnostic tool.
-#: src/config/commands.cpp:50
+#: src/config/commands.cpp:63
 msgid "cannot save the configuration from here"
 msgstr "одавде не могу да сачувам подешавања"
 
@@ -1906,49 +1929,449 @@ msgstr "одавде не могу да сачувам подешавања"
 #. a read-only home directory, a full disk. NOT silent: a user who
 #. believes a setting was kept and finds it gone after a restart has
 #. no way to know which of the two went wrong.
-#: src/config/commands.cpp:60 src/daemon/main.cpp:655
+#: src/config/commands.cpp:73 src/daemon/main.cpp:668
 msgid "Could not save configuration"
 msgstr "Не могу да сачувам подешавања"
 
 #. Translators: spoken when the configuration has been written to disk.
-#: src/config/commands.cpp:65 src/daemon/main.cpp:654
+#: src/config/commands.cpp:78 src/daemon/main.cpp:667
 msgid "Configuration saved"
 msgstr "Подешавања сачувана"
 
 #. Translators: spoken when the configuration cannot be reloaded
 #. because the command was run outside the screen reader.
-#: src/config/commands.cpp:72
+#: src/config/commands.cpp:85
 msgid "cannot revert the configuration from here"
 msgstr "одавде не могу да вратим подешавања"
 
 #. Translators: spoken when the configuration has been reloaded from
 #. disk, undoing every change made since it was last saved.
-#: src/config/commands.cpp:85 src/daemon/main.cpp:658
+#: src/config/commands.cpp:98 src/daemon/main.cpp:671
 msgid "Configuration applied"
 msgstr "Подешавања примењена"
 
 #. Translators: spoken when every setting has been returned to its
 #. factory value.
-#: src/config/commands.cpp:93 src/daemon/main.cpp:661
+#: src/config/commands.cpp:106 src/daemon/main.cpp:674
 msgid "Configuration restored to factory defaults"
 msgstr "Подешавања враћена на фабричке вредности"
 
+#: src/config/commands.cpp:130
+msgid "report alignment on"
+msgstr "укључено пријављивање поравнања"
+
+#: src/config/commands.cpp:131
+msgid "report alignment off"
+msgstr "искључено пријављивање поравнања"
+
+#: src/config/commands.cpp:132
+msgid "report articles off"
+msgstr "искључено пријављивање чланака"
+
+#: src/config/commands.cpp:132
+msgid "report articles on"
+msgstr "укључено пријављивање чланака"
+
+#: src/config/commands.cpp:133
+msgid "report block quotes on"
+msgstr "укључено пријављивање цитата"
+
+#: src/config/commands.cpp:134
+msgid "report block quotes off"
+msgstr "искључено пријављивање цитата"
+
+#: src/config/commands.cpp:135
+msgid "report cell borders on"
+msgstr "пријављивање ивица ћелија укључено"
+
+#: src/config/commands.cpp:136
+msgid "report cell borders off"
+msgstr "пријављивање ивица ћелија искључено"
+
+#: src/config/commands.cpp:137
+msgid "report if clickable on"
+msgstr "укључено пријављивање кликабилности"
+
+#: src/config/commands.cpp:138
+msgid "report if clickable off"
+msgstr "искључено пријављивање кликабилности"
+
+#: src/config/commands.cpp:139
+msgid "report colors off"
+msgstr "искључено пријављивање боја"
+
+#: src/config/commands.cpp:139
+msgid "report colors on"
+msgstr "укључено пријављивање боја"
+
+#: src/config/commands.cpp:140
+msgid "report comments off"
+msgstr "искључено пријављивање коментара"
+
+#: src/config/commands.cpp:140
+msgid "report comments on"
+msgstr "укључено пријављивање коментара"
+
+#: src/config/commands.cpp:141
+msgid "report emphasis off"
+msgstr "искључено пријављивање наглашеног текста"
+
+#: src/config/commands.cpp:141
+msgid "report emphasis on"
+msgstr "укључено пријављивање наглашеног текста"
+
+#: src/config/commands.cpp:142
+msgid "report figures and captions on"
+msgstr "укључено пријављивање фигура и наслова слика"
+
+#: src/config/commands.cpp:143
+msgid "report figures and captions off"
+msgstr "искључено пријављивање фигура и наслова слика"
+
+#: src/config/commands.cpp:144
+msgid "report font name on"
+msgstr "укључено пријављивање имена фонта"
+
+#: src/config/commands.cpp:145
+msgid "report font name off"
+msgstr "искључено пријављивање имена фонта"
+
+#: src/config/commands.cpp:146
+msgid "report font size on"
+msgstr "укључено пријављивање величине фонта"
+
+#: src/config/commands.cpp:147
+msgid "report font size off"
+msgstr "искључено пријављивање величине фонта"
+
+#: src/config/commands.cpp:148
+msgid "report frames off"
+msgstr "искључено пријављивање оквира"
+
+#: src/config/commands.cpp:148
+msgid "report frames on"
+msgstr "укључено пријављивање оквира"
+
+#: src/config/commands.cpp:149
+msgid "report graphics off"
+msgstr "искључено пријављивање слика"
+
+#: src/config/commands.cpp:149
+msgid "report graphics on"
+msgstr "укључено пријављивање слика"
+
+#: src/config/commands.cpp:150
+msgid "report groupings on"
+msgstr "укључено пријављивање груписања"
+
+#: src/config/commands.cpp:151
+msgid "report groupings off"
+msgstr "искључено пријављивање груписања"
+
+#: src/config/commands.cpp:152
+msgid "report headings off"
+msgstr "искључено пријављивање наслова"
+
+#: src/config/commands.cpp:152
+msgid "report headings on"
+msgstr "укључено пријављивање наслова"
+
+#: src/config/commands.cpp:153
+msgid "report highlighted on"
+msgstr "укључено пријављивање обележеног текста"
+
+#: src/config/commands.cpp:154
+msgid "report highlighted off"
+msgstr "искључено пријављивање обележеног текста"
+
+#: src/config/commands.cpp:155
+msgid "report landmarks and regions on"
+msgstr "укључено пријављивање орјентира и региона"
+
+#: src/config/commands.cpp:156
+msgid "report landmarks and regions off"
+msgstr "искључено пријављивање орјентира и региона"
+
+#: src/config/commands.cpp:157
+msgid "report line numbers on"
+msgstr "укључено пријављивање броја редова"
+
+#: src/config/commands.cpp:158
+msgid "report line numbers off"
+msgstr "искључено пријављивање броја редова"
+
+#: src/config/commands.cpp:159
+msgid "report line spacing on"
+msgstr "укључено пријављивање одвајања редова"
+
+#: src/config/commands.cpp:160
+msgid "report line spacing off"
+msgstr "искључено пријављивање одвајања редова"
+
+#: src/config/commands.cpp:161
+msgid "report links off"
+msgstr "искључено пријављивање линкова"
+
+#: src/config/commands.cpp:161
+msgid "report links on"
+msgstr "укључено пријављивање линкова"
+
+#: src/config/commands.cpp:162
+msgid "report lists off"
+msgstr "искључено пријављивање листа"
+
+#: src/config/commands.cpp:162
+msgid "report lists on"
+msgstr "укључено пријављивање листа"
+
+#: src/config/commands.cpp:163
+msgid "report pages off"
+msgstr "искључено пријављивање страница"
+
+#: src/config/commands.cpp:163
+msgid "report pages on"
+msgstr "укључено пријављивање страница"
+
+#: src/config/commands.cpp:165
+msgid "report paragraph indentation off"
+msgstr "искључено пријављивање увлачења пасуса"
+
+#: src/config/commands.cpp:165
+msgid "report paragraph indentation on"
+msgstr "укључено пријављивање увлачења пасуса"
+
+#: src/config/commands.cpp:166
+msgid "report revisions on"
+msgstr "укључено пријављивање ревизија"
+
+#: src/config/commands.cpp:167
+msgid "report revisions off"
+msgstr "искључено пријављивање ревизија"
+
+#: src/config/commands.cpp:168
+msgid "report spelling errors on"
+msgstr "пријављивање правописних грешака укључено"
+
+#: src/config/commands.cpp:169
+msgid "report spelling errors off"
+msgstr "пријављивање правописних грешака искључено"
+
+#: src/config/commands.cpp:171
+msgid "Report errors in braille off"
+msgstr "Искључено приказивање грешака на брајевом реду"
+
+#: src/config/commands.cpp:171
+msgid "Report errors in braille on"
+msgstr "Укључено приказивање грешака на брајевом реду"
+
+#: src/config/commands.cpp:172
+msgid "report style off"
+msgstr "искључено пријављивање стила"
+
+#: src/config/commands.cpp:172
+msgid "report style on"
+msgstr "укључено пријављивање стила"
+
+#: src/config/commands.cpp:174
+msgid "report superscripts and subscripts off"
+msgstr "искључено пријављивање експонената и индекса"
+
+#: src/config/commands.cpp:174
+msgid "report superscripts and subscripts on"
+msgstr "укључено пријављивање експонената и индекса"
+
+#: src/config/commands.cpp:176
+msgid "report table cell coordinates off"
+msgstr "искључено пријављивање координата ћелија у табели"
+
+#: src/config/commands.cpp:176
+msgid "report table cell coordinates on"
+msgstr "укључено пријављивање координата ћелија у табели"
+
+#: src/config/commands.cpp:177
+msgid "report tables off"
+msgstr "искључено пријављивање табела"
+
+#: src/config/commands.cpp:177
+msgid "report tables on"
+msgstr "укључено пријављивање табела"
+
+#: src/config/commands.cpp:179
+msgid "Ignore blank lines for line indentation reporting on"
+msgstr "Укључено занемаривање празних редова за пријављивање увлачења редова"
+
+#: src/config/commands.cpp:180
+msgid "Ignore blank lines for line indentation reporting off"
+msgstr "Искључено занемаривање празних редова за пријављивање увлачења редова"
+
+#. Translators: the link type (visited or not) is part of announcing
+#. links, so it cannot be switched while links are not announced.
+#: src/config/commands.cpp:216
+msgid "The report links setting must be enabled to toggle report link type"
+msgstr "Подешавање пријављивања линкова мора бити укључено како би се пријављивање врсте линка укључило или искључило"
+
+#: src/config/commands.cpp:223
+msgid "Report link type off"
+msgstr "Искључено пријављивање врсте линка"
+
+#. Translators: whether a link is announced as visited.
+#: src/config/commands.cpp:223
+msgid "Report link type on"
+msgstr "Укључено пријављивање врсте линка"
+
+#: src/config/commands.cpp:234 src/gui/model.cpp:26 src/gui/model.cpp:59
+#: src/gui/model.cpp:235 src/gui/model.cpp:474 src/gui/model.cpp:504
+#: src/input/commands.cpp:39 src/input/commands.cpp:48
+msgid "Off"
+msgstr "Искључено"
+
+#: src/config/commands.cpp:234 src/gui/model.cpp:505
+msgid "Rows and columns"
+msgstr "Редови и колоне"
+
+#: src/config/commands.cpp:234 src/gui/model.cpp:506
+msgid "Rows only"
+msgstr "Само редови"
+
+#: src/config/commands.cpp:235 src/gui/model.cpp:507
+msgid "Columns only"
+msgstr "Само колоне"
+
+#. Translators: reported when the table header mode changes; {mode} is
+#. the new mode, e.g. "Rows and columns".
+#: src/config/commands.cpp:238
+msgid "Report table headers {mode}"
+msgstr "Пријављивање заглавља табела {mode}"
+
+#. Translators: A state in which font attributes are not reported.
+#: src/config/commands.cpp:259
+msgid "Do not report font attributes"
+msgstr "Не пријављуј атрибуте фонта"
+
+#. Translators: A state in which font attributes are only spoken.
+#: src/config/commands.cpp:263
+msgid "Speak font attributes"
+msgstr "Изговарај атрибуте фонта"
+
+#. Translators: A state in which font attributes are only brailled.
+#: src/config/commands.cpp:267
+msgid "Braille font attributes"
+msgstr "Приказуј атрибуте фонта на брајевом реду"
+
+#. Translators: A state in which font attributes are both spoken
+#. and brailled.
+#: src/config/commands.cpp:272
+msgid "Speak and braille font attributes"
+msgstr "Изговарај и приказуј атрибуте фонта на брајевом реду"
+
+#. Translators: reported when the keyboard layout changes; {layout} is
+#. "desktop" or "laptop".
+#: src/config/commands.cpp:286
+msgid "{layout} layout"
+msgstr "{layout} распоред"
+
+#. Translators: a gesture that applies only to one keyboard
+#. layout.
+#: src/config/commands.cpp:287 src/gui/gesture_model.cpp:86
+msgid "desktop"
+msgstr "десктоп"
+
+#. Translators: a gesture that applies only to one keyboard
+#. layout, shown after the keys, e.g. "ALUS+h (laptop)".
+#: src/config/commands.cpp:287 src/gui/gesture_model.cpp:83
+msgid "laptop"
+msgstr "лаптоп"
+
+#. Translators: A message reported when executing the cycle
+#. automatic language switching mode command.
+#: src/config/commands.cpp:303
+msgid "Automatic language switching off"
+msgstr "Искључена аутоматска промена језика"
+
+#. Translators: A message reported when executing the cycle automatic
+#. language switching mode command.
+#: src/config/commands.cpp:310
+msgid "Automatic language and dialect switching on"
+msgstr "Укључена аутоматска промена језика и дијалекта"
+
+#. Translators: A message reported when executing the cycle automatic
+#. language switching mode command.
+#: src/config/commands.cpp:318
+msgid "Automatic language switching on"
+msgstr "Укључена аутоматска промена језика"
+
+#. Translators: Used when reporting speech Unicode normalization state;
+#. {state} is "enabled" or "disabled".
+#: src/config/commands.cpp:331
+msgid "Speech Unicode normalization {state}"
+msgstr "{state} уникодна стандардизација изговора"
+
+#: src/config/commands.cpp:332
+msgid "disabled"
+msgstr "онемогућено"
+
+#: src/config/commands.cpp:332
+msgid "enabled"
+msgstr "омогућено"
+
+#. Translators: The message announced when re-enabling all
+#. configuration profile triggers.
+#: src/config/commands.cpp:344
+msgid "Configuration profile triggers enabled"
+msgstr "Омогућени активатори профила подешавања"
+
+#. Translators: The message announced when temporarily disabling
+#. all configuration profile triggers.
+#: src/config/commands.cpp:347
+msgid "Configuration profile triggers disabled"
+msgstr "Онемогућени активатори профила подешавања"
+
+#. Translators: Message announced when the command to report the
+#. current configuration profile and the default configuration
+#. profile is active.
+#: src/config/commands.cpp:359
+msgid "normal configuration profile active"
+msgstr "профил са стандардним подешавањима активан"
+
+#. Translators: Message announced when the command to report the current
+#. configuration profile is active; {profileName} is its name.
+#: src/config/commands.cpp:364
+msgid "{profileName} configuration profile active"
+msgstr "{profileName}  је активан профил подешавања"
+
+#. Translators: spoken when the file manager could not be started on
+#. the configuration folder; %s is the folder.
+#: src/config/commands.cpp:382
+msgid "Could not open %s"
+msgstr "Не могу да отворим %s"
+
+#. Translators: spoken when ALUS cannot restart itself from where the
+#. command was run.
+#: src/config/commands.cpp:394
+msgid "cannot restart from here"
+msgstr "одавде не могу поново да покренем ALUS"
+
+#. Translators: spoken just before ALUS restarts itself.
+#: src/config/commands.cpp:398
+msgid "restarting"
+msgstr "поново покрећем"
+
 #. Translators: spoken as ALUS shuts down, on the user's own command.
-#: src/daemon/main.cpp:663 src/input/commands.cpp:186
+#: src/daemon/main.cpp:676 src/input/commands.cpp:186
 msgid "exiting"
 msgstr "излазим"
 
 #. Translators: spoken as the screen reader finishes starting.
 #. "ALUS" is the product name and is NOT translated.
-#: src/daemon/main.cpp:750
+#: src/daemon/main.cpp:770
 msgid "ALUS started"
 msgstr "ALUS покренут"
 
-#: src/daemon/main.cpp:758
+#: src/daemon/main.cpp:778
 msgid "The object model is not available: %s"
 msgstr "Објектни модел није доступан: %s"
 
-#: src/daemon/main.cpp:772
+#: src/daemon/main.cpp:792
 msgid "Keyboard input is not available: %s"
 msgstr "Улаз са тастатуре није доступан: %s"
 
@@ -2066,7 +2489,7 @@ msgid "%s is now unbound for you; the default is kept in place for everything el
 msgstr "%s је за вас одвезан; подразумевано везивање остаје за све остало"
 
 #. Translators: the title of the gesture dialog.
-#: src/gui/gesture_dialog.cpp:334 src/gui/model.cpp:563
+#: src/gui/gesture_dialog.cpp:334 src/gui/model.cpp:568
 msgid "Gestures"
 msgstr "Команде тастатуре"
 
@@ -2092,18 +2515,6 @@ msgstr "Уклони"
 #: src/gui/gesture_model.cpp:58
 msgid "ALUS"
 msgstr "ALUS"
-
-#. Translators: a gesture that applies only to one keyboard
-#. layout, shown after the keys, e.g. "ALUS+h (laptop)".
-#: src/gui/gesture_model.cpp:83
-msgid "laptop"
-msgstr "лаптоп"
-
-#. Translators: a gesture that applies only to one keyboard
-#. layout.
-#: src/gui/gesture_model.cpp:86
-msgid "desktop"
-msgstr "десктоп"
 
 #: src/gui/gesture_model.cpp:148
 msgid "yours"
@@ -2264,12 +2675,6 @@ msgstr "ALUS мени"
 #: src/gui/menu_main.cpp:387
 msgid "Help"
 msgstr "Помоћ"
-
-#: src/gui/model.cpp:26 src/gui/model.cpp:59 src/gui/model.cpp:235
-#: src/gui/model.cpp:474 src/gui/model.cpp:499 src/input/commands.cpp:39
-#: src/input/commands.cpp:48
-msgid "Off"
-msgstr "Искључено"
 
 #: src/gui/model.cpp:27 src/input/commands.cpp:43
 msgid "Only in edit controls"
@@ -2495,7 +2900,7 @@ msgstr "Нормализуј Unicode пре изговарања"
 msgid "Makes mathematical and styled letters readable: ℂ is spoken as C."
 msgstr "Чини математичка и стилизована слова читљивим: ℂ се изговара као Ц."
 
-#: src/gui/model.cpp:147 src/gui/model.cpp:546 src/i18n/data_strings.cpp:33
+#: src/gui/model.cpp:147 src/gui/model.cpp:551 src/i18n/data_strings.cpp:33
 msgid "Braille"
 msgstr "Брајев ред"
 
@@ -3071,115 +3476,103 @@ msgstr "Координате ћелије"
 msgid "Table headers"
 msgstr "Заглавља табеле"
 
-#: src/gui/model.cpp:500
-msgid "Rows and columns"
-msgstr "Редови и колоне"
-
-#: src/gui/model.cpp:501
-msgid "Rows only"
-msgstr "Само редови"
-
-#: src/gui/model.cpp:502
-msgid "Columns only"
-msgstr "Само колоне"
-
-#: src/gui/model.cpp:504
+#: src/gui/model.cpp:509
 msgid "Cell borders"
 msgstr "Ивице ћелија"
 
-#: src/gui/model.cpp:506
+#: src/gui/model.cpp:511
 msgid "Tables used only for layout"
 msgstr "Табеле које служе само за распоред"
 
-#: src/gui/model.cpp:507
+#: src/gui/model.cpp:512
 msgid "`alus+shift+f` reports the formatting at the caret; this decides whether a table that only arranges a page counts as a table at all."
 msgstr "`алус+схифт+ф` најављује форматирање на карети; ово одлучује да ли табела која само распоређује страну уопште важи за табелу."
 
-#: src/gui/model.cpp:511
+#: src/gui/model.cpp:516
 msgid "Elements"
 msgstr "Елементи"
 
-#: src/gui/model.cpp:514
+#: src/gui/model.cpp:519
 msgid "Headings"
 msgstr "Наслови"
 
-#: src/gui/model.cpp:516
+#: src/gui/model.cpp:521
 msgid "Links"
 msgstr "Везе"
 
-#: src/gui/model.cpp:518
+#: src/gui/model.cpp:523
 msgid "Whether a link has been visited"
 msgstr "Да ли је веза посећена"
 
-#: src/gui/model.cpp:520
+#: src/gui/model.cpp:525
 msgid "Graphics"
 msgstr "Графика"
 
-#: src/gui/model.cpp:522
+#: src/gui/model.cpp:527
 msgid "Lists"
 msgstr "Листе"
 
-#: src/gui/model.cpp:524
+#: src/gui/model.cpp:529
 msgid "Block quotes"
 msgstr "Блоковски цитати"
 
-#: src/gui/model.cpp:526
+#: src/gui/model.cpp:531
 msgid "Groupings"
 msgstr "Груписања"
 
-#: src/gui/model.cpp:528
+#: src/gui/model.cpp:533
 msgid "Landmarks and regions"
 msgstr "Оријентири и региони"
 
-#: src/gui/model.cpp:530
+#: src/gui/model.cpp:535
 msgid "Articles"
 msgstr "Чланци"
 
-#: src/gui/model.cpp:532
+#: src/gui/model.cpp:537
 msgid "Frames"
 msgstr "Оквири"
 
-#: src/gui/model.cpp:534
+#: src/gui/model.cpp:539
 msgid "Figures and captions"
 msgstr "Слике и натписи"
 
-#: src/gui/model.cpp:536
+#: src/gui/model.cpp:541
 msgid "Clickable elements"
 msgstr "Елементи на које се може кликнути"
 
-#: src/gui/model.cpp:538
+#: src/gui/model.cpp:543
 msgid "When formatting is reported"
 msgstr "Када се форматирање најављује"
 
-#: src/gui/model.cpp:542
+#: src/gui/model.cpp:547
 msgid "Report formatting changes after the cursor"
 msgstr "Најављуј промене форматирања после курсора"
 
-#: src/gui/model.cpp:543
+#: src/gui/model.cpp:548
 msgid "Costs a call per line; off by default for that reason."
 msgstr "Кошта један позив по линији; зато је подразумевано искључено."
 
-#: src/gui/model.cpp:550
+#: src/gui/model.cpp:555
 msgid "Bold, italic and underline on the display"
 msgstr "Подебљано, курзив и подвучено на реду"
 
-#: src/gui/model.cpp:553
+#: src/gui/model.cpp:558
 msgid "Spelling errors on the display"
 msgstr "Правописне грешке на реду"
 
-#: src/gui/model.cpp:565
+#: src/gui/model.cpp:570
 msgid "Commands and keys"
 msgstr "Команде и тастери"
 
-#: src/gui/model.cpp:566
+#: src/gui/model.cpp:571
 msgid "Every command ALUS knows, with the keys bound to it. A command with no description is not shown, because a command that cannot be explained cannot be rebound sensibly."
 msgstr "Свака команда коју ALUS зна, са тастерима везаним за њу. Команда без описа се не приказује, јер команда која се не може објаснити не може се ни разумно превезати."
 
-#: src/gui/model.cpp:570
+#: src/gui/model.cpp:575
 msgid "Edit gestures"
 msgstr "Уреди гестове"
 
-#: src/gui/model.cpp:655
+#: src/gui/model.cpp:660
 msgid "%s (not offered by the synthesizer)"
 msgstr "%s (синтетизатор га не нуди)"
 
@@ -5146,7 +5539,7 @@ msgstr "параграф текста"
 msgid "clickable element"
 msgstr "елемент на који се може кликнути"
 
-#: src/nav/quick_nav.cpp:97
+#: src/nav/quick_nav.cpp:101
 msgid "more text"
 msgstr "још текста"
 
@@ -5163,99 +5556,104 @@ msgid "Screen review"
 msgstr "Преглед екрана"
 
 #. Translators: there is nothing to review.
-#: src/nav/text_commands.cpp:105
+#: src/nav/text_commands.cpp:106
 msgid "No review position"
 msgstr "Нема позиције прегледа"
 
 #. Translators: the review cursor is at the top line already.
-#: src/nav/text_commands.cpp:215
+#: src/nav/text_commands.cpp:216
 msgid "Top"
 msgstr "Врх"
 
 #. Translators: the review cursor is at the bottom line already.
-#: src/nav/text_commands.cpp:220
+#: src/nav/text_commands.cpp:221
 msgid "Bottom"
 msgstr "Дно"
 
 #. Translators: there is nothing to read from here.
 #. Translators: there is nothing to read.
-#: src/nav/text_commands.cpp:312 src/nav/text_commands.cpp:491 src/nav/text_commands.cpp:499
-#: src/nav/text_commands.cpp:508
+#: src/nav/text_commands.cpp:313 src/nav/text_commands.cpp:492 src/nav/text_commands.cpp:500
+#: src/nav/text_commands.cpp:509
 msgid "No text to read"
 msgstr "Нема текста за читање"
 
 #. Translators: the last review mode is already in use.
-#: src/nav/text_commands.cpp:330
+#: src/nav/text_commands.cpp:331
 msgid "No next review mode"
 msgstr "Нема наредног режима прегледа"
 
 #. Translators: the first review mode is already in use.
-#: src/nav/text_commands.cpp:343
+#: src/nav/text_commands.cpp:344
 msgid "No previous review mode"
 msgstr "Нема претходног режима прегледа"
 
 #. Translators: the start of the text to copy has been marked.
-#: src/nav/text_commands.cpp:358
+#: src/nav/text_commands.cpp:359
 msgid "Start marked"
 msgstr "Почетак означен"
 
 #. Translators: no start marker has been set.
-#: src/nav/text_commands.cpp:364 src/nav/text_commands.cpp:384
+#: src/nav/text_commands.cpp:365 src/nav/text_commands.cpp:385
 msgid "No start marker set"
 msgstr "Почетни маркер није постављен"
 
 #. Translators: the marked position is in another object.
-#: src/nav/text_commands.cpp:389
+#: src/nav/text_commands.cpp:390
 msgid "The start marker must reside within the same object"
 msgstr "Почетни маркер мора бити у истом објекту"
 
 #. Translators: nothing has been selected.
-#: src/nav/text_commands.cpp:400
+#: src/nav/text_commands.cpp:401
 msgid "No text to copy"
 msgstr "Нема текста за копирање"
 
 #. Translators: the object refused to change its selection.
-#: src/nav/text_commands.cpp:408
+#: src/nav/text_commands.cpp:409
 msgid "Cannot select text here"
 msgstr "Овде није могуће изабрати текст"
 
 #. Translators: the text has been selected.
-#: src/nav/text_commands.cpp:412
+#: src/nav/text_commands.cpp:413
 msgid "Selected"
 msgstr "Изабрано"
 
+#. Translators: copying to the clipboard is not available yet.
+#: src/nav/text_commands.cpp:423
+msgid "Clipboard support is not available yet"
+msgstr "Подршка за оставу још није доступна"
+
 #. Translators: there is no selection.
 #. Translators: no text is selected.
-#: src/nav/text_commands.cpp:438 src/nav/text_commands.cpp:460 src/nav/text_commands.cpp:605
+#: src/nav/text_commands.cpp:439 src/nav/text_commands.cpp:461 src/nav/text_commands.cpp:606
 msgid "No selection"
 msgstr "Без избора"
 
 #. Translators: reported when the command needs a document and the
 #. text layer is not running (`alus-daemon --no-nav`).
-#: src/nav/text_commands.cpp:518 src/nav/text_commands.cpp:523
+#: src/nav/text_commands.cpp:519 src/nav/text_commands.cpp:524
 msgid "Not in a document"
 msgstr "Није у документу"
 
 #. Translators: reported when there is no document around this one to
 #. move out to (alus+control+space).
-#: src/nav/text_commands.cpp:543
+#: src/nav/text_commands.cpp:544
 msgid "No containing document"
 msgstr "Нема документа који га садржи"
 
 #. Translators: reported when the containing document refused the
 #. focus, which only the application can decide.
-#: src/nav/text_commands.cpp:556
+#: src/nav/text_commands.cpp:557
 msgid "Could not move to the containing document"
 msgstr "Не могу да пређем на документ који га садржи"
 
 #. Translators: the focused object has no caret.
-#: src/nav/text_commands.cpp:630 src/nav/text_commands.cpp:641 src/nav/text_commands.cpp:651
+#: src/nav/text_commands.cpp:631 src/nav/text_commands.cpp:642 src/nav/text_commands.cpp:652
 #: src/nav/text_commands.cpp:703 src/nav/text_commands.cpp:798
 msgid "No caret"
 msgstr "Нема курсора"
 
 #. Translators: the caret's position could not be worked out.
-#: src/nav/text_commands.cpp:635
+#: src/nav/text_commands.cpp:636
 msgid "Unable to determine the caret position"
 msgstr "Није могуће одредити позицију карете"
 
@@ -5279,56 +5677,56 @@ msgstr "Режим фокусирања"
 
 #. Translators: spoken for the key that opens a Python console in other
 #. screen readers; ALUS is not written in Python.
-#: src/script/command_status.cpp:143
+#: src/script/command_status.cpp:152
 msgid "ALUS has no Python console"
 msgstr "ALUS нема Python конзолу"
 
 #. Translators: spoken for the audio ducking key.
-#: src/script/command_status.cpp:145
+#: src/script/command_status.cpp:154
 msgid "ALUS does not lower other applications' audio"
 msgstr "ALUS не утишава звук других програма"
 
 #. Translators: spoken for the sound split key.
-#: src/script/command_status.cpp:147
+#: src/script/command_status.cpp:156
 msgid "sound split is not available"
 msgstr "дељење звука није доступно"
 
-#: src/script/command_status.cpp:152
+#: src/script/command_status.cpp:161
 msgid "ALUS cannot move the mouse pointer; the click keys act on the navigator object"
 msgstr "ALUS не може да помери показивач миша; тастери за клик делују на објекат за навигацију"
 
 #. Translators: spoken for the key that moves the navigator object to the
 #. mouse; Wayland does not tell ALUS where the pointer is.
 #. Translators: spoken for the mouse tracking key, for the same reason.
-#: src/script/command_status.cpp:155 src/script/command_status.cpp:157
+#: src/script/command_status.cpp:164 src/script/command_status.cpp:166
 msgid "ALUS cannot know where the mouse pointer is"
 msgstr "ALUS не може да зна где је показивач миша"
 
 #. Translators: spoken for the keys that hold a mouse button down.
-#: src/script/command_status.cpp:159 src/script/command_status.cpp:160
+#: src/script/command_status.cpp:168 src/script/command_status.cpp:169
 msgid "ALUS cannot hold a mouse button down"
 msgstr "ALUS не може да држи притиснут тастер миша"
 
 #. Translators: spoken for the reload plugins key.
-#: src/script/command_status.cpp:162
+#: src/script/command_status.cpp:171
 msgid "add-ons are loaded when ALUS starts; restart ALUS to reload them"
 msgstr "додаци се учитавају при покретању ALUS-а; поново покрените ALUS да бисте их учитали"
 
 #. Translators: spoken for a developer key about a screen model that
 #. ALUS does not have.
-#: src/script/command_status.cpp:165
+#: src/script/command_status.cpp:174
 msgid "ALUS has no display model"
 msgstr "ALUS нема модел екрана"
 
 #. Translators: spoken for the native selection mode key in browse mode.
-#: src/script/command_status.cpp:167
+#: src/script/command_status.cpp:176
 msgid "native selection mode is not available"
 msgstr "режим изворног избора није доступан"
 
 #. Translators: spoken when a key runs a command that this
 #. version of ALUS does not have yet. Short on purpose:
 #. what matters is that the key is not silent.
-#: src/script/command_status.cpp:209
+#: src/script/command_status.cpp:218
 msgid "not in this version"
 msgstr "нема у овој верзији"
 
@@ -5381,66 +5779,51 @@ msgctxt "symbolLevel"
 msgid "character"
 msgstr "знак"
 
-#. Translators: Presented when unable to copy to the clipboard because
-#. of an error or the clipboard content did not match what was just
-#. copied.
-#. Translators: Presented when unable to copy to the clipboard
-#. because of an error.
-#: src/speech/global_commands.cpp:158 src/speech/global_commands.cpp:287 src/speech/global_commands.cpp:290
-msgid "Unable to copy"
-msgstr "Немогуће копирати"
-
-#. Translators: Announced when a text has been copied to clipboard. %s is
-#. the copied text.
-#: src/speech/global_commands.cpp:171
-msgid "Copied to clipboard: %s"
-msgstr "Копирано у привремену меморију: %s"
-
 #. Translators: Reported when there is no last spoken information to
 #. copy.
-#: src/speech/global_commands.cpp:191
+#: src/speech/global_commands.cpp:193
 msgid "Nothing to copy"
 msgstr "Нема ничега за копирање"
 
 #. Translators: Presented when there is no text on the clipboard.
-#: src/speech/global_commands.cpp:217
+#: src/speech/global_commands.cpp:219
 msgid "There is no text on the clipboard"
 msgstr "Нема текста у привременој меморији"
 
 #. Translators: Message when failed to mark the start of a fragment
 #. of the log file for later copy to clipboard.
-#: src/speech/global_commands.cpp:253
+#: src/speech/global_commands.cpp:255
 msgid "Unable to mark log position"
 msgstr "Немогуће обележити позицију дневника"
 
 #. Translators: Message when marking the start of a fragment of the log
 #. file for later copy to clipboard.
-#: src/speech/global_commands.cpp:259
+#: src/speech/global_commands.cpp:261
 msgid "Log fragment start position marked, press again to copy to clipboard"
 msgstr "Почетак фрагмента дневника је обележен, притисните поново за копирање у привремену меморију"
 
 #. Translators: Message when attempting to copy an empty fragment of
 #. the log file.
-#: src/speech/global_commands.cpp:273
+#: src/speech/global_commands.cpp:275
 msgid "No new log entry to copy"
 msgstr "Нема нових догађаја у дневнику за копирање"
 
 #. Translators: Message when a fragment of the log file has
 #. been copied to clipboard.
-#: src/speech/global_commands.cpp:284
+#: src/speech/global_commands.cpp:286
 msgid "Log fragment copied to clipboard"
 msgstr "Фрагмент дневника копиран у привремену меморију"
 
 #. Translators: spoken when the synthesizer settings ring
 #. (alus+control+arrows) has nothing in it, because the synthesizer
 #. reports no setting that can be stepped.
-#: src/speech/global_commands.cpp:309
+#: src/speech/global_commands.cpp:311
 msgid "No settings"
 msgstr "Нема подешавања"
 
 #. Translators: spoken when a command that needs the speech pipeline is
 #. run where there is none, e.g. under `alus-daemon --no-speech`.
-#: src/speech/global_commands.cpp:317 src/speech/global_commands.cpp:344 src/speech/global_commands.cpp:362
+#: src/speech/global_commands.cpp:319 src/speech/global_commands.cpp:346 src/speech/global_commands.cpp:364
 msgid "speech is not available"
 msgstr "говор није доступан"
 
@@ -5450,19 +5833,19 @@ msgstr "говор није доступан"
 #. The brace is upstream's, and it is copied exactly: the msgid is the key
 #. into upstream's Serbian catalogue, so a pattern rewritten to "%s" would
 #. be an untranslated string (i18n::substituteNamed says more).
-#: src/speech/global_commands.cpp:333
+#: src/speech/global_commands.cpp:335
 msgid "Speech mode {mode}"
 msgstr "Режим говора {mode}"
 
 #. Translators: reported when the punctuation and symbol level is cycled;
 #. %s is the new level ("none", "some", "most", "all").
-#: src/speech/global_commands.cpp:356
+#: src/speech/global_commands.cpp:358
 msgid "Symbol level %s"
 msgstr "Ниво симбола %s"
 
 #. Translators: reported when `alus+x` is pressed before ALUS has said
 #. anything there is to repeat.
-#: src/speech/global_commands.cpp:373
+#: src/speech/global_commands.cpp:375
 msgid "Nothing to repeat"
 msgstr "Нема шта да се понови"
 
