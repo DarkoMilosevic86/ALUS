@@ -49,6 +49,13 @@ struct AtspiBackendOptions {
     // The loop's context, so that events arrive in the pump (decision 2
     // above). Null means the default context, which is what a test wants.
     GMainContext* mainContext = nullptr;
+    // N151: make sure applications expose themselves. Gecko (Firefox,
+    // Thunderbird), Qt (Telegram) and others only do when org.a11y.Status
+    // says a screen reader or accessibility is on; Alt+Super+S switches the
+    // desktop's screen reader OFF, and then ALUS could read nothing in them.
+    // When both are off, the daemon sets IsEnabled (toolkit-accessibility,
+    // which does NOT start the other reader) and restores it on exit.
+    bool ensureAccessibilityEnabled = false;
 };
 
 class AtspiBackend final : public Backend {
@@ -177,6 +184,11 @@ private:
 
     Options options_;
     bool initialized_ = false;
+    // True when this backend turned org.a11y.Status IsEnabled on and must
+    // turn it off again.
+    bool restoreIsEnabled_ = false;
+    void enableApplicationAccessibility();
+    void restoreApplicationAccessibility();
     std::unique_ptr<Listener> listener_;
     EventSink sink_;
     std::vector<std::string> subscribed_;

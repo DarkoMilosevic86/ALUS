@@ -1442,3 +1442,24 @@ blocks is walked into"); fails without the fix.
 
 Tests: `tests/a11y/test_behaviors.cpp` ("N150 a dialog's text has no
 placeholder and its walk is bounded").
+
+**N151 — with `alus nolog` Thunderbird and Telegram said nothing; with
+`measure` they did.** No difference in the code paths explained it (the
+log level skips no code; the script's two branches differ only in the
+daemon's arguments). The difference was what the user did first: before
+`alus nolog` they turned the other reader off with Alt+Super+S, which turns
+the DESKTOP's screen reader switch off; `measure` they let the script stop
+the reader, and the switch stayed on. Gecko (Thunderbird, Firefox) and Qt
+(Telegram) expose themselves only when org.a11y.Status says a screen reader
+(`ScreenReaderEnabled`, that switch) or accessibility (`IsEnabled`, the
+`toolkit-accessibility` setting) is on. Measured: with the switch off both
+were false.
+
+ALUS cannot turn the screen reader switch on -- the session starts the other
+reader when it does (`tools/alus-switch.sh` says why). `IsEnabled` starts
+nothing. The daemon's backend (`ensureAccessibilityEnabled`, set by
+`a11y::Service`) now turns `IsEnabled` on when both are off and turns it off
+again on exit. Verified with `gsettings monitor`: `toolkit-accessibility`
+went true while the layers ran and false when they exited. An application
+already running when accessibility was off may need a restart: Gecko
+decides at start-up.

@@ -77,6 +77,8 @@ void Service::initialize() {
             std::chrono::milliseconds{config_.getInt(kSection, "callTimeout", 500)};
         // The loop's context, so events arrive inside a pump cycle (§3.1).
         backendOptions.mainContext = loop_.context();
+        // The screen reader makes sure applications expose themselves (N151).
+        backendOptions.ensureAccessibilityEnabled = true;
         ownedBackend_ = std::make_unique<AtspiBackend>(backendOptions);
         std::string error;
         if (!ownedBackend_->initialize(&error)) {

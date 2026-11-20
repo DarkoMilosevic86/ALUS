@@ -7,6 +7,7 @@
 #include "alus/core/log.hpp"
 
 #include <atspi/atspi.h>
+#include <gio/gio.h>
 #include <glib.h>
 
 #include <algorithm>
@@ -202,7 +203,101 @@ const char* textGranularityName(TextGranularity granularity) {
 
 AtspiBackend::AtspiBackend(Options options) : options_(options) {}
 
+namespace {
+
+// org.a11y.Status on the session bus: the switches every toolkit reads to
+// decide whether to expose itself to assistive technology.
+constexpr const char* kA11yBusName = "org.a11y.Bus";
+constexpr const char* kA11yBusPath = "/org/a11y/bus";
+constexpr const char* kStatusInterface = "org.a11y.Status";
+constexpr gint kStatusTimeoutMs = 1000;
+
+std::optional<bool> readStatus(GDBusConnection* bus, const char* property) {
+    GError* error = nullptr;
+    GVariant* reply = g_dbus_connection_call_sync(
+        bus, kA11yBusName, kA11yBusPath, "org.freedesktop.DBus.Properties", "Get",
+        g_variant_new("(ss)", kStatusInterface, property), G_VARIANT_TYPE("(v)"),
+        G_DBUS_CALL_FLAGS_NONE, kStatusTimeoutMs, nullptr, &error);
+    if (reply == nullptr) {
+        if (error != nullptr) {
+            ALUS_DEBUG("org.a11y.Status {}: {}", property, error->message);
+            g_error_free(error);
+        }
+        return std::nullopt;
+    }
+    GVariant* value = nullptr;
+    g_variant_get(reply, "(v)", &value);
+    std::optional<bool> result;
+    if (value != nullptr && g_variant_is_of_type(value, G_VARIANT_TYPE_BOOLEAN)) {
+        result = g_variant_get_boolean(value) != FALSE;
+    }
+    if (value != nullptr) {
+        g_variant_unref(value);
+    }
+    g_variant_unref(reply);
+    return result;
+}
+
+bool writeStatus(GDBusConnection* bus, const char* property, bool on) {
+    GError* error = nullptr;
+    GVariant* reply = g_dbus_connection_call_sync(
+        bus, kA11yBusName, kA11yBusPath, "org.freedesktop.DBus.Properties", "Set",
+        g_variant_new("(ssv)", kStatusInterface, property, g_variant_new_boolean(on ? TRUE : FALSE)),
+        nullptr, G_DBUS_CALL_FLAGS_NONE, kStatusTimeoutMs, nullptr, &error);
+    if (reply == nullptr) {
+        ALUS_WARNING("could not set org.a11y.Status {}: {}", property,
+                     error != nullptr ? error->message : "unknown error");
+        if (error != nullptr) {
+            g_error_free(error);
+        }
+        return false;
+    }
+    g_variant_unref(reply);
+    return true;
+}
+
+}  // namespace
+
+void AtspiBackend::enableApplicationAccessibility() {
+    GError* error = nullptr;
+    GDBusConnection* bus = g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, &error);
+    if (bus == nullptr) {
+        if (error != nullptr) {
+            g_error_free(error);
+        }
+        return;
+    }
+    const std::optional<bool> enabled = readStatus(bus, "IsEnabled");
+    const std::optional<bool> screenReader = readStatus(bus, "ScreenReaderEnabled");
+    if (enabled.has_value() && screenReader.has_value() && !*enabled && !*screenReader) {
+        if (writeStatus(bus, "IsEnabled", true)) {
+            restoreIsEnabled_ = true;
+            ALUS_INFO("accessibility was off for applications (the desktop's screen reader "
+                      "switch is off); turned toolkit accessibility on until ALUS exits");
+        }
+    }
+    g_object_unref(bus);
+}
+
+void AtspiBackend::restoreApplicationAccessibility() {
+    if (!restoreIsEnabled_) {
+        return;
+    }
+    restoreIsEnabled_ = false;
+    GError* error = nullptr;
+    GDBusConnection* bus = g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, &error);
+    if (bus == nullptr) {
+        if (error != nullptr) {
+            g_error_free(error);
+        }
+        return;
+    }
+    writeStatus(bus, "IsEnabled", false);
+    g_object_unref(bus);
+}
+
 AtspiBackend::~AtspiBackend() {
+    restoreApplicationAccessibility();
     unsubscribe();
     // atspi_exit() is NOT called. libatspi's own shutdown tears down the D-Bus
     // connection its worker is still using, and phase 3 measured what that
@@ -257,6 +352,9 @@ bool AtspiBackend::initialize(std::string* error) {
         atspi_set_main_context(options_.mainContext);
     }
     initialized_ = true;
+    if (options_.ensureAccessibilityEnabled) {
+        enableApplicationAccessibility();
+    }
     ALUS_INFO("AT-SPI {} ready (call timeout {} ms)", platformVersion(),
               options_.callTimeout.count());
     return true;
