@@ -21,7 +21,8 @@ find /tmp/alus-stage -type f
 
 | Path (under the prefix) | What |
 |---|---|
-| `bin/alus-daemon`, `bin/alus-cli`, `bin/alus-settings`, `bin/alus-elements` | the programs |
+| `bin/alus-daemon`, `bin/alus-cli`, `bin/alus-settings`, `bin/alus-elements`, `bin/alus-clipboard` | the programs (the last two are started by the daemon) |
+| `bin/alus-switch` | swaps the keyboard from the other screen reader to ALUS and back (`alus-switch alus`, `alus-switch other`); see below |
 | `share/alus/` | the command table (`scripts.csv`), the built-in gesture map, key labels, the command status list, symbol and character dictionaries, per-language data in `locale/` |
 | `share/locale/*/LC_MESSAGES/alus.mo` | translations |
 | `share/applications/alus.desktop` | the autostart entry (**not enabled** by installing) |
@@ -31,7 +32,23 @@ find /tmp/alus-stage -type f
 
 Nothing outside the prefix is touched, and **nothing is enabled**: installing
 ALUS does not start it with your session and does not stop any other screen
-reader. Which screen reader starts is your decision.
+reader. Which screen reader starts is your decision. The test framework the
+source tree bundles (Catch2) is not installed.
+
+## Trying ALUS next to the desktop's screen reader
+
+While the desktop's own reader (Orca) is running, in a terminal:
+
+```bash
+alus-switch alus nolog     # ALUS takes the keyboard; nothing is logged
+alus-switch other          # give the keyboard back
+alus-switch status         # who has it now
+```
+
+Every step is spoken. Do not turn the other reader off with Alt+Super+S
+first: that turns the desktop's screen reader switch off, and the overview
+(Super key) then announces nothing. The script stops the other reader itself
+and leaves the switch alone.
 
 ## Starting ALUS with the session
 

@@ -66,12 +66,14 @@ DAEMON_ARGS=()                       # extra alus-daemon arguments (measure)
 
 here=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 
-# The installed binaries win; the build tree is the fallback, so this works
-# before `meson install` as well as after it.
+# Run from the source tree (tools/alus-switch.sh), the build tree beside it
+# wins, so a developer who ALSO has ALUS installed tests what they just built.
+# Installed (as `alus-switch`, next to alus-daemon), there is no build tree
+# and $PATH answers.
 find_bin() {
   local name=$1
-  if command -v "$name" >/dev/null 2>&1; then command -v "$name"; return 0; fi
   if [ -x "$here/build/src/$name" ]; then printf '%s\n' "$here/build/src/$name"; return 0; fi
+  if command -v "$name" >/dev/null 2>&1; then command -v "$name"; return 0; fi
   return 1
 }
 

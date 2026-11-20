@@ -3,9 +3,13 @@
 #
 # This file is part of ALUS (Access Linux Using Speech).
 
+# The bundled Catch2 (subprojects/) is for the tests only: `meson install`
+# must not put a test framework's headers and libraries on a user's system,
+# which it did until the release check of 2026.1.0.
 catch2_dep = dependency('catch2-with-main',
   version: '>=3.4',
-  fallback: ['catch2', 'catch2_with_main_dep'])
+  fallback: ['catch2', 'catch2_with_main_dep'],
+  default_options: ['install=false', 'tests=false'])
 
 core_test_sources = files(
   'core/test_log.cpp',

@@ -1463,3 +1463,26 @@ again on exit. Verified with `gsettings monitor`: `toolkit-accessibility`
 went true while the layers ran and false when they exited. An application
 already running when accessibility was off may need a restart: Gecko
 decides at start-up.
+
+**Release check for 2026.1.0 beta: what `meson install` puts down.** A
+release build installed into a scratch prefix, the programs run from another
+directory:
+
+- The bundled Catch2 installed 187 files (its headers and libraries) along
+  with ALUS. `tests/meson.build` now builds the fallback with
+  `install=false` and `tests=false`; 47 files remain, all ALUS's.
+- `tools/alus-switch.sh` was not installed, and every beta user with Orca
+  needs it. It is installed as `bin/alus-switch`.
+- Three lookups preferred an INSTALLED copy over the build tree a program
+  runs from: the data directory (`core::findDataDirectory`), the
+  translations (`i18n` locale directory) and the switch script's daemon.
+  With ALUS installed, a build from source would have run new code against
+  old data. Each now takes the source tree first when the program runs from
+  a build tree (`build/meson-info` beside `build/src/<program>`), and an
+  installed program still finds only its prefix. A side effect for the
+  better: the build tree's catalogues are found from any working directory.
+- Checked from the installed prefix: version 2026.1.0, the catalogue from
+  `<prefix>/share/locale` (sr, sr@latin), the settings window and the helper
+  programs beside the daemon, the `.desktop` files and the systemd unit
+  pointing into the prefix, autostart not enabled. The daemon itself was not
+  started (the user's ALUS was running).

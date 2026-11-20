@@ -71,6 +71,20 @@ std::filesystem::path resolveLocaleDirectory(const std::filesystem::path& prefer
         }
         ALUS_WARNING("ALUS_LOCALE_DIR={} holds no alus.mo", fromEnvironment);
     }
+    // A program running from a build tree uses that tree's catalogues, even
+    // with ALUS also installed (the same rule as core::findDataDirectory):
+    // build/src/<program> -> build/po.
+    {
+        std::error_code code;
+        const std::filesystem::path self = std::filesystem::read_symlink("/proc/self/exe", code);
+        if (!code) {
+            const std::filesystem::path buildDir = self.parent_path().parent_path();
+            if (std::filesystem::exists(buildDir / "meson-info", code) &&
+                holdsCatalog(buildDir / "po")) {
+                return buildDir / "po";
+            }
+        }
+    }
     if (const std::filesystem::path installed{ALUS_LOCALE_DIR}; holdsCatalog(installed)) {
         return installed;
     }

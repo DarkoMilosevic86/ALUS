@@ -180,6 +180,15 @@ install_subdir('data/characters',
 # reintroduce the defect it exists to prevent (see
 # include/alus/script/command_status.hpp).
 #
+# The swap from the other screen reader to ALUS and back, which every beta
+# user on GNOME needs: Orca is the session's reader and only one reader can
+# hold the keyboard. Installed as `alus-switch` beside alus-daemon; its own
+# lookup finds the daemon on $PATH there (2026.1.0 release check).
+install_data('tools/alus-switch.sh',
+  install_dir: get_option('bindir'),
+  rename: 'alus-switch',
+  install_mode: 'rwxr-xr-x')
+
 # data/gestures-alus.ini is deliberately NOT here. It is an input to
 # tools/extract-commands.py, not something the daemon reads: its effect is
 # already inside the generated gestures-builtin.ini and scripts.csv

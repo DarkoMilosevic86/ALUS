@@ -31,6 +31,21 @@ std::filesystem::path findDataDirectory(const std::filesystem::path& preferred,
         }
         ALUS_WARNING("ALUS_DATA_DIR={} does not contain {}", fromEnvironment, marker.string());
     }
+    // A program running from a build tree uses the source tree's data, even
+    // when an installed copy exists: a developer who also has ALUS installed
+    // would otherwise run new code against old data (found before 2026.1.0).
+    // build/src/<program> -> build/meson-info marks the tree, ../../data is
+    // the source.
+    if (const std::filesystem::path self = std::filesystem::read_symlink("/proc/self/exe", code);
+        !code) {
+        const std::filesystem::path buildDir = self.parent_path().parent_path();
+        if (std::filesystem::exists(buildDir / "meson-info", code)) {
+            const std::filesystem::path source = buildDir.parent_path() / "data";
+            if (usable(source)) {
+                return source;
+            }
+        }
+    }
     const std::filesystem::path installed{ALUS_DATA_DIR};
     if (usable(installed)) {
         return installed;
