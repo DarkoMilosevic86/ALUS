@@ -33,10 +33,10 @@ ALUS works with the GNOME desktop on Wayland, web browsers (Firefox, Chrome,
 Chromium), mail (Thunderbird), LibreOffice, the file manager, terminals and
 most GTK, Qt and Electron applications.
 
-If you have used NVDA on Windows, you already know most of ALUS: the commands,
-their keys and the concepts -- focus, review cursor, navigator object, browse
-mode, focus mode, say all -- are the same. This guide also explains what is
-particular to Linux.
+If you have used a screen reader on Windows, much of ALUS will be familiar:
+the commands, their keys and the concepts -- focus, review cursor, navigator
+object, browse mode, focus mode, say all -- follow the conventions blind users
+already know. This guide also explains what is particular to Linux.
 
 ALUS is free software, released under the GNU General Public License,
 version 2 or later.
@@ -331,8 +331,7 @@ The settings are stored in `~/.config/alus/alus.ini`.
 Every command can be given another key, or have its key removed, in the
 Input gestures dialog (ALUS menu → Input gestures…). Find the command, choose
 Add and press the new key. The keys are stored in
-`~/.config/alus/gestures.ini`, in the same format as NVDA's, so a file from
-NVDA works unchanged.
+`~/.config/alus/gestures.ini`.
 
 ## Language
 

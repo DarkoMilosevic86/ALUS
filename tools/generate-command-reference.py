@@ -81,7 +81,7 @@ def read_status(path: Path) -> dict[str, tuple[str, str]]:
         if line.startswith("["):
             section = line.strip("[]")
             continue
-        if "=" not in line or section not in ("announce", "platform"):
+        if "=" not in line or section not in ("announce", "platform", "missing"):
             continue
         name, _, reason = line.partition("=")
         out[name.strip()] = (section, reason.strip())
@@ -93,6 +93,9 @@ def read_status(path: Path) -> dict[str, tuple[str, str]]:
 def status_prefix(state: str) -> str:
     if state == "announce":
         return "**NOT IN THIS VERSION** (the key says so when pressed) — "
+    if state == "missing":
+        return ("**NOT IN THIS VERSION** (no key; hidden from the Input gestures "
+                "dialog, N154) — ")
     if state == "platform":
         return ("**NOT ON WAYLAND** (the key stays with the application; ALUS "
                 "cannot send it back, N18) — ")
@@ -137,6 +140,8 @@ def main() -> int:
                    if status.get(r["script"], ("",))[0] == "announce")
     platform = sum(1 for r in documented
                    if status.get(r["script"], ("",))[0] == "platform")
+    missing = sum(1 for r in documented
+                  if status.get(r["script"], ("",))[0] == "missing")
     lines = [
         "# ALUS command reference",
         "",
@@ -158,11 +163,12 @@ def main() -> int:
         f"Commands: **{len(documented)}** in {len(by_category)} categories, "
         f"**{bound}** of them bound to keys.",
         "",
-        f"**{announce + platform}** are not in this version and are marked so in "
-        f"the *Description* column: **{announce}** have a key that **says** the "
-        f"command is missing, and **{platform}** are deliberately left unbound "
-        "because the key belongs to the application (N18). The source is "
-        "`data/commands-status.ini`.",
+        f"**{announce + platform + missing}** are not in this version and are marked "
+        f"so in the *Description* column: **{announce}** have a key that **says** "
+        f"the command is missing, **{platform}** are deliberately left unbound "
+        "because the key belongs to the application (N18), and "
+        f"**{missing}** have no key and are not shown in the Input gestures dialog. "
+        "The source is `data/commands-status.ini`.",
         "",
     ]
 

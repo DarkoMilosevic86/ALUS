@@ -217,6 +217,13 @@ Model buildModel(const script::Catalog& catalog, input::GestureManager& manager,
         if (!info->isVisibleInGestureDialog()) {
             continue;
         }
+        // N154: only what ALUS really does. The other screen reader's add-on
+        // store, its Python console, its mouse tracking... are in the
+        // catalogue because the catalogue is extracted from it; a row for
+        // them would offer to rebind a command that does nothing.
+        if (!catalog.status().isAvailable(info->name)) {
+            continue;
+        }
         Command command;
         command.location = info->location;
         command.script = info->name;

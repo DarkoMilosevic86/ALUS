@@ -95,10 +95,17 @@ TEST_CASE("the dialog lists the whole command table with its keys", "[gui]") {
     const alus::gui::Model model = alus::gui::buildModel(
         harness.catalog, *harness.manager, &alus::input::KeyNames::shared());
 
-    // ~390 commands are in v1.0 scope and 75 of them have no description, so
-    // the dialog shows a few hundred. The exact number moves with upstream;
-    // what must hold is that it is the whole table and not a fragment.
-    CHECK(model.commands.size() > 250);
+    // ~390 commands are in v1.0 scope, 75 of them have no description and
+    // about a hundred are not in this version (N154: hidden), so the dialog
+    // shows two hundred and more. The exact number moves; what must hold is
+    // that it is the whole table of what ALUS does and not a fragment.
+    CHECK(model.commands.size() > 200);
+    // N154: the other screen reader's add-on store is not offered.
+    CHECK(std::none_of(model.commands.begin(), model.commands.end(),
+                       [](const alus::gui::Command& command) {
+                           return command.script == "activateAddonsManager" ||
+                                  command.script == "activatePythonConsole";
+                       }));
     CHECK(model.categories.size() > 10);
     CHECK(model.bindingCount() > 200);
 

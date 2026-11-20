@@ -7,18 +7,18 @@ Prva javna verzija programa ALUS.
 ### Najvažnije
 
 - Čitač ekrana za GNOME radnu površinu na Wayland-u, sa komandama, tasterima
-  i pojmovima iz NVDA: fokus, kursor pregleda, objektna navigacija, režim
+  i pojmovima koje slepi korisnici poznaju: fokus, kursor pregleda, objektna navigacija, režim
   pretraživanja, režim fokusa, čitaj sve, pomoć za unos.
 - **ALUS meni** (`ALUS+A`, laptop `ALUS+N`): podešavanja, komande tastature,
   pomoć, doniranje, čuvanje i vraćanje podešavanja, izlaz.
 - **Pomoć na engleskom, srpskoj ćirilici i srpskoj latinici**: ovo uputstvo,
   Šta je novo i brzi pregled komandi, napravljen od tastera koje zaista
   koristite.
-- **Veb kao u NVDA**: slova za brzu navigaciju čitaju element na koji stanu;
+- **Veb**: slova za brzu navigaciju čitaju element na koji stanu;
   tabele, liste i orijentiri čitaju svoj prvi red; lista elemenata
   (`ALUS+F7`) otvara se tamo gde ste; raspored ekrana (`ALUS+V`) pamti se i
   posle ponovnog pokretanja.
-- **Režim fokusa kao u NVDA**: `ALUS+Space` ga uključuje i isključuje;
+- **Režim fokusa**: `ALUS+Space` ga uključuje i isključuje;
   `Escape` izlazi samo iz režima fokusa u koji je ALUS ušao sam, pa i dalje
   izlazi iz prikaza preko celog ekrana na YouTube-u.
 - **Thunderbird**: poruke se čitaju u režimu pretraživanja.

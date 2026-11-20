@@ -435,8 +435,10 @@ msgstr "⣏⣀⣹"
 
 # -- the gesture dialog --
 
+# N154: the same name as the ALUS menu item that opens it.
 msgid "Gestures"
-msgstr "Gestovi"
+msgstr "Komande tastature"
+
 
 msgid "Commands"
 msgstr "Komande"

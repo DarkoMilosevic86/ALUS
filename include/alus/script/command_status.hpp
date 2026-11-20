@@ -44,6 +44,8 @@ public:
         Announce,
         // [platform]: deliberately unbound; the application needs the key.
         Platform,
+        // [missing]: not implemented, no key; hidden from every list (N154).
+        Missing,
     };
 
     bool load(const std::filesystem::path& path, std::string* error = nullptr);
@@ -59,12 +61,22 @@ public:
     const std::map<std::string, std::string, std::less<>>& platformLimited() const noexcept {
         return platform_;
     }
-    std::size_t size() const noexcept { return announce_.size() + platform_.size(); }
+    const std::map<std::string, std::string, std::less<>>& missing() const noexcept {
+        return missing_;
+    }
+    // Whether the command belongs in the lists the user sees (the Input
+    // gestures dialog, the commands quick reference): only what ALUS really
+    // does. A key that explains why a command is absent still works.
+    bool isAvailable(std::string_view script) const { return stateOf(script) == State::Implemented; }
+    std::size_t size() const noexcept {
+        return announce_.size() + platform_.size() + missing_.size();
+    }
     bool empty() const noexcept { return size() == 0; }
 
 private:
     std::map<std::string, std::string, std::less<>> announce_;
     std::map<std::string, std::string, std::less<>> platform_;
+    std::map<std::string, std::string, std::less<>> missing_;
 };
 
 // Binds every [announce] command that `object` may legitimately answer for --

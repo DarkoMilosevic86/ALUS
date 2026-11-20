@@ -445,6 +445,29 @@ TEST_CASE("T9.6 every key the built-in map assigns runs something",
         return classes;
     };
 
+    // N154: the lists the user sees (Input gestures, the commands quick
+    // reference) show what the status file calls available. So the file must
+    // be exact both ways: a command nothing implements is listed (or the
+    // dialog offers a dead row), and a listed [missing] command is really
+    // missing (or the dialog hides a working one).
+    {
+        const script::CommandStatus& commandStatus = stack.catalog().status();
+        for (const script::ScriptInfo* info : stack.catalog().all()) {
+            const bool owned = !ownerClassesOf(info->name).empty();
+            const auto state = commandStatus.stateOf(info->name);
+            if (state == script::CommandStatus::State::Implemented && !owned) {
+                FAIL_CHECK("NOTHING IMPLEMENTS `" + info->name + "` [" + info->location +
+                           "], and the Input gestures dialog would offer it. Implement "
+                           "it, or list it under [missing] in data/commands-status.ini.");
+            }
+            if (state == script::CommandStatus::State::Missing && owned) {
+                FAIL_CHECK("`" + info->name + "` is implemented but listed under [missing] "
+                           "in data/commands-status.ini, which hides it from the user. "
+                           "Delete its line.");
+            }
+        }
+    }
+
     // N102's regression test, and it belongs here rather than in the browse
     // mode suite: what broke was the WIRING between the interceptor and the
     // catalogue, and the browse mode tests build the interceptor themselves.
@@ -540,6 +563,11 @@ TEST_CASE("T9.6 every key the built-in map assigns runs something",
                                     : " -- it is owned by an object answering to " +
                                           ownerClasses + ", which the lookup cannot reach"));
                 }
+                break;
+            case script::CommandStatus::State::Missing:
+                FAIL_CHECK("HAS A KEY BUT IS LISTED AS MISSING: " + where +
+                           ". [missing] is for commands with no key; give it an "
+                           "[announce] line instead, so the key says why.");
                 break;
             case script::CommandStatus::State::Implemented:
                 ++implemented;

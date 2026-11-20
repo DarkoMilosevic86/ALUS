@@ -208,6 +208,10 @@ def check(directory: Path) -> int:
                 failures.append("missing: %s" % path)
                 continue
             text = path.read_text(encoding="utf-8")
+            # ALUS never names the screen reader it was ported from to its
+            # users; its help does not either.
+            if "NVDA" in text:
+                failures.append("%s: names NVDA" % path)
             ids = set(re.findall(r'id="([^"]+)"', text))
             for target in re.findall(r'href="#([^"]+)"', text):
                 if target not in ids:

@@ -1522,3 +1522,18 @@ layout containers) and `objectNavigation.reportEdge` (the edge of the tree
 is spoken, "No next", never a sound). Their rows are removed; the keys are
 still read and kept, so an NVDA configuration imports unchanged. Also: the
 "next in flow" command said "No next" untranslated.
+
+**N154 — the Input gestures dialog offered the other screen reader's add-on
+store.** The catalogue is extracted from upstream, and the dialog listed
+every described command in it, so it offered to rebind the add-on store,
+the wxPython inspector, mouse tracking and about ninety other commands that
+do nothing in ALUS. Measured with the coverage stack: 294 commands are
+implemented, 93 are not and have no key. Those 93 are now listed under a new
+`[missing]` section of `data/commands-status.ini`, and the dialog and the
+commands quick reference show only available commands. Keys that explain why
+a command is absent (`[announce]`) still work; they are just not offered.
+The coverage test holds the list exact both ways: a command nothing
+implements must be listed, and a listed one must not be implemented. The
+user help names no other screen reader (checked by `help-links`), and the
+Serbian settings page is called "Komande tastature", like the menu item
+that opens it.

@@ -33,10 +33,11 @@ ALUS radi sa GNOME radnom površinom na Wayland-u, veb pregledačima (Firefox,
 Chrome, Chromium), poštom (Thunderbird), paketom LibreOffice, upravljačem
 datoteka, terminalima i većinom GTK, Qt i Electron aplikacija.
 
-Ako ste koristili NVDA na Windows-u, već poznajete veći deo programa ALUS:
-komande, njihovi tasteri i pojmovi -- fokus, kursor pregleda, navigacioni
-objekat, režim pretraživanja, režim fokusa, čitaj sve -- isti su. Ovo
-uputstvo objašnjava i ono što je posebno za Linux.
+Ako ste koristili čitač ekrana na Windows-u, veći deo programa ALUS biće vam
+poznat: komande, njihovi tasteri i pojmovi -- fokus, kursor pregleda,
+navigacioni objekat, režim pretraživanja, režim fokusa, čitaj sve -- prate
+navike koje slepi korisnici već imaju. Ovo uputstvo objašnjava i ono što je
+posebno za Linux.
 
 ALUS je slobodan softver, objavljen pod GNU opštom javnom licencom, verzija 2
 ili novija.
@@ -322,7 +323,7 @@ pritisnete OK; Otkaži ili Escape ih odbacuju. Glas možete isprobati pre nego
 | Prikaz objekata | opise, prečice, informacije o položaju, opise alata, obaveštenja |
 | Kursor pregleda | šta kursor pregleda prati, navigaciju kroz dokument, raspored ekrana |
 | Formatiranje dokumenta | koje formatiranje i struktura se najavljuju tokom čitanja |
-| Gestovi | svaku komandu i njene tastere |
+| Komande tastature | svaku komandu i njene tastere |
 
 Podešavanja se čuvaju u datoteci `~/.config/alus/alus.ini`.
 
@@ -331,8 +332,7 @@ Podešavanja se čuvaju u datoteci `~/.config/alus/alus.ini`.
 Svakoj komandi možete dodeliti drugi taster, ili joj ukloniti taster, u
 prozoru Komande tastature (ALUS meni → Komande tastature…). Pronađite komandu,
 izaberite Dodaj i pritisnite novi taster. Tasteri se čuvaju u datoteci
-`~/.config/alus/gestures.ini`, u istom formatu kao kod NVDA, pa datoteka iz
-NVDA radi bez izmena.
+`~/.config/alus/gestures.ini`.
 
 ## Jezik
 

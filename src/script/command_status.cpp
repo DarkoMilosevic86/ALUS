@@ -43,6 +43,7 @@ bool CommandStatus::load(const std::filesystem::path& path, std::string* error) 
 bool CommandStatus::loadFromString(std::string_view text, std::string* error) {
     announce_.clear();
     platform_.clear();
+    missing_.clear();
 
     // Which map the lines are going into. A file with no section header at all
     // is a file that says nothing, and saying nothing here means "everything
@@ -71,6 +72,8 @@ bool CommandStatus::loadFromString(std::string_view text, std::string* error) {
                 current = &announce_;
             } else if (section == "platform") {
                 current = &platform_;
+            } else if (section == "missing") {
+                current = &missing_;
             } else {
                 current = nullptr;
                 sane = false;
@@ -112,6 +115,9 @@ CommandStatus::State CommandStatus::stateOf(std::string_view script) const {
     if (platform_.find(script) != platform_.end()) {
         return State::Platform;
     }
+    if (missing_.find(script) != missing_.end()) {
+        return State::Missing;
+    }
     return State::Implemented;
 }
 
@@ -120,6 +126,9 @@ std::string_view CommandStatus::reasonFor(std::string_view script) const {
         return it->second;
     }
     if (const auto it = platform_.find(script); it != platform_.end()) {
+        return it->second;
+    }
+    if (const auto it = missing_.find(script); it != missing_.end()) {
         return it->second;
     }
     return {};

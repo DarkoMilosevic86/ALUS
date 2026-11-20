@@ -6,18 +6,18 @@ The first public version of ALUS.
 
 ### Highlights
 
-- A screen reader for the GNOME desktop on Wayland, with NVDA's commands,
-  keys and concepts: focus, review cursor, object navigation, browse mode,
+- A screen reader for the GNOME desktop on Wayland, with the commands,
+  keys and concepts blind users know: focus, review cursor, object navigation, browse mode,
   focus mode, say all, input help.
 - **The ALUS menu** (`ALUS+A`, laptop `ALUS+N`): settings, input gestures,
   help, donations, saving and restoring the configuration, exit.
 - **Help in English, Serbian Cyrillic and Serbian Latin**: this guide, What's
   new, and a commands quick reference generated from the keys you really use.
-- **Web browsing like NVDA's**: quick navigation letters read the element
+- **Web browsing**: quick navigation letters read the element
   they land on; tables, lists and landmarks read their first line; the
   elements list (`ALUS+F7`) opens where you are; screen layout (`ALUS+V`) is
   remembered after a restart.
-- **Focus mode as in NVDA**: `ALUS+Space` turns it on and off; `Escape` leaves
+- **Focus mode**: `ALUS+Space` turns it on and off; `Escape` leaves
   only the focus mode ALUS entered by itself, so it still leaves full screen
   on YouTube.
 - **Thunderbird**: messages are read in browse mode.
