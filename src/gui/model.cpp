@@ -367,13 +367,6 @@ std::vector<Page> build() {
                       Row{RowKind::Toggle, "annotations", "reportAriaDescription",
                           N_("An element's accessible description")},
                   }},
-            Group{N_("Object navigation"), nullptr,
-                  {
-                      Row{RowKind::Toggle, "objectNavigation", "reportEdge",
-                          N_("Play a sound at the edge of the tree"),
-                          N_("An expected failure must be noticeable without being "
-                             "an error.")},
-                  }},
         }});
 
     // -----------------------------------------------------------------------
@@ -390,12 +383,14 @@ std::vector<Page> build() {
                              "was just focused.")},
                       Row{RowKind::Toggle, "reviewCursor", "followCaret",
                           N_("The caret")},
-                      Row{RowKind::Toggle, "reviewCursor", "followMouse",
-                          N_("The mouse pointer")},
-                      Row{RowKind::Toggle, "reviewCursor", "simpleReviewMode",
-                          N_("Simple review"),
-                          N_("Skips the containers a toolkit uses for layout and "
-                             "that carry no information of their own.")},
+                      // N153: no rows for followMouse, simpleReviewMode and
+                      // objectNavigation.reportEdge. ALUS reads and keeps the
+                      // three keys (an NVDA configuration imports unchanged),
+                      // but nothing acts on them in 2026.1.0: Wayland does not
+                      // tell a screen reader where the pointer is, object
+                      // navigation does not skip layout containers, and the
+                      // edge of the tree is SPOKEN ("No next"), not a sound. A
+                      // switch that changes nothing is worse than none.
                   }},
             Group{N_("Caret"), nullptr,
                   {

@@ -83,7 +83,7 @@ with both layouts.
 | Control | stop speech |
 | Shift | pause / resume speech |
 | ALUS+Control+G | open the settings window |
-| ALUS+A | open the settings window (laptop layout: ALUS+N) |
+| ALUS+A | the ALUS menu: settings, gestures, help, donate, configuration, exit (laptop layout: ALUS+N) |
 | ALUS+Control+V | voice settings |
 | ALUS+Down Arrow | say all from the caret (laptop: ALUS+A) |
 | ALUS+Up Arrow | read the current line (laptop: ALUS+L) |
@@ -132,7 +132,7 @@ they say that the clipboard cannot be reached.
 
 ## Settings
 
-Open the settings with **ALUS+Control+G** (or **ALUS+A**), from the
+Open the settings with **ALUS+Control+G**, from the ALUS menu (**ALUS+A**), from the
 application menu ("ALUS Settings"), or with `alus-settings`. The window is a
 separate program, so it is read like any other application.
 

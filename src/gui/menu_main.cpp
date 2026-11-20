@@ -114,8 +114,8 @@ std::filesystem::path helpDirectory() {
     if (!code) {
         const std::filesystem::path buildDir = self.parent_path().parent_path();
         if (std::filesystem::exists(buildDir / "meson-info", code) &&
-            std::filesystem::exists(buildDir / "help", code)) {
-            return buildDir / "help";
+            std::filesystem::exists(buildDir / "docs" / "help", code)) {
+            return buildDir / "docs" / "help";
         }
     }
     return std::filesystem::path{ALUS_DOC_DIR};

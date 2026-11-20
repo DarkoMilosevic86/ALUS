@@ -142,6 +142,8 @@ alus_inc = include_directories('include')
 
 subdir('src')
 subdir('po')
+python3 = find_program('python3', required: true)
+subdir('docs/help')
 subdir('tests')
 
 # The add-on ABI header, and the ONLY header ALUS installs.

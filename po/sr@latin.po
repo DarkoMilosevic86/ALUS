@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: alus 2026.1.0\n"
 "Report-Msgid-Bugs-To: daremc86@gmail.com\n"
-"POT-Creation-Date: 2026-11-20 09:36+0000\n"
-"PO-Revision-Date: 2026-11-20 09:36+0000\n"
+"POT-Creation-Date: 2026-11-20 09:44+0000\n"
+"PO-Revision-Date: 2026-11-20 09:44+0000\n"
 "Last-Translator: tools/import-nvda-po.py\n"
 "Language-Team: Serbian (Latin)\n"
 "Language: sr_RS@latin\n"
@@ -74,7 +74,7 @@ msgid "No objects inside"
 msgstr "Nema unutrašnjih objekata"
 
 #. Translators: this is the last object.
-#: src/a11y/commands.cpp:245
+#: src/a11y/commands.cpp:245 src/a11y/commands.cpp:278
 msgid "No next"
 msgstr "Nema narednog"
 
@@ -2064,7 +2064,7 @@ msgid "%s is now unbound for you; the default is kept in place for everything el
 msgstr "%s je za vas odvezan; podrazumevano vezivanje ostaje za sve ostalo"
 
 #. Translators: the title of the gesture dialog.
-#: src/gui/gesture_dialog.cpp:334 src/gui/model.cpp:568
+#: src/gui/gesture_dialog.cpp:334 src/gui/model.cpp:563
 msgid "Gestures"
 msgstr "Gestovi"
 
@@ -2264,7 +2264,7 @@ msgid "Help"
 msgstr "Pomoć"
 
 #: src/gui/model.cpp:26 src/gui/model.cpp:59 src/gui/model.cpp:235
-#: src/gui/model.cpp:479 src/gui/model.cpp:504 src/input/commands.cpp:39
+#: src/gui/model.cpp:474 src/gui/model.cpp:499 src/input/commands.cpp:39
 #: src/input/commands.cpp:48
 msgid "Off"
 msgstr "Isključeno"
@@ -2493,7 +2493,7 @@ msgstr "Normalizuj Unicode pre izgovaranja"
 msgid "Makes mathematical and styled letters readable: ℂ is spoken as C."
 msgstr "Čini matematička i stilizovana slova čitljivim: ℂ se izgovara kao C."
 
-#: src/gui/model.cpp:147 src/gui/model.cpp:551 src/i18n/data_strings.cpp:33
+#: src/gui/model.cpp:147 src/gui/model.cpp:546 src/i18n/data_strings.cpp:33
 msgid "Braille"
 msgstr "Brajev red"
 
@@ -2841,7 +2841,7 @@ msgstr "Nikako"
 msgid "A beep"
 msgstr "Bipom"
 
-#: src/gui/model.cpp:351 src/gui/model.cpp:480
+#: src/gui/model.cpp:351 src/gui/model.cpp:475
 msgid "Speech only"
 msgstr "Govorom"
 
@@ -2873,335 +2873,311 @@ msgstr "Da postoje dodatni detalji"
 msgid "An element's accessible description"
 msgstr "Pristupačni opis elementa"
 
-#: src/gui/model.cpp:370 src/i18n/data_strings.cpp:41
-msgid "Object navigation"
-msgstr "Navigacija po objektima"
-
-#: src/gui/model.cpp:373
-msgid "Play a sound at the edge of the tree"
-msgstr "Pusti zvuk na ivici drveta"
-
-#: src/gui/model.cpp:374
-msgid "An expected failure must be noticeable without being an error."
-msgstr "Očekivani neuspeh mora da se primeti a da ne bude greška."
-
-#: src/gui/model.cpp:383
+#: src/gui/model.cpp:376
 msgid "Review cursor"
 msgstr "Kursor pregleda"
 
-#: src/gui/model.cpp:385
+#: src/gui/model.cpp:378
 msgid "What the review cursor follows"
 msgstr "Šta kursor pregleda prati"
 
-#: src/gui/model.cpp:388
+#: src/gui/model.cpp:381
 msgid "The keyboard focus"
 msgstr "Fokus tastature"
 
-#: src/gui/model.cpp:389
+#: src/gui/model.cpp:382
 msgid "On by default, and the reason `alus+numpad5` says what was just focused."
 msgstr "Podrazumevano uključeno, i zato `alus+numpad5` kaže šta je upravo fokusirano."
 
-#: src/gui/model.cpp:392
+#: src/gui/model.cpp:385
 msgid "The caret"
 msgstr "Kareta"
 
-#: src/gui/model.cpp:394
-msgid "The mouse pointer"
-msgstr "Pokazivač miša"
-
-#: src/gui/model.cpp:396
-msgid "Simple review"
-msgstr "Jednostavan pregled"
-
-#: src/gui/model.cpp:397
-msgid "Skips the containers a toolkit uses for layout and that carry no information of their own."
-msgstr "Preskače kontejnere koje toolkit koristi za raspored a koji sami ne nose nikakvu informaciju."
-
-#: src/gui/model.cpp:400
+#: src/gui/model.cpp:395
 msgid "Caret"
 msgstr "Kareta"
 
-#: src/gui/model.cpp:403
+#: src/gui/model.cpp:398
 msgid "How long to wait for an application to move its caret, in milliseconds"
 msgstr "Koliko čekati da aplikacija pomeri svoju karetu, u milisekundama"
 
-#: src/gui/model.cpp:405
+#: src/gui/model.cpp:400
 msgid "Every toolkit reports caret movement differently; this is the budget before ALUS reports what is there anyway."
 msgstr "Svaki skup vidžeta drugačije prijavljuje pomeranje karete; ovo je rok posle kog ALUS ipak najavi šta je tu."
 
-#: src/gui/model.cpp:410
+#: src/gui/model.cpp:405
 msgid "Document navigation"
 msgstr "Navigacija po dokumentu"
 
-#: src/gui/model.cpp:413
+#: src/gui/model.cpp:408
 msgid "What ends a paragraph"
 msgstr "Šta završava paragraf"
 
-#: src/gui/model.cpp:414
+#: src/gui/model.cpp:409
 msgid "No toolkit on Linux answers the accessibility API's own paragraph granularity, so these two styles are the only way paragraph movement exists at all."
 msgstr "Nijedan toolkit na Linuxu ne odgovara na granularnost paragrafa iz samog API-ja za pristupačnost, pa su ova dva stila jedini način da kretanje po paragrafima uopšte postoji."
 
-#: src/gui/model.cpp:417
+#: src/gui/model.cpp:412
 msgid "The application decides"
 msgstr "Aplikacija odlučuje"
 
-#: src/gui/model.cpp:418
+#: src/gui/model.cpp:413
 msgid "A single line break"
 msgstr "Jedan prelom reda"
 
-#: src/gui/model.cpp:419
+#: src/gui/model.cpp:414
 msgid "A blank line"
 msgstr "Prazan red"
 
-#: src/gui/model.cpp:421
+#: src/gui/model.cpp:416
 msgid "Say all reads by"
 msgstr "Čitanje svega ide po"
 
-#: src/gui/model.cpp:422
+#: src/gui/model.cpp:417
 msgid "Line"
 msgstr "Liniji"
 
-#: src/gui/model.cpp:422
+#: src/gui/model.cpp:417
 msgid "Paragraph"
 msgstr "Paragrafu"
 
-#: src/gui/model.cpp:424
+#: src/gui/model.cpp:419
 msgid "Use screen layout"
 msgstr "Koristi raspored ekrana"
 
-#: src/gui/model.cpp:425
+#: src/gui/model.cpp:420
 msgid "On, a web page's line is what the screen shows on one line, a label beside its field. Off, every link and field is a line of its own. `alus+v` switches it, and the choice is kept."
 msgstr "Uključeno, red na veb stranici je ono što ekran prikazuje u jednom redu, natpis pored svog polja. Isključeno, svaki link i svako polje su poseban red. `alus+v` ga menja, i izbor se pamti."
 
-#: src/gui/model.cpp:436 src/i18n/data_strings.cpp:44
+#: src/gui/model.cpp:431 src/i18n/data_strings.cpp:44
 msgid "Document formatting"
 msgstr "Formatiranje dokumenta"
 
-#: src/gui/model.cpp:438
+#: src/gui/model.cpp:433
 msgid "Font"
 msgstr "Font"
 
-#: src/gui/model.cpp:441
+#: src/gui/model.cpp:436
 msgid "Font name"
 msgstr "Ime fonta"
 
-#: src/gui/model.cpp:443
+#: src/gui/model.cpp:438
 msgid "Font size"
 msgstr "Veličina fonta"
 
-#: src/gui/model.cpp:445
+#: src/gui/model.cpp:440
 msgid "Bold, italic and underline"
 msgstr "Podebljano, kurziv i podvučeno"
 
-#: src/gui/model.cpp:448
+#: src/gui/model.cpp:443
 msgid "Superscripts and subscripts"
 msgstr "Eksponenti i indeksi"
 
-#: src/gui/model.cpp:450
+#: src/gui/model.cpp:445
 msgid "Emphasis"
 msgstr "Naglašavanje"
 
-#: src/gui/model.cpp:452
+#: src/gui/model.cpp:447
 msgid "Highlighted text"
 msgstr "Istaknut tekst"
 
-#: src/gui/model.cpp:454
+#: src/gui/model.cpp:449
 msgid "Style name"
 msgstr "Ime stila"
 
-#: src/gui/model.cpp:456
+#: src/gui/model.cpp:451
 msgid "Colours"
 msgstr "Boje"
 
-#: src/gui/model.cpp:458
+#: src/gui/model.cpp:453
 msgid "Document information"
 msgstr "Podaci o dokumentu"
 
-#: src/gui/model.cpp:461
+#: src/gui/model.cpp:456
 msgid "Comments"
 msgstr "Komentari"
 
-#: src/gui/model.cpp:463
+#: src/gui/model.cpp:458
 msgid "Bookmarks"
 msgstr "Obeleživači"
 
-#: src/gui/model.cpp:465
+#: src/gui/model.cpp:460
 msgid "Editor revisions"
 msgstr "Izmene u uređivaču"
 
-#: src/gui/model.cpp:467
+#: src/gui/model.cpp:462
 msgid "Spelling errors"
 msgstr "Pravopisne greške"
 
-#: src/gui/model.cpp:469
+#: src/gui/model.cpp:464
 msgid "Grammar errors"
 msgstr "Gramatičke greške"
 
-#: src/gui/model.cpp:471
+#: src/gui/model.cpp:466
 msgid "Pages and spacing"
 msgstr "Strane i prored"
 
-#: src/gui/model.cpp:474
+#: src/gui/model.cpp:469
 msgid "Page numbers"
 msgstr "Brojevi strana"
 
-#: src/gui/model.cpp:476
+#: src/gui/model.cpp:471
 msgid "Line numbers"
 msgstr "Brojevi linija"
 
-#: src/gui/model.cpp:478
+#: src/gui/model.cpp:473
 msgid "Line indentation"
 msgstr "Uvlačenje linija"
 
-#: src/gui/model.cpp:481
+#: src/gui/model.cpp:476
 msgid "Tones"
 msgstr "Tonovima"
 
-#: src/gui/model.cpp:482
+#: src/gui/model.cpp:477
 msgid "Speech and tones"
 msgstr "Govorom i tonovima"
 
-#: src/gui/model.cpp:484
+#: src/gui/model.cpp:479
 msgid "How long an indentation tone lasts, in milliseconds"
 msgstr "Koliko ton uvlačenja traje, u milisekundama"
 
-#: src/gui/model.cpp:488
+#: src/gui/model.cpp:483
 msgid "Ignore blank lines when reporting indentation"
 msgstr "Ignoriši prazne linije pri najavi uvlačenja"
 
-#: src/gui/model.cpp:490
+#: src/gui/model.cpp:485
 msgid "Line spacing"
 msgstr "Prored"
 
-#: src/gui/model.cpp:492
+#: src/gui/model.cpp:487
 msgid "Paragraph indentation"
 msgstr "Uvlačenje pasusa"
 
-#: src/gui/model.cpp:494
+#: src/gui/model.cpp:489
 msgid "Alignment"
 msgstr "Poravnanje"
 
-#: src/gui/model.cpp:496 src/gui/model.cpp:499
+#: src/gui/model.cpp:491 src/gui/model.cpp:494
 msgid "Tables"
 msgstr "Tabele"
 
-#: src/gui/model.cpp:501
+#: src/gui/model.cpp:496
 msgid "Cell coordinates"
 msgstr "Koordinate ćelije"
 
-#: src/gui/model.cpp:503
+#: src/gui/model.cpp:498
 msgid "Table headers"
 msgstr "Zaglavlja tabele"
 
-#: src/gui/model.cpp:505
+#: src/gui/model.cpp:500
 msgid "Rows and columns"
 msgstr "Redovi i kolone"
 
-#: src/gui/model.cpp:506
+#: src/gui/model.cpp:501
 msgid "Rows only"
 msgstr "Samo redovi"
 
-#: src/gui/model.cpp:507
+#: src/gui/model.cpp:502
 msgid "Columns only"
 msgstr "Samo kolone"
 
-#: src/gui/model.cpp:509
+#: src/gui/model.cpp:504
 msgid "Cell borders"
 msgstr "Ivice ćelija"
 
-#: src/gui/model.cpp:511
+#: src/gui/model.cpp:506
 msgid "Tables used only for layout"
 msgstr "Tabele koje služe samo za raspored"
 
-#: src/gui/model.cpp:512
+#: src/gui/model.cpp:507
 msgid "`alus+shift+f` reports the formatting at the caret; this decides whether a table that only arranges a page counts as a table at all."
 msgstr "`alus+shift+f` najavljuje formatiranje na kareti; ovo odlučuje da li tabela koja samo raspoređuje stranu uopšte važi za tabelu."
 
-#: src/gui/model.cpp:516
+#: src/gui/model.cpp:511
 msgid "Elements"
 msgstr "Elementi"
 
-#: src/gui/model.cpp:519
+#: src/gui/model.cpp:514
 msgid "Headings"
 msgstr "Naslovi"
 
-#: src/gui/model.cpp:521
+#: src/gui/model.cpp:516
 msgid "Links"
 msgstr "Veze"
 
-#: src/gui/model.cpp:523
+#: src/gui/model.cpp:518
 msgid "Whether a link has been visited"
 msgstr "Da li je veza posećena"
 
-#: src/gui/model.cpp:525
+#: src/gui/model.cpp:520
 msgid "Graphics"
 msgstr "Grafika"
 
-#: src/gui/model.cpp:527
+#: src/gui/model.cpp:522
 msgid "Lists"
 msgstr "Liste"
 
-#: src/gui/model.cpp:529
+#: src/gui/model.cpp:524
 msgid "Block quotes"
 msgstr "Blokovski citati"
 
-#: src/gui/model.cpp:531
+#: src/gui/model.cpp:526
 msgid "Groupings"
 msgstr "Grupisanja"
 
-#: src/gui/model.cpp:533
+#: src/gui/model.cpp:528
 msgid "Landmarks and regions"
 msgstr "Orijentiri i regioni"
 
-#: src/gui/model.cpp:535
+#: src/gui/model.cpp:530
 msgid "Articles"
 msgstr "Članci"
 
-#: src/gui/model.cpp:537
+#: src/gui/model.cpp:532
 msgid "Frames"
 msgstr "Okviri"
 
-#: src/gui/model.cpp:539
+#: src/gui/model.cpp:534
 msgid "Figures and captions"
 msgstr "Slike i natpisi"
 
-#: src/gui/model.cpp:541
+#: src/gui/model.cpp:536
 msgid "Clickable elements"
 msgstr "Elementi na koje se može kliknuti"
 
-#: src/gui/model.cpp:543
+#: src/gui/model.cpp:538
 msgid "When formatting is reported"
 msgstr "Kada se formatiranje najavljuje"
 
-#: src/gui/model.cpp:547
+#: src/gui/model.cpp:542
 msgid "Report formatting changes after the cursor"
 msgstr "Najavljuj promene formatiranja posle kursora"
 
-#: src/gui/model.cpp:548
+#: src/gui/model.cpp:543
 msgid "Costs a call per line; off by default for that reason."
 msgstr "Košta jedan poziv po liniji; zato je podrazumevano isključeno."
 
-#: src/gui/model.cpp:555
+#: src/gui/model.cpp:550
 msgid "Bold, italic and underline on the display"
 msgstr "Podebljano, kurziv i podvučeno na redu"
 
-#: src/gui/model.cpp:558
+#: src/gui/model.cpp:553
 msgid "Spelling errors on the display"
 msgstr "Pravopisne greške na redu"
 
-#: src/gui/model.cpp:570
+#: src/gui/model.cpp:565
 msgid "Commands and keys"
 msgstr "Komande i tasteri"
 
-#: src/gui/model.cpp:571
+#: src/gui/model.cpp:566
 msgid "Every command ALUS knows, with the keys bound to it. A command with no description is not shown, because a command that cannot be explained cannot be rebound sensibly."
 msgstr "Svaka komanda koju ALUS zna, sa tasterima vezanim za nju. Komanda bez opisa se ne prikazuje, jer komanda koja se ne može objasniti ne može se ni razumno prevezati."
 
-#: src/gui/model.cpp:575
+#: src/gui/model.cpp:570
 msgid "Edit gestures"
 msgstr "Uredi gestove"
 
-#: src/gui/model.cpp:660
+#: src/gui/model.cpp:655
 msgid "%s (not offered by the synthesizer)"
 msgstr "%s (sintetizator ga ne nudi)"
 
@@ -3329,6 +3305,10 @@ msgstr "Stanje sistema"
 #: src/i18n/data_strings.cpp:40
 msgid "Mouse"
 msgstr "Miš"
+
+#: src/i18n/data_strings.cpp:41
+msgid "Object navigation"
+msgstr "Navigacija po objektima"
 
 #: src/i18n/data_strings.cpp:42
 msgid "Input"

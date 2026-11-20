@@ -458,6 +458,14 @@ test('potfiles-up-to-date', python,
   workdir: meson.project_source_root(),
   timeout: 60)
 
+# The HTML help the ALUS menu opens: all three languages built, and no link
+# in a page's contents leading nowhere (the Cyrillic anchors once did).
+test('help-links', python,
+  args: [meson.project_source_root() / 'tools' / 'build-help.py', '--check',
+         meson.project_build_root() / 'docs' / 'help'],
+  suite: 'external',
+  timeout: 30)
+
 test('command-reference-up-to-date', python,
   args: [meson.project_source_root() / 'tools' / 'generate-command-reference.py',
          '--check'],

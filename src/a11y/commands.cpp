@@ -275,7 +275,7 @@ void ObjectCommands::navigatorObject_nextInFlow(input::Gesture& /*gesture*/) {
             parent = parent->parent();
         }
     }
-    moveTo(target, "No next");
+    moveTo(target, _("No next"));
 }
 
 void ObjectCommands::navigatorObject_previousInFlow(input::Gesture& /*gesture*/) {

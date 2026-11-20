@@ -89,6 +89,7 @@ To install ALUS system-wide and start it with your session, see
 | Document | For |
 |---|---|
 | [User guide](docs/user-guide.md) | running ALUS, the most important keys, settings, languages, troubleshooting |
+| [Help for users](docs/help/) | the guide and What's new that the ALUS menu opens, in English, Serbian Cyrillic and Latin |
 | [Command reference](docs/commands.md) | every command with its desktop and laptop keys (generated) |
 | [Configuration](docs/configuration.md) | `alus.ini`, `gestures.ini`, profiles, dictionaries, environment variables |
 | [Building](docs/building.md) | dependencies per distribution, build options, running from the source tree |
@@ -96,7 +97,7 @@ To install ALUS system-wide and start it with your session, see
 | [Development](docs/development.md) | source layout, tests, diagnostics, regenerating data, translations, conventions |
 | [Writing add-ons](docs/add-ons.md) | the C plugin ABI |
 | [Design](docs/design/vision.md) | vision, [architecture](docs/design/architecture.md), [risks](docs/design/risks.md) |
-| [History](docs/history/README.md) | phase reports and the findings (N1–N128) that shaped the code |
+| [History](docs/history/README.md) | phase reports and the findings (N1–N153) that shaped the code |
 
 ## Requirements
 
@@ -121,6 +122,17 @@ brings the other screen reader back by itself. `alus-cli input-info`,
 `alus-cli a11y-info` and the other diagnostics in the
 [user guide](docs/user-guide.md#diagnostics) explain most "it says nothing"
 problems.
+
+## Supporting ALUS
+
+ALUS is free, and it is made by one person. If it helps you, you can support
+its development with a donation:
+
+- **PayPal**: daremc86@gmail.com
+  ([donate](https://www.paypal.com/donate/?business=daremc86%40gmail.com&no_recurring=0&currency_code=EUR))
+- **Google Pay**: daremc86@gmail.com
+
+The same is in ALUS itself: ALUS menu (`ALUS+A`) → Donate….
 
 ## Licence
 
