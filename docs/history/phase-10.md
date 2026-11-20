@@ -1414,3 +1414,31 @@ introduction, "Биографија", "Други светски рат" and the
 
 Test: `tests/nav/test_browse_mode.cpp` ("N149 an article body with text and
 blocks is walked into"); fails without the fix.
+
+**N150 — Firefox: a slow caret, and a dialog that stalled the core.** Logs
+`alus-measure-20261120-090652.log` (Thunderbird) and `-091201.log`
+(Firefox); the user said everything worked. Read anyway:
+
+- *The caret was found by walking the page.* A browse mode caret is a
+  bookmark of leaf paths, and every key restored it by walking the leaves
+  from the top until a path matched -- the slowest focus changes in Firefox
+  were 293 ms and 3366 AT-SPI calls, mostly that walk. `text::Bookmark` now
+  carries an opaque `hint`, and a document bookmark keeps the leaf objects
+  there: when they are alive, still name the same paths and are still in the
+  document (`contains`, a dozen cached calls), the walk is skipped. The paths
+  remain the truth when the page changed. Measured in Chrome on
+  sr.wikipedia.org "Београд" with `measure-focus webfocus`: a focus move
+  inside the page went from 1165 calls / 66 ms to 67 calls / 3 ms, and the
+  farther down the page, the bigger the difference.
+- *A nameless Firefox dialog.* 09:14:37: a window came up without a focus
+  event, ALUS focused a nameless DIALOG and said "dialog" and a U+FFFC; the
+  core was stuck 502 ms and the watchdog released every key.
+  `DialogBehavior::dialogText` descended into every section with no limit
+  (here, apparently a page inside the dialog) and took a child's text as it
+  was. It is now bounded (depth 8, 300 objects, 2000 characters) and drops
+  placeholders.
+- The build had no `libpulse-dev`, so ALUS's own tones were silent ("built
+  without libpulse"); installing the package and reconfiguring fixes it.
+
+Tests: `tests/a11y/test_behaviors.cpp` ("N150 a dialog's text has no
+placeholder and its walk is bounded").

@@ -80,6 +80,11 @@ struct Bookmark {
     std::int64_t end = 0;
     // For implementations whose position is not two numbers (phase 6).
     std::string data;
+    // An implementation's shortcut back to where it was, opaque to everyone
+    // else and NOT part of the identity below: a document range keeps the
+    // leaf objects here, so restoring its caret need not walk the page to
+    // find them by path (N150). `data` stays the truth when the hint is gone.
+    std::shared_ptr<const void> hint;
 
     bool valid() const noexcept { return kind != nullptr; }
     bool operator==(const Bookmark& other) const noexcept {

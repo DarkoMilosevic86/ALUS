@@ -53,6 +53,18 @@ public:
     // NVDA: Dialog.getDialogText. Public because phase 6 reuses it for
     // ARIA dialogs, and because it is worth testing on its own.
     static std::string dialogText(const Object& object, bool allowFocusedDescendants = true);
+
+private:
+    // N150: a dialog's text is a message, not a document. The walk is
+    // bounded -- Firefox showed a nameless dialog with a whole page inside,
+    // and reading it held the core for over half a second (the watchdog
+    // released every key) -- and placeholders never reach speech.
+    struct Budget {
+        int objects = 300;
+        std::size_t characters = 2000;
+    };
+    static std::string dialogText(const Object& object, bool allowFocusedDescendants, int depth,
+                                  Budget& budget);
 };
 
 // ALUS's own (N139): a GTK list item, tree item or table row with no name

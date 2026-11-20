@@ -153,6 +153,16 @@ bool ProgressBarBehavior::handleEvent(Object& object, const core::Event& event) 
 // ---------------------------------------------------------------------------
 
 std::string DialogBehavior::dialogText(const Object& object, bool allowFocusedDescendants) {
+    Budget budget;
+    return dialogText(object, allowFocusedDescendants, 0, budget);
+}
+
+std::string DialogBehavior::dialogText(const Object& object, bool allowFocusedDescendants,
+                                       int depth, Budget& budget) {
+    constexpr int kMaxDepth = 8;
+    if (depth > kMaxDepth || budget.objects <= 0 || budget.characters == 0) {
+        return {};
+    }
     const std::vector<ObjectPtr>& children = object.children();
     std::vector<std::string> parts;
     const int childCount = static_cast<int>(children.size());
@@ -160,6 +170,9 @@ std::string DialogBehavior::dialogText(const Object& object, bool allowFocusedDe
         const ObjectPtr& child = children[static_cast<std::size_t>(index)];
         if (child == nullptr) {
             continue;
+        }
+        if (--budget.objects < 0 || budget.characters == 0) {
+            break;
         }
         const StateSet& childStates = child->states();
         const Role childRole = child->role();
@@ -183,7 +196,8 @@ std::string DialogBehavior::dialogText(const Object& object, bool allowFocusedDe
                 // reported twice.
                 const bool childIsDialog =
                     child->hasBehavior("NVDAObjects.behaviors.Dialog");
-                const std::string childText = dialogText(*child, !childIsDialog);
+                const std::string childText =
+                    dialogText(*child, !childIsDialog, depth + 1, budget);
                 if (!childText.empty()) {
                     parts.push_back(childText);
                 }
@@ -239,10 +253,19 @@ std::string DialogBehavior::dialogText(const Object& object, bool allowFocusedDe
         if (child->hasInterface(Interface::Text)) {
             childText = child->textRange(0, -1);
         }
-        if (childText.empty()) {
+        // An embedded object's U+FFFC is not a word: said, it was a "dialog"
+        // announcement with a placeholder in it.
+        for (std::size_t at = childText.find("\xEF\xBF\xBC"); at != std::string::npos;
+             at = childText.find("\xEF\xBF\xBC", at)) {
+            childText.erase(at, 3);
+        }
+        if (isBlank(childText)) {
             childText = childName;
         }
-        if (!childText.empty()) {
+        if (!childText.empty() && !isBlank(childText)) {
+            budget.characters = childText.size() >= budget.characters
+                                    ? 0
+                                    : budget.characters - childText.size();
             parts.push_back(childText);
         }
     }

@@ -429,3 +429,30 @@ TEST_CASE("N139 a nameless GTK list item is named from the labels inside it",
         CHECK(fixture.registry.objectFor(item)->name().empty());
     }
 }
+
+TEST_CASE("N150 a dialog's text has no placeholder and its walk is bounded", "[a11y][behavior]") {
+    // Log 09:14:37, Firefox: a nameless dialog was announced as "dialog
+    // U+FFFC", and reading its text held the core for over half a second.
+    A11yFixture fixture;
+    MockBackend& backend = fixture.backend;
+    const Ref application = backend.addApplication("Firefox", "Gecko");
+    const Ref dialog = backend.add(application, PlatformRole::Dialog, "");
+    const Ref message = backend.add(dialog, PlatformRole::Static, "");
+    backend.node(message).text = "Save the password? \xEF\xBF\xBC";
+    backend.node(message).interfaces |= Interface::Text;
+    // A page's worth of sections behind it.
+    Ref container = backend.add(dialog, PlatformRole::Section, "");
+    for (int index = 0; index < 2000; ++index) {
+        const Ref section = backend.add(container, PlatformRole::Section, "");
+        backend.add(section, PlatformRole::Label, "line " + std::to_string(index));
+        if (index % 50 == 0) {
+            container = section;
+        }
+    }
+    const std::string text = DialogBehavior::dialogText(*fixture.registry.objectFor(dialog));
+    CHECK(text.rfind("Save the password?", 0) == 0);
+    CHECK(text.find("\xEF\xBF\xBC") == std::string::npos);
+    // Bounded: it stops long before two thousand lines.
+    CHECK(text.find("line 1999") == std::string::npos);
+    CHECK(text.size() < 3000);
+}

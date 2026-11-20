@@ -1770,6 +1770,20 @@ bool DocumentTextRange::updateSelection() {
     return false;
 }
 
+namespace {
+
+// N150: what a document bookmark keeps besides the paths -- the objects
+// themselves. Restoring the browse mode caret is done on every key, and by
+// path alone it walked the leaves from the top of the page to find it: on a
+// long page in Firefox, 3366 AT-SPI calls and 293 ms for one focus change.
+struct BookmarkHint {
+    ObjectPtr root;
+    ObjectPtr first;  // the start leaf (or the link, inside a line)
+    ObjectPtr last;   // the end leaf
+};
+
+}  // namespace
+
 text::Bookmark DocumentTextRange::bookmark() const {
     text::Bookmark mark;
     static const char kKind = 0;
@@ -1787,6 +1801,7 @@ text::Bookmark DocumentTextRange::bookmark() const {
         mark.start = start_.offset;
         mark.end = end_.offset;
         mark.data = start_.leaf->path() + "\x1e" + parent->path();
+        mark.hint = std::make_shared<const BookmarkHint>(BookmarkHint{root_, start_.leaf, start_.leaf});
         appendNeighbour(mark, parent);
         return mark;
     }
@@ -1801,6 +1816,7 @@ text::Bookmark DocumentTextRange::bookmark() const {
     if (!last.leaf->sameAs(*first.leaf)) {
         mark.data += "\x1f" + last.leaf->path();
     }
+    mark.hint = std::make_shared<const BookmarkHint>(BookmarkHint{root_, first.leaf, last.leaf});
     appendNeighbour(mark, first.leaf);
     return mark;
 }
@@ -1848,6 +1864,28 @@ bool DocumentTextRange::moveToBookmark(const text::Bookmark& mark) {
 }
 
 bool DocumentTextRange::moveToExactBookmark(const text::Bookmark& mark) {
+    // The shortcut first (N150): the very objects, if they are still alive,
+    // still the ones the paths name, and still in this document. `contains`
+    // walks up the parents -- a dozen cached calls -- where the path search
+    // walks every leaf above the caret.
+    if (const auto* hint = static_cast<const BookmarkHint*>(mark.hint.get());
+        hint != nullptr && hint->root != nullptr && hint->root->sameAs(*root_) &&
+        hint->first != nullptr && hint->last != nullptr && hint->first->isAlive() &&
+        hint->last->isAlive()) {
+        const std::size_t cut = mark.data.find_first_of("\x1e\x1f\x1d");
+        const std::string firstPath = mark.data.substr(0, cut);
+        const bool inLink = mark.data.find('\x1e') != std::string::npos;
+        if (hint->first->path() == firstPath &&
+            (inLink || DocumentLeaves::isLeaf(*hint->first)) &&
+            DocumentLeaves::contains(root_, hint->first) &&
+            (hint->last->sameAs(*hint->first) || DocumentLeaves::contains(root_, hint->last))) {
+            start_ = DocumentPosition{hint->first, static_cast<int>(mark.start)};
+            end_ = DocumentPosition{hint->last, static_cast<int>(mark.end)};
+            normalise(start_);
+            normalise(end_);
+            return true;
+        }
+    }
     if (const std::size_t rs = mark.data.find('\x1e'); rs != std::string::npos) {
         const std::string childPath = mark.data.substr(0, rs);
         const std::string parentPath = mark.data.substr(rs + 1);
