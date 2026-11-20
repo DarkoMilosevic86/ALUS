@@ -227,7 +227,10 @@ to_alus() {
   if [ "$had_switch" != "true" ]; then
     # Not turned on here: turning it on is exactly what makes the session
     # start the other reader. Said, so the thinner desktop is not a mystery.
-    say "warning: the desktop's screen reader switch is off; some desktop announcements, such as the Super key, will be missing"
+    # Said with what to do about it: the user had turned the other reader off
+    # with Alt+Super+S "so that the two would not fight", which is what this
+    # script already prevents -- and that key is what turns the switch off.
+    say "the desktop's screen reader switch is off, so the Super key will be silent. Next time, start ALUS with this script while $OTHER_NAME is still running, without Alt+Super+S: the script stops $OTHER_NAME itself and keeps the switch on."
   fi
 
   # Only start one if the swap did not already leave one running (the BOTH

@@ -29,8 +29,14 @@ Ways to start ALUS:
 | How | When |
 |---|---|
 | `alus-cli autostart --enable` | ALUS starts every time you log in ([installing.md](installing.md#starting-alus-with-the-session)) |
-| `tools/alus-switch.sh alus` | swap from the other screen reader to ALUS now; every step is spoken, and a failed start brings the other reader back |
+| `tools/alus-switch.sh alus` | swap from the other screen reader to ALUS now; every step is spoken, and a failed start brings the other reader back (`alus nolog`: the same, writing no log) |
 | `alus-daemon` (installed) or `./build/src/alus-daemon` (from the source tree root) | start it directly, when no other reader runs |
+
+Run the script **while the other reader is still running**, and do not turn
+that reader off with Alt+Super+S first: the script stops it itself without
+touching the desktop's screen reader switch, so the two never fight and the
+desktop keeps announcing (the Super key's overview is silent when the switch
+is off).
 
 To stop ALUS press **ALUS+Q**. If you started it with `alus-switch.sh`,
 `tools/alus-switch.sh other` gives the keyboard back to the other reader.
