@@ -1537,3 +1537,15 @@ implements must be listed, and a listed one must not be implemented. The
 user help names no other screen reader (checked by `help-links`), and the
 Serbian settings page is called "Komande tastature", like the menu item
 that opens it.
+
+**N155 — every GTK 4 menu was read without names.** Found while building the
+ALUS menu (N152), and the same in real applications: the main menus of
+Calculator and Text Editor gave "menu item" eleven times and nothing else.
+GTK 4.18 exports a GMenuModel item with no name; its LABELLED_BY target is
+the item's GtkLabel with role INVALID, an empty name and no place among the
+item's children -- but that object does answer the Text interface, and its
+text is the label ("Нови прозор", "Clear History"). `Object::name` now falls
+back to the text of a LABELLED_BY target whose name is empty (at most 200
+characters, trimmed). Measured after the change: both menus read in full,
+"Discard Changes…" with its unavailable state. Test: `test_object.cpp` "N155
+a GTK 4 menu item takes its name from its label's text".

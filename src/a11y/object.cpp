@@ -237,6 +237,31 @@ Object::Object(Registry& registry, Ref ref)
                         return label->name();
                     }
                 }
+                // N155: GTK 4.18's menu items (every GMenuModel menu: the main
+                // menu of Calculator, Files, Settings...) have no name, and
+                // their LABELLED_BY target is the item's GtkLabel exported
+                // with role INVALID and no name -- but with a Text interface
+                // that holds the label. Measured: "Нови прозор", "Clear
+                // History". So the label's text is the name when its own name
+                // is empty. Bounded: a label, not a document.
+                for (const ObjectPtr& label :
+                     objectsFrom(backend().relation(ref_, PlatformRelation::LabelledBy))) {
+                    if (!label || !label->hasInterface(Interface::Text)) {
+                        continue;
+                    }
+                    constexpr int kLabelLimit = 200;
+                    const int count = std::min(label->characterCount(), kLabelLimit);
+                    if (count <= 0) {
+                        continue;
+                    }
+                    std::string text = label->textRange(0, count);
+                    const auto first = text.find_first_not_of(" \t\n");
+                    if (first == std::string::npos) {
+                        continue;
+                    }
+                    const auto last = text.find_last_not_of(" \t\n");
+                    return text.substr(first, last - first + 1);
+                }
                 return platformName;
             }),
       description_(scope_,

@@ -240,6 +240,31 @@ TEST_CASE("the name comes from the LABELLED_BY relation", "[a11y][object]") {
     CHECK(fixture.registry.objectFor(entry)->name() == "File name");
 }
 
+TEST_CASE("N155 a GTK 4 menu item takes its name from its label's text", "[a11y][object]") {
+    // Measured on GTK 4.18 (Calculator's main menu): the item has no name,
+    // and its LABELLED_BY target is the GtkLabel exported with role INVALID
+    // and an empty name -- its words are only in its Text interface.
+    A11yFixture fixture;
+    MockBackend& backend = fixture.backend;
+    const Ref menu = backend.add(backend.desktopRef(), PlatformRole::Menu, "Main menu");
+    const Ref item = backend.add(menu, PlatformRole::MenuItem);
+    const Ref box = backend.add(item, PlatformRole::Panel);
+    const Ref label = backend.add(box, PlatformRole::Invalid);
+    backend.node(label).text = "New window\n";
+    backend.addInterface(label, Interface::Text);
+    backend.node(item).relations[PlatformRelation::LabelledBy] = {label};
+
+    CHECK(fixture.registry.objectFor(item)->name() == "New window");
+
+    // A label with no text gives no name, rather than an empty string that
+    // would hide a name found some other way.
+    const Ref other = backend.add(menu, PlatformRole::MenuItem);
+    const Ref blank = backend.add(other, PlatformRole::Invalid);
+    backend.addInterface(blank, Interface::Text);
+    backend.node(other).relations[PlatformRelation::LabelledBy] = {blank};
+    CHECK(fixture.registry.objectFor(other)->name().empty());
+}
+
 TEST_CASE("the description comes from DESCRIBED_BY when there is none", "[a11y][object]") {
     A11yFixture fixture;
     MockBackend& backend = fixture.backend;
